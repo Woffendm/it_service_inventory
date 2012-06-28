@@ -1,6 +1,7 @@
 class Employee < ActiveRecord::Base
   attr_accessible :name, :notes
   validates_presence_of :name
+  validate :name, :exclusion => { :in => %w(Michael), :message => "Identity theft is a serious crime!!!" }
   belongs_to :group
   has_many :employee_allocations
   has_many :services, :through => :employee_allocations
