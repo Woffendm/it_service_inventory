@@ -1,0 +1,15 @@
+<h1> Groups </h1>
+
+<%= link_to "New Group" , new_group_path %>
+<table>
+	<tr>
+		<th> Name </th>
+	</tr>
+	<% @groups.each do |group| %>
+	<tr>
+		<td><%= group.name %></td>
+		<td> <%= link_to "Edit Name" , edit_group_path(group.id) %></td>
+		<td> <%= link_to "Employee Roster" , roster_group_path(group.id) %></td>
+	</tr>	
+	<% end %>
+</table>

@@ -1,0 +1,53 @@
+<h1> Edit Employee <%= @employee.name %> </h1>
+
+<h2> Change Name and Notes </h2>
+<%= form_for @employee do |form| %>
+	<p>
+		<%= form.label :name %>
+		<%= form.text_field :name %>
+	</p>
+	<p>
+		<%= form.label :notes %>
+		<%= form.text_field :notes %>
+	</p>
+	<p><%= form.submit  "Save changes" %></p>
+<% end %>
+
+
+<!-- Creates table with the employee's services and allocations -->
+<h2> Existing Services </h2>
+<table>
+	<tr>
+		<th>Services</th>
+		<th>Allocations</th>
+	</tr>
+	<% @employee.services.each do |service| %>
+		<tr>
+			<td> <%= service.name %> </td>
+		  <% @index =  @employee.services.index(service) %>
+		  <td> <%= @employee.employee_allocations[@index].allocation %> </td>
+			<td> 
+				<%= form_tag("remove_service", :method => "post") do %>
+					<%= hidden_field_tag(:service, service.id) %>
+					<%= submit_tag  "Remove", :confirm => "Confirm removal." %>
+				<% end %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+
+
+<!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
+<h2> Add Services </h2>
+<%= form_tag("add_service", :method => "post") do %>
+	<p>
+		<%= label_tag :name %>
+		<%= collection_select(:service, :id, @employee.get_available_services, :id, :name) %>
+		<%= select_tag(:allocation, options_for_select([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 
+				1])) %>
+		<%= submit_tag  "Add" %>
+	</p>
+<% end %>
+
+
+<%= link_to "Back", employees_path %>

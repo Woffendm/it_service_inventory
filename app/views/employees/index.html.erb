@@ -1,0 +1,37 @@
+<h1> Employees </h1>
+
+<%= link_to "New Employee" , new_employee_path %>
+
+<table>
+	<tr>
+		<th></th>
+		<th> Name </th>
+		<th> Notes </th>
+		<th> Services </th>
+		<th> Allocations </th>
+	</tr>
+	<% @employees.each do |employee| %>
+		<tr>
+			<% @newRow = nil %>
+			<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
+			<td>  <%= employee.name %> </td>
+			<td>  <%= employee.notes %> </td>
+			<% employee.services.each do |service| %>
+				<% @index =  employee.services.index(service) %>
+				<% if(@newRow) %>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td> <%= service.name %> </td>
+			    	<td> <%= employee.employee_allocations[@index].allocation %> </td>
+					</tr>
+				<% else %>
+					<% @newRow = true %>
+					<td> <%= service.name %> </td>
+		    	<td> <%= employee.employee_allocations[@index].allocation %> </td>
+				<% end %>
+			<% end %>
+		</tr>	
+	<% end %>
+</table>

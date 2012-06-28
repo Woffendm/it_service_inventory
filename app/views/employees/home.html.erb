@@ -1,0 +1,61 @@
+<!--BEGIN SECTION 1 -->
+<h1> Home </h1>
+
+<h2> Search </h2>
+<table>
+	<tr>
+		<th> Group </th>
+		<th> Employee </th>
+	</tr>
+	<tr>
+		<td> 
+			<select>
+			<option selected ="selected"> All Groups </option>
+			<% @groups.each do |group| %>
+				<option value = <%= group %>>  <%= group.name %> </option>
+			<% end %>
+			</select>
+		</td>
+		<td> 
+			<select>
+			<option disabled selected ="selected"> Select Employee </option>
+			<% @employees.each do |employee| %>
+				<option value = <%= employee %>>  <%= employee.name %> </option>
+			<% end %>
+			</select> 
+		</td>
+		<td> <button>Add Below </button></td>
+	</tr>	
+</table>
+
+<div class = "all_results">
+	<h2> Results</h2>
+	<table>
+		<tr>
+			<th> Name </th>
+			<th> Services </th>
+			<th> Allocations </th>
+		</tr>
+		<tr>
+			<td> Name Here	</td>
+			<td> Services Here </td>
+			<td> Allocations Here </td>
+			<td><%= link_to "Edit Employee", edit_employee_path(@employees.first.id) %></td>
+			<td><button> Hide </button></td>
+		</tr>	
+	</table>
+</div>
+
+<div class = "add_button">Test </div>
+
+<!--BEGIN TEST SECTION-->
+<script language="javascript" type ="text/javascript">
+	
+	var add = getElementsByClass('add_button')[0];
+	addEvent(add, 'click', showStuff());
+	function showStuff(){
+		document.write("hey yall");
+	}
+	
+//LOOK THROUGHR RAILS HELPERS
+</script>

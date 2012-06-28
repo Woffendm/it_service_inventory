@@ -1,0 +1,38 @@
+
+<h1> Employee Roster for <%= @group.name %> </h1>
+
+<table>
+	<tr>
+		<th> Employees</th>
+	</tr>
+	<% @group.employees.each do |employee| %>
+		<tr>
+			<td><%= employee.name %></td>
+		</tr>
+	<% end %>
+</table>
+
+
+<h2> Add Employees </h2>
+
+<%= form_tag("add_employee", :method => "post") do %>
+	<p>
+		<%= label_tag :name %>
+		<%= collection_select(:employee, :id, Employee.all, :id, :name) %>
+		<%= submit_tag  "Add" %>
+	</p>
+<% end %>
+
+
+<h2> Remove Employees </h2>
+
+<%= form_tag("remove_employee", :method => "post") do %>
+<p>
+	<%= label_tag :name %>
+	<%= collection_select(:employee, :id, @group.employees, :id, :name) %>
+	<%= submit_tag  "Remove" %>
+</p>
+<% end %>
+
+<%= link_to "Back", groups_path %>
+
