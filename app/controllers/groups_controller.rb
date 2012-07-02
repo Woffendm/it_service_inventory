@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
   before_filter :load_employees, :only => [:index, :roster, :edit]
   before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, :roster]
-  before_filter :load_employee, :only => [:add_employee, :remove_employee]
+  before_filter :load_employee, :only => [:add_employee]
   
   
   
@@ -49,6 +49,7 @@ class GroupsController < ApplicationController
 
 
   def remove_employee
+    @employee = Employee.find(params[:employee])
     @group.employees.delete(@employee)
     redirect_to roster_group_path(@group.id)
   end

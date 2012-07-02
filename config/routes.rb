@@ -1,6 +1,8 @@
 Project1::Application.routes.draw do
   resources :services
 
+match 'employees/home' => 'employees#home'
+
   resources :groups do
     member do
       get 'roster'
@@ -11,7 +13,6 @@ Project1::Application.routes.draw do
 
   resources :employees do
     member do
-      get 'home'
       post 'add_service'
       post 'remove_service'
     end
@@ -69,7 +70,7 @@ Project1::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'employees#home'
+  root :to => 'employees#index'
 
   # See how all your routes lay out with "rake routes"
 

@@ -1,4 +1,10 @@
-<!--BEGIN SECTION 1 -->
+<head>
+	<%= javascript_include_tag :defaults %>
+	<% @groups = Group.all%>
+	<% @employees = Employee.all %>
+</head>
+
+
 <h1> Home </h1>
 
 <h2> Search </h2>
@@ -48,8 +54,18 @@
 
 <div class = "add_button">Test </div>
 
+<a href="#" id="alert">Test2</a>
+
+
 <!--BEGIN TEST SECTION-->
 <script language="javascript" type ="text/javascript">
+	
+	$(function(){
+		$("#alert").click(function() {
+			alert("Success");
+			return false;
+		})
+	})
 	
 	var add = getElementsByClass('add_button')[0];
 	addEvent(add, 'click', showStuff());

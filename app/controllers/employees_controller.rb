@@ -1,8 +1,9 @@
 class EmployeesController < ApplicationController
   
-  before_filter :load_groups, :only => [:index, :new, :edit, :home]
+  before_filter :load_groups, :only => [:index, :new, :edit, :cheese]
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
   before_filter :load_service, :only => [:add_service, :remove_service]
+  #verify :params => "service", :only => [:add_service, :remove_service]
   
   
   
@@ -33,32 +34,34 @@ class EmployeesController < ApplicationController
   
   
   def edit
+    
   end
-  
   
   
 #Action-related methods
   def update
-    @employee.update_attributes(params[:employee])
-    redirect_to employees_path 
+    if @employee.update_attributes(params[:employee])
+      redirect_to employees_path 
+      return
+    end
+      render :edit
   end
   
   
   def add_service
-    @service=Service.find(params[:service][:id])
-    @employee.services << @service
-    @index =  @employee.services.index(@service)
-    @employee.employee_allocations[@index].allocation = params[:allocation]
-    @employee.employee_allocations[@index].save
-    redirect_to edit_employee_path(@employee.id)
+    @employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
+    if @employee_allocation.save
+      redirect_to edit_employee_path(@employee.id)
+      return
+    end
+    render :edit
   end
 
 
   def remove_service
-    @service=Service.find(params[:service])
-    @index =  @employee.services.index(@service)
-    @employee.services.delete(@service)
-    @employee.employee_allocations.delete_at(@index)
+    @employee_allocation = @employee.employee_allocations.find(params[:employee_allocation])
+    @employee_allocation.delete
+    @employee.save
     redirect_to edit_employee_path(@employee.id)
   end
   
