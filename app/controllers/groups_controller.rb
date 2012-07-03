@@ -55,6 +55,13 @@ class GroupsController < ApplicationController
   end
   
   
+  def employees
+    @group = Group.find(params[:group][:id])
+    @employees = @group.employees
+    render :layout => false
+  end
+  
+  
   def destroy
     @group.destroy 
     redirect_to groups_path 

@@ -1,13 +1,16 @@
 Project1::Application.routes.draw do
   resources :services
 
-match 'employees/home' => 'employees#home'
+ match 'employees/home' => 'employees#home'
 
   resources :groups do
     member do
       get 'roster'
       post 'add_employee'
       post 'remove_employee'
+    end
+    collection do
+      get 'employees'
     end
   end
 
@@ -16,9 +19,10 @@ match 'employees/home' => 'employees#home'
       post 'add_service'
       post 'remove_service'
     end
+    collection do
+      get 'populate_employee_results'
+    end
   end
-  
-  
   
 
   # The priority is based upon order of creation:

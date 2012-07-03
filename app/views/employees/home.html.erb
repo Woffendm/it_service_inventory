@@ -1,77 +1,78 @@
 <head>
 	<%= javascript_include_tag :defaults %>
-	<% @groups = Group.all%>
-	<% @employees = Employee.all %>
+	<script src="../home.js"></script>
 </head>
 
 
 <h1> Home </h1>
 
-<h2> Search </h2>
-<table>
-	<tr>
-		<th> Group </th>
-		<th> Employee </th>
-	</tr>
-	<tr>
-		<td> 
-			<select>
-			<option selected ="selected"> All Groups </option>
-			<% @groups.each do |group| %>
-				<option value = <%= group %>>  <%= group.name %> </option>
-			<% end %>
-			</select>
-		</td>
-		<td> 
-			<select>
-			<option disabled selected ="selected"> Select Employee </option>
-			<% @employees.each do |employee| %>
-				<option value = <%= employee %>>  <%= employee.name %> </option>
-			<% end %>
-			</select> 
-		</td>
-		<td> <button>Add Below </button></td>
-	</tr>	
+<table><caption> Search</caption>
+	<thead>
+		<th>Group</th>
+		<th>Employee</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<div id="group_dropdown">
+					<%= form_tag("employees", :method => "get") do %>
+						<%= collection_select(:group, :id, @groups, :id, :name) %>
+					<% end %>
+				</div>
+			</td>
+			<td>
+				<div id="employee_dropdown">
+					<%= form_tag("populate_employee_results", :method => "get") do %>
+						<div id="employee_select_div">
+							<%= collection_select(:employee, :id, @employees, :id, :name) %>
+						</div>
+					<% end %>
+				</div>
+			</td>
+		</tr>
+	</tbody>
 </table>
 
-<div class = "all_results">
-	<h2> Results</h2>
-	<table>
-		<tr>
-			<th> Name </th>
-			<th> Services </th>
-			<th> Allocations </th>
-		</tr>
-		<tr>
-			<td> Name Here	</td>
-			<td> Services Here </td>
-			<td> Allocations Here </td>
-			<td><%= link_to "Edit Employee", edit_employee_path(@employees.first.id) %></td>
-			<td><button> Hide </button></td>
-		</tr>	
+
+
+
+<div id = "employee_results">
+	<% if @employee != nil %>
+	<table><caption> Results</caption>
+		<thead>
+			<th>Name</th>
+			<th>Services</th>
+			<th>Allocations</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td> <%= @employee.name %> </td>
+				<% @allign = true %>
+				<% @employee.employee_allocations.each do |employee_allocation| %>
+					<% if(@allign) %>
+						<td> <%= employee_allocation.service.name %> </td>
+				  	<td> <%= employee_allocation.allocation %> </td>
+						</tr>
+						<% @allign = false %>
+					<% else %>
+						<tr>
+							<td>  </td>
+							<td> <%= employee_allocation.service.name %> </td>
+			  			<td> <%= employee_allocation.allocation %> </td>
+						</tr>
+					<% end %>
+				<% end %>
+			</tr>
+		</tbody>
 	</table>
+	<% end %>
 </div>
-
-<div class = "add_button">Test </div>
-
-<a href="#" id="alert">Test2</a>
 
 
 <!--BEGIN TEST SECTION-->
 <script language="javascript" type ="text/javascript">
-	
-	$(function(){
-		$("#alert").click(function() {
-			alert("Success");
-			return false;
-		})
-	})
-	
-	var add = getElementsByClass('add_button')[0];
-	addEvent(add, 'click', showStuff());
-	function showStuff(){
-		document.write("hey yall");
-	}
-	
-//LOOK THROUGHR RAILS HELPERS
+/*
+	var resultDisplay = $("#employee_results");
+	resultDisplay.click(clicked);
+*/
 </script>

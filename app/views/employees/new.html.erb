@@ -1,19 +1,17 @@
 <h1> New Employee </h1>
+
+<%= error_messages_for :employee %>
+<h2> Change Name and Notes </h2>
 <%= form_for @employee do |form| %>
-	<%= error_messages_for :employee %>
 	<p>
 		<%= form.label :name %>
 		<%= form.text_field :name %>
 	</p>
-
 	<p>
 		<%= form.label :notes %>
-		<%= form.text_area :notes %>
+		<%= form.text_field :notes %>
 	</p>
-
-	<p>
-		<%= form.submit  "Save Employee" %>
-	</p>
+	<p><%= form.submit  "Save changes" %></p>
 <% end %>
 
 

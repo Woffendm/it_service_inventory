@@ -10,7 +10,7 @@ class EmployeeAllocation < ActiveRecord::Base
       total_allocation += an_allocation.allocation
     end
     if(total_allocation + allocation > 1)
-      errors.add(:allocation, "Your allocation is TOO DAMN HIGH")
+      errors.add(:allocation, "total cannot exceed 1")
     end
   end
 end

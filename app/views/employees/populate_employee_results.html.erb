@@ -1,0 +1,28 @@
+
+<table><caption> Results</caption>
+	<thead>
+		<th>Name</th>
+		<th>Services</th>
+		<th>Allocations</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td> <%= @employee.name %> </td>
+			<% @allign = true %>
+			<% @employee.employee_allocations.each do |employee_allocation| %>
+				<% if(@allign) %>
+					<td> <%= employee_allocation.service.name %> </td>
+			  	<td> <%= employee_allocation.allocation %> </td>
+					</tr>
+					<% @allign = false %>
+				<% else %>
+					<tr>
+						<td>  </td>
+						<td> <%= employee_allocation.service.name %> </td>
+		  			<td> <%= employee_allocation.allocation %> </td>
+					</tr>
+				<% end %>
+			<% end %>
+		</tr>
+	</tbody>
+</table>
