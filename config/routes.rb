@@ -1,4 +1,6 @@
 Project1::Application.routes.draw do
+  resources :themes
+
   resources :services
 
  match 'employees/home' => 'employees#home'

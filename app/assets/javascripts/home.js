@@ -17,7 +17,7 @@ $(document).ready(function(){
 	
 	
 	var employeeSelect = $("#employee_dropdown");
-	employeeSelect.change(function(e) {
+	employeeSelect.click(function(e) {
 		var employeeId = e.target.value;
 		$.ajax({
 			type: "GET",

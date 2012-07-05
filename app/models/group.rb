@@ -1,7 +1,8 @@
 class Group < ActiveRecord::Base
   attr_accessible :name, :employees
-  validates_presence_of :name
   has_and_belongs_to_many :employees
+  validates_presence_of :name
+
 
   def get_available_employees
     available_employees = []
@@ -12,5 +13,4 @@ class Group < ActiveRecord::Base
 		end
 		return available_employees
   end
-
 end

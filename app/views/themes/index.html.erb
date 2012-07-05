@@ -1,0 +1,19 @@
+<h1> Themes </h1>
+
+<%= link_to "New Theme" , new_theme_path %>
+
+<table class="table table-striped">
+	<thead>
+		<th> Name </th>
+	</thead>
+	<% @themes.each do |theme| %>
+		<tbody>
+			<tr>
+				<td>  <%= theme.name %> </td>
+				<td> <%= link_to "Edit" , edit_theme_path(theme.id) %> </td>
+				<td> <%= link_to "Delete", theme_path(theme.id), :method=>:delete, :confirm=>"Confirm
+				 			theme deletion" %> </td>
+			</tr>	
+		</tbody>
+	<% end %>
+</table>

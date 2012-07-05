@@ -4,6 +4,7 @@ class EmployeeAllocation < ActiveRecord::Base
   belongs_to :service
   validate :validate_total_allocation
   
+  
   def validate_total_allocation
     total_allocation = 0
     employee.employee_allocations.each do |an_allocation|
