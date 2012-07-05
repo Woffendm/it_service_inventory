@@ -3,6 +3,7 @@ $(document).ready(function(){
 		'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 	})
 
+
 	var groupSelect = $("#group_dropdown");
 	groupSelect.change(function(e) {
 		var groupId = e.target.value;
@@ -13,6 +14,7 @@ $(document).ready(function(){
 		})
 		return true;
 	});
+	
 	
 	var employeeSelect = $("#employee_dropdown");
 	employeeSelect.change(function(e) {
@@ -26,11 +28,14 @@ $(document).ready(function(){
 	});
 });
 
+
+
 function popEmployeeDropdown(response){
 	groupSelect = $("#group")
 	$("#employee_select_div").html(response);
 	return false;
 }
+
 
 function popEmployeeResults(response){
 	employeeSelect = $("#employee")

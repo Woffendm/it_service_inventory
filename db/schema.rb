@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120626171540) do
+ActiveRecord::Schema.define(:version => 20120705164446) do
 
   create_table "employee_allocations", :force => true do |t|
     t.integer  "employee_id"
@@ -25,7 +25,11 @@ ActiveRecord::Schema.define(:version => 20120626171540) do
     t.text     "notes"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.integer  "group_id"
+  end
+
+  create_table "employees_groups", :force => true do |t|
+    t.integer "employee_id"
+    t.integer "group_id"
   end
 
   create_table "groups", :force => true do |t|

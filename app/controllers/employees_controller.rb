@@ -1,27 +1,25 @@
 # This class controls the Employee model, views, and related actions
 #
-# Author:
-#
+# Author: Michael Woffendin 
+# Copyright: 
 
 class EmployeesController < ApplicationController
   
   before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results]
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
-  
+  before_filter :load_employees, :only => [:home, :index]
   
   
 # View-related methods
 
   # Page used to rapidly search for an employee
   def home
-    @employees = Employee.all
     @employee = nil
   end
   
   
   # List of all employees
   def index
-    @employees = Employee.all
   end
   
   
@@ -53,7 +51,7 @@ class EmployeesController < ApplicationController
   # Updates an employee based on info entered on the "edit" page
   def update
     if @employee.update_attributes(params[:employee])
-      redirect_to employees_path 
+      redirect_to edit_employee_path 
       return
     end
       render :edit
@@ -99,18 +97,23 @@ class EmployeesController < ApplicationController
   
   
   
-#Loading methods
+# Loading methods
 
   private
-    #Loads all groups and services
+    # Loads all groups and services alphabetically
     def load_groups
-      @groups = Group.all
-      @services = Service.all
+      @groups = Group.order(:name)
+      @services = Service.order(:name)
     end
     
     
-    #Loads an employee based off parameters given
+    # Loads an employee based off parameters given
     def load_employee
       @employee=Employee.find(params[:id])
+    end
+    
+    
+    def load_employees
+      @employees=Employee.order(:name)
     end
 end

@@ -1,83 +1,63 @@
 class ServicesController < ApplicationController
-  # GET /services
-  # GET /services.json
+    before_filter :load_service, :only => [:update, :destroy, :edit]
+
+  
+# View-related methods
+  
+  # List of all services
   def index
-    @services = Service.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @services }
-    end
+    @services = Service.order(:name)
   end
 
-  # GET /services/1
-  # GET /services/1.json
-  def show
-    @service = Service.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @service }
-    end
-  end
-
-  # GET /services/new
-  # GET /services/new.json
+  
+  # Page for creating a new service
   def new
     @service = Service.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @service }
-    end
   end
 
-  # GET /services/1/edit
+  
+  # Page for editing an existing service
   def edit
-    @service = Service.find(params[:id])
   end
 
-  # POST /services
-  # POST /services.json
+
+
+# Action-related methods 
+
+  # Creates a new service using info entered on the "new" page
   def create
     @service = Service.new(params[:service])
-
-    respond_to do |format|
-      if @service.save
-        format.html { redirect_to @service, :notice => 'Service was successfully created.' }
-        format.json { render :json => @service, :status => :created, :location => @service }
-      else
-        format.html { render :action => "new" }
-        format.json { render :json => @service.errors, :status => :unprocessable_entity }
-      end
+    if @service.save
+      redirect_to edit_service_path(@service.id)
+      return
     end
+    render :new
   end
 
-  # PUT /services/1
-  # PUT /services/1.json
+
+  # Updates an existing service using info entered on the "edit" page
   def update
-    @service = Service.find(params[:id])
-
-    respond_to do |format|
-      if @service.update_attributes(params[:service])
-        format.html { redirect_to @service, :notice => 'Service was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @service.errors, :status => :unprocessable_entity }
-      end
+    if @service.update_attributes(params[:service])
+      redirect_to edit_service_path 
+      return
     end
+      render :edit
   end
 
-  # DELETE /services/1
-  # DELETE /services/1.json
+
+  # Hurls selected service into the nearest black hole
   def destroy
-    @service = Service.find(params[:id])
-    @service.destroy
-
-    respond_to do |format|
-      format.html { redirect_to services_url }
-      format.json { head :no_content }
-    end
+    @service.destroy 
+    redirect_to services_path 
   end
+  
+
+
+# Loading methods
+
+  private
+    # Loads a service based on the id provided in params
+    def load_service
+      @service=Service.find(params[:id])
+    end
 end

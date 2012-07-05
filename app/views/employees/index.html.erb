@@ -2,32 +2,34 @@
 
 <%= link_to "New Employee" , new_employee_path %>
 
-<table>
-	<tr>
+<table class="table table-striped">
+	<thead>
 		<th> Name </th>
 		<th> Notes </th>
 		<th> Services </th>
 		<th> Allocations </th>
-	</tr>
+	</thead>
 	<% @employees.each do |employee| %>
-		<tr>
-			<% @newRow = nil %>
-			<td>  <%= employee.name %> </td>
-			<td>  <%= employee.notes %> </td>
-			<td>
-				<% employee.services.each do |service| %>
-					<%= service.name %>
-					<br/>
-				<% end %>
-			</td>
-			<td>
-				<% employee.employee_allocations.each do |employee_allocation| %>
-					<%= employee_allocation.allocation %> 
-					<br/>
-				<% end %>
-			</td>
-			<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
-			<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm employee deletion" %> </td>
-		</tr>	
+		<tbody>
+			<tr>
+				<td>  <%= employee.name %> </td>
+				<td>  <%= employee.notes %> </td>
+				<td>
+					<% employee.services.each do |service| %>
+						<%= service.name %>
+						<br/>
+					<% end %>
+				</td>
+				<td>
+					<% employee.employee_allocations.each do |employee_allocation| %>
+						<%= employee_allocation.allocation %> 
+						<br/>
+					<% end %>
+				</td>
+				<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
+				<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm
+				 			employee deletion" %> </td>
+			</tr>	
+		</tbody>
 	<% end %>
 </table>

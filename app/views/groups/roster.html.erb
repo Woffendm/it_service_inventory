@@ -18,7 +18,7 @@
 		<th> Employees</th>
 	</thead>
 	<tbody>
-		<% @group.employees.each do |employee| %>
+		<% @group.employees.order(:name).each do |employee| %>
 			<tr>
 				<td><%= employee.name %></td>
 				<td>
