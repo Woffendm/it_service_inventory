@@ -2,11 +2,12 @@
 
 <%= link_to "New Group" , new_group_path %>
 <table class="table table-striped">
+	<caption> All Groups </caption>
 	<thead>
 		<th> Name </th>
-		<th> </th>
-		<th> Total <br/> Employees </th>
-		<th> </th>
+		<th> Edit Name </th>
+		<th> Total Employees </th>
+		<th> Employee Roster </th>
 		<th> Delete</th>
 	</thead>
 	<% if Group.first != nil %>

@@ -1,1 +1,2 @@
-<%= collection_select(:employee, :id, @employees, :id, :name) %>
+<%= collection_select(:employee, :id, @employees, :id, :name, 
+											{:prompt => 'Select Employee' }) %>

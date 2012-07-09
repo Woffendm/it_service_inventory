@@ -3,11 +3,14 @@
 <%= link_to "New Employee" , new_employee_path %>
 
 <table class="table table-striped">
+	<caption> All Employees </caption>
 	<thead>
 		<th> Name </th>
 		<th> Notes </th>
 		<th> Services </th>
 		<th> Allocations </th>
+		<th> Edit </th>
+		<th> Delete </th>
 	</thead>
 	<% @employees.each do |employee| %>
 		<tbody>

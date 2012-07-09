@@ -25,6 +25,7 @@ class EmployeesController < ApplicationController
   
   # List of all employees
   def index
+    @theme = "volkura"
   end
   
   

@@ -2,9 +2,12 @@
 
 <%= link_to 'New Service', new_service_path %>
 
-<table>
+<table class="table table-striped">
+	<caption> All Services </caption>
   <thead>
-    <th>Name</th>
+    <th> Name </th>
+		<th> Edit </th>
+		<th> Delete </th>
   </thead>
 	<% @services.each do |service| %>
 		<tbody>

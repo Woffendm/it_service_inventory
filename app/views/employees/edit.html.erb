@@ -30,10 +30,11 @@
 
 
 <!-- Creates table with the employee's services and allocations -->
-<table><caption> Existing Services</caption>
+<table class="table table-striped"><caption> Existing Services</caption>
 	<thead>
 		<th>Services</th>
 		<th>Allocations</th>
+		<th> Remove Service </th>
 	</thead>
 	<tbody>
 		<% @employee.employee_allocations.each do |employee_allocation| %>

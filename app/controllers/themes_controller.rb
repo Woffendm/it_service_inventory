@@ -44,7 +44,7 @@ class ThemesController < ApplicationController
 
 
 
-  # Casts the selected theme into an unfathomable abyss of destruction
+  # The selected theme is forced to listen to Justin Beiber until it destroys itself
   def destroy
     @theme.destroy 
     redirect_to themes_path 

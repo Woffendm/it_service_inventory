@@ -6,7 +6,7 @@
 
 <h1> Home </h1>
 
-<table><caption> Search</caption>
+<table class="table table-striped"><caption> Search</caption>
 	<thead>
 		<th>Group</th>
 		<th>Employee</th>
@@ -16,7 +16,8 @@
 			<td>
 				<div id="group_dropdown">
 					<%= form_tag("employees", :method => "get") do %>
-						<%= collection_select(:group, :id, @groups, :id, :name) %>
+						<%= collection_select(:group, :id, @groups, :id, :name, 
+																	{:prompt => 'All Groups' }) %>
 					<% end %>
 				</div>
 			</td>
@@ -24,7 +25,8 @@
 				<div id="employee_dropdown">
 					<%= form_tag("populate_employee_results", :method => "get") do %>
 						<div id="employee_select_div">
-							<%= collection_select(:employee, :id, @employees, :id, :name) %>
+							<%= collection_select(:employee, :id, @employees, :id, :name, 
+																		{:prompt => 'Select Employee' }) %>
 						</div>
 					<% end %>
 				</div>
@@ -38,7 +40,7 @@
 
 <div id = "employee_results">
 	<% if @employee != nil %>
-	<table><caption> Results</caption>
+	<table class="table table-striped"><caption> Results</caption>
 		<thead>
 			<th>Name</th>
 			<th>Services</th>
