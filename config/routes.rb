@@ -1,9 +1,9 @@
 Project1::Application.routes.draw do
-  resources :themes
-
+  
   resources :services
 
  match 'employees/home' => 'employees#home'
+ match 'employees/search_ldap_view' => 'employees#search_ldap_view'
 
   resources :groups do
     member do
@@ -23,9 +23,16 @@ Project1::Application.routes.draw do
     end
     collection do
       get 'populate_employee_results'
+      get 'search_ldap'
+      post 'ldap_create'
     end
   end
   
+  resources :app_settings do
+    collection do
+      post 'change_active_theme'
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
