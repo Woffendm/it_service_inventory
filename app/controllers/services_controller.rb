@@ -1,3 +1,8 @@
+# This class controls the Service model, views, and related actions
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class ServicesController < ApplicationController
     before_filter :load_service, :only => [:update, :destroy, :edit]
 

@@ -6,7 +6,7 @@
 
 <h1> Home </h1>
 
-<table class="table table-striped"><caption> Search</caption>
+<table class="table table-striped"><caption> Browse Existing Employees </caption>
 	<thead>
 		<th>Group</th>
 		<th>Employee</th>
@@ -36,36 +36,5 @@
 </table>
 
 
-
-
 <div id = "employee_results">
-	<% if @employee != nil %>
-	<table class="table table-striped"><caption> Results</caption>
-		<thead>
-			<th>Name</th>
-			<th>Services</th>
-			<th>Allocations</th>
-		</thead>
-		<tbody>
-			<tr>
-				<td> <%= @employee.name %> </td>
-				<% @allign = true %>
-				<% @employee.employee_allocations.each do |employee_allocation| %>
-					<% if(@allign) %>
-						<td> <%= employee_allocation.service.name %> </td>
-				  	<td> <%= employee_allocation.allocation %> </td>
-						</tr>
-						<% @allign = false %>
-					<% else %>
-						<tr>
-							<td>  </td>
-							<td> <%= employee_allocation.service.name %> </td>
-			  			<td> <%= employee_allocation.allocation %> </td>
-						</tr>
-					<% end %>
-				<% end %>
-			</tr>
-		</tbody>
-	</table>
-	<% end %>
 </div>

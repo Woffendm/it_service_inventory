@@ -1,0 +1,17 @@
+body{
+	margin: 5em;
+	border-style: ridge;
+	border-width: 0px;
+	border-color: black;
+}
+
+thead{
+	color: orange;
+	background: black;
+}
+
+caption{
+	font-size: 150%;
+	color: black;
+	background: orange;
+}

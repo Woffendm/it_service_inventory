@@ -6,10 +6,9 @@
 class EmployeesController < ApplicationController
   
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
-  before_filter :load_employees, :only => [:home, :index]
-  before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results]
-  
-  
+  before_filter :load_employees, :only => [:home, :edit, :index]
+  before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results, :search_ldap]
+    
 # View-related methods
 
   # Page for editing an existing employee
@@ -25,7 +24,6 @@ class EmployeesController < ApplicationController
   
   # List of all employees
   def index
-    @theme = "volkura"
   end
   
   
@@ -34,8 +32,41 @@ class EmployeesController < ApplicationController
     @employee=Employee.new
   end
   
+
+  # 
+  def search_ldap_view
+    @data = nil
+    @message = ""
+  end
+
+
+  # 
+  def search_ldap
+    @employee = Employee.new
+    @message = ""
+    search = params[:last_name] 
+    if params[:first_name] != ""
+      search = search + ", " + params[:first_name]
+    end
+    @data = RemoteEmployee.search(search)
+    render :search_ldap_view
+  end
   
   
+  # Imports an employee from the OSU LDAP
+  def ldap_create
+    @employee=Employee.new
+    @employee.name = params[:name]
+    @employee.osu_id = params[:osu_id]
+    @employee.osu_username = params[:osu_username]
+    @employee.email = params[:email]
+    if @employee.save
+      @message = "Employee added to application!"
+    else
+      @message = "Error: Employee is already in the application :("
+    end
+    render :search_ldap_view
+  end
   
   
 # Action-related methods

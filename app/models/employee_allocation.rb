@@ -1,3 +1,8 @@
+# This class links together Employees and Services.
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class EmployeeAllocation < ActiveRecord::Base
   attr_accessible :allocation, :employee_id, :service_id, :employee
   belongs_to :employee
@@ -5,6 +10,7 @@ class EmployeeAllocation < ActiveRecord::Base
   validate :validate_total_allocation
   
   
+  # Returns an error message if an employee's total allocation exceeds 1
   def validate_total_allocation
     total_allocation = 0
     employee.employee_allocations.each do |an_allocation|

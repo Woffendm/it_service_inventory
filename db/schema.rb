@@ -10,7 +10,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120705230300) do
+ActiveRecord::Schema.define(:version => 20120710165104) do
+
+  create_table "app_settings", :force => true do |t|
+    t.string   "code"
+    t.string   "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "employee_allocations", :force => true do |t|
     t.integer  "employee_id"
@@ -22,9 +29,12 @@ ActiveRecord::Schema.define(:version => 20120705230300) do
 
   create_table "employees", :force => true do |t|
     t.string   "name"
+    t.string   "email"
+    t.string   "osu_username"
+    t.string   "osu_id"
     t.text     "notes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "employees_groups", :force => true do |t|
@@ -39,12 +49,6 @@ ActiveRecord::Schema.define(:version => 20120705230300) do
   end
 
   create_table "services", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "themes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

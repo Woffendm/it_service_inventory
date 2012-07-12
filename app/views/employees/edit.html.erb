@@ -1,31 +1,46 @@
 <h1> Edit Employee <%= @employee.name %> </h1>
 
 <%= error_messages_for :employee %>
-<h2> Change Name and Notes </h2>
-<%= form_for @employee do |form| %>
-	<p>
-		<%= form.label :name %>
-		<%= form.text_field :name %>
-	</p>
-	<p>
-		<%= form.label :notes %>
-		<%= form.text_field :notes %>
-	</p>
-	<p><%= form.submit  "Save changes" %></p>
-<% end %>
+<table class="table table-striped"><caption> Edit Employee Attributes </caption>
+	<thead>
+		<th> Name </th>
+		<th> Email </th>
+		<th> Notes </th>
+		<th> </th>
+	</thead>
+	<tbody>
+		<tr>
+			<%= form_for @employee do |form| %>
+				<td> <%= form.text_field :name %> </td>
+				<td> <%= form.text_field :email %> </td>	
+				<td> <%= form.text_field :notes %> </td>
+				<td> <%= form.submit  "Save changes" %> </td>
+			<% end %>
+		</tr>
+	</tbody>
+</table>
 
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
-<h2> Add Services </h2>
-<%= form_tag("add_service", :method => "post") do %>
-<%= error_messages_for :employee_allocation %>
-	<p>
-		<%= label_tag :name %>
-		<%= collection_select(:employee_allocation, :service_id, @employee.get_available_services, :id, :name) %>
-		<%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]) %>
-		<%= submit_tag  "Add" %>
-	</p>
-<% end %>
+<table class="table table-striped"><caption> Add Service </caption>
+	<thead>
+		<th>Service</th>
+		<th>Allocation</th>
+		<th> Submit </th>
+	</thead>
+	<tbody>
+		<tr>
+			<%= form_tag("add_service", :method => "post") do %>
+				<%= error_messages_for :employee_allocation %>
+				<td> <%= collection_select(:employee_allocation, :service_id,
+				 														@employee.get_available_services, :id, :name) %> </td>
+				<td> <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+					 							0.9, 1]) %> </td>
+				<td> <%= submit_tag  "Add" %> </td>
+			<% end %>
+		<tr>
+	</tbody>
+</table>
 
 
 

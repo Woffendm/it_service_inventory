@@ -1,11 +1,14 @@
 <h1> Employees </h1>
 
-<%= link_to "New Employee" , new_employee_path %>
+<%= link_to "New Employee: Manually Enter" , new_employee_path %>
+<br/>
+<%= link_to "New Employee: Search OSU Directory" , employees_search_ldap_view_path %>
 
 <table class="table table-striped">
 	<caption> All Employees </caption>
 	<thead>
 		<th> Name </th>
+		<th> Email </th>
 		<th> Notes </th>
 		<th> Services </th>
 		<th> Allocations </th>
@@ -16,6 +19,7 @@
 		<tbody>
 			<tr>
 				<td>  <%= employee.name %> </td>
+				<td>	<%= employee.email %> </td>
 				<td>  <%= employee.notes %> </td>
 				<td>
 					<% employee.services.each do |service| %>

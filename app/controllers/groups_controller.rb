@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
   
   # Populates the employee dropdown list on the "employee/home" page based on the group selected
   def employees
-    if(params[:group][:id] == nil)
+    if params[:group][:id].nil?
       @employees = Employee.all
     else 
       @group = Group.find(params[:group][:id])

@@ -6,23 +6,16 @@
 		<th>Allocations</th>
 	</thead>
 	<tbody>
-		<tr>
-			<td> <%= @employee.name %> </td>
-			<% @allign = true %>
-			<% @employee.employee_allocations.each do |employee_allocation| %>
-				<% if(@allign) %>
-					<td> <%= employee_allocation.service.name %> </td>
-			  	<td> <%= employee_allocation.allocation %> </td>
-					</tr>
-					<% @allign = false %>
+		<% @employee.employee_allocations.each do |employee_allocation| %>
+			<tr>
+				<% if employee_allocation == @employee.employee_allocations.first %>
+					<td> <%= @employee.name %> </td>
 				<% else %>
-					<tr>
-						<td>  </td>
-						<td> <%= employee_allocation.service.name %> </td>
-		  			<td> <%= employee_allocation.allocation %> </td>
-					</tr>
+					<td> </td>
 				<% end %>
-			<% end %>
-		</tr>
+				<td> <%= employee_allocation.service.name %> </td>
+		  	<td> <%= employee_allocation.allocation %> </td>
+			</tr>
+		<% end %>
 	</tbody>
 </table>
