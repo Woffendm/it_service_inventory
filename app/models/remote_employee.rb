@@ -6,10 +6,10 @@ class RemoteEmployee
     filter = Net::LDAP::Filter.eq("cn", employee_name.to_s + "*")
     treebase = "ou=People, o=orst.edu"
     ldap_results = ldap.search(:base => treebase, :filter => filter)
-    if ldap_results != nil
-      ldap_results = ldap_results.sort_by { |u| u.cn }
+    if ldap_results.nil?
+      return nil
     end
-    return ldap_results
+    return ldap_results.sort_by { |u| u.cn }
   end
   
 end

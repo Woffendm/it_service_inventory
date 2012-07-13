@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20120710165104) do
     t.text     "notes"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.integer  "group_id"
   end
 
   create_table "employees_groups", :force => true do |t|
@@ -49,6 +50,12 @@ ActiveRecord::Schema.define(:version => 20120710165104) do
   end
 
   create_table "services", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "themes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false

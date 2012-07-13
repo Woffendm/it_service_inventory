@@ -34,8 +34,7 @@
 					<% end %>
 				</td>
 				<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
-				<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm
-				 			employee deletion" %> </td>
+				<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm employee deletion" %> </td>
 			</tr>	
 		</tbody>
 	<% end %>

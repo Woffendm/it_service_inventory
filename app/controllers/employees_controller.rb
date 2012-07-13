@@ -8,6 +8,7 @@ class EmployeesController < ApplicationController
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
   before_filter :load_employees, :only => [:home, :edit, :index]
   before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results, :search_ldap]
+
     
 # View-related methods
 
@@ -33,40 +34,13 @@ class EmployeesController < ApplicationController
   end
   
 
-  # 
+  # Page for searching the OSU directory for new employees
   def search_ldap_view
     @data = nil
     @message = ""
   end
-
-
-  # 
-  def search_ldap
-    @employee = Employee.new
-    @message = ""
-    search = params[:last_name] 
-    if params[:first_name] != ""
-      search = search + ", " + params[:first_name]
-    end
-    @data = RemoteEmployee.search(search)
-    render :search_ldap_view
-  end
   
   
-  # Imports an employee from the OSU LDAP
-  def ldap_create
-    @employee=Employee.new
-    @employee.name = params[:name]
-    @employee.osu_id = params[:osu_id]
-    @employee.osu_username = params[:osu_username]
-    @employee.email = params[:email]
-    if @employee.save
-      @message = "Employee added to application!"
-    else
-      @message = "Error: Employee is already in the application :("
-    end
-    render :search_ldap_view
-  end
   
   
 # Action-related methods
@@ -102,6 +76,22 @@ class EmployeesController < ApplicationController
   end
 
 
+  # Imports an employee from the OSU LDAP and saves them to the application
+  def ldap_create
+    @employee=Employee.new
+    @employee.name = params[:name]
+    @employee.osu_id = params[:osu_id]
+    @employee.osu_username = params[:osu_username]
+    @employee.email = params[:email]
+    if @employee.save
+      @message = "Employee added to application!"
+    else
+      @message = "Error: Employee is already in the application :("
+    end
+    render :search_ldap_view
+  end
+
+
   # Populates the employee dropdown list on the "home" page based off the employee roster of the
   # selected group
   def populate_employee_results
@@ -117,6 +107,19 @@ class EmployeesController < ApplicationController
     @employee_allocation.delete
     @employee.save
     redirect_to edit_employee_path(@employee.id)
+  end
+
+
+  # Searches the OSU directory for individuals with the last and first names provided
+  def search_ldap
+    @employee = Employee.new
+    @message = ""
+    search = params[:last_name] 
+    if params[:first_name] != ""
+      search = search + ", " + params[:first_name]
+    end
+    @data = RemoteEmployee.search(search)
+    render :search_ldap_view
   end
 
 
