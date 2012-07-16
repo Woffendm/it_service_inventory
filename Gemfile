@@ -13,6 +13,8 @@ gem 'dynamic_form'
 
 gem 'net-ldap'
 
+gem 'therubyracer'
+
 group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
