@@ -11,25 +11,30 @@ describe Group do
   
   
   describe "available employees" do
-    employee = Employee.new
-    employee.name = "some employee"
-    employee.save
-    group = Group.new
+    before do
+      @employee = Employee.create(:name => "first employee")
+      @employee_2 = Employee.create(:name => "last employee")
+      @group = Group.create(:name => "some group")
+      @group.employees.push(@employee)
+    end
     
     
     # get_available_employees cannot return more employees than actually exist
     it "should be at most Employee.all" do
-      assert (group.get_available_employees.length <= Employee.all.length)
+      @group.get_available_employees.length.should <= Employee.all.length
     end
   
     
-    group.employees.push(Employee.all)
-    group.save
-    
+    # get_available_employees returns only employees not currently assigned to the group
+    it "should return only available employees" do
+      @group.get_available_employees.first.id.should eq(@employee_2.id)
+    end
+  
     
     # get_available_employees only returns available employees
     it "should return an empty array if there are no available employees" do
-      assert group.get_available_employees == []
+      @group.employees.push(@employee_2)
+      @group.get_available_employees.should be_empty
     end
   end
 end

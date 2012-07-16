@@ -10,26 +10,39 @@ describe Employee do
   end
   
   
-  describe "available services" do
-    service = Service.new
-    service.name = "some service"
-    service.save
+  # Can save when given a name
+  it "should save when given a name" do
     employee = Employee.new
-    
+    employee.name = "some employee"
+    employee.should be_valid
+  end
+  
+  
+  describe "available services" do
+    before do
+      @service = Service.create(:name => "first service")
+      @service_2 = Service.create(:name => "last service")
+      @employee = Employee.create(:name => "some employee")
+      @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1)
+    end
+
     
     # get_available_services cannot return more services than actually exist
     it "should be at most Service.all" do
-      assert (employee.get_available_services.length <= Service.all.length)
+      @employee.get_available_services.length.should <= Service.all.length
     end
-  
-    
-    employee.services.push(service)
-    employee.save
     
     
-    # get_available_services only returns available services
+    # get_available_services returns only services not currently assigned to the employee
+    it "should return only available services" do
+      @employee.get_available_services.first.id.should eq(@service_2.id)
+    end
+
+    
+    # get_available_services returns an empty array if no services are available
     it "should return an empty array if there are no available services" do
-      assert employee.get_available_services == []
+      @employee.employee_allocations.create(:service_id => @service_2.id, :allocation => 0.1)
+      @employee.get_available_services.should be_empty
     end
   end
 end
