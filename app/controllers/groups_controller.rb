@@ -20,7 +20,7 @@ class GroupsController < ApplicationController
   
   # Page for creating a new group
   def new
-    @group=Group.new
+    @group = Group.new
   end
   
   
@@ -39,7 +39,7 @@ class GroupsController < ApplicationController
   
   # Creates a new group using the information entered on the "new" page
   def create
-    @group=Group.new(params[:group])
+    @group = Group.new(params[:group])
     if @group.save
       redirect_to groups_path
       return
@@ -101,7 +101,7 @@ class GroupsController < ApplicationController
   
     # Loads a group based on given parameters
     def load_group
-      @group=Group.find(params[:id])
+      @group = Group.find(params[:id])
     end
     
     # Loads an employee based on given parameters

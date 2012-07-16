@@ -63,6 +63,6 @@ class ServicesController < ApplicationController
   private
     # Loads a service based on the id provided in params
     def load_service
-      @service=Service.find(params[:id])
+      @service = Service.find(params[:id])
     end
 end

@@ -30,7 +30,7 @@ class EmployeesController < ApplicationController
   
   # Page for creating a new employee
   def new
-    @employee=Employee.new
+    @employee = Employee.new
   end
   
 
@@ -59,7 +59,7 @@ class EmployeesController < ApplicationController
   
   # Creates a new employee using info entered on the "new" page
   def create
-    @employee=Employee.new(params[:employee])
+    @employee = Employee.new(params[:employee])
     if @employee.save
       redirect_to edit_employee_path(@employee.id)
       return
@@ -141,13 +141,13 @@ class EmployeesController < ApplicationController
   private
     # Loads an employee based off parameters given
     def load_employee
-      @employee=Employee.find(params[:id])
+      @employee = Employee.find(params[:id])
     end
     
     
     # Loads all employees in alphabetical order
     def load_employees
-      @employees=Employee.order(:name)
+      @employees = Employee.order(:name)
     end
     
     
