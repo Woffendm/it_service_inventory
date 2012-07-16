@@ -15,6 +15,8 @@ gem 'net-ldap'
 
 gem 'therubyracer'
 
+gem 'cancan'
+
 group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
