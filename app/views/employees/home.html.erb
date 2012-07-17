@@ -18,7 +18,7 @@
 	<div id="employee_dropdown">
 		<%= form_tag("populate_employee_results", :method => "get") do %>
 			<div id="employee_select_div">
-							<%= label_tag "Employee Name: " %>
+				<%= label_tag "Employee Name: " %>
 				<%= collection_select(:employee, :id, @employees, :id, :name,	{:prompt => 'Select Employee' }) %>
 			</div>
 		<% end %>

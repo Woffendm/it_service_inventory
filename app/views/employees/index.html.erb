@@ -1,44 +1,45 @@
-		<h2> Employees </h2>
-		<%= link_to "Add New Employee" , employees_search_ldap_view_path %>
-			<table class="list issues">
-				<caption> All Employees </caption>
-				<thead>
-					<th> Name </th>
-					<th> Email </th>
-					<th> Notes </th>
-					<th> Services </th>
-					<th> Allocations </th>
-					<th> Edit </th>
-					<th> Delete </th>
-				</thead>
-				<tbody>
-					<% @employees.each do |employee| %>
-						<% if @odd %>
-							<% @odd = false %>
-							<tr class="even">
-						<% else %>
-							<% @odd = true %>
-							<tr class="odd">
+<h2> Employees </h2>
+	
+	
+<%= link_to "Add New Employee" , employees_search_ldap_view_path %>
+<table class="list issues">
+	<caption> All Employees </caption>
+	<thead>
+		<th> Name </th>
+		<th> Email </th>
+		<th> Notes </th>
+		<th> Services </th>
+		<th> Allocations </th>
+		<th> Edit </th>
+		<th> Delete </th>
+	</thead>
+	<tbody>
+		<% @employees.each do |employee| %>
+			<% if @odd %>
+				<% @odd = false %>
+				<tr class="even">
+			<% else %>
+				<% @odd = true %>
+				<tr class="odd">
+			<% end %>
+				<td>  <%= employee.name %> </td>
+				<td>	<%= employee.email %> </td>
+				<td>  <%= employee.notes %> </td>
+				<td>
+					<% employee.services.each do |service| %>
+						<%= service.name %>
+						<br/>
 						<% end %>
-						<td>  <%= employee.name %> </td>
-						<td>	<%= employee.email %> </td>
-						<td>  <%= employee.notes %> </td>
-						<td>
-							<% employee.services.each do |service| %>
-								<%= service.name %>
-								<br/>
-							<% end %>
-						</td>
-						<td>
-							<% employee.employee_allocations.each do |employee_allocation| %>
-								<%= employee_allocation.allocation %> 
-								<br/>
-							<% end %>
-						</td>
-						<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
-						<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete,
-						 		:confirm=>"Confirm employee deletion" %> </td>
-					</tr>	
-				<% end %>
-			</tbody>
-		</table>
+				</td>
+				<td>
+					<% employee.employee_allocations.each do |employee_allocation| %>
+						<%= employee_allocation.allocation %> 
+						<br/>
+					<% end %>
+				</td>
+				<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
+				<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm employee deletion" %> </td>
+			</tr>	
+		<% end %>
+	</tbody>
+</table>

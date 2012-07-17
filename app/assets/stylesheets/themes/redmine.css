@@ -110,7 +110,7 @@ div#welcome-store-content h1, div#welcome-store-content h2, div#welcome-store-co
     box-shadow: 0 0 3px 0 #CCCCCC;
 }
 a, a:link, a:visited {
-    color: #005782;
+		color: blue;
 }
 div.issue {
     background: none repeat scroll 0 0 #FFFFDD;

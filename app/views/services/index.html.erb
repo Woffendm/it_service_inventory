@@ -1,12 +1,13 @@
 <h2>Services</h2>
 
+
 <%= link_to 'New Service', new_service_path %>
+
 
 <table class="list issues">
 	<caption> All Services </caption>
   <thead>
     <th> Name </th>
-		<th> Edit </th>
 		<th> Delete </th>
   </thead>
 	<tbody>
@@ -18,10 +19,9 @@
 				<% @odd = true %>
 				<tr class="odd">
 			<% end %>
-    		<td><%= service.name %></td>
-    		<td><%= link_to 'Edit', edit_service_path(service.id) %></td>
-    		<td> <%= link_to "Delete", service_path(service.id), :method=>:delete, :confirm=>"Confirm
- 						service deletion" %> </td>
+    		<td><%= link_to  service.name, edit_service_path(service.id) %> </td>
+    		<td> <%= link_to "Delete", service_path(service.id), :method=>:delete, :confirm=>
+								"Confirm service deletion" %> </td>
   		</tr>
 		<% end %>
 	</tbody>

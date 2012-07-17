@@ -6,7 +6,7 @@
 
 class RemoteEmployee
   
-  # This 
+  # This method searches the OSU LDAP directory for a given employee and returns an array of results
   def self.search(employee_name)
     ldap = Net::LDAP.new :host => "client-ldap.onid.orst.edu", :port => 389
     filter = Net::LDAP::Filter.eq("cn", employee_name.to_s + "*")

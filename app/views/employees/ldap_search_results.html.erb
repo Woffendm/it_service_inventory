@@ -1,38 +1,38 @@
 <table class="list issues"><caption> Employee Search Results </caption>
-		<thead>
-			<th> Name </th>
-			<th> Department </th>
-			<th> Email </th>
-			<th> Add To Application </th>
-		</thead>
-		<tbody>
-			<% @data.each do |entry| %>
-				<tr>
-					<%= form_tag("ldap_create", :method => "post") do %>
-  					<td> <%= entry.cn.first %> </td>
-						<% if entry.respond_to?(:osudepartment) %>
-							<td> <%= entry.osudepartment.first %> </td>
-						<% else %>
-							<td>  </td>
-						<% end %>
-						<% if entry.respond_to?(:mail) %>
-							<td> 
-								<%= entry.mail.first %> 
-								<%= hidden_field_tag(:email, entry.mail.first) %>
-							</td>
-						<% else %>
-							<td>
-								<%= hidden_field_tag(:email, "") %>
-							</td>
-						<% end %>
+	<thead>
+		<th> Name </th>
+		<th> Department </th>
+		<th> Email </th>
+		<th> Add To Application </th>
+	</thead>
+	<tbody>
+		<% @data.each do |entry| %>
+			<tr>
+				<%= form_tag("ldap_create", :method => "post") do %>
+  				<td> <%= entry.cn.first %> </td>
+					<% if entry.respond_to?(:osudepartment) %>
+						<td> <%= entry.osudepartment.first %> </td>
+					<% else %>
+						<td>  </td>
+					<% end %>
+					<% if entry.respond_to?(:mail) %>
 						<td> 
-							<%= hidden_field_tag(:name, entry.cn.first) %>
-							<%= hidden_field_tag(:osu_username, entry.uid.first) %>
-							<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
-							<%= submit_tag  "Add Employee" %> 
+							<%= entry.mail.first %> 
+							<%= hidden_field_tag(:email, entry.mail.first) %>
+						</td>
+					<% else %>
+						<td>
+							<%= hidden_field_tag(:email, "") %>
 						</td>
 					<% end %>
-				</tr>
-			<% end %>
-		</tbody>
-	</table>
+					<td> 
+						<%= hidden_field_tag(:name, entry.cn.first) %>
+						<%= hidden_field_tag(:osu_username, entry.uid.first) %>
+						<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
+						<%= submit_tag  "Add Employee" %> 
+					</td>
+				<% end %>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

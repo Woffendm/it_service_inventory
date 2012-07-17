@@ -1,11 +1,12 @@
 <h2> Edit Group: <%= @group.name %> </h2>
+
+
 <%= error_messages_for :group %>
 <%= form_for @group do |form| %>
 	<p>
 		<%= form.label :name %>
 		<%= form.text_field :name %>
 	</p>
-
 	<p>
 		<%= form.submit  "Save Group" %>
 	</p>

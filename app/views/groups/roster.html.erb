@@ -1,5 +1,6 @@
 <h2> Employee Roster for Group: <%= @group.name %> </h2>
 
+
 <% if @group.get_available_employees.length > 0 %>
 	<h3>Add Employee</h3>
 	<div id="my-form">
@@ -12,6 +13,7 @@
 		<% end %>
 	</div>
 <% end %>
+
 
 <% if @group.employees.length > 0 %>
 	<table class="list issues"><caption> Existing Employees </caption>
