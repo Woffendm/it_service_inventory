@@ -1,7 +1,7 @@
-<h1> Groups </h1>
+<h2> Groups </h2>
 
 <%= link_to "New Group" , new_group_path %>
-<table class="table table-striped">
+<table class="list issues">
 	<caption> All Groups </caption>
 	<thead>
 		<th> Name </th>
@@ -13,13 +13,18 @@
 	<% if Group.first != nil %>
 		<% @groups.each do |group| %>
 			<tbody>
-				<tr>
+				<% if @odd %>
+					<% @odd = false %>
+					<tr class="even">
+				<% else %>
+					<% @odd = true %>
+					<tr class="odd">
+				<% end %>
 					<td> <%= group.name %></td>
 					<td> <%= link_to "Edit Name" , edit_group_path(group.id) %></td>
 					<td> <%= group.employees.length %> </td>
 					<td> <%= link_to "Employee Roster" , roster_group_path(group.id) %></td>
-					<td> <%= link_to "Delete", group_path(group.id), :method=>:delete, :confirm=>"Confirm
-					 			group deletion" %> </td>
+					<td> <%= link_to "Delete", group_path(group.id), :method=>:delete, :confirm=>"Confirm group deletion" %> </td>
 				</tr>	
 			</tbody>
 		<% end %>

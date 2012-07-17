@@ -1,37 +1,45 @@
+<h2> Employee Roster for Group: <%= @group.name %> </h2>
 
-<h1> Employee Roster for <%= @group.name %> </h1>
-
-<h2> Add Employees </h2>
-
-<%= form_tag("add_employee", :method => "post") do %>
-	<p>
-		<%= label_tag :name %>
-		<%= collection_select(:employee, :id, @group.get_available_employees, :id, :name) %>
-		<%= submit_tag  "Add" %>
-	</p>
+<% if @group.get_available_employees.length > 0 %>
+	<h3>Add Employee</h3>
+	<div id="my-form">
+		<%= form_tag("add_employee", :method => "post") do %>
+			<p>
+				<%= label_tag :name %>
+				<%= collection_select(:employee, :id, @group.get_available_employees, :id, :name) %>
+				<%= submit_tag  "Add" %>
+			</p>
+		<% end %>
+	</div>
 <% end %>
 
-
-
-<table class="table table-striped"><caption> Existing Employees </caption>
-	<thead>
-		<th> Employees</th>
-		<th> Remove </th>
-	</thead>
-	<tbody>
-		<% @group.employees.order(:name).each do |employee| %>
-			<tr>
-				<td><%= employee.name %></td>
-				<td>
-					<%= form_tag("remove_employee", :method => "post") do %>
-						<%= hidden_field_tag(:employee, employee.id) %>
-						<%= submit_tag  "Remove", :confirm => "Confirm removal." %>
-					<% end %>
-				</td>
-			</tr>
-		<% end %>
-	</tbody>
-</table>
+<% if @group.employees.length > 0 %>
+	<table class="list issues"><caption> Existing Employees </caption>
+		<thead>
+			<th> Employees</th>
+			<th> Remove </th>
+		</thead>
+		<tbody>
+			<% @group.employees.order(:name).each do |employee| %>
+				<% if @odd %>
+					<% @odd = false %>
+					<tr class="even">
+				<% else %>
+					<% @odd = true %>
+					<tr class="odd">
+				<% end %>
+					<td><%= employee.name %></td>
+					<td>
+						<%= form_tag("remove_employee", :method => "post") do %>
+							<%= hidden_field_tag(:employee, employee.id) %>
+							<%= submit_tag  "Remove", :confirm => "Confirm removal." %>
+						<% end %>
+					</td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+<% end %>
 
 
 <%= link_to "Back", groups_path %>

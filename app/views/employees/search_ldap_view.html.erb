@@ -3,37 +3,29 @@
 	<!--<script src="../search_ldap_view.js"></script> -->
 </head>
 
+<h2> Add Employee to Application </h2>
 
-<h1> Search OSU Directory </h1>
-<table class="table table-striped"><caption> Search OSU Directory </caption>
-	<thead>
-		<th> Last Name </th>
-		<th> First Name </th>
-		<th> Search </th>
-	</thead>
-	<tbody>
-		<tr>
-			<%= form_tag("search_ldap", :method => "get") do %>
-				<td>
-					<div id="last_name_search">
-						<%= text_field_tag(:last_name) %>
-					</div>
-				</td>
-				<td>
-					<div id="first_name_search">
-						<%= text_field_tag(:first_name) %>
-					</div>
-				</td>
-				<td> <%= submit_tag "Search" %> </td>
-			<% end %>
-		</tr>
-	</tbody>
-</table>
+<h3> Search OSU Directory </h3>
+<div id="my-form">
+	<%= form_tag("search_ldap", :method => "get") do %>
+		<div id="last_name_search">
+			<%= label_tag "Last name:" %>
+			<%= text_field_tag(:last_name) %>
+		</div>
+		<div id="first_name_search">
+			<%= label_tag "First name:" %>
+			<%= text_field_tag(:first_name) %>
+		</div>
+		<div> 
+			<%= submit_tag "Search" %> 
+		</div>
+	<% end %>
+</div>
 
 <%= @message %>
 
 <% if @data != nil %>
-	<table class="table table-striped"><caption> Employee Search Results </caption>
+	<table class="list issues"><caption> Employee Search Results </caption>
 		<thead>
 			<th> Name </th>
 			<th> Department </th>
@@ -42,7 +34,13 @@
 		</thead>
 		<tbody>
 			<% @data.each do |entry| %>
-				<tr>
+				<% if @odd %>
+					<% @odd = false %>
+					<tr class="even">
+				<% else %>
+					<% @odd = true %>
+					<tr class="odd">
+				<% end %>
 					<%= form_tag("ldap_create", :method => "post") do %>
   					<td> <%= entry.cn.first %> </td>
 						<% if entry.respond_to?(:osudepartment) %>
@@ -75,3 +73,5 @@
 
 <div id = "ldap_search_results">
 </div>
+
+<%= link_to "Back", employees_path %>

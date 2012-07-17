@@ -1,7 +1,6 @@
-<h1> Edit Service <%= @service.name %> </h1>
+<h2> Edit Service: <%= @service.name %> </h2>
 
 <%= error_messages_for :service %>
-<h2> Change Name</h2>
 <%= form_for @service do |form| %>
 	<p>
 		<%= form.label :name %>

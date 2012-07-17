@@ -4,36 +4,26 @@
 </head>
 
 
-<h1> Home </h1>
+<h2> Home </h2>
 
-<table class="table table-striped"><caption> Browse Existing Employees </caption>
-	<thead>
-		<th>Group</th>
-		<th>Employee</th>
-	</thead>
-	<tbody>
-		<tr>
-			<td>
-				<div id="group_dropdown">
-					<%= form_tag("employees", :method => "get") do %>
-						<%= collection_select(:group, :id, @groups, :id, :name, 
-																	{:prompt => 'All Groups' }) %>
-					<% end %>
-				</div>
-			</td>
-			<td>
-				<div id="employee_dropdown">
-					<%= form_tag("populate_employee_results", :method => "get") do %>
-						<div id="employee_select_div">
-							<%= collection_select(:employee, :id, @employees, :id, :name, 
-																		{:prompt => 'Select Employee' }) %>
-						</div>
-					<% end %>
-				</div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+
+<h3> Search Existing Employees </h3>
+<div id="my-form">
+	<div id="group_dropdown">
+		<%= form_tag("employees", :method => "get") do %>
+			<%= label_tag "Group Name: " %>
+			<%= collection_select(:group, :id, @groups, :id, :name, {:prompt => 'All Groups' }) %>
+		<% end %>
+	</div>
+	<div id="employee_dropdown">
+		<%= form_tag("populate_employee_results", :method => "get") do %>
+			<div id="employee_select_div">
+							<%= label_tag "Employee Name: " %>
+				<%= collection_select(:employee, :id, @employees, :id, :name,	{:prompt => 'Select Employee' }) %>
+			</div>
+		<% end %>
+	</div>
+</div>
 
 
 <div id = "employee_results">

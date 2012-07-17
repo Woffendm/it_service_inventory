@@ -1,23 +1,22 @@
-<h1> Application Settings </h1>
-
-<table class="table table-striped">
-	<caption> All Settings </caption>
-	<thead>
-		<th> Setting </th>
-		<th> Currently Active </th>
-		<th> Options </th>
-		<th> </th>
-	</thead>
-	<tbody>
-		<% AppSetting.all.each do |setting| %>
-			<%= form_for setting do |form| %>
-				<tr>
-					<td> <%= setting.code %> </td>
-					<td> <%= setting.active.from(7) %> </td>
-					<td> <%= form.select(:active, options_for_select(@themes)) %> </td>
-					<td> <%= form.submit  "Save changes" %> </td>
-				</tr>
+	<h2> Application Settings </h2>
+	<table class="list issues">
+		<caption> All Settings </caption>
+		<thead>
+			<th> Setting </th>
+			<th> Currently Active </th>
+			<th> Options </th>
+			<th> </th>
+		</thead>
+		<tbody>
+			<% AppSetting.all.each do |setting| %>
+				<%= form_for setting do |form| %>
+					<tr>
+						<td> <%= setting.code %> </td>
+						<td> <%= setting.active.from(7) %> </td>
+						<td> <%= form.select(:active, options_for_select(@themes)) %> </td>
+						<td> <%= form.submit  "Save changes" %> </td>
+					</tr>
+				<% end %>
 			<% end %>
-		<% end %>
-	</tbody>
-</table>
+		</tbody>
+	</table>

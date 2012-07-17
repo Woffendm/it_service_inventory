@@ -1,23 +1,29 @@
-<h1>Services</h1>
+<h2>Services</h2>
 
 <%= link_to 'New Service', new_service_path %>
 
-<table class="table table-striped">
+<table class="list issues">
 	<caption> All Services </caption>
   <thead>
     <th> Name </th>
 		<th> Edit </th>
 		<th> Delete </th>
   </thead>
-	<% @services.each do |service| %>
-		<tbody>
-  		<tr>
+	<tbody>
+		<% @services.each do |service| %>
+  		<% if @odd %>
+				<% @odd = false %>
+				<tr class="even">
+			<% else %>
+				<% @odd = true %>
+				<tr class="odd">
+			<% end %>
     		<td><%= service.name %></td>
     		<td><%= link_to 'Edit', edit_service_path(service.id) %></td>
     		<td> <%= link_to "Delete", service_path(service.id), :method=>:delete, :confirm=>"Confirm
  						service deletion" %> </td>
   		</tr>
-		</tbody>
-	<% end %>
+		<% end %>
+	</tbody>
 </table>
 
