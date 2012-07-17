@@ -1,4 +1,5 @@
-# This class links together Employees and Services.
+# This class links together Employees and Services, enabling employees to have many services and 
+#   visa versa
 #
 # Author: Michael Woffendin 
 # Copyright:

@@ -21,6 +21,7 @@ describe EmployeeAllocation do
         allocation_2 = @employee.employee_allocations.new
         allocation_2.allocation = 0.1
         allocation_2.should_not be_valid 
+        @employee.should_not be_valid
       end
     end
   end

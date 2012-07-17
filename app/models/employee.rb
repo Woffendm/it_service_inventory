@@ -1,4 +1,4 @@
-# This class stores information related to employees.
+# This class stores information related to employees such as their names, groups, emails, etc.
 #
 # Author: Michael Woffendin 
 # Copyright:
@@ -8,9 +8,7 @@ class Employee < ActiveRecord::Base
   has_and_belongs_to_many :groups
   has_many :employee_allocations
   has_many :services, :through => :employee_allocations
-  # Validates name presence and that it has at least one letter
   validates_presence_of :name
-  validates_format_of :name, :with => /[a-z]/
 
   
   # Returns an array of services that the employee does not currently have
