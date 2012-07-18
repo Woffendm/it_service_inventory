@@ -43,3 +43,6 @@
 		<% end %>
 	</tbody>
 </table>
+
+<% @request = Employee.first %>
+<%= link_to url_for(:controller => :employees, :action => :show, :id => @request.id, :only_path => false) %>

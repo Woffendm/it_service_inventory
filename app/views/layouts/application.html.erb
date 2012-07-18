@@ -4,20 +4,31 @@
   <title>IT Service Inventory</title>
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
-	<%= stylesheet_link_tag @current_theme %>
+	<%= stylesheet_link_tag "redmine" %>
+	<!--<%= stylesheet_link_tag @current_theme %>-->
   <%= csrf_meta_tags %>
 </head>
 <body class="theme-Osu highrise controller-issues action-index">
 	<div id="wrapper">
 		<div id="wrapper2">
 			<div id="top-menu">
+				<div id="account">
 					<ul>
-						<li><%= link_to "Home", employees_home_path %> </li>
-						<li><%= link_to "Employees", employees_path %></li>
-						<li><%= link_to "Groups", groups_path %></li>
-						<li><%= link_to "Services", services_path %></li>
-						<li><%= link_to "Settings", app_settings_path %></li>
+						<li> <%= link_to "Login", logins_new_path %>
+						<!--<li> <%= link_to "Logout", employees_home_path %>-->
 					</ul>
+				</div>
+				<div id="loggedas">
+					Logged in as:
+					<%= session[:current_user_name] %>
+				</div>
+				<ul>
+					<li><%= link_to "Home", employees_home_path %> </li>
+					<li><%= link_to "Employees", employees_path %></li>
+					<li><%= link_to "Groups", groups_path %></li>
+					<li><%= link_to "Services", services_path %></li>
+					<li><%= link_to "Settings", app_settings_path %></li>
+				</ul>
 			</div>
 			<div id="header">
 				<h1> IT Service Inventory </h1>

@@ -1,10 +1,16 @@
 Project1::Application.routes.draw do
   
   resources :services
+  
+  resources :logins
 
  match 'employees/home' => 'employees#home'
  match 'employees/search_ldap_view' => 'employees#search_ldap_view'
+ match 'logins/new' => 'logins#new'
+ match 'logins/create' => 'logins#create'
+ match 'logins/destroy' => 'logins#destroy'
 
+ 
   resources :groups do
     member do
       get 'roster'
@@ -33,6 +39,7 @@ Project1::Application.routes.draw do
       post 'change_active_theme'
     end
   end
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

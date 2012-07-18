@@ -1,0 +1,8 @@
+<%= form_tag("create", :method => "post") do %>
+	<%= label_tag "ONID Username: " %>
+	<%= text_field_tag :username %>
+	<%= submit_tag "Login" %>
+<% end %>
+
+
+<%= session[:current_user_name] %>
