@@ -41,6 +41,7 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(params[:group])
     if @group.save
+      flash[:notice] = "Group created!"
       redirect_to groups_path
       return
     end
@@ -51,13 +52,15 @@ class GroupsController < ApplicationController
   # Updates a group based on the information endered on the "edit" page
   def update
     @group.update_attributes(params[:group])
-    redirect_to edit_group_path 
+    flash[:notice] = "Group updated!"
+    redirect_to groups_path 
   end
   
   
   # Adds the employee selected on the "roster" page to the given group
   def add_employee
     @group.employees << @employee
+    flash[:notice] = "Employee added to group!"
     redirect_to roster_group_path(@group.id)
   end
 
@@ -66,6 +69,7 @@ class GroupsController < ApplicationController
   def remove_employee
     @employee = Employee.find(params[:employee])
     @group.employees.delete(@employee)
+    flash[:notice] = "Employee removed from group!"
     redirect_to roster_group_path(@group.id)
   end
   
@@ -85,6 +89,7 @@ class GroupsController < ApplicationController
   # Casts the selected group into an unfathomable abyss of destruction
   def destroy
     @group.destroy 
+    flash[:notice] = "Group deleted!"
     redirect_to groups_path 
   end
   

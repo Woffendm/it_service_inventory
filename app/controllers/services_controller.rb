@@ -33,7 +33,8 @@ class ServicesController < ApplicationController
   def create
     @service = Service.new(params[:service])
     if @service.save
-      redirect_to edit_service_path(@service.id)
+      flash[:notice] = "Service created!"
+      redirect_to services_path
       return
     end
     render :new
@@ -43,7 +44,8 @@ class ServicesController < ApplicationController
   # Updates an existing service using info entered on the "edit" page
   def update
     if @service.update_attributes(params[:service])
-      redirect_to edit_service_path 
+      flash[:notice] = "Service updated!"
+      redirect_to services_path 
       return
     end
       render :edit
@@ -53,6 +55,7 @@ class ServicesController < ApplicationController
   # Hurls selected service into the nearest black hole
   def destroy
     @service.destroy 
+    flash[:notice] = "Service deleted!"
     redirect_to services_path 
   end
   

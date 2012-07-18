@@ -9,7 +9,7 @@
 		<% @employee.employee_allocations.each do |employee_allocation| %>
 			<tr>
 				<% if employee_allocation == @employee.employee_allocations.first %>
-					<td> <%= @employee.name %> </td>
+					<td> <%= @employee.name_last + "," + @employee.name_first %> </td>
 				<% else %>
 					<td> </td>
 				<% end %>

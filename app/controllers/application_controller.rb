@@ -16,4 +16,9 @@ class ApplicationController < ActionController::Base
     def load_theme
       @current_theme = AppSetting.find_by_code('active-theme').active
     end
+    
+    
+    def current_user
+      @_current_user ||= session[:current_user_id] && Employee.find_by_id(session[current_user_id])
+    end
 end

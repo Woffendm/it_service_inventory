@@ -63,7 +63,10 @@
 							</td>
 						<% end %>
 						<td> 
-							<%= hidden_field_tag(:name, entry.cn.first) %>
+							<% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
+							<%= hidden_field_tag(:name_last, @temp[0]) %>
+							<%= hidden_field_tag(:name_first, @temp[1]) %>
+							<%= hidden_field_tag(:name_MI, @temp[2]) %>
 							<%= hidden_field_tag(:osu_username, entry.uid.first) %>
 							<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
 							<%= submit_tag  "Add Employee" %> 

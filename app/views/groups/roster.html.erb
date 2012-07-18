@@ -7,7 +7,7 @@
 		<%= form_tag("add_employee", :method => "post") do %>
 			<p>
 				<%= label_tag :name %>
-				<%= collection_select(:employee, :id, @group.get_available_employees, :id, :name) %>
+				<%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
 				<%= submit_tag  "Add" %>
 			</p>
 		<% end %>
@@ -22,7 +22,7 @@
 			<th> Remove </th>
 		</thead>
 		<tbody>
-			<% @group.employees.order(:name).each do |employee| %>
+			<% @group.employees.order(:name_last).each do |employee| %>
 				<% if @odd %>
 					<% @odd = false %>
 					<tr class="even">
@@ -30,7 +30,7 @@
 					<% @odd = true %>
 					<tr class="odd">
 				<% end %>
-					<td><%= employee.name %></td>
+					<td><%= employee.full_name %></td>
 					<td>
 						<%= form_tag("remove_employee", :method => "post") do %>
 							<%= hidden_field_tag(:employee, employee.id) %>

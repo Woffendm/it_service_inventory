@@ -50,6 +50,7 @@ class EmployeesController < ApplicationController
   def add_service
     @employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
     if @employee_allocation.save
+      flash[:notice] = "Service added to employee!"
       redirect_to edit_employee_path(@employee.id)
       return
     end
@@ -72,6 +73,7 @@ class EmployeesController < ApplicationController
   # to a thousand winds
   def destroy
     @employee.destroy 
+    flash[:notice] = "Employee deleted!"
     redirect_to employees_path 
   end
 
@@ -79,14 +81,16 @@ class EmployeesController < ApplicationController
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
     @employee=Employee.new
-    @employee.name = params[:name]
+    @employee.name_last = params[:name_last]
+    @employee.name_first = params[:name_first]
+    @employee.name_MI = params[:name_MI]
     @employee.osu_id = params[:osu_id]
     @employee.osu_username = params[:osu_username]
     @employee.email = params[:email]
     if @employee.save
-      @message = "Employee added to application!"
+      flash[:notice] = "Employee added to application!"
     else
-      @message = "Error: Employee is already in the application :("
+      flash[:error] = "Something went wrong while adding the employee to the application."
     end
     render :search_ldap_view
   end
@@ -106,6 +110,7 @@ class EmployeesController < ApplicationController
     @employee_allocation = @employee.employee_allocations.find(params[:employee_allocation])
     @employee_allocation.delete
     @employee.save
+    flash[:notice] = "Service removed from employee!"
     redirect_to edit_employee_path(@employee.id)
   end
 
@@ -126,6 +131,7 @@ class EmployeesController < ApplicationController
   # Updates an employee based on info entered on the "edit" page
   def update
     if @employee.update_attributes(params[:employee])
+      flash[:notice] = "Employee updated!"
       redirect_to edit_employee_path 
       return
     end
@@ -147,7 +153,7 @@ class EmployeesController < ApplicationController
     
     # Loads all employees in alphabetical order
     def load_employees
-      @employees = Employee.order(:name)
+      @employees = Employee.order(:name_last)
     end
     
     

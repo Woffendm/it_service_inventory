@@ -23,6 +23,18 @@
 				<h1> IT Service Inventory </h1>
 			</div>
 			<div id="main">
+				<% if flash[:notice] %>
+					<p class="notice">
+						<%= flash[:notice] %>
+					</p>
+				<% end %>
+				<% if flash[:error] %>
+					<p class="error">
+						Error:
+						<br/>
+						<%= flash[:error] %>
+					</p>
+				<% end %>
 				<div id="content">
 					<%= yield %>
 				</div>

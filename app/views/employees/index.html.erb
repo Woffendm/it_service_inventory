@@ -10,8 +10,8 @@
 		<th> Notes </th>
 		<th> Services </th>
 		<th> Allocations </th>
-		<th> Edit </th>
-		<th> Delete </th>
+		<th>  </th>
+		<th>  </th>
 	</thead>
 	<tbody>
 		<% @employees.each do |employee| %>
@@ -22,7 +22,7 @@
 				<% @odd = true %>
 				<tr class="odd">
 			<% end %>
-				<td>  <%= employee.name %> </td>
+				<td>  <%= employee.full_name %> </td>
 				<td>	<%= employee.email %> </td>
 				<td>  <%= employee.notes %> </td>
 				<td>

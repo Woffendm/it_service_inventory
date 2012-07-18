@@ -2123,3 +2123,41 @@ table.list th, table.list td {
 #center {
   text-align: center;	
 }
+
+label {
+  display: block;
+	float: left;
+	width: 100px;
+}
+
+.notice, .alert {
+  background: url("/assets/status-success.png") 0.4em center no-repeat #e3fde3;
+  padding: .5em .5em .5em 5em;
+  border: 1px solid #006600;
+  margin-bottom: 1em;
+  -webkit-box-shadow: 0 0 7px #006600;
+  -moz-box-shadow: 0 0 7px #006600;
+  box-shadow: 0 0 7px #006600;
+  min-height: 1.5em;
+	width: 78.3% !important;
+ }
+
+.alert {
+  background: url("/assets/status-warning.png") 0.4em center no-repeat #fef7c5;
+  border-color: #D85A1A;
+  -webkit-box-shadow: 0 0 7px #d85a1a;
+  -moz-box-shadow: 0 0 7px #d85a1a;
+  box-shadow: 0 0 7px #d85a1a; }
+
+.notice h3 {
+  color: #006600; }
+
+.error{
+	padding: 20px;
+	background: pink;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 120%;
+	width: 700px;
+	height: 50px;
+}
