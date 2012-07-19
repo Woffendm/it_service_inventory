@@ -48,14 +48,6 @@ ActiveRecord::Schema.define(:version => 20120718164455) do
     t.datetime "updated_at",   :null => false
   end
 
-  create_table "employees_groups", :force => true do |t|
-    t.integer  "employee_id"
-    t.integer  "group_id"
-    t.boolean  "group_admin"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -63,12 +55,6 @@ ActiveRecord::Schema.define(:version => 20120718164455) do
   end
 
   create_table "services", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "themes", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
