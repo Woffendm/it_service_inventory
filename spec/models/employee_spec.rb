@@ -6,14 +6,16 @@ describe Employee do
   it "should require a name" do
     employee = Employee.new
     employee.should_not be_valid
-    employee.should have_at_least(1).error_on(:name)
+    employee.should have_at_least(1).error_on(:name_first)
+    employee.should have_at_least(1).error_on(:name_last)
   end
   
   
   # Can save when given a name
   it "should save when given a name" do
     employee = Employee.new
-    employee.name = "some employee"
+    employee.name_first = "some"
+    employee.name_last = "employee"
     employee.should be_valid
   end
   
@@ -22,7 +24,7 @@ describe Employee do
     before do
       @service = Service.create(:name => "first service")
       @service_2 = Service.create(:name => "last service")
-      @employee = Employee.create(:name => "some employee")
+      @employee = Employee.create(:name_first => "some", :name_last => "employee")
       @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1)
     end
 

@@ -17,6 +17,8 @@ class Employee < ActiveRecord::Base
     Service.order(:name) - self.services
   end
   
+  
+  # Returns the employee's full name, in the format "lastname, firstname"
   def full_name
     return "#{name_last}, #{name_first}"
   end

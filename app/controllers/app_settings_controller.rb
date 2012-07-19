@@ -4,7 +4,7 @@
 # Copyright:
 
 class AppSettingsController < ApplicationController
-  
+  before_filter :load_permissions
   
   # View with all configurable settings for the application, and forms to alter said settings
   def index
@@ -24,4 +24,12 @@ class AppSettingsController < ApplicationController
      end
        render :index
    end
+
+
+
+  private
+    # Only authorized users can view and edit app settings 
+    def load_permissions
+      authorize! :manage, AppSetting
+    end
 end

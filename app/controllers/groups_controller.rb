@@ -5,7 +5,7 @@
 
 class GroupsController < ApplicationController
   before_filter :load_employees, :only => [:index, :roster, :edit]
-  before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, :roster]
+  before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, :add_group_admin]
   before_filter :load_employee, :only => [:add_employee]
   
   
@@ -20,6 +20,7 @@ class GroupsController < ApplicationController
   
   # Page for creating a new group
   def new
+    authorize! :create, Group
     @group = Group.new
   end
   
@@ -31,6 +32,7 @@ class GroupsController < ApplicationController
   
   # Page containing the list of all employees assigned to a given group
   def roster
+    @group = Group.find(params[:id])
   end
   
   
@@ -39,6 +41,7 @@ class GroupsController < ApplicationController
   
   # Creates a new group using the information entered on the "new" page
   def create
+    authorize! :create, Group
     @group = Group.new(params[:group])
     if @group.save
       flash[:notice] = "Group created!"
@@ -86,8 +89,19 @@ class GroupsController < ApplicationController
   end
   
   
+  
+  def add_group_admin
+    temp = @group.employee_groups.find_by_employee_id(params[:employee])
+    temp.group_admin = true
+    temp.save
+    flash[:notice] = Employee.find(params[:employee]).full_name + " is now a group admin"
+    redirect_to roster_group_path(@group.id)
+  end
+  
+  
   # Casts the selected group into an unfathomable abyss of destruction
   def destroy
+    authorize! :destroy, Group
     @group.destroy 
     flash[:notice] = "Group deleted!"
     redirect_to groups_path 
@@ -107,7 +121,9 @@ class GroupsController < ApplicationController
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])
+      authorize! :update, @group
     end
+    
     
     # Loads an employee based on given parameters
     def load_employee

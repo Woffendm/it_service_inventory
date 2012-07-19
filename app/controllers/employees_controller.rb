@@ -30,14 +30,15 @@ class EmployeesController < ApplicationController
   
   # Page for creating a new employee
   def new
+    authorize! :create, Employee
     @employee = Employee.new
   end
   
 
   # Page for searching the OSU directory for new employees
   def search_ldap_view
+    authorize! :create, Employee
     @data = nil
-    @message = ""
   end
   
   
@@ -60,6 +61,7 @@ class EmployeesController < ApplicationController
   
   # Creates a new employee using info entered on the "new" page
   def create
+    authorize! :create, Employee
     @employee = Employee.new(params[:employee])
     if @employee.save
       redirect_to edit_employee_path(@employee.id)
@@ -72,6 +74,7 @@ class EmployeesController < ApplicationController
   # Obliterates selected employee with the mighty hammer of Thor and scatters their data like dust  
   # to a thousand winds
   def destroy
+    authorize! :destroy, Employee
     @employee.destroy 
     flash[:notice] = "Employee deleted!"
     redirect_to employees_path 
@@ -80,6 +83,7 @@ class EmployeesController < ApplicationController
 
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
+    authorize! :create, Employee
     @employee=Employee.new
     @employee.name_last = params[:name_last]
     @employee.name_first = params[:name_first]
@@ -118,7 +122,6 @@ class EmployeesController < ApplicationController
   # Searches the OSU directory for individuals with the last and first names provided
   def search_ldap
     @employee = Employee.new
-    @message = ""
     search = params[:last_name] 
     if params[:first_name] != ""
       search = search + ", " + params[:first_name]
@@ -148,6 +151,7 @@ class EmployeesController < ApplicationController
     # Loads an employee based off parameters given
     def load_employee
       @employee = Employee.find(params[:id])
+      authorize! :update, @employee
     end
     
     

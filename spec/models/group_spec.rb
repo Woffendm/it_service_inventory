@@ -12,8 +12,8 @@ describe Group do
   
   describe "available employees" do
     before do
-      @employee = Employee.create(:name => "first employee")
-      @employee_2 = Employee.create(:name => "last employee")
+      @employee = Employee.create(:name_first => "first", :name_last => "employee")
+      @employee_2 = Employee.create(:name_first => "last", :name_last => "employee")
       @group = Group.create(:name => "some group")
       @group.employees.push(@employee)
     end

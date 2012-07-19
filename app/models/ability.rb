@@ -1,7 +1,39 @@
+# This class stores information related to users' abilities. Here's the run down:
+# => Site Admin: Can manage everything (Create groups, employees, set group administration, etc.).
+#                Is the only one who can change application settings
+# => Group Admin: Can manage services and the group that they admin. Can also update employees 
+#                within their group and create new employees.
+# => Everyone Else: Can view the employee index, group index, and group rosters. Can only edit their
+#                own information (if they are in the database)
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class Ability
   include CanCan::Ability
 
+  # Sets up the permissions outlined above
   def initialize(user)
+    if user
+      # Checks to see if user is site admin
+      if user.site_admin
+        can :manage, :all
+      else
+        # Checks to see if user is an admin of any of their groups
+        user.employee_groups.each do |group|
+          if group.group_admin
+            can :update, Group, :id => group.group_id
+            can :manage, Service
+            can :create, Employee
+          end
+        end
+        # Everyone else can only edit themself
+        can :read, :all
+        can :update, Employee, :id => user.id
+      end
+    end
+    
+    
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)

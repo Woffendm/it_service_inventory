@@ -1,8 +1,5 @@
 Project1::Application.routes.draw do
-  
-  resources :services
-  
-  resources :logins
+
 
  match 'employees/home' => 'employees#home'
  match 'employees/search_ldap_view' => 'employees#search_ldap_view'
@@ -16,6 +13,7 @@ Project1::Application.routes.draw do
       get 'roster'
       post 'add_employee'
       post 'remove_employee'
+      post 'add_group_admin'
     end
     collection do
       get 'employees'
@@ -39,6 +37,10 @@ Project1::Application.routes.draw do
       post 'change_active_theme'
     end
   end
+  
+  resources :logins
+  
+  resources :services
   
 
   # The priority is based upon order of creation:

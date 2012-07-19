@@ -4,7 +4,8 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-    before_filter :load_service, :only => [:update, :destroy, :edit]
+  before_filter :load_service, :only => [:update, :destroy, :edit]
+  before_filter :load_permissions
 
   
 # View-related methods
@@ -67,5 +68,10 @@ class ServicesController < ApplicationController
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
+    end
+    
+    
+    def load_permissions
+      authorize! :manage, Service
     end
 end

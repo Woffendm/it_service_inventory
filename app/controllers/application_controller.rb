@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   
   # Makes the active theme available throughout application.
   before_filter :load_theme
+  before_filter :current_user
   
 
   
@@ -18,7 +19,8 @@ class ApplicationController < ActionController::Base
     end
     
     
+    # Loads the currently logged-in user for use by the ability.rb model
     def current_user
-      @current_user ||= session[:current_user_id] && Employee.find_by_id(session[current_user_id])
+      @current_user ||= session[:current_user_id] && Employee.find(session[:current_user_id])
     end
 end

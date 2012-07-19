@@ -1,7 +1,11 @@
 <h2> Groups </h2>
 
 
-<%= link_to "New Group" , new_group_path %>
+<% if can? :create, Group %>
+	<%= link_to "New Group" , new_group_path %>
+<% end %>
+	
+	
 <table class="list issues">
 	<caption> All Groups </caption>
 	<thead>
@@ -11,9 +15,9 @@
 		<th> Employee Roster </th>
 		<th> </th>
 	</thead>
-	<% if Group.first != nil %>
-		<% @groups.each do |group| %>
-			<tbody>
+	<tbody>
+		<% if Group.first != nil %>
+			<% @groups.each do |group| %>
 				<% if @odd %>
 					<% @odd = false %>
 					<tr class="even">
@@ -22,12 +26,21 @@
 					<tr class="odd">
 				<% end %>
 					<td> <%= group.name %></td>
-					<td> <%= link_to "Edit Name" , edit_group_path(group.id) %></td>
+					<td> 
+						<% if can? :update, group %>
+							<%= link_to "Edit Name" , edit_group_path(group.id) %>
+						<% end %>
+					</td>
 					<td> <%= group.employees.length %> </td>
-					<td> <%= link_to "Employee Roster" , roster_group_path(group.id) %></td>
-					<td> <%= link_to "Delete", group_path(group.id), :method=>:delete, :confirm=>"Confirm group deletion" %> </td>
+					<td> <%= link_to "View Roster" , roster_group_path(group.id) %></td>
+					<td> 
+						<% if can? :delete, Group %>
+							<%= link_to "Delete", group_path(group.id), :method=>:delete, 
+													:confirm=>"Confirm group deletion" %> 
+						<% end %>
+					</td>
 				</tr>	
-			</tbody>
+			<% end %>
 		<% end %>
-	<% end %>
+	</tbody>
 </table>

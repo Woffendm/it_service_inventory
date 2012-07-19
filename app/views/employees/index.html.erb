@@ -1,7 +1,10 @@
 <h2> Employees </h2>
 	
 	
-<%= link_to "Add New Employee" , employees_search_ldap_view_path %>
+<% if can? :create, Employee %>
+	<%= link_to "Add New Employee" , employees_search_ldap_view_path %>
+<% end %>
+
 <table class="list issues">
 	<caption> All Employees </caption>
 	<thead>
@@ -37,12 +40,18 @@
 						<br/>
 					<% end %>
 				</td>
-				<td> <%= link_to "Edit" , edit_employee_path(employee.id) %> </td>
-				<td> <%= link_to "Delete", employee_path(employee.id), :method=>:delete, :confirm=>"Confirm employee deletion" %> </td>
+				<td> 
+					<% if can? :update, employee %>
+						<%= link_to "Edit" , edit_employee_path(employee.id) %> 
+					<% end %>
+				</td>
+				<td> 
+					<% if can? :destroy, employee %>
+						<%= link_to "Delete", employee_path(employee.id), :method=>:delete, 
+												:confirm=>"Confirm employee deletion" %> 
+					<% end %>
+				</td>
 			</tr>	
 		<% end %>
 	</tbody>
 </table>
-
-<% @request = Employee.first %>
-<%= link_to url_for(:controller => :employees, :action => :show, :id => @request.id, :only_path => false) %>

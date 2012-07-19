@@ -14,8 +14,11 @@
 			<div id="top-menu">
 				<div id="account">
 					<ul>
-						<li> <%= link_to "Login", logins_new_path %>
-						<!--<li> <%= link_to "Logout", employees_home_path %>-->
+						<% if session[:current_user_id] %>
+							<li> <%= link_to "Logout", logins_destroy_path %>
+						<% else %>
+							<li> <%= link_to "Login", logins_new_path %>
+						<% end %>
 					</ul>
 				</div>
 				<div id="loggedas">
@@ -26,8 +29,12 @@
 					<li><%= link_to "Home", employees_home_path %> </li>
 					<li><%= link_to "Employees", employees_path %></li>
 					<li><%= link_to "Groups", groups_path %></li>
-					<li><%= link_to "Services", services_path %></li>
-					<li><%= link_to "Settings", app_settings_path %></li>
+					<% if can? :manage, Service %>
+						<li><%= link_to "Services", services_path %></li>
+					<% end %>
+					<% if can? :manage, AppSetting %>
+						<li><%= link_to "Settings", app_settings_path %></li>
+					<% end %>
 				</ul>
 			</div>
 			<div id="header">

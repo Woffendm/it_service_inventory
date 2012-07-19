@@ -3,7 +3,7 @@ require "spec_helper"
 describe EmployeeAllocation do
     describe "validate_total_allocation" do
       before do
-        @employee = Employee.create(:name => "some employee")
+        @employee = Employee.create(:name_first => "some", :name_last => "employee")
         @allocation_1 = @employee.employee_allocations.new
         @allocation_1.allocation = 1
         @employee.save 
