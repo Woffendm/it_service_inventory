@@ -11,11 +11,9 @@ class LoginsController < ApplicationController
       session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
       flash[:notice] = "Logged in as: " + session[:current_user_name]
-      redirect_to new_logins_path
+      redirect_to logins_new_path
     else
-      session[:current_user_id] = nil
-      session[:current_user_name] = "Guest"
-      flash[:error] = "No employee with that ONID username is in the application. Logged in as Guest"
+      flash[:error] = "No employee with that ONID username is in the application"
       render :new
     end
   end
@@ -24,8 +22,8 @@ class LoginsController < ApplicationController
   # Removes session value (logout)
   def destroy
     session[:current_user_id] = nil
-    session[:current_user_name] = "Guest"
+    session[:current_user_name] = nil
     flash[:notice] = "Successfully logged out!"
-    redirect_to new_logins_path
+    redirect_to logins_new_path
   end
 end

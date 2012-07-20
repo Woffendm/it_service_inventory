@@ -8,6 +8,7 @@ class EmployeesController < ApplicationController
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
   before_filter :load_employees, :only => [:home, :edit, :index]
   before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results, :search_ldap]
+  before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
 
     
 # View-related methods
@@ -30,14 +31,12 @@ class EmployeesController < ApplicationController
   
   # Page for creating a new employee
   def new
-    authorize! :create, Employee
     @employee = Employee.new
   end
   
 
   # Page for searching the OSU directory for new employees
   def search_ldap_view
-    authorize! :create, Employee
     @data = nil
   end
   
@@ -61,7 +60,6 @@ class EmployeesController < ApplicationController
   
   # Creates a new employee using info entered on the "new" page
   def create
-    authorize! :create, Employee
     @employee = Employee.new(params[:employee])
     if @employee.save
       redirect_to edit_employee_path(@employee.id)
@@ -83,20 +81,27 @@ class EmployeesController < ApplicationController
 
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
-    authorize! :create, Employee
-    @employee=Employee.new
-    @employee.name_last = params[:name_last]
-    @employee.name_first = params[:name_first]
-    @employee.name_MI = params[:name_MI]
-    @employee.osu_id = params[:osu_id]
-    @employee.osu_username = params[:osu_username]
-    @employee.email = params[:email]
-    if @employee.save
+    new_employee=Employee.new
+    new_employee.name_last = params[:name_last]
+    new_employee.name_first = params[:name_first]
+    new_employee.name_MI = params[:name_MI]
+    new_employee.osu_id = params[:osu_id]
+    new_employee.osu_username = params[:osu_username]
+    new_employee.email = params[:email]
+    if new_employee.save
       flash[:notice] = "Employee added to application!"
     else
       flash[:error] = "Something went wrong while adding the employee to the application."
     end
     render :search_ldap_view
+  end
+
+
+  def ldap_search_results
+    @employee = Employee.new
+    search = params[:last_name] 
+    @data = RemoteEmployee.search(search)
+    render :layout => false
   end
 
 
@@ -148,7 +153,13 @@ class EmployeesController < ApplicationController
 # Loading methods
 
   private
-    # Loads an employee based off parameters given
+    # Ensures that the user is authorized to create new employees
+    def authorize_creation
+      authorize! :create, Employee
+    end
+      
+      
+    # Loads an employee based off parameters given and ensures that user is authorized to edit them
     def load_employee
       @employee = Employee.find(params[:id])
       authorize! :update, @employee

@@ -20,6 +20,38 @@ describe Employee do
   end
   
   
+  
+  describe "only one of each employee" do
+    before do
+      @employee = Employee.new
+      @employee.name_first = "some"
+      @employee.name_last = "employee"
+      @employee.osu_id = "1"
+      @employee.osu_username = "bob"
+      @employee.save
+      @employee2 = Employee.new
+      @employee2.name_first = "some"
+      @employee2.name_last = "employee"
+      @employee2.osu_id = "1"
+      @employee2.osu_username = "bob"
+    end
+    
+    
+    it "should not save if there is already an employee with the same osu username and id" do
+      @employee2.should_not be_valid
+      @employee2.should have_at_least(1).error_on(:osu_id)
+    end
+    
+    
+    it "should save when given a unique osu username and id" do
+      @employee2.osu_id = "unique id"
+      @employee2.osu_username = "unique username"
+      @employee2.should be_valid
+    end
+  end
+  
+  
+  
   describe "available services" do
     before do
       @service = Service.create(:name => "first service")

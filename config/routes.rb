@@ -28,6 +28,7 @@ Project1::Application.routes.draw do
     collection do
       get 'populate_employee_results'
       get 'search_ldap'
+      post 'ldap_search_results'
       post 'ldap_create'
     end
   end

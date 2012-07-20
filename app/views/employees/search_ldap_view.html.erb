@@ -1,10 +1,8 @@
-<head>
-	<%= javascript_include_tag :defaults %>
-	<!--<script src="../search_ldap_view.js"></script> -->
-</head>
+<%= javascript_include_tag "ldap_search_results" %> 
 
 
 <h2> Add Employee to Application </h2>
+
 
 
 <h3> Search OSU Directory </h3>
@@ -23,57 +21,6 @@
 		</div>
 	<% end %>
 </div>
-
-
-<% if @data != nil %>
-	<table class="list issues"><caption> Employee Search Results </caption>
-		<thead>
-			<th> Name </th>
-			<th> Department </th>
-			<th> Email </th>
-			<th> Add To Application </th>
-		</thead>
-		<tbody>
-			<% @data.each do |entry| %>
-				<% if @odd %>
-					<% @odd = false %>
-					<tr class="even">
-				<% else %>
-					<% @odd = true %>
-					<tr class="odd">
-				<% end %>
-					<%= form_tag("ldap_create", :method => "post") do %>
-  					<td> <%= entry.cn.first %> </td>
-						<% if entry.respond_to?(:osudepartment) %>
-							<td> <%= entry.osudepartment.first %> </td>
-						<% else %>
-							<td>  </td>
-						<% end %>
-						<% if entry.respond_to?(:mail) %>
-							<td> 
-								<%= entry.mail.first %> 
-								<%= hidden_field_tag(:email, entry.mail.first) %>
-							</td>
-						<% else %>
-							<td>
-								<%= hidden_field_tag(:email, "") %>
-							</td>
-						<% end %>
-						<td> 
-							<% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
-							<%= hidden_field_tag(:name_last, @temp[0]) %>
-							<%= hidden_field_tag(:name_first, @temp[1]) %>
-							<%= hidden_field_tag(:name_MI, @temp[2]) %>
-							<%= hidden_field_tag(:osu_username, entry.uid.first) %>
-							<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
-							<%= submit_tag  "Add Employee" %> 
-						</td>
-					<% end %>
-				</tr>
-			<% end %>
-		</tbody>
-	</table>
-<% end %>
 
 
 <div id = "ldap_search_results">

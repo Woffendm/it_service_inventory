@@ -23,7 +23,7 @@
 
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
-<% if @employee.get_available_services.length > 0 %>
+<% if @employee.get_available_services.any?%>
 	<h3>Add Services</h3>
 	<div id="my-form">
 		<% if @employee.get_available_services != nil %>
@@ -43,7 +43,7 @@
 
 
 <!-- Creates table with the employee's services and allocations -->
-<% if @employee.employee_allocations.length > 0 %>
+<% if @employee.employee_allocations.any? %>
 	<table class="list issues"><caption> Existing Services</caption>
 		<thead>
 			<th>Services</th>

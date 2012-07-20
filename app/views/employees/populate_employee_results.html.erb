@@ -9,7 +9,13 @@
 		<% @employee.employee_allocations.each do |employee_allocation| %>
 			<tr>
 				<% if employee_allocation == @employee.employee_allocations.first %>
-					<td> <%= @employee.full_name %> </td>
+					<td> 
+						<% if can? :update, @employee %>
+							<%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
+						<% else %>
+							<%= @employee.full_name %>
+						<% end %> 
+					</td>
 				<% else %>
 					<td> </td>
 				<% end %>
