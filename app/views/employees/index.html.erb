@@ -27,7 +27,11 @@
 			<% end %>
 				<td>  <%= employee.full_name %> </td>
 				<td>	<%= employee.email %> </td>
-				<td>  <%= employee.notes %> </td>
+				<td>  
+					<% if employee.notes %> 
+						<%= employee.notes.truncate(20) %>
+					<% end %>
+				</td>
 				<td>
 					<% employee.services.each do |service| %>
 						<%= service.name %>

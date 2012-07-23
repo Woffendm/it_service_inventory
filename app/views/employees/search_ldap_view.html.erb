@@ -1,22 +1,20 @@
-<%= javascript_include_tag "ldap_search_results" %> 
-
-
 <h2> Add Employee to Application </h2>
-
 
 
 <h3> Search OSU Directory </h3>
 <div id="my-form">
+	<div id="search_div">
 	<%= form_tag("search_ldap", :method => "get") do %>
 		<div id="last_name_search">
 			<%= label_tag "Last name:" %>
-			<%= text_field_tag(:last_name) %>
+			<%= text_field_tag :last_name, nil, :placeholder => 'Must enter last name' %>
 		</div>
 		<div id="first_name_search">
 			<%= label_tag "First name:" %>
-			<%= text_field_tag(:first_name) %>
+			<%= text_field_tag :first_name, nil, :placeholder => 'First name optional' %>
 		</div>
 	<% end %>
+	</div>
 </div>
 
 

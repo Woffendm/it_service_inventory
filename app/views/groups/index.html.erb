@@ -2,16 +2,17 @@
 
 
 <% if can? :create, Group %>
-	<h3> New Group </h3>
-	<div id="my-form">
+	<fieldset>
+		<legend>New Group</legend>
 		<%= error_messages_for :group %>
 		<%= form_for @group do |form| %>
 			<%= form.label "Name:" %>
 			<%= form.text_field :name %>
 			</br>
+			<label> &nbsp </label>
 			<%= form.submit  "Create Group" %>
 		<% end %>
-	</div>
+	</fieldset>
 <% end %>
 
 	

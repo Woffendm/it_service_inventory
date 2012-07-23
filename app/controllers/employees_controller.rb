@@ -100,11 +100,7 @@ class EmployeesController < ApplicationController
   # Searches the OSU directory for individuals with the last and first names provided
   def ldap_search_results
     @employee = Employee.new
-    search = params[:last_name]
-    if params[:first_name]
-      search = search + ", " + params[:first_name]
-    end 
-    @data = RemoteEmployee.search(search)
+    @data = RemoteEmployee.search(params[:last_name], params[:first_name])
     render :layout => false
   end
 

@@ -14,12 +14,14 @@
 		<%= @employee.email %>		
 		<br/><br/>
 		<%= form.label "Notes:" %> 
-		<%= form.text_field :notes %>
+		<%= form.text_area :notes, :maxlength => 1000, :rows => 6, :cols => 60 %>
 		<br/><br/>
 		<%= form.submit  "Save changes" %> 
 	<% end %>
 </div>
 <br/><br/><br/>
+
+
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
 <% if @employee.get_available_services.any?%>
