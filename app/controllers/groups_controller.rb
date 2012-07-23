@@ -14,6 +14,7 @@ class GroupsController < ApplicationController
 
   # List of all groups
   def index
+    @group = Group.new
     @groups = Group.order(:name)
   end
   
@@ -79,7 +80,7 @@ class GroupsController < ApplicationController
   
   # Populates the employee dropdown list on the "employee/home" page based on the group selected
   def employees
-    if params[:group][:id].nil?
+    if params[:group][:id] == "0"
       @employees = Employee.all
     else 
       @group = Group.find(params[:group][:id])
@@ -89,7 +90,7 @@ class GroupsController < ApplicationController
   end
   
   
-  
+  # Makes the selected individual an administrator for the current group
   def add_group_admin
     temp = @group.employee_groups.find_by_employee_id(params[:employee])
     temp.group_admin = true

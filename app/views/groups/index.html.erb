@@ -2,17 +2,24 @@
 
 
 <% if can? :create, Group %>
-	<%= link_to "New Group" , new_group_path %>
+	<h3> New Group </h3>
+	<div id="my-form">
+		<%= error_messages_for :group %>
+		<%= form_for @group do |form| %>
+			<%= form.label "Name:" %>
+			<%= form.text_field :name %>
+			</br>
+			<%= form.submit  "Create Group" %>
+		<% end %>
+	</div>
 <% end %>
-	
+
 	
 <table class="list issues">
 	<caption> All Groups </caption>
 	<thead>
 		<th> Name </th>
-		<th>  </th>
 		<th> Total Employees </th>
-		<th> Employee Roster </th>
 		<th> </th>
 	</thead>
 	<tbody>
@@ -25,14 +32,17 @@
 					<% @odd = true %>
 					<tr class="odd">
 				<% end %>
-					<td> <%= group.name %></td>
 					<td> 
 						<% if can? :update, group %>
-							<%= link_to "Edit Name" , edit_group_path(group.id) %>
+							<%= link_to group.name , edit_group_path(group.id) %>
+						<% else %>
+							<%= group.name %>
 						<% end %>
 					</td>
-					<td> <%= group.employees.length %> </td>
-					<td> <%= link_to "View Roster" , roster_group_path(group.id) %></td>
+					<td> 
+						<%= link_to group.employees.length.to_s + " (Click to view)",
+						 						roster_group_path(group.id) %>
+					</td>
 					<td> 
 						<% if can? :delete, Group %>
 							<%= link_to "Delete", group_path(group.id), :method=>:delete, 

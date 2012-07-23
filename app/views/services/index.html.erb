@@ -1,7 +1,18 @@
 <h2>Services</h2>
 
 
-<%= link_to 'New Service', new_service_path %>
+<h3> New Service </h3>
+<div id="my-form">
+	<% if can? :create, Service %>
+		<%= error_messages_for :service %>
+		<%= form_for @service do |form| %>
+			<%= form.label "Name:" %>
+			<%= form.text_field :name %>
+			</br>
+			<%= form.submit  "Create Service" %>
+		<% end %>
+	<% end %>
+</div>
 
 
 <table class="list issues">

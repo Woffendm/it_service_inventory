@@ -16,9 +16,6 @@
 			<%= label_tag "First name:" %>
 			<%= text_field_tag(:first_name) %>
 		</div>
-		<div> 
-			<%= submit_tag "Search" %> 
-		</div>
 	<% end %>
 </div>
 
@@ -26,5 +23,5 @@
 <div id = "ldap_search_results">
 </div>
 
-
-<%= link_to "Back", employees_path %>
+<br/><br/>
+<%= link_to "Return to All Employees", employees_path %>

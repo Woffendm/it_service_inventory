@@ -14,11 +14,13 @@
 			<div id="top-menu">
 				<div id="account">
 					<ul>
-						<% if session[:current_user_id] %>
-							<li> <%= link_to "Logout", logins_destroy_path %>
-						<% else %>
-							<li> <%= link_to "Login", logins_new_path %>
-						<% end %>
+						<li> 
+							<% if session[:current_user_id] %>
+								<%= link_to "Logout", logins_destroy_path %>
+							<% else %>
+							 	<%= link_to "Login", logins_new_path %>
+							<% end %>
+						</li>
 					</ul>
 				</div>
 				<div id="loggedas">

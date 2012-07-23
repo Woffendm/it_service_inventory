@@ -13,11 +13,26 @@ $(document).ready(function(){
 	
 	// Searches the OSU directory for everyone whose last name begins with whatever is entered in the 
 	// appropriate text box on the "search_ldap_view" page
+	var firstNameSearch = $("#first_name_search");
+	firstNameSearch.keyup(function(e) {
+		var searchVal = e.target.value;
+		var searchVal2 = $('#last_name').val();
+		$.ajax({
+			type: "get",
+			url: "/employees/ldap_search_results?last_name=" + searchVal2 + "&first_name=" + searchVal,
+			success: popLdapSearchResults
+		})
+		return true;
+	});
+	
+	
+	// Searches the OSU directory for everyone whose last name begins with whatever is entered in the 
+	// appropriate text box on the "search_ldap_view" page
 	var lastNameSearch = $("#last_name_search");
 	lastNameSearch.keyup(function(e) {
 		var searchVal = e.target.value;
 		$.ajax({
-			type: "post",
+			type: "get",
 			url: "/employees/ldap_search_results?last_name=" + searchVal,
 			success: popLdapSearchResults
 		})

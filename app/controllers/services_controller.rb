@@ -13,6 +13,7 @@ class ServicesController < ApplicationController
   # List of all services
   def index
     @services = Service.order(:name)
+    @service = Service.new
   end
 
   
@@ -71,6 +72,7 @@ class ServicesController < ApplicationController
     end
     
     
+    # Loads permissions. Only group admins and site admins can do things to services
     def load_permissions
       authorize! :manage, Service
     end

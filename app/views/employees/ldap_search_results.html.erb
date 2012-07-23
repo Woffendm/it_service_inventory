@@ -4,7 +4,7 @@
 			<th> Name </th>
 			<th> Department </th>
 			<th> Email </th>
-			<th> Add To Application </th>
+			<th>  </th>
 		</thead>
 		<tbody>
 			<% @data.each do |entry| %>
@@ -27,19 +27,24 @@
 						<% end %>
 					</td>
 					<td> 
-						<%= form_tag("ldap_create", :method => "post") do %>
-					 		<% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
-					 		<%= hidden_field_tag(:name_last, @temp[0]) %>
-					 		<%= hidden_field_tag(:name_first, @temp[1]) %>
-					 		<%= hidden_field_tag(:name_MI, @temp[2]) %>
-					 		<%= hidden_field_tag(:osu_username, entry.uid.first) %>
-					 		<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
-					 		<% if entry.respond_to?(:mail) %>
-					 			<%= hidden_field_tag(:email, entry.mail.first) %>
-					 		<% else %>
-					 			<%= hidden_field_tag(:email, "") %>
-					 		<% end %>
-					 		<%= submit_tag  "Add Employee" %> 
+						<% if Employee.find_by_osu_id(entry.osuuid.first) &&
+							 		Employee.find_by_osu_username(entry.uid.first) %>
+							Already in application!
+						<% else %>
+							<%= form_tag("ldap_create", :method => "post") do %>
+					 			<% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
+					 			<%= hidden_field_tag(:name_last, @temp[0]) %>
+					 			<%= hidden_field_tag(:name_first, @temp[1]) %>
+					 			<%= hidden_field_tag(:name_MI, @temp[2]) %>
+					 			<%= hidden_field_tag(:osu_username, entry.uid.first) %>
+					 			<%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
+					 			<% if entry.respond_to?(:mail) %>
+					 				<%= hidden_field_tag(:email, entry.mail.first) %>
+					 			<% else %>
+					 				<%= hidden_field_tag(:email, "") %>
+					 			<% end %>
+					 			<%= submit_tag  "Add To Application" %> 
+							<% end %>
 						<% end %>
 					</td>
 				</tr>

@@ -585,6 +585,9 @@ tr.odd.priority-1, tr.even.priority-1 {
 }
 #top-menu #account {
     border-radius: 0 4px 4px 0;
+    padding-bottom: 0;
+		font-size: 0.99em;
+   
 }
 .controller-account.action-login #top-menu #account {
     border-radius: 4px 4px 4px 4px;
@@ -654,5 +657,13 @@ span.tip {
 
 div#my-form {
 	border-top: 5px solid black;
-	margin-bottom: 50px;
+	padding-top: 5px;
+	margin-bottom: 30px;
 }
+
+tr > td
+{
+	padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+

@@ -1,34 +1,33 @@
 <h2> Edit Employee: <%= @employee.full_name %> </h2>
 
 
-<h3>Edit Basic Information</h3>
+<h3>Basic Information</h3>
 <div id="my-form">
 	<%= form_for @employee do |form| %>
-		<%= error_messages_for :employee %>
 		<%= form.label "Last Name:" %>
-	 	<%= form.text_field :name_last %>
-		<br/>
+	 	<%= @employee.name_last %>
+		<br/><br/>
 		<%= form.label "First Name:" %>
-	 	<%= form.text_field :name_first %>
-		<br/>
+		<%= @employee.name_first %>		
+		<br/><br/>
 		<%= form.label "Email: " %> 
-		<%= form.text_field :email %>
-		<div>
-			<%= form.label "Notes:" %> 
-			<%= form.text_field :notes %>
-		</div>
+		<%= @employee.email %>		
+		<br/><br/>
+		<%= form.label "Notes:" %> 
+		<%= form.text_field :notes %>
+		<br/><br/>
 		<%= form.submit  "Save changes" %> 
 	<% end %>
 </div>
-
+<br/><br/><br/>
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
 <% if @employee.get_available_services.any?%>
-	<h3>Add Services</h3>
+	<h3>Services</h3>
 	<div id="my-form">
 		<% if @employee.get_available_services != nil %>
 			<%= form_tag("add_service", :method => "post") do %>
-				<%= label_tag "Service and Allocation: " %>
+				<%= label_tag "New service " %>
 				<%= error_messages_for :employee_allocation %>
 				<%= collection_select(:employee_allocation, :service_id,
 				 	@employee.get_available_services, :id, :name) %> 
@@ -44,7 +43,7 @@
 
 <!-- Creates table with the employee's services and allocations -->
 <% if @employee.employee_allocations.any? %>
-	<table class="list issues"><caption> Existing Services</caption>
+	<table class="list issues">
 		<thead>
 			<th>Services</th>
 			<th>Allocations</th>
@@ -74,6 +73,6 @@
 		</tbody>
 	</table>
 <% end %>
+<br/><br/>
 
-
-<%= link_to "Back", employees_path %>
+<%= link_to "Return to All Employees", employees_path %>

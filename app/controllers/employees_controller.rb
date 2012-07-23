@@ -91,15 +91,19 @@ class EmployeesController < ApplicationController
     if new_employee.save
       flash[:notice] = "Employee added to application!"
     else
-      flash[:error] = "Something went wrong while adding the employee to the application."
+      flash[:error] = "Employee is already in the application."
     end
     render :search_ldap_view
   end
 
 
+  # Searches the OSU directory for individuals with the last and first names provided
   def ldap_search_results
     @employee = Employee.new
-    search = params[:last_name] 
+    search = params[:last_name]
+    if params[:first_name]
+      search = search + ", " + params[:first_name]
+    end 
     @data = RemoteEmployee.search(search)
     render :layout => false
   end
@@ -121,18 +125,6 @@ class EmployeesController < ApplicationController
     @employee.save
     flash[:notice] = "Service removed from employee!"
     redirect_to edit_employee_path(@employee.id)
-  end
-
-
-  # Searches the OSU directory for individuals with the last and first names provided
-  def search_ldap
-    @employee = Employee.new
-    search = params[:last_name] 
-    if params[:first_name] != ""
-      search = search + ", " + params[:first_name]
-    end
-    @data = RemoteEmployee.search(search)
-    render :search_ldap_view
   end
 
 

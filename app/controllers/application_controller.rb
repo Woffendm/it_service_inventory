@@ -6,7 +6,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   
-  # Makes the active theme available throughout application.
+  # Makes the active theme available throughout application (disabled until we get some actual 
+  # themes)
   # before_filter :load_theme
   before_filter :current_user
   

@@ -15,7 +15,12 @@ $(document).ready(function(){
 	// Gets id of selected group, passes it to "employees" method in groups controller
 	var groupSelect = $("#group_dropdown");
 	groupSelect.change(function(e) {
-		var groupId = e.target.value;
+		if(e.target.value){
+			var groupId =  e.target.value;
+		}
+		else{
+			var groupId = "0"
+		}
 		$.ajax({
 			type: "GET",
 			url: "/groups/employees?group[id]=" + groupId,
