@@ -11,11 +11,12 @@ gem 'json'
 
 gem 'dynamic_form'
 
-gem 'net-ldap'
 
 gem 'therubyracer'
 
 gem 'cancan'
+
+gem 'omniauth-ldap'
 
 group :development, :test do
   gem 'rspec'

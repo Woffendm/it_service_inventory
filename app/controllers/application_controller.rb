@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   # before_filter :load_theme
   before_filter :current_user
   
-
   
   private
     # Loads the currently logged-in user for use by the ability.rb model

@@ -20,13 +20,7 @@ class ServicesController < ApplicationController
     @services = Service.order(:name)
     @service = Service.new
   end
-
   
-  # Page for creating a new service
-  def new
-    @service = Service.new
-  end
-
 
 
 # Action-related methods 
@@ -45,6 +39,7 @@ class ServicesController < ApplicationController
 
   # Hurls selected service into the nearest black hole
   def destroy
+    authorize! :destroy, Service
     @service.destroy 
     flash[:notice] = "Service deleted!"
     redirect_to services_path 
@@ -68,7 +63,7 @@ class ServicesController < ApplicationController
   private
     # Loads permissions. Only group admins and site admins can do things to services
     def load_permissions
-      authorize! :manage, Service
+      authorize! :update, Service
     end
   
   

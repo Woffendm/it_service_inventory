@@ -6,7 +6,8 @@
 
 class RemoteEmployee
   
-  # This method searches the OSU LDAP directory for a given employee and returns an array of results
+  # This method searches the OSU LDAP directory for a given employee by first and last name and
+  # returns an array of results
   def self.search(last_name, first_name)
     ldap = Net::LDAP.new :host => "client-ldap.onid.orst.edu", :port => 389
     filter1 = Net::LDAP::Filter.eq("cn", last_name.to_s + "*")
@@ -21,6 +22,8 @@ class RemoteEmployee
   end
   
   
+  # This method searches the OSU LDAP directory for a given employee by OSU id and ONID username and
+  # returns an array with one result. 
   def self.update_search(osu_username, osu_id)
     ldap = Net::LDAP.new :host => "client-ldap.onid.orst.edu", :port => 389
     filter1 = Net::LDAP::Filter.eq("osuuid", osu_id)
@@ -34,3 +37,5 @@ class RemoteEmployee
     return ldap_results.sort_by { |u| u.cn }
   end
 end
+
+# RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first

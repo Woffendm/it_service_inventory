@@ -30,7 +30,13 @@
 					<% @odd = true %>
 					<tr class="odd">
 				<% end %>
-					<td><%= employee.full_name %></td>
+					<td>
+						<% if can? :update, employee %>
+							<%= link_to employee.full_name , edit_employee_path(employee.id) %> 
+						<% else %>
+							<%= employee.full_name %>
+						<% end %>
+					</td>
 					<td>
 						<% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
 							Group Admin

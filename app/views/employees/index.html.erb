@@ -25,7 +25,13 @@
 				<% @odd = true %>
 				<tr class="odd">
 			<% end %>
-				<td>  <%= employee.full_name %> </td>
+				<td>  
+					<% if can? :update, employee %>
+						<%= link_to employee.full_name , edit_employee_path(employee.id) %> 
+					<% else %>
+						<%= employee.full_name %>
+					<% end %>
+				</td>
 				<td>	<%= employee.email %> </td>
 				<td>  
 					<% if employee.notes %> 
@@ -45,11 +51,6 @@
 					<% end %>
 				</td>
 				<td> 
-					<% if can? :update, employee %>
-						<%= link_to "Edit" , edit_employee_path(employee.id) %> 
-					<% end %>
-				</td>
-				<td> 
 					<% if can? :destroy, employee %>
 						<%= link_to "Delete", employee_path(employee.id), :method=>:delete, 
 												:confirm=>"Confirm employee deletion" %> 
@@ -59,6 +60,3 @@
 		<% end %>
 	</tbody>
 </table>
-
-
-<%= RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first %>

@@ -24,13 +24,6 @@ class GroupsController < ApplicationController
   end
   
   
-  # Page for creating a new group
-  def new
-    authorize! :create, Group
-    @group = Group.new
-  end
-  
-  
   # Page containing the list of all employees assigned to a given group
   def roster
     @group = Group.find(params[:id])

@@ -1,0 +1,7 @@
+treebase = "ou=people, o=.somecollege.edu"
+Rails.application.config.middleware.use OmniAuth::Strategies::LDAP, 
+      :host => "hostname.somecollege.edu",
+      :port => 389,
+      :method => :plain,
+      :base => treebase,
+      :uid => 'uid'

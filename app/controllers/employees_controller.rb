@@ -28,12 +28,6 @@ class EmployeesController < ApplicationController
   def index
   end
   
-  
-  # Page for creating a new employee
-  def new
-    @employee = Employee.new
-  end
-  
 
   # Page for searching the OSU directory for new employees
   def search_ldap_view
@@ -54,6 +48,7 @@ class EmployeesController < ApplicationController
       redirect_to edit_employee_path(@employee.id)
       return
     end
+    flash[:error] = "The total allocation for a given employee cannot exceed 1. Either lower the new allocation or remove an existing service  from the employee."
     render :edit
   end
   

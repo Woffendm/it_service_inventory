@@ -559,7 +559,7 @@ tr.odd.priority-1, tr.even.priority-1 {
     background: none repeat scroll 0 0 #F2F2F2;
     height: auto;
     min-height: 22px;
-    padding: 5px 10px;
+    padding:;
 }
 #top-menu ul {
     border-radius: 4px 4px 4px 4px;
@@ -578,7 +578,7 @@ tr.odd.priority-1, tr.even.priority-1 {
 #top-menu #loggedas {
     border-radius: 4px 0 0 4px;
     margin-right: 0;
-    padding: 0.4em 0.6em 0.4em 1.2em;
+    padding: 0.4em 0.6em 0.65em 1.2em;
 }
 #top-menu > ul {
     padding-left: 1.2em;
@@ -586,8 +586,6 @@ tr.odd.priority-1, tr.even.priority-1 {
 #top-menu #account {
     border-radius: 0 4px 4px 0;
     padding-bottom: 0;
-		font-size: 0.99em;
-   
 }
 .controller-account.action-login #top-menu #account {
     border-radius: 4px 4px 4px 4px;
@@ -667,3 +665,6 @@ tr > td
   padding-bottom: 0.5em;
 }
 
+div.field_with_errors {
+	display: inline;
+}

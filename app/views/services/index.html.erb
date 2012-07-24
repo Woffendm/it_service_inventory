@@ -4,7 +4,7 @@
 
 <% if can? :create, Service %>
 	<fieldset>
-		<legend>New Group</legend>
+		<legend>New Service</legend>
 		<%= error_messages_for :service %>
 		<%= form_for @service do |form| %>
 			<%= form.label "Name:" %>
@@ -35,8 +35,10 @@
 			<% end %>
     		<td><%= link_to  service.name, edit_service_path(service.id) %> </td>
     		<td> 
-					<%= link_to "Delete", service_path(service.id), :method => :delete, :confirm =>
-															"Confirm service deletion" %> 
+					<% if can? :delete, Group %>
+						<%= link_to "Delete", service_path(service.id), :method => :delete, :confirm =>
+												"Confirm service deletion" %> 
+					<% end %>
 				</td>
   		</tr>
 		<% end %>

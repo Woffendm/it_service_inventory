@@ -16,7 +16,7 @@
 					<ul>
 						<li> 
 							<% if session[:current_user_id] %>
-								<%= link_to "Logout", logins_destroy_path %>
+								<%= link_to "Logout", logins_destroy_path, :class => "logout" %>
 							<% else %>
 							 	<%= link_to "Login", logins_new_path %>
 							<% end %>
@@ -26,7 +26,7 @@
 				<div id="loggedas">
 					<% if session[:current_user_name] %>
 						Logged in as:
-						<%= session[:current_user_name] %>
+						<%= link_to session[:current_user_name],edit_employee_path(session[:current_user_id]) %>
 					<% else %>
 						Not logged in
 					<% end %>
@@ -35,7 +35,7 @@
 					<li><%= link_to "Home", employees_home_path %> </li>
 					<li><%= link_to "Employees", employees_path %></li>
 					<li><%= link_to "Groups", groups_path %></li>
-					<% if can? :manage, Service %>
+					<% if can? :update, Service %>
 						<li><%= link_to "Services", services_path %></li>
 					<% end %>
 					<% if can? :manage, AppSetting %>
@@ -54,8 +54,7 @@
 				<% end %>
 				<% if flash[:error] %>
 					<p class="error">
-						Error:
-						<br/>
+						Error: 
 						<%= flash[:error] %>
 					</p>
 				<% end %>

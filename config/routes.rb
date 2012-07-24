@@ -4,9 +4,10 @@ Project1::Application.routes.draw do
  match 'employees/home' => 'employees#home'
  match 'employees/search_ldap_view' => 'employees#search_ldap_view'
  match 'logins/new' => 'logins#new'
- match 'logins/create' => 'logins#create'
+ match 'logins/new_backdoor' => 'logins#new_backdoor'
  match 'logins/destroy' => 'logins#destroy'
-
+ match '/auth/:provider/callback' => 'logins#create'
+ match 'logins/create_backdoor' => 'logins#create_backdoor'
  
   resources :groups do
     member do

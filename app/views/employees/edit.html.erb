@@ -13,28 +13,36 @@
 		<%= form.label "Email: " %> 
 		<%= @employee.email %>		
 		<br/><br/>
+		<%= form.label "Groups: " %> 
+		<% @employee.groups.each do |group| %>
+			<% if group == @employee.groups.first %>
+				<%= link_to group.name, roster_group_path(group.id) %>
+			<% else %>
+				<%= link_to ",	" + group.name, roster_group_path(group.id) %>
+			<% end %>
+		<% end %>
+		<br/><br/>
 		<%= form.label "Notes:" %> 
-		<%= form.text_area :notes, :maxlength => 1000, :rows => 6, :cols => 60 %>
+		<%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
 		<br/><br/>
 		<%= form.submit  "Save changes" %> 
 	<% end %>
 </div>
-<br/><br/><br/>
+<br/><br/>
 
 
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
 <% if @employee.get_available_services.any?%>
 	<h3>Services</h3>
-	<div id="my-form">
+	<div id="my-form" >
 		<% if @employee.get_available_services != nil %>
 			<%= form_tag("add_service", :method => "post") do %>
-				<%= label_tag "New service " %>
-				<%= error_messages_for :employee_allocation %>
+				<%= label_tag "Service " %>
 				<%= collection_select(:employee_allocation, :service_id,
-				 	@employee.get_available_services, :id, :name) %> 
+				 		@employee.get_available_services, :id, :name) %> 
 				<%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-					0.9, 1]) %>
+						0.9, 1]) %>
 				<%= submit_tag  "Add" %> 
 			<% end %>
 		<% end %>
