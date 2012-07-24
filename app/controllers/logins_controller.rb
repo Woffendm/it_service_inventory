@@ -1,6 +1,7 @@
 class LoginsController < ApplicationController
+ 
+  # Page for logins
   def new
-    
   end
   
   
@@ -11,7 +12,7 @@ class LoginsController < ApplicationController
       session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
       flash[:notice] = "Logged in as: " + session[:current_user_name]
-      redirect_to logins_new_path
+      redirect_to employees_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
       render :new

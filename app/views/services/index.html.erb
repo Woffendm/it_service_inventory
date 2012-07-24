@@ -34,8 +34,10 @@
 				<tr class="odd">
 			<% end %>
     		<td><%= link_to  service.name, edit_service_path(service.id) %> </td>
-    		<td> <%= link_to "Delete", service_path(service.id), :method=>:delete, :confirm=>
-								"Confirm service deletion" %> </td>
+    		<td> 
+					<%= link_to "Delete", service_path(service.id), :method => :delete, :confirm =>
+															"Confirm service deletion" %> 
+				</td>
   		</tr>
 		<% end %>
 	</tbody>

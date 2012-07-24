@@ -20,4 +20,17 @@ class RemoteEmployee
     return ldap_results.sort_by { |u| u.cn }
   end
   
+  
+  def self.update_search(osu_username, osu_id)
+    ldap = Net::LDAP.new :host => "client-ldap.onid.orst.edu", :port => 389
+    filter1 = Net::LDAP::Filter.eq("osuuid", osu_id)
+    filter2 = Net::LDAP::Filter.eq("uid", osu_username)
+    final_filter = filter1 & filter2
+    treebase = "ou=People, o=orst.edu"
+    ldap_results = ldap.search(:base => treebase, :filter => final_filter)
+    if ldap_results.nil?
+      return nil
+    end
+    return ldap_results.sort_by { |u| u.cn }
+  end
 end

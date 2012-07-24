@@ -38,7 +38,9 @@
 							<% if can? :update, @group %>
 								<%= form_tag("add_group_admin", :method => "post") do %>
 					 				<%= hidden_field_tag(:employee, employee.id) %>
-					 				<%= submit_tag  "Make Group Admin", :confirm => "This will allow the selected employee to edit everything within this group. Are you sure?" %>
+					 				<%= submit_tag  "Make Group Admin", :confirm => 
+																	"This will allow the selected employee to edit everything" + 					
+																	" within this group. Are you sure?" %>
 					 			<% end %>
 							<% end %>
 						<% end %>

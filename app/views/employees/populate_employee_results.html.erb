@@ -6,22 +6,22 @@
 		<th>Allocations</th>
 	</thead>
 	<tbody>
-		<% @employee.employee_allocations.each do |employee_allocation| %>
-			<tr>
-				<% if employee_allocation == @employee.employee_allocations.first %>
-					<td> 
-						<% if can? :update, @employee %>
-							<%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
-						<% else %>
-							<%= @employee.full_name %>
-						<% end %> 
-					</td>
+		<tr>
+			<td>
+				<% if can? :update, @employee %>
+					<%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
 				<% else %>
-					<td> </td>
+					<%= @employee.full_name %>
+				<% end %> 
+			</td>
+			<% @employee.employee_allocations.each do |employee_allocation| %>
+				<% if employee_allocation != @employee.employee_allocations.first %>
+					<tr>
+						<td> </td>
 				<% end %>
 				<td> <%= employee_allocation.service.name %> </td>
 		  	<td> <%= employee_allocation.allocation %> </td>
 			</tr>
-		<% end %>
+			<% end %>
 	</tbody>
 </table>

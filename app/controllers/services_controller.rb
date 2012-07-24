@@ -10,6 +10,11 @@ class ServicesController < ApplicationController
   
 # View-related methods
   
+  # Page for editing an existing service
+  def edit
+  end
+  
+  
   # List of all services
   def index
     @services = Service.order(:name)
@@ -20,11 +25,6 @@ class ServicesController < ApplicationController
   # Page for creating a new service
   def new
     @service = Service.new
-  end
-
-  
-  # Page for editing an existing service
-  def edit
   end
 
 
@@ -43,6 +43,14 @@ class ServicesController < ApplicationController
   end
 
 
+  # Hurls selected service into the nearest black hole
+  def destroy
+    @service.destroy 
+    flash[:notice] = "Service deleted!"
+    redirect_to services_path 
+  end
+
+
   # Updates an existing service using info entered on the "edit" page
   def update
     if @service.update_attributes(params[:service])
@@ -50,15 +58,7 @@ class ServicesController < ApplicationController
       redirect_to services_path 
       return
     end
-      render :edit
-  end
-
-
-  # Hurls selected service into the nearest black hole
-  def destroy
-    @service.destroy 
-    flash[:notice] = "Service deleted!"
-    redirect_to services_path 
+    render :edit
   end
   
 
@@ -66,14 +66,14 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
-    # Loads a service based on the id provided in params
-    def load_service
-      @service = Service.find(params[:id])
-    end
-    
-    
     # Loads permissions. Only group admins and site admins can do things to services
     def load_permissions
       authorize! :manage, Service
+    end
+  
+  
+    # Loads a service based on the id provided in params
+    def load_service
+      @service = Service.find(params[:id])
     end
 end

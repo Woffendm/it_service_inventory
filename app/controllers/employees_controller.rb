@@ -87,7 +87,7 @@ class EmployeesController < ApplicationController
     new_employee.name_MI = params[:name_MI]
     new_employee.osu_id = params[:osu_id]
     new_employee.osu_username = params[:osu_username]
-    new_employee.email = params[:email]
+    new_employee.email = params[:email].downcase
     if new_employee.save
       flash[:notice] = "Employee added to application!"
     else
@@ -135,8 +135,10 @@ class EmployeesController < ApplicationController
   end
 
 
-
-  
+  # Updates
+  def update_all_employees
+ RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
+  end  
   
 # Loading methods
 
