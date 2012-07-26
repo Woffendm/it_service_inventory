@@ -12,17 +12,20 @@ $(document).ready(function(){
 	
 	
 	// Searches the OSU directory for everyone whose last name begins with whatever is entered in the 
-	// appropriate text box on the "search_ldap_view". Appends first name to query if that is entered.
-	// Because of the way the search works, the last name must be COMPLETELY entered before a first
-	// name is entered. 
+	// appropriate text box on the "search_ldap_view" provided that the entry has at least two 
+	// characters. After the user enters at least two characters for the last name field, the method 
+	// will further restrict search results by whatever is entered in the first name field. It should 
+	// be noted however that the field name of "first name" is somewhat misleading, as the first name 
+	// search will actually return both first and middle names that match the query (this is 
+	// intentional).
 	var searchDiv = $("#search_div");
 	searchDiv.keyup(function(e) {
-		var searchVal = $('#first_name').val();
-		var searchVal2 = $('#last_name').val();
-		if(searchVal2.length > 1){
+		var first_name = $('#first_name').val();
+		var last_name = $('#last_name').val();
+		if (last_name.length > 1) {
 			$.ajax({
 				type: "get",
-				url: "/employees/ldap_search_results?last_name=" + searchVal2 + "&first_name=" + searchVal,
+				url: "/employees/ldap_search_results?last_name=" + last_name + "&first_name=" + first_name,
 				success: popLdapSearchResults
 			})
 		}

@@ -68,6 +68,9 @@ class EmployeesController < ApplicationController
   # to a thousand winds
   def destroy
     authorize! :destroy, Employee
+    @employee.employee_allocations.each do |allocation|
+      allocation.delete
+    end
     @employee.destroy 
     flash[:notice] = "Employee deleted!"
     redirect_to employees_path 
