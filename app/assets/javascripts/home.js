@@ -15,7 +15,7 @@ $(document).ready(function(){
 	// Gets id of selected group, passes it to "employees" method in groups controller. Default is 0.
 	var groupSelect = $("#group_dropdown");
 	groupSelect.change(function(e) {
-		var groupId = "0"
+		var groupId = "0";
 		if (e.target.value) {
 			groupId =  e.target.value;
 		}
@@ -32,7 +32,10 @@ $(document).ready(function(){
 	// controller 
 	var employeeSelect = $("#employee_dropdown");
 	employeeSelect.change(function(e) {
-		var employeeId = e.target.value;
+		var employeeId = "0";
+		if (e.target.value) {
+			 employeeId = e.target.value;
+		}
 		$.ajax({
 			type: "GET",
 			url: "/employees/populate_employee_results?employee[id]=" + employeeId,

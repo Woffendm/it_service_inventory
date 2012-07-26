@@ -8,6 +8,7 @@ Project1::Application.routes.draw do
  match 'logins/destroy' => 'logins#destroy'
  match '/auth/:provider/callback' => 'logins#create'
  match 'logins/create_backdoor' => 'logins#create_backdoor'
+ match 'app_settings/admins' => 'app_settings#admins'
  
   resources :groups do
     member do
@@ -37,6 +38,7 @@ Project1::Application.routes.draw do
   resources :app_settings do
     collection do
       post 'change_active_theme'
+      post 'add_admin'
     end
   end
   

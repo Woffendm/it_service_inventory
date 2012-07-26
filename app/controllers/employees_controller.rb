@@ -106,7 +106,11 @@ class EmployeesController < ApplicationController
   # Populates the employee dropdown list on the "home" page based off the employee roster of the
   # selected group
   def populate_employee_results
-    @employee = Employee.find(params[:employee][:id])
+    if params[:employee][:id] == "0"
+      @employee = nil
+    else
+      @employee = Employee.find(params[:employee][:id])
+    end
     render :layout => false
   end
   

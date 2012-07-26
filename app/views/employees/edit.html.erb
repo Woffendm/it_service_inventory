@@ -1,7 +1,7 @@
-<h2> Edit Employee: <%= @employee.full_name %> </h2>
+<h2> Edit Employee: <%= @employee.full_name %></h2>
 
 
-<h3>Basic Information</h3>
+<h3>Basic Information </h3>
 <div id="my-form">
 	<%= form_for @employee do |form| %>
 		<%= form.label "Last Name:" %>
@@ -14,11 +14,11 @@
 		<%= @employee.email %>		
 		<br/><br/>
 		<%= form.label "Groups: " %> 
-		<% @employee.groups.each do |group| %>
-			<% if group == @employee.groups.first %>
-				<%= link_to group.name, roster_group_path(group.id) %>
+		<% @employee.groups.order(:name).each do |group| %>
+			<% if group != @employee.groups.order(:name).last %>
+				<%= link_to group.name + ", ", roster_group_path(group.id) %>
 			<% else %>
-				<%= link_to ",	" + group.name, roster_group_path(group.id) %>
+				<%= link_to group.name, roster_group_path(group.id) %>
 			<% end %>
 		<% end %>
 		<br/><br/>

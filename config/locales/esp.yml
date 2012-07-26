@@ -1,0 +1,40 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+en:
+  hello: "Hola mundo!"
+  
+  all:                "todos"
+  allocation:         "asignación"
+  allocations:        "asignaciónes"
+  basic_information:  "información fundamental"
+  department:         "departamento"
+  email:              "correo electrónico"
+  employee:           "trabajador"
+  employees:          "trabajadores"
+  first_name:         "nombre primero" 
+  group:              "grupo"
+  group:              "grupos"
+  group_admin:        "gerente de grupo"
+  IT_service_inventory: "Inventario de Servicios Técnicos"
+  last_name:          "apellido"
+  name:               "nombre"
+  notes:              "notas"
+  OSU_directory:      "el directorio de OSU"
+  service:            "servicio"
+  services:           "servicios"
+  total:              "total"
+  
+  
+  add:
+  add_to_application: 
+  already_in_application: "este trabajador esta ya en el aplicación"      
+  click_to_view:
+  create: 
+  delete: 
+  edit:
+  make:
+  return_to:          "devuelva a"
+  save:
+  search:
+  select:
