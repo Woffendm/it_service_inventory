@@ -1,19 +1,19 @@
-<h2> Employees </h2>
+<h2> <%= t(:employees) %> </h2>
 	
 	
 <% if can? :create, Employee %>
-	<%= link_to "New Employee" , employees_search_ldap_view_path %>
+	<%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
-<%= t(:test) %>
+
 
 <table class="list issues">
-	<caption> All Employees </caption>
+	<caption> <%= t(:all_employees) %></caption>
 	<thead>
-		<th> Name </th>
-		<th> Email </th>
-		<th> Notes </th>
-		<th> Services </th>
-		<th> Allocations </th>
+		<th> <%= t(:name) %> </th>
+		<th> <%= t(:email) %> </th>
+		<th> <%= t(:notes) %> </th>
+		<th> <%= t(:services) %> </th>
+		<th> <%= t(:allocations) %> </th>
 		<th>  </th>
 	</thead>
 	<tbody>
@@ -52,7 +52,7 @@
 				</td>
 				<td> 
 					<% if can? :destroy, employee %>
-						<%= link_to "Delete", employee_path(employee.id), :method=>:delete, 
+						<%= link_to t(:delete), employee_path(employee.id), :method=>:delete, 
 												:confirm=>"Confirm employee deletion" %> 
 					<% end %>
 				</td>

@@ -4,7 +4,7 @@
 # Copyright:
 
 class Employee < ActiveRecord::Base
-  attr_accessible :name_first, :name_last, :notes, :email
+  attr_accessible :name_first, :name_last, :notes, :email, :preferred_theme, :preferred_language
   has_many :employee_groups
   has_many :groups, :through => :employee_groups
   has_many :employee_allocations

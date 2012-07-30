@@ -1,0 +1,27 @@
+<h2> <%= t(:user_settings) %> </h2>
+
+
+<%= link_to t(:my_edit_page), edit_employee_path(@current_user.id) %>
+
+
+<table class="list issues">
+  <caption> <%= t(:all_settings) %> </caption>
+  <thead>
+    <th> <%= t(:setting) %> </th>
+    <th> <%= t(:current_setting) %> </th>
+    <th> <%= t(:options) %> </th>
+    <th> </th>
+  </thead>
+  <tbody>
+    <tr>
+      <td> <%= t(:preferred_language) %> </td>
+      <td> <%= @current_user.preferred_language %> </td>
+      <td>
+        <%= form_tag("update_settings", :method => "post") do %>
+				  <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]]) %>
+				  <%= submit_tag  t(:save_changes) %>
+				<% end %>
+			</td>
+    </tr>
+  </tbody>
+</table>

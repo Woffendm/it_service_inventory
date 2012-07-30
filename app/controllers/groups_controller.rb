@@ -57,10 +57,10 @@ class GroupsController < ApplicationController
     @group = Group.new(params[:group])
     if @group.save
       flash[:notice] = "Group created!"
-      redirect_to groups_path
-      return
+    else
+      flash[:error] = "New group name cannot be blank"
     end
-    render :new
+    redirect_to groups_path
   end
   
   
@@ -96,9 +96,13 @@ class GroupsController < ApplicationController
   
   # Updates a group based on the information endered on the "edit" page
   def update
-    @group.update_attributes(params[:group])
-    flash[:notice] = "Group updated!"
-    redirect_to groups_path 
+    if @group.update_attributes(params[:group])
+      flash[:notice] = "Group updated!"
+      redirect_to groups_path 
+      return
+    end
+    flash[:error] = "Group must have a name"
+    redirect_to edit_group_path(@group.id) 
   end
   
   

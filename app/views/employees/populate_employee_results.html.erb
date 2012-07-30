@@ -1,9 +1,9 @@
 <% if @employee %>
-	<table class="list issues"><caption> Search Results</caption>
+	<table class="list issues"><caption> <%= t(:search_results) %> </caption>
 		<thead>
-			<th>Name</th>
-			<th>Services</th>
-			<th>Allocations</th>
+			<th><%= t(:name) %></th>
+			<th><%= t(:services) %></th>
+			<th><%= t(:allocations) %></th>
 		</thead>
 		<tbody>
 			<tr>

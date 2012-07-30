@@ -1,68 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IT Service Inventory</title>
+  <title><%= t(:IT_service_inventory) %></title>
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
-	<%= stylesheet_link_tag "redmine" %>
-	<!--<%= stylesheet_link_tag @current_theme %>-->
+  <%= stylesheet_link_tag "redmine" %>
+  <!--<%= stylesheet_link_tag @current_theme %>-->
   <%= csrf_meta_tags %>
+  <% if @current_user.preferred_language %>
+    <% I18n.locale = @current_user.preferred_language %>
+  <% else %>
+    <% I18n.locale = :en %>
+  <% end %>
 </head>
 <body class="theme-Osu highrise controller-issues action-index">
-	<div id="wrapper">
-		<div id="wrapper2">
-			<div id="top-menu">
-				<div id="account">
-					<ul>
-						<li> 
-							<% if session[:current_user_id] %>
-								<%= link_to "Logout", logins_destroy_path, :class => "logout" %>
-							<% else %>
-							 	<%= link_to "Login", logins_new_path %>
-							<% end %>
-						</li>
-					</ul>
-				</div>
-				<div id="loggedas">
-					<% if session[:current_user_name] %>
-						Logged in as:
-						<%= link_to session[:current_user_name],edit_employee_path(session[:current_user_id]) %>
-					<% else %>
-						Not logged in
-					<% end %>
-				</div>
-				<ul>
-					<li><%= link_to "Home", employees_home_path %> </li>
-					<li><%= link_to "Employees", employees_path %></li>
-					<li><%= link_to "Groups", groups_path %></li>
-					<% if can? :update, Service %>
-						<li><%= link_to "Services", services_path %></li>
-					<% end %>
-					<% if can? :manage, AppSetting %>
-						<li><%= link_to "Settings", app_settings_path %></li>
-					<% end %>
-				</ul>
-			</div>
-			<div id="header">
-				<h1> IT Service Inventory </h1>
-			</div>
-			<div id="main">
-				<% if flash[:notice] %>
-					<p class="notice">
-						<%= flash[:notice] %>
-					</p>
-				<% end %>
-				<% if flash[:error] %>
-					<p class="error">
-						Error: 
-						<%= flash[:error] %>
-					</p>
-				<% end %>
-				<div id="content">
-					<%= yield %>
-				</div>
-			</div>
-		</div>
-	</div>
+  <div id="wrapper">
+    <div id="wrapper2">
+      <div id="top-menu">
+        <div id="account">
+          <ul>
+            <li> 
+              <% if session[:current_user_id] %>
+                <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
+              <% else %>
+                 <%= link_to t(:login), logins_new_path %>
+              <% end %>
+            </li>
+          </ul>
+        </div>
+        <div id="loggedas">
+          <% if session[:current_user_name] %>
+            <%= t(:logged_in_as) %> :
+            <%= link_to session[:current_user_name],
+                user_settings_employee_path(session[:current_user_id]) %>
+          <% else %>
+            Not logged in
+          <% end %>
+        </div>
+        <ul>
+          <li><%= link_to t(:home), employees_home_path %> </li>
+          <li><%= link_to t(:employees), employees_path %></li>
+          <li><%= link_to t(:groups), groups_path %></li>
+          <% if can? :update, Service %>
+            <li><%= link_to t(:services), services_path %></li>
+          <% end %>
+          <% if can? :manage, AppSetting %>
+            <li><%= link_to t(:settings), app_settings_path %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div id="header">
+        <h1> IT Service Inventory </h1>
+      </div>
+      <div id="main">
+        <% if flash[:notice] %>
+          <p class="notice">
+            <%= flash[:notice] %>
+          </p>
+        <% end %>
+        <% if flash[:error] %>
+          <p class="error">
+            Error: 
+            <%= flash[:error] %>
+          </p>
+        <% end %>
+        <div id="content">
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

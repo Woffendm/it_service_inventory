@@ -9,7 +9,7 @@ Project1::Application.routes.draw do
  match '/auth/:provider/callback' => 'logins#create'
  match 'logins/create_backdoor' => 'logins#create_backdoor'
  match 'app_settings/admins' => 'app_settings#admins'
- 
+
   resources :groups do
     member do
       get 'roster'
@@ -24,8 +24,10 @@ Project1::Application.routes.draw do
   
   resources :employees do
     member do
+      get 'user_settings'
       post 'add_service'
       post 'remove_service'
+      post 'update_settings'
     end
     collection do
       get 'populate_employee_results'

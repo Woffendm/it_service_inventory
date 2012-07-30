@@ -1,21 +1,24 @@
-<h2> Edit Service: <%= @service.name %> </h2>
+<h2> <%= t(:edit) + t(:service) %>: <%= @service.name %> </h2>
 
 
 <%= error_messages_for :service %>
 <%= form_for @service do |form| %>
 	<p>
-		<%= form.label :name %>
+		<%= form.label t(:name) %>
 		<%= form.text_field :name %>
 	</p>
-	<p><%= form.submit  "Save changes" %></p>
+	<p>
+		<label> &nbsp </label>
+		<%= form.submit  t(:save_changes) %>
+	</p>
 <% end %>
 
 <% if @service.employees.any? %>
-	<table class="list issues"><caption> Employees With This Service </caption>
+	<table class="list issues"><caption> <%= t(:employees_with_this_service) %> </caption>
 		<thead>
-			<th> Name </th>
-			<th> Groups </th>
-			<th> Allocation </th>
+			<th> <%= t(:name) %> </th>
+			<th> <%= t(:groups) %> </th>
+			<th> <%= t(:allocation) %> </th>
 		</thead>
 		<tbody>
 			<% @service.employees.order(:name_last).each do |employee| %>
@@ -53,4 +56,4 @@
 <% end %>
 
 <br/><br/>
-<%= link_to "Return to All Services", services_path %>
+<%= link_to t(:return_to) + t(:all_services), services_path %>

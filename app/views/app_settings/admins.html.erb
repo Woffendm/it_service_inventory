@@ -1,22 +1,22 @@
-<h2> Site Admins </h2>
+<h2> <%= t(:site_admins) %> </h2>
 
 
-<h3>Add Admin</h3>
+<h3> <%= t(:add) + t(:admin) %> </h3>
 <div id="my-form">
-	<%= form_tag("add_admin", :method => "post") do %>
+	<%= form_tag( t(:add) + t(:site_admin), :method => "post") do %>
 		<p>
-			<%= label_tag :name %>
+			<%= label_tag t(:name) %>
 			<%= collection_select(:employee, :id, Employee.where(:site_admin => nil).order(:name_last), :id, :full_name) %>
-			<%= submit_tag  "Add Admin" %>
+			<%= submit_tag  t(:add) %>
 		</p>
 	<% end %>
 </div>
 
 
 <table class="list issues">
-	<caption> Existing Administrators </caption>
+	<caption> <%= t(:existing_administrators) %> </caption>
 	<thead>
-		<th> Name </th>
+		<th> <%= t(:name) %> </th>
 		<th> </th>
 	</thead>
 	<tbody>

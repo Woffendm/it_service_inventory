@@ -1,17 +1,17 @@
-<h2>Services</h2>
+<h2> <%= t(:services) %> </h2>
 
 
 
 <% if can? :create, Service %>
 	<fieldset>
-		<legend>New Service</legend>
+		<legend><%= t(:new_service) %></legend>
 		<%= error_messages_for :service %>
 		<%= form_for @service do |form| %>
-			<%= form.label "Name:" %>
+			<%= form.label t(:name) %>
 			<%= form.text_field :name %>
 			</br>
 			<label> &nbsp </label>
-			<%= form.submit  "Create Service" %>
+			<%= form.submit  t(:create) + t(:service) %>
 		<% end %>
 	</fieldset>	
 <% end %>
@@ -19,9 +19,9 @@
 
 
 <table class="list issues">
-	<caption> All Services </caption>
+	<caption> <%= t(:all_services) %> </caption>
   <thead>
-    <th> Name </th>
+    <th> <%= t(:name) %> </th>
 		<th>  </th>
   </thead>
 	<tbody>
@@ -36,7 +36,7 @@
     		<td><%= link_to  service.name, edit_service_path(service.id) %> </td>
     		<td> 
 					<% if can? :delete, Group %>
-						<%= link_to "Delete", service_path(service.id), :method => :delete, :confirm =>
+						<%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
 												"Confirm service deletion" %> 
 					<% end %>
 				</td>

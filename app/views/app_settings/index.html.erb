@@ -1,15 +1,15 @@
-<h2> Application Settings </h2>
+<h2> <%= t(:application_settings) %> </h2>
 
 
-<%= link_to "Add Site Admin", app_settings_admins_path %>
+<%= link_to t(:add) + t(:site_admin), app_settings_admins_path %>
 
 
 <table class="list issues">
-	<caption> All Settings </caption>
+	<caption> <%= t(:all_settings) %> </caption>
 	<thead>
-		<th> Setting </th>
-		<th> Currently Active </th>
-		<th> Options </th>
+		<th> <%= t(:setting) %> </th>
+		<th> <%= t(:current_setting) %> </th>
+		<th> <%= t(:options) %> </th>
 		<th> </th>
 	</thead>
 	<tbody>
@@ -19,7 +19,7 @@
 					<td> <%= setting.code %> </td>
 					<td> <%= setting.active.from(7) %> </td>
 					<td> <%= form.select(:active, options_for_select(@themes)) %> </td>
-					<td> <%= form.submit  "Save changes" %> </td>
+					<td> <%= form.submit  t(:save_changes) %> </td>
 				</tr>
 			<% end %>
 		<% end %>

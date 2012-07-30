@@ -4,39 +4,43 @@
 # Copyright: 
 
 class EmployeesController < ApplicationController
-  
+
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
   before_filter :load_employees, :only => [:home, :edit, :index]
   before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results, :search_ldap]
   before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
 
-    
+
 # View-related methods
 
   # Page for editing an existing employee
   def edit
   end
-  
+
 
   # Page used to rapidly search for an employee
   def home
     @employee = nil
   end
-  
-  
+
+
   # List of all employees
   def index
   end
-  
+
 
   # Page for searching the OSU directory for new employees
   def search_ldap_view
     @data = nil
   end
-  
-  
-  
-  
+
+
+  #
+  def user_settings
+  end
+
+
+
 # Action-related methods
 
   # Adds a new service and corresponding allocation to an employee based off info entered on the
@@ -51,8 +55,8 @@ class EmployeesController < ApplicationController
     flash[:error] = "The total allocation for a given employee cannot exceed 1. Either lower the new allocation or remove an existing service  from the employee."
     render :edit
   end
-  
-  
+
+
   # Creates a new employee using info entered on the "new" page
   def create
     @employee = Employee.new(params[:employee])
@@ -113,7 +117,7 @@ class EmployeesController < ApplicationController
     end
     render :layout => false
   end
-  
+
 
   # Removes a service and corresponding allocation from an employee based off selection made on the
   # "edit" page
@@ -137,10 +141,25 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Updates
+  # Updates an employee based on info entered on the "edit" page
+  def update_settings
+    @employee = Employee.find(@current_user.id)
+    if @employee.update_attributes(params[:employee])
+      flash[:notice] = "Settings updated!"
+    else
+      flash[:error] = "Something went wrong! We're all going to die!!!"
+    end
+    redirect_to user_settings_employee_path(@current_user.id)
+  end
+
+
+
+
+  # Updates the names and emails of all employees in the application based off the most recent
+  # information provided in the OSU online directory
   def update_all_employees
- RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
-  end  
+    RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
+  end
   
 # Loading methods
 
@@ -149,21 +168,21 @@ class EmployeesController < ApplicationController
     def authorize_creation
       authorize! :create, Employee
     end
-      
-      
+
+
     # Loads an employee based off parameters given and ensures that user is authorized to edit them
     def load_employee
       @employee = Employee.find(params[:id])
       authorize! :update, @employee
     end
-    
-    
+
+
     # Loads all employees in alphabetical order
     def load_employees
       @employees = Employee.order(:name_last)
     end
-    
-    
+
+
     # Loads all groups and services alphabetically
     def load_groups
       @groups = Group.order(:name)

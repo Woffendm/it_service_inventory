@@ -1,2 +1,2 @@
-<%= label_tag "Employee Name: " %>
-<%= collection_select(:employee, :id, @employees, :id, :full_name, {:prompt => 'Select Employee' }) %>
+<%= label_tag t(:employee_name) %>
+<%= collection_select(:employee, :id, @employees, :id, :full_name, {:prompt => t(:select) + t(:employee) }) %>

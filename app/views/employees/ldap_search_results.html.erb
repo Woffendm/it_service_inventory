@@ -1,9 +1,9 @@
 <% if !@data.nil? %>
-	<table class="list issues"><caption> Employee Search Results </caption>
+	<table class="list issues"><caption> <%= t(:search_results) %> </caption>
 		<thead>
-			<th> Name </th>
-			<th> Department </th>
-			<th> Email </th>
+			<th> <%= t(:name) %> </th>
+			<th> <%= t(:department) %> </th>
+			<th> <%= t(:email) %> </th>
 			<th>  </th>
 		</thead>
 		<tbody>
@@ -29,7 +29,7 @@
 					<td> 
 						<% if Employee.find_by_osu_id(entry.osuuid.first) &&
 							 		Employee.find_by_osu_username(entry.uid.first) %>
-							Already in application!
+							<%= t(:already_in_application) %>
 						<% else %>
 							<%= form_tag("ldap_create", :method => "post") do %>
 					 			<% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
@@ -43,7 +43,7 @@
 					 			<% else %>
 					 				<%= hidden_field_tag(:email, "") %>
 					 			<% end %>
-					 			<%= submit_tag  "Add To Application" %> 
+					 			<%= submit_tag  t(:add_to_application) %> 
 							<% end %>
 						<% end %>
 					</td>

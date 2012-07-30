@@ -1,26 +1,26 @@
-<h2> Groups </h2>
+<h2> <%= t(:groups) %> </h2>
 
 
 <% if can? :create, Group %>
 	<fieldset>
-		<legend>New Group</legend>
+		<legend><%= t(:new_group) %></legend>
 		<%= error_messages_for :group %>
 		<%= form_for @group do |form| %>
-			<%= form.label "Name:" %>
+			<%= form.label t(:name) %>
 			<%= form.text_field :name %>
 			</br>
 			<label> &nbsp </label>
-			<%= form.submit  "Create Group" %>
+			<%= form.submit  t(:create) + t(:group) %>
 		<% end %>
 	</fieldset>
 <% end %>
 
 	
 <table class="list issues">
-	<caption> All Groups </caption>
+	<caption> <%= t(:all_groups) %> </caption>
 	<thead>
-		<th> Name </th>
-		<th> Total Employees </th>
+		<th> <%= t(:name) %> </th>
+		<th> <%= t(:total_employees) %> </th>
 		<th> </th>
 	</thead>
 	<tbody>
@@ -41,12 +41,12 @@
 						<% end %>
 					</td>
 					<td> 
-						<%= link_to group.employees.length.to_s + " (Click to view)",
+						<%= link_to group.employees.length.to_s + t(:click_to_view),
 						 						roster_group_path(group.id) %>
 					</td>
 					<td> 
 						<% if can? :delete, Group %>
-							<%= link_to "Delete", group_path(group.id), :method=>:delete, 
+							<%= link_to t(:delete), group_path(group.id), :method=>:delete, 
 													:confirm=>"Confirm group deletion" %> 
 						<% end %>
 					</td>
