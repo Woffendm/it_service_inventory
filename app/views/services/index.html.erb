@@ -3,46 +3,46 @@
 
 
 <% if can? :create, Service %>
-	<fieldset>
-		<legend><%= t(:new_service) %></legend>
-		<%= error_messages_for :service %>
-		<%= form_for @service do |form| %>
-			<%= form.label t(:name) %>
-			<%= form.text_field :name %>
-			</br>
-			<label> &nbsp </label>
-			<%= form.submit  t(:create) + t(:service) %>
-		<% end %>
-	</fieldset>	
+  <fieldset>
+    <legend><%= t(:new_service) %></legend>
+    <%= error_messages_for :service %>
+    <%= form_for @service do |form| %>
+      <%= form.label t(:name) %>
+      <%= form.text_field :name %>
+      </br>
+      <label> &nbsp </label>
+      <%= form.submit  t(:create) + t(:service) %>
+    <% end %>
+  </fieldset>  
 <% end %>
 
 
 
 <table class="list issues">
-	<caption> <%= t(:all_services) %> </caption>
+  <caption> <%= t(:all_services) %> </caption>
   <thead>
     <th> <%= t(:name) %> </th>
-		<th>  </th>
+    <th>  </th>
   </thead>
-	<tbody>
-		<% @services.each do |service| %>
-  		<% if @odd %>
-				<% @odd = false %>
-				<tr class="even">
-			<% else %>
-				<% @odd = true %>
-				<tr class="odd">
-			<% end %>
-    		<td><%= link_to  service.name, edit_service_path(service.id) %> </td>
-    		<td> 
-					<% if can? :delete, Group %>
-						<%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
-												"Confirm service deletion" %> 
-					<% end %>
-				</td>
-  		</tr>
-		<% end %>
-	</tbody>
+  <tbody>
+    <% @services.each do |service| %>
+      <% if @odd %>
+        <% @odd = false %>
+        <tr class="even">
+      <% else %>
+        <% @odd = true %>
+        <tr class="odd">
+      <% end %>
+        <td><%= link_to  service.name, edit_service_path(service.id) %> </td>
+        <td> 
+          <% if can? :delete, Group %>
+            <%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
+                        "Confirm service deletion" %> 
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
 

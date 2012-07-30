@@ -5,25 +5,25 @@
 
 
 <table class="list issues">
-	<caption> <%= t(:all_settings) %> </caption>
-	<thead>
-		<th> <%= t(:setting) %> </th>
-		<th> <%= t(:current_setting) %> </th>
-		<th> <%= t(:options) %> </th>
-		<th> </th>
-	</thead>
-	<tbody>
-		<% AppSetting.all.each do |setting| %>
-			<%= form_for setting do |form| %>
-				<tr>
-					<td> <%= setting.code %> </td>
-					<td> <%= setting.active.from(7) %> </td>
-					<td> 
-					  <%= form.select(:active, options_for_select(@themes), :selected => setting.active) %>
-					</td>
-					<td> <%= form.submit  t(:save_changes) %> </td>
-				</tr>
-			<% end %>
-		<% end %>
-	</tbody>
+  <caption> <%= t(:all_settings) %> </caption>
+  <thead>
+    <th> <%= t(:setting) %> </th>
+    <th> <%= t(:current_setting) %> </th>
+    <th> <%= t(:options) %> </th>
+    <th> </th>
+  </thead>
+  <tbody>
+    <% AppSetting.all.each do |setting| %>
+      <%= form_for setting do |form| %>
+        <tr>
+          <td> <%= setting.code %> </td>
+          <td> <%= setting.active.from(7) %> </td>
+          <td> 
+            <%= form.select(:active, options_for_select(@themes), :selected => setting.active) %>
+          </td>
+          <td> <%= form.submit  t(:save_changes) %> </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
 </table>

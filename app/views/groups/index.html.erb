@@ -2,56 +2,56 @@
 
 
 <% if can? :create, Group %>
-	<fieldset>
-		<legend><%= t(:new_group) %></legend>
-		<%= error_messages_for :group %>
-		<%= form_for @group do |form| %>
-			<%= form.label t(:name) %>
-			<%= form.text_field :name %>
-			</br>
-			<label> &nbsp </label>
-			<%= form.submit  t(:create) + t(:group) %>
-		<% end %>
-	</fieldset>
+  <fieldset>
+    <legend><%= t(:new_group) %></legend>
+    <%= error_messages_for :group %>
+    <%= form_for @group do |form| %>
+      <%= form.label t(:name) %>
+      <%= form.text_field :name %>
+      </br>
+      <label> &nbsp </label>
+      <%= form.submit  t(:create) + t(:group) %>
+    <% end %>
+  </fieldset>
 <% end %>
 
-	
+  
 <table class="list issues">
-	<caption> <%= t(:all_groups) %> </caption>
-	<thead>
-		<th> <%= t(:name) %> </th>
-		<th> <%= t(:total_employees) %> </th>
-		<th> </th>
-	</thead>
-	<tbody>
-		<% if Group.first != nil %>
-			<% @groups.each do |group| %>
-				<% if @odd %>
-					<% @odd = false %>
-					<tr class="even">
-				<% else %>
-					<% @odd = true %>
-					<tr class="odd">
-				<% end %>
-					<td> 
-						<% if can? :update, group %>
-							<%= link_to group.name , edit_group_path(group.id) %>
-						<% else %>
-							<%= group.name %>
-						<% end %>
-					</td>
-					<td> 
-						<%= link_to group.employees.length.to_s + t(:click_to_view),
-						 						roster_group_path(group.id) %>
-					</td>
-					<td> 
-						<% if can? :delete, Group %>
-							<%= link_to t(:delete), group_path(group.id), :method=>:delete, 
-													:confirm=>"Confirm group deletion" %> 
-						<% end %>
-					</td>
-				</tr>	
-			<% end %>
-		<% end %>
-	</tbody>
+  <caption> <%= t(:all_groups) %> </caption>
+  <thead>
+    <th> <%= t(:name) %> </th>
+    <th> <%= t(:total_employees) %> </th>
+    <th> </th>
+  </thead>
+  <tbody>
+    <% if Group.first != nil %>
+      <% @groups.each do |group| %>
+        <% if @odd %>
+          <% @odd = false %>
+          <tr class="even">
+        <% else %>
+          <% @odd = true %>
+          <tr class="odd">
+        <% end %>
+          <td> 
+            <% if can? :update, group %>
+              <%= link_to group.name , edit_group_path(group.id) %>
+            <% else %>
+              <%= group.name %>
+            <% end %>
+          </td>
+          <td> 
+            <%= link_to group.employees.length.to_s + t(:click_to_view),
+                         roster_group_path(group.id) %>
+          </td>
+          <td> 
+            <% if can? :delete, Group %>
+              <%= link_to t(:delete), group_path(group.id), :method=>:delete, 
+                          :confirm=>"Confirm group deletion" %> 
+            <% end %>
+          </td>
+        </tr>  
+      <% end %>
+    <% end %>
+  </tbody>
 </table>

@@ -1,64 +1,64 @@
 <h2> <%= t(:employees) %> </h2>
-	
-	
+  
+  
 <% if can? :create, Employee %>
-	<%= link_to t(:new_employee) , employees_search_ldap_view_path %>
+  <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
 
 
 <table class="list issues">
-	<caption> <%= t(:all_employees) %></caption>
-	<thead>
-		<th> <%= t(:name) %> </th>
-		<th> <%= t(:email) %> </th>
-		<th> <%= t(:notes) %> </th>
-		<th> <%= t(:services) %> </th>
-		<th> <%= t(:allocations) %> </th>
-		<th>  </th>
-	</thead>
-	<tbody>
-		<% @employees.each do |employee| %>
-			<% if @odd %>
-				<% @odd = false %>
-				<tr class="even">
-			<% else %>
-				<% @odd = true %>
-				<tr class="odd">
-			<% end %>
-				<td>  
-					<% if can? :update, employee %>
-						<%= link_to employee.full_name , edit_employee_path(employee.id) %> 
-					<% else %>
-						<%= employee.full_name %>
-					<% end %>
-				</td>
-				<td>	<%= employee.email %> </td>
-				<td>  
-					<% if employee.notes %> 
-						<%= employee.notes.truncate(20) %>
-					<% end %>
-				</td>
-				<td>
-					<% employee.services.each do |service| %>
-						<%= service.name %>
-						<br/>
-						<% end %>
-				</td>
-				<td>
-					<% employee.employee_allocations.each do |employee_allocation| %>
-						<%= employee_allocation.allocation %> 
-						<br/>
-					<% end %>
-				</td>
-				<td> 
-					<% if can? :destroy, employee %>
-						<%= link_to t(:delete), employee_path(employee.id), :method=>:delete, 
-												:confirm=>"Confirm employee deletion" %> 
-					<% end %>
-				</td>
-			</tr>	
-		<% end %>
-	</tbody>
+  <caption> <%= t(:all_employees) %></caption>
+  <thead>
+    <th> <%= t(:name) %> </th>
+    <th> <%= t(:email) %> </th>
+    <th> <%= t(:notes) %> </th>
+    <th> <%= t(:services) %> </th>
+    <th> <%= t(:allocations) %> </th>
+    <th>  </th>
+  </thead>
+  <tbody>
+    <% @employees.each do |employee| %>
+      <% if @odd %>
+        <% @odd = false %>
+        <tr class="even">
+      <% else %>
+        <% @odd = true %>
+        <tr class="odd">
+      <% end %>
+        <td>  
+          <% if can? :update, employee %>
+            <%= link_to employee.full_name , edit_employee_path(employee.id) %> 
+          <% else %>
+            <%= employee.full_name %>
+          <% end %>
+        </td>
+        <td>  <%= employee.email %> </td>
+        <td>  
+          <% if employee.notes %> 
+            <%= employee.notes.truncate(20) %>
+          <% end %>
+        </td>
+        <td>
+          <% employee.services.each do |service| %>
+            <%= service.name %>
+            <br/>
+            <% end %>
+        </td>
+        <td>
+          <% employee.employee_allocations.each do |employee_allocation| %>
+            <%= employee_allocation.allocation %> 
+            <br/>
+          <% end %>
+        </td>
+        <td> 
+          <% if can? :destroy, employee %>
+            <%= link_to t(:delete), employee_path(employee.id), :method=>:delete, 
+                        :confirm=>"Confirm employee deletion" %> 
+          <% end %>
+        </td>
+      </tr>  
+    <% end %>
+  </tbody>
 </table>
 
 

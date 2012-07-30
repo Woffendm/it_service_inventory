@@ -110,7 +110,7 @@ div#welcome-store-content h1, div#welcome-store-content h2, div#welcome-store-co
     box-shadow: 0 0 3px 0 #CCCCCC;
 }
 a, a:link, a:visited {
-		color: blue;
+    color: blue;
 }
 div.issue {
     background: none repeat scroll 0 0 #FFFFDD;
@@ -150,8 +150,8 @@ h2, h3, h4, .wiki h1, .wiki h2, .wiki h3 {
 table.list caption {
     font-weight: bold;
     text-align: left;
-		font-size: 140%;
-		border-bottom: 5px solid black;		
+    font-size: 140%;
+    border-bottom: 5px solid black;    
 }
 table.list tbody tr {
     border-top: 0px solid #CCCCCC;
@@ -654,17 +654,17 @@ span.tip {
 }
 
 div#my-form {
-	border-top: 5px solid black;
-	padding-top: 5px;
-	margin-bottom: 30px;
+  border-top: 5px solid black;
+  padding-top: 5px;
+  margin-bottom: 30px;
 }
 
 tr > td
 {
-	padding-top: 0.5em;
+  padding-top: 0.5em;
   padding-bottom: 0.5em;
 }
 
 div.field_with_errors {
-	display: inline;
+  display: inline;
 }

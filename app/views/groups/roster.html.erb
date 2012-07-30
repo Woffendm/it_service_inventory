@@ -2,69 +2,69 @@
 
 
 <% if (@group.get_available_employees.length > 0)  && (can? :update, @group) %>
-	<h3> <%= t(:add) + t(:employee) %> </h3>
-	<div id="my-form">
-		<%= form_tag("add_employee", :method => "post") do %>
-			<p>
-				<%= label_tag t(:name) %>
-				<%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
-				<%= submit_tag  t(:add) %>
-			</p>
-		<% end %>
-	</div>
+  <h3> <%= t(:add) + t(:employee) %> </h3>
+  <div id="my-form">
+    <%= form_tag("add_employee", :method => "post") do %>
+      <p>
+        <%= label_tag t(:name) %>
+        <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
+        <%= submit_tag  t(:add) %>
+      </p>
+    <% end %>
+  </div>
 <% end %>
 
 
 <% if @paginated_employees.any? %>
-	<table class="list issues"><caption> <%= t(:existing_employees) %> </caption>
-		<thead>
-			<th> </th>
-			<th> </th>
-		</thead>
-		<tbody>
-			<% @paginated_employees.each do |employee| %>
-				<% if @odd %>
-					<% @odd = false %>
-					<tr class="even">
-				<% else %>
-					<% @odd = true %>
-					<tr class="odd">
-				<% end %>
-					<td>
-						<% if can? :update, employee %>
-							<%= link_to employee.full_name , edit_employee_path(employee.id) %> 
-						<% else %>
-							<%= employee.full_name %>
-						<% end %>
-					</td>
-					<td>
-						<% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
-							<%= t(:group_admin) %>
-						<% else %>
-							<% if can? :update, @group %>
-								<%= form_tag("add_group_admin", :method => "post") do %>
-					 				<%= hidden_field_tag(:employee, employee.id) %>
-					 				<%= submit_tag  t(:make) + t(:group_admin), :confirm => 
-																	"This will allow the selected employee to edit everything" + 					
-																	" within this group. Are you sure?" %>
-					 			<% end %>
-							<% end %>
-						<% end %>
-					</td>
-					<% if can? :update, @group %>
-						<td>
-							<%= form_tag("remove_employee", :method => "post") do %>
-								<%= hidden_field_tag(:employee, employee.id) %>
-								<%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
-							<% end %>
-						</td>
-					<% end %>
-				</tr>
-			<% end %>
-		</tbody>
-	</table>
-	<%= will_paginate @paginated_employees %>
-	<%= render :partial => "/partials/partial.html.erb" %>
+  <table class="list issues"><caption> <%= t(:existing_employees) %> </caption>
+    <thead>
+      <th> </th>
+      <th> </th>
+    </thead>
+    <tbody>
+      <% @paginated_employees.each do |employee| %>
+        <% if @odd %>
+          <% @odd = false %>
+          <tr class="even">
+        <% else %>
+          <% @odd = true %>
+          <tr class="odd">
+        <% end %>
+          <td>
+            <% if can? :update, employee %>
+              <%= link_to employee.full_name , edit_employee_path(employee.id) %> 
+            <% else %>
+              <%= employee.full_name %>
+            <% end %>
+          </td>
+          <td>
+            <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
+              <%= t(:group_admin) %>
+            <% else %>
+              <% if can? :update, @group %>
+                <%= form_tag("add_group_admin", :method => "post") do %>
+                   <%= hidden_field_tag(:employee, employee.id) %>
+                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => 
+                                  "This will allow the selected employee to edit everything" +           
+                                  " within this group. Are you sure?" %>
+                 <% end %>
+              <% end %>
+            <% end %>
+          </td>
+          <% if can? :update, @group %>
+            <td>
+              <%= form_tag("remove_employee", :method => "post") do %>
+                <%= hidden_field_tag(:employee, employee.id) %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @paginated_employees %>
+  <%= render :partial => "/partials/partial.html.erb" %>
 <% end %>
 
 

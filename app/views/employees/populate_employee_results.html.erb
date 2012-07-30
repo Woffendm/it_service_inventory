@@ -1,28 +1,28 @@
 <% if @employee %>
-	<table class="list issues"><caption> <%= t(:search_results) %> </caption>
-		<thead>
-			<th><%= t(:name) %></th>
-			<th><%= t(:services) %></th>
-			<th><%= t(:allocations) %></th>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<% if can? :update, @employee %>
-						<%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
-					<% else %>
-						<%= @employee.full_name %>
-					<% end %> 
-				</td>
-				<% @employee.employee_allocations.each do |employee_allocation| %>
-					<% if employee_allocation != @employee.employee_allocations.first %>
-						<tr>
-							<td> </td>
-					<% end %>
-					<td> <%= employee_allocation.service.name %> </td>
-			  	<td> <%= employee_allocation.allocation %> </td>
-				</tr>
-				<% end %>
-		</tbody>
-	</table>
+  <table class="list issues"><caption> <%= t(:search_results) %> </caption>
+    <thead>
+      <th><%= t(:name) %></th>
+      <th><%= t(:services) %></th>
+      <th><%= t(:allocations) %></th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <% if can? :update, @employee %>
+            <%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
+          <% else %>
+            <%= @employee.full_name %>
+          <% end %> 
+        </td>
+        <% @employee.employee_allocations.each do |employee_allocation| %>
+          <% if employee_allocation != @employee.employee_allocations.first %>
+            <tr>
+              <td> </td>
+          <% end %>
+          <td> <%= employee_allocation.service.name %> </td>
+          <td> <%= employee_allocation.allocation %> </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
 <% end %>

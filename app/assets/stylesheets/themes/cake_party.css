@@ -1,19 +1,19 @@
 body{
-	margin: 5em;
-	border-style: ridge;
-	border-width: 0px;
-	border-color: black;
-	background: magenta;
-	color: yellow;
+  margin: 5em;
+  border-style: ridge;
+  border-width: 0px;
+  border-color: black;
+  background: magenta;
+  color: yellow;
 }
 
 thead{
-	color: pink;
-	background: cyan;
+  color: pink;
+  background: cyan;
 }
 
 caption{
-	font-size: 150%;
-	color: orange;
-	background: purple;
+  font-size: 150%;
+  color: orange;
+  background: purple;
 }

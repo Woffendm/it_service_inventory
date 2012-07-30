@@ -3,14 +3,14 @@
 
 <%= error_messages_for :group %>
 <%= form_for @group do |form| %>
-	<p>
-		<%= form.label t(:name) %>
-		<%= form.text_field :name %>
-	</p>
-	<p>
-		<label> &nbsp </label>
-		<%= form.submit  t(:save_changes) %>
-	</p>
+  <p>
+    <%= form.label t(:name) %>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <label> &nbsp </label>
+    <%= form.submit  t(:save_changes) %>
+  </p>
 <% end %>
 
 
