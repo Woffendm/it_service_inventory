@@ -18,7 +18,9 @@
 				<tr>
 					<td> <%= setting.code %> </td>
 					<td> <%= setting.active.from(7) %> </td>
-					<td> <%= form.select(:active, options_for_select(@themes)) %> </td>
+					<td> 
+					  <%= form.select(:active, options_for_select(@themes), :selected => setting.active) %>
+					</td>
 					<td> <%= form.submit  t(:save_changes) %> </td>
 				</tr>
 			<% end %>

@@ -17,6 +17,8 @@ gem 'cancan'
 
 gem 'omniauth-ldap'
 
+gem 'will_paginate'
+
 # gem 'mysql'
 
 group :development, :test do

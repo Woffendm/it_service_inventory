@@ -12,12 +12,20 @@ class LoginsController < ApplicationController
   end
   
   
+  #
+  def change_results_per_page
+    session[:results_per_page] = params[:results_per_page]
+    redirect_to request.referer
+  end
+  
+  
   # Sets session value to current user/employee (login)
   def create
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)
     if employee_exists
       session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
+      session[:results_per_page] = 25
       flash[:notice] = "Logged in as: " + session[:current_user_name]
       redirect_to employees_home_path
     else
@@ -34,6 +42,7 @@ class LoginsController < ApplicationController
     if employee_exists
       session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
+      session[:results_per_page] = 25
       flash[:notice] = "Logged in as: " + session[:current_user_name]
       redirect_to employees_home_path
     else
@@ -47,6 +56,7 @@ class LoginsController < ApplicationController
   def destroy
     session[:current_user_id] = nil
     session[:current_user_name] = nil
+    session[:results_per_page] = nil
     flash[:notice] = "Successfully logged out!"
     redirect_to employees_home_path
   end

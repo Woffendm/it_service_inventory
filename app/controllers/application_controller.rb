@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   # before_filter :set_locale
 
 
+
   private
     # Loads the currently logged-in user for use by the ability.rb model
     def current_user

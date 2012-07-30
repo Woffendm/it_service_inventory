@@ -7,7 +7,7 @@ class EmployeesController < ApplicationController
 
   before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
   before_filter :load_employees, :only => [:home, :edit, :index]
-  before_filter :load_groups, :only => [:index, :new, :edit, :home, :populate_employee_results, :search_ldap]
+  before_filter :load_groups, :only => [:new, :edit, :home, :populate_employee_results, :search_ldap]
   before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
 
 
@@ -26,6 +26,8 @@ class EmployeesController < ApplicationController
 
   # List of all employees
   def index
+    @employees = Employee.order(:name_last).paginate(:page => params[:page], 
+                :per_page => session[:results_per_page])
   end
 
 
@@ -35,7 +37,7 @@ class EmployeesController < ApplicationController
   end
 
 
-  #
+  # Page where a user can change some prefrences, such as language. 
   def user_settings
   end
 

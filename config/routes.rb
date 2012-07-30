@@ -44,7 +44,12 @@ Project1::Application.routes.draw do
     end
   end
   
-  resources :logins
+  resources :logins do
+    collection do
+      get 'change_results_per_page'
+    end
+  end
+    
   
   resources :services
   

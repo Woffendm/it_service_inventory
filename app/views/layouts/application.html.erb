@@ -7,10 +7,12 @@
   <%= stylesheet_link_tag "redmine" %>
   <!--<%= stylesheet_link_tag @current_theme %>-->
   <%= csrf_meta_tags %>
-  <% if @current_user.preferred_language %>
-    <% I18n.locale = @current_user.preferred_language %>
-  <% else %>
-    <% I18n.locale = :en %>
+  <% if @current_user %>
+    <% if @current_user.preferred_language %>
+      <% I18n.locale = @current_user.preferred_language %>
+    <% else %>
+      <% I18n.locale = :en %>
+    <% end %>
   <% end %>
 </head>
 <body class="theme-Osu highrise controller-issues action-index">

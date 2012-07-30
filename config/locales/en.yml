@@ -23,7 +23,7 @@ en:
   employee_name:      "Employee Name: "
   employee_roster_for_group:  "Employee Roster for Group: "
   existing_employees: "Existing Employees"
-  existing_administrators: "Existing Administrators" 
+  existing_administrators: "Existing Administrators"
   first_name:         "First Name" 
   group:              "Group"
   groups:             "Groups"
@@ -46,7 +46,7 @@ en:
   settings:           "Settings"
   site_admin:         "Site Admin"
   site_admins:        "Site Admins"
-  total_employees:    "Total Employees" 
+  total_employees:    "Total Employees"
   user_settings:      "User Settings"
 
 

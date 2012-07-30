@@ -4,7 +4,7 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_employees, :only => [:index, :roster, :edit]
+  before_filter :load_employees, :only => [:roster]
   before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, :add_group_admin]
   before_filter :load_employee, :only => [:add_employee]
   
@@ -27,6 +27,8 @@ class GroupsController < ApplicationController
   # Page containing the list of all employees assigned to a given group
   def roster
     @group = Group.find(params[:id])
+    @paginated_employees = @group.employees.order(:name_last).paginate(:page => params[:page],
+                          :per_page => session[:results_per_page])
   end
   
   

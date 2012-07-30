@@ -17,7 +17,8 @@ class ServicesController < ApplicationController
   
   # List of all services
   def index
-    @services = Service.order(:name)
+    @services = Service.order(:name).paginate(:page => params[:page], 
+                :per_page => session[:results_per_page])
     @service = Service.new
   end
   

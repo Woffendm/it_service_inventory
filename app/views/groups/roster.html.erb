@@ -15,14 +15,14 @@
 <% end %>
 
 
-<% if @group.employees.any? %>
+<% if @paginated_employees.any? %>
 	<table class="list issues"><caption> <%= t(:existing_employees) %> </caption>
 		<thead>
 			<th> </th>
 			<th> </th>
 		</thead>
 		<tbody>
-			<% @group.employees.order(:name_last).each do |employee| %>
+			<% @paginated_employees.each do |employee| %>
 				<% if @odd %>
 					<% @odd = false %>
 					<tr class="even">
@@ -63,7 +63,10 @@
 			<% end %>
 		</tbody>
 	</table>
+	<%= will_paginate @paginated_employees %>
+	<%= render :partial => "/partials/partial.html.erb" %>
 <% end %>
 
-<br/><br/>
+
+<br/><br/><br/>
 <%= link_to t(:return_to) + t(:all_groups), groups_path %>

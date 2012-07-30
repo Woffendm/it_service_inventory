@@ -3,30 +3,30 @@
 
 <h3><%= t(:basic_information) %> </h3>
 <div id="my-form">
-	<%= form_for @employee do |form| %>
-		<%= form.label t(:last_name) %>
-	 	<%= @employee.name_last %>
-		<br/><br/>
-		<%= form.label t(:first_name) %>
-		<%= @employee.name_first %>		
-		<br/><br/>
-		<%= form.label t(:email) %> 
-		<%= @employee.email %>		
-		<br/><br/>
-		<%= form.label t(:groups) %> 
-		<% @employee.groups.order(:name).each do |group| %>
-			<% if group != @employee.groups.order(:name).last %>
-				<%= link_to group.name + ", ", roster_group_path(group.id) %>
-			<% else %>
-				<%= link_to group.name, roster_group_path(group.id) %>
-			<% end %>
-		<% end %>
-		<br/><br/>
-		<%= form.label t(:notes) %> 
-		<%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
-		<br/><br/>
-		<%= form.submit  t(:save_changes) %> 
-	<% end %>
+  <%= form_for @employee do |form| %>
+    <%= form.label t(:last_name) %>
+     <%= @employee.name_last %>
+    <br/><br/>
+    <%= form.label t(:first_name) %>
+    <%= @employee.name_first %>    
+    <br/><br/>
+    <%= form.label t(:email) %> 
+    <%= @employee.email %>    
+    <br/><br/>
+    <%= form.label t(:groups) %> 
+    <% @employee.groups.order(:name).each do |group| %>
+      <% if group != @employee.groups.order(:name).last %>
+        <%= link_to group.name + ", ", roster_group_path(group.id) %>
+      <% else %>
+        <%= link_to group.name, roster_group_path(group.id) %>
+      <% end %>
+    <% end %>
+    <br/><br/>
+    <%= form.label t(:notes) %> 
+    <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
+    <br/><br/>
+    <%= form.submit  t(:save_changes) %> 
+  <% end %>
 </div>
 <br/><br/>
 
@@ -34,54 +34,61 @@
 
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
 <% if @employee.get_available_services.any?%>
-	<h3><%= t(:services) %></h3>
-	<div id="my-form" >
-		<% if @employee.get_available_services != nil %>
-			<%= form_tag("add_service", :method => "post") do %>
-				<%= label_tag t(:service) %>
-				<%= collection_select(:employee_allocation, :service_id,
-				 		@employee.get_available_services, :id, :name) %> 
-				<%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-						0.9, 1]) %>
-				<%= submit_tag  t(:add) %> 
-			<% end %>
-		<% end %>
-	</div>
+  <h3><%= t(:services) %></h3>
+  <div id="my-form" >
+    <% if @employee.get_available_services != nil %>
+      <%= form_tag("add_service", :method => "post") do %>
+        <%= label_tag t(:service) %>
+        <%= collection_select(:employee_allocation, :service_id,
+             @employee.get_available_services, :id, :name) %> 
+        <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+            0.9, 1]) %>
+        <%= submit_tag  t(:add) %> 
+      <% end %>
+    <% end %>
+  </div>
 <% end %> 
 
 
 
 <!-- Creates table with the employee's services and allocations -->
 <% if @employee.employee_allocations.any? %>
-	<table class="list issues">
-		<thead>
-			<th><%= t(:services) %></th>
-			<th><%= t(:allocations) %></th>
-			<th> </th>
-		</thead>
-		<tbody>
-			<% @employee.employee_allocations.each do |employee_allocation| %>
-				<% if employee_allocation != @employee_allocation %>
-					<% if @odd %>
-						<% @odd = false %>
-						<tr class="even">
-					<% else %>
-						<% @odd = true %>
-						<tr class="odd">
-					<% end %>
-						<td> <%= employee_allocation.service.name %> </td>
-		  			<td> <%= employee_allocation.allocation %> </td>
-						<td> 
-							<%= form_tag("remove_service", :method => "post") do %>
-								<%= hidden_field_tag(:employee_allocation, employee_allocation.id) %>
-								<%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
-							<% end %>
-						</td>
-					</tr>
-				<% end %>
-			<% end %>
-		</tbody>
-	</table>
+  <table class="list issues">
+    <thead>
+      <th><%= t(:services) %></th>
+      <th><%= t(:allocations) %></th>
+      <th> </th>
+    </thead>
+    <tbody>
+      <% @employee.employee_allocations.each do |employee_allocation| %>
+        <% if employee_allocation != @employee_allocation %>
+          <% if @odd %>
+            <% @odd = false %>
+            <tr class="even">
+          <% else %>
+            <% @odd = true %>
+            <tr class="odd">
+          <% end %>
+            <td> 
+              <% if can? :update, Service %>
+                <%= link_to employee_allocation.service.name,
+                            edit_service_path(employee_allocation.service.id) %>
+              <% else %>
+                <%= employee_allocation.service.name %> 
+              <% end %>
+            </td>
+            <td> <%= employee_allocation.allocation %> </td>
+            <td> 
+              <%= form_tag("remove_service", :method => "post") do %>
+                <%= hidden_field_tag(:employee_allocation, employee_allocation.id) %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
 <% end %>
 <br/><br/>
 
