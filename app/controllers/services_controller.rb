@@ -30,11 +30,11 @@ class ServicesController < ApplicationController
   def create
     @service = Service.new(params[:service])
     if @service.save
-      flash[:notice] = "Service created!"
-      redirect_to services_path
-      return
+      flash[:notice] = t(:service) + t(:created)
+    else
+      flash[:error] = t(:service) + t(:needs_a_name)
     end
-    render :new
+    redirect_to services_path  
   end
 
 
@@ -42,7 +42,7 @@ class ServicesController < ApplicationController
   def destroy
     authorize! :destroy, Service
     @service.destroy 
-    flash[:notice] = "Service deleted!"
+    flash[:notice] = t(:service) + t(:deleted)
     redirect_to services_path 
   end
 
@@ -50,11 +50,11 @@ class ServicesController < ApplicationController
   # Updates an existing service using info entered on the "edit" page
   def update
     if @service.update_attributes(params[:service])
-      flash[:notice] = "Service updated!"
-      redirect_to services_path 
-      return
+      flash[:notice] = t(:service) + t(:updated)
+    else
+      flash[:error] = t(:service) + t(:needs_a_name)
     end
-    render :edit
+    redirect_to services_path 
   end
   
 

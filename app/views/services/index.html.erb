@@ -35,9 +35,9 @@
       <% end %>
         <td><%= link_to  service.name, edit_service_path(service.id) %> </td>
         <td> 
-          <% if can? :delete, Group %>
+          <% if can? :delete, Service %>
             <%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
-                        "Confirm service deletion" %> 
+                        t(:confirm_deletion) %> 
           <% end %>
         </td>
       </tr>

@@ -50,11 +50,11 @@ class EmployeesController < ApplicationController
   def add_service
     @employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
     if @employee_allocation.save
-      flash[:notice] = "Service added to employee!"
+      flash[:notice] = t(:service) + t(:added)
       redirect_to edit_employee_path(@employee.id)
       return
     end
-    flash[:error] = "The total allocation for a given employee cannot exceed 1. Either lower the new allocation or remove an existing service  from the employee."
+    flash[:error] = t(:over_allocated)
     render :edit
   end
 
@@ -78,7 +78,7 @@ class EmployeesController < ApplicationController
       allocation.delete
     end
     @employee.destroy 
-    flash[:notice] = "Employee deleted!"
+    flash[:notice] = t(:employee) + t(:deleted)
     redirect_to employees_path 
   end
 
@@ -93,9 +93,9 @@ class EmployeesController < ApplicationController
     new_employee.osu_username = params[:osu_username]
     new_employee.email = params[:email].downcase
     if new_employee.save
-      flash[:notice] = "Employee added to application!"
+      flash[:notice] = t(:employee) + t(:added)
     else
-      flash[:error] = "Employee is already in the application."
+      flash[:error] = t(:already_in_application)
     end
     render :search_ldap_view
   end
@@ -127,7 +127,7 @@ class EmployeesController < ApplicationController
     @employee_allocation = @employee.employee_allocations.find(params[:employee_allocation])
     @employee_allocation.delete
     @employee.save
-    flash[:notice] = "Service removed from employee!"
+    flash[:notice] = t(:service) + t(:removed)
     redirect_to edit_employee_path(@employee.id)
   end
 
@@ -135,7 +135,7 @@ class EmployeesController < ApplicationController
   # Updates an employee based on info entered on the "edit" page
   def update
     if @employee.update_attributes(params[:employee])
-      flash[:notice] = "Employee updated!"
+      flash[:notice] = t(:employee) + t(:updated)
       redirect_to edit_employee_path 
       return
     end
@@ -147,7 +147,7 @@ class EmployeesController < ApplicationController
   def update_settings
     @employee = Employee.find(@current_user.id)
     if @employee.update_attributes(params[:employee])
-      flash[:notice] = "Settings updated!"
+      flash[:notice] = t(:settings) + t(:updated)
     else
       flash[:error] = "Something went wrong! We're all going to die!!!"
     end

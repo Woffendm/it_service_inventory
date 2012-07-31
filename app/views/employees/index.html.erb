@@ -52,8 +52,8 @@
         </td>
         <td> 
           <% if can? :destroy, employee %>
-            <%= link_to t(:delete), employee_path(employee.id), :method=>:delete, 
-                        :confirm=>"Confirm employee deletion" %> 
+            <%= link_to t(:delete), employee_path(employee.id), :method => :delete, 
+                        :confirm => t(:confirm_deletion) %> 
           <% end %>
         </td>
       </tr>  

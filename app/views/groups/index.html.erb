@@ -46,8 +46,8 @@
           </td>
           <td> 
             <% if can? :delete, Group %>
-              <%= link_to t(:delete), group_path(group.id), :method=>:delete, 
-                          :confirm=>"Confirm group deletion" %> 
+              <%= link_to t(:delete), group_path(group.id), :method => :delete, 
+                          :confirm => t(:confirm_deletion) %> 
             <% end %>
           </td>
         </tr>  

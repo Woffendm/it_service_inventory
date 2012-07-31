@@ -19,7 +19,14 @@
             <tr>
               <td> </td>
           <% end %>
-          <td> <%= employee_allocation.service.name %> </td>
+          <td> 
+            <% if can? :update, Service %>
+              <%= link_to employee_allocation.service.name,
+                          edit_service_path(employee_allocation.service_id) %> 
+            <% else %>
+              <%= employee_allocation.service.name %>
+            <% end %>
+          </td>
           <td> <%= employee_allocation.allocation %> </td>
         </tr>
         <% end %>

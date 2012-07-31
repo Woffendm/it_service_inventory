@@ -7,11 +7,11 @@
   <%= form_tag("search_ldap", :method => "get") do %>
     <div id="last_name_search">
       <%= label_tag t(:last_name) %>
-      <%= text_field_tag :last_name, nil, :placeholder => 'Must enter last name' %>
+      <%= text_field_tag :last_name, nil, :placeholder => t(:must_enter_last_name) %>
     </div>
     <div id="first_name_search">
       <%= label_tag t(:first_name) %>
-      <%= text_field_tag :first_name, nil, :placeholder => 'First name optional' %>
+      <%= text_field_tag :first_name, nil, :placeholder => t(:first_name_optional) %>
     </div>
   <% end %>
   </div>

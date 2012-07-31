@@ -38,7 +38,7 @@ class GroupsController < ApplicationController
   # Adds the employee selected on the "roster" page to the given group
   def add_employee
     @group.employees << @employee
-    flash[:notice] = "Employee added to group!"
+    flash[:notice] = t(:employee) + t(:added)
     redirect_to roster_group_path(@group.id)
   end
   
@@ -48,7 +48,7 @@ class GroupsController < ApplicationController
     temp = @group.employee_groups.find_by_employee_id(params[:employee])
     temp.group_admin = true
     temp.save
-    flash[:notice] = Employee.find(params[:employee]).full_name + " is now a group admin"
+    flash[:notice] = t(:admin) + t(:added)
     redirect_to roster_group_path(@group.id)
   end
   
@@ -58,9 +58,9 @@ class GroupsController < ApplicationController
     authorize! :create, Group
     @group = Group.new(params[:group])
     if @group.save
-      flash[:notice] = "Group created!"
+      flash[:notice] = t(:group) + t(:created)
     else
-      flash[:error] = "New group name cannot be blank"
+      flash[:error] = t(:group) + t(:needs_a_name)
     end
     redirect_to groups_path
   end
@@ -70,7 +70,7 @@ class GroupsController < ApplicationController
   def destroy
     authorize! :destroy, Group
     @group.destroy 
-    flash[:notice] = "Group deleted!"
+    flash[:notice] = t(:group) + t(:deleted)
     redirect_to groups_path 
   end
   
@@ -91,7 +91,7 @@ class GroupsController < ApplicationController
   def remove_employee
     @employee = Employee.find(params[:employee])
     @group.employees.delete(@employee)
-    flash[:notice] = "Employee removed from group!"
+    flash[:notice] = t(:employee) + t(:removed)
     redirect_to roster_group_path(@group.id)
   end
   
@@ -99,11 +99,11 @@ class GroupsController < ApplicationController
   # Updates a group based on the information endered on the "edit" page
   def update
     if @group.update_attributes(params[:group])
-      flash[:notice] = "Group updated!"
+      flash[:notice] = t(:group) + t(:updated)
       redirect_to groups_path 
       return
     end
-    flash[:error] = "Group must have a name"
+    flash[:error] = t(:group) + t(:needs_a_name)
     redirect_to edit_group_path(@group.id) 
   end
   

@@ -44,9 +44,7 @@
               <% if can? :update, @group %>
                 <%= form_tag("add_group_admin", :method => "post") do %>
                    <%= hidden_field_tag(:employee, employee.id) %>
-                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => 
-                                  "This will allow the selected employee to edit everything" +           
-                                  " within this group. Are you sure?" %>
+                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
                  <% end %>
               <% end %>
             <% end %>
@@ -55,7 +53,7 @@
             <td>
               <%= form_tag("remove_employee", :method => "post") do %>
                 <%= hidden_field_tag(:employee, employee.id) %>
-                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) + t(:employee) %>
               <% end %>
             </td>
           <% end %>

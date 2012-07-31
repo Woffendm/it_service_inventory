@@ -1,7 +1,6 @@
 <h2> <%= t(:edit) + t(:group) %>: <%= @group.name %> </h2>
 
 
-<%= error_messages_for :group %>
 <%= form_for @group do |form| %>
   <p>
     <%= form.label t(:name) %>

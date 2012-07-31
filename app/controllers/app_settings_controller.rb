@@ -39,7 +39,7 @@ class AppSettingsController < ApplicationController
   def update
     @setting = AppSetting.find(params[:id])
     if @setting.update_attributes(params[:app_setting])
-      flash[:notice] = "Theme changed!"
+      flash[:notice] = t(:setting) + t(:updated)
       redirect_to app_settings_path 
       return
      end
