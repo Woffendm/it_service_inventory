@@ -41,6 +41,7 @@ class ServicesController < ApplicationController
   # Hurls selected service into the nearest black hole
   def destroy
     authorize! :destroy, Service
+    @service.employee_allocations.each(&:destroy)
     @service.destroy 
     flash[:notice] = t(:service) + t(:deleted)
     redirect_to services_path 

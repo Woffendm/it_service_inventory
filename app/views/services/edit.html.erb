@@ -20,7 +20,7 @@
       <th> <%= t(:allocation) %> </th>
     </thead>
     <tbody>
-      <% @service.employees.order(:name_last).each do |employee| %>
+      <% @service.employees.order(:name_last, :name_first).each do |employee| %>
         <% if @odd %>
           <% @odd = false %>
           <tr class="even">
@@ -29,13 +29,9 @@
           <tr class="odd">
         <% end %>
           <td>
-            <% if can? :update, employee %>
-              <%= link_to employee.full_name , edit_employee_path(employee.id) %> 
-            <% else %>
-              <%= employee.full_name %>
-            <% end %>
+            <%= render  :partial => "/shared/can_update_employee.html.erb", 
+                        :locals => {:@employee => employee} %>
           </td>
-
           <td>
             <% employee.groups.order(:name).each do |group| %>
               <% if group != employee.groups.order(:name).last %>

@@ -25,14 +25,11 @@
         <% @odd = true %>
         <tr class="odd">
       <% end %>
-        <td>  
-          <% if can? :update, employee %>
-            <%= link_to employee.full_name , edit_employee_path(employee.id) %> 
-          <% else %>
-            <%= employee.full_name %>
-          <% end %>
+        <td> 
+          <%= render  :partial => "/shared/can_update_employee.html.erb", 
+                      :locals => {:@employee => employee} %>  
         </td>
-        <td>  <%= employee.email %> </td>
+        <td> <%= employee.email %> </td>
         <td>  
           <% if employee.notes %> 
             <%= employee.notes.truncate(20) %>
@@ -56,7 +53,7 @@
                         :confirm => t(:confirm_deletion) %> 
           <% end %>
         </td>
-      </tr>  
+      </tr> 
     <% end %>
   </tbody>
 </table>
@@ -64,5 +61,5 @@
 
 <div>
   <%= will_paginate @employees %>
-  <%= render :partial => "/partials/partial.html.erb" %>
+  <%= render :partial => "/shared/results_per_page.html.erb" %>
 </div>

@@ -6,10 +6,13 @@
 class AppSettingsController < ApplicationController
   before_filter :load_permissions
   
+  
+  
   # View-related methods
   
   # View with a list of all current site admins, and a form to add additional admins
   def admins
+    @not_admins = Employee.where(:site_admin => nil).order(:name_last)
     @admins = Employee.where(:site_admin => true)
   end
   
@@ -18,7 +21,7 @@ class AppSettingsController < ApplicationController
   def index
     @themes = Dir.glob("app/assets/stylesheets/themes/**/*")
     (0..@themes.length-1).each do |i|
-      @themes[i] = @themes[i].from(23)
+      @themes[i] = @themes[i].from(23) # Takes substring to get rid of useless directory information
     end
   end
   
@@ -26,7 +29,7 @@ class AppSettingsController < ApplicationController
   
   # Action-related methods
   
-  # Adds administrator privilages to an employee
+  # Adds site administrator privilages to an employee
   def add_admin
     @new_admin = Employee.find(params[:employee][:id])
     @new_admin.site_admin = true
@@ -42,9 +45,9 @@ class AppSettingsController < ApplicationController
       flash[:notice] = t(:setting) + t(:updated)
       redirect_to app_settings_path 
       return
-     end
-       render :index
-   end
+    end
+    render :index
+  end
 
 
 

@@ -69,6 +69,7 @@ class GroupsController < ApplicationController
   # Casts the selected group into an unfathomable abyss of destruction
   def destroy
     authorize! :destroy, Group
+    @employee.employee_groups.each(&:destroy)
     @group.destroy 
     flash[:notice] = t(:group) + t(:deleted)
     redirect_to groups_path 
@@ -78,10 +79,10 @@ class GroupsController < ApplicationController
   # Populates the employee dropdown list on the "employee/home" page based on the group selected
   def employees
     if params[:group][:id] == "0"
-      @employees = Employee.order(:name_last)
+      @employees = Employee.order(:name_last, :name_first)
     else 
       @group = Group.find(params[:group][:id])
-      @employees = @group.employees.order(:name_last)
+      @employees = @group.employees.order(:name_last, :name_first)
     end
     render :layout => false
   end
@@ -120,7 +121,8 @@ class GroupsController < ApplicationController
   
     # Loads all employees
     def load_employees
-      @employees = Employee.order(:name_last)
+      @employees = Employee.order(:name_last, :name_first)
+     
     end
   
   

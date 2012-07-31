@@ -12,10 +12,16 @@ class LoginsController < ApplicationController
   end
   
   
-  #
+  # Changes the number of results that are displayed per page. 
   def change_results_per_page
     session[:results_per_page] = params[:results_per_page]
-    redirect_to request.referer
+    if request.referer
+      flash[:notice] = t(:setting) + t(:updated)
+      redirect_to request.referer
+    else
+      flash[:error] = "I <3 Pie"
+      redirect_to employees_home_path
+    end
   end
   
   

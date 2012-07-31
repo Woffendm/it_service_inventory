@@ -5,10 +5,10 @@
 
 class EmployeesController < ApplicationController
 
-  before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
-  before_filter :load_employees, :only => [:home, :edit, :index]
-  before_filter :load_groups, :only => [:new, :edit, :home, :populate_employee_results, :search_ldap]
   before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
+  before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
+  before_filter :load_employees, :only => [:home]
+  before_filter :load_groups, :only => [:new, :edit, :home, :populate_employee_results, :search_ldap]
 
 
 # View-related methods
@@ -20,20 +20,20 @@ class EmployeesController < ApplicationController
 
   # Page used to rapidly search for an employee
   def home
-    @employee = nil
+    @employee = nil # This is here to prevent an error on the populate_employee_results partial
   end
 
 
   # List of all employees
   def index
-    @employees = Employee.order(:name_last).paginate(:page => params[:page], 
+    @employees = Employee.order(:name_last, :name_first).paginate(:page => params[:page], 
                 :per_page => session[:results_per_page])
   end
 
 
   # Page for searching the OSU directory for new employees
   def search_ldap_view
-    @data = nil
+    @data = nil # This is here to prevent an error on the ldap_search_results partial
   end
 
 
@@ -74,9 +74,8 @@ class EmployeesController < ApplicationController
   # to a thousand winds
   def destroy
     authorize! :destroy, Employee
-    @employee.employee_allocations.each do |allocation|
-      allocation.delete
-    end
+    @employee.employee_allocations.each(&:destroy)
+    @employee.employee_groups.each(&:destroy)
     @employee.destroy 
     flash[:notice] = t(:employee) + t(:deleted)
     redirect_to employees_path 
@@ -139,18 +138,15 @@ class EmployeesController < ApplicationController
       redirect_to edit_employee_path 
       return
     end
-      render :edit
+    render :edit
   end
 
 
   # Updates an employee based on info entered on the "edit" page
   def update_settings
     @employee = Employee.find(@current_user.id)
-    if @employee.update_attributes(params[:employee])
-      flash[:notice] = t(:settings) + t(:updated)
-    else
-      flash[:error] = "Something went wrong! We're all going to die!!!"
-    end
+    @employee.update_attributes(params[:employee])
+    flash[:notice] = t(:settings) + t(:updated)
     redirect_to user_settings_employee_path(@current_user.id)
   end
 
@@ -181,7 +177,7 @@ class EmployeesController < ApplicationController
 
     # Loads all employees in alphabetical order
     def load_employees
-      @employees = Employee.order(:name_last)
+      @employees = Employee.order(:name_last, :name_first)
     end
 
 

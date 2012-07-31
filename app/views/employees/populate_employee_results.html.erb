@@ -2,30 +2,27 @@
   <table class="list issues"><caption> <%= t(:search_results) %> </caption>
     <thead>
       <th><%= t(:name) %></th>
-      <th><%= t(:services) %></th>
-      <th><%= t(:allocations) %></th>
+      <th><%= t(:service) %></th>
+      <th><%= t(:allocation) %></th>
     </thead>
     <tbody>
-      <tr>
-        <td>
-          <% if can? :update, @employee %>
-            <%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
-          <% else %>
-            <%= @employee.full_name %>
-          <% end %> 
-        </td>
-        <% @employee.employee_allocations.each do |employee_allocation| %>
-          <% if employee_allocation != @employee.employee_allocations.first %>
-            <tr>
-              <td> </td>
-          <% end %>
-          <td> 
-            <% if can? :update, Service %>
-              <%= link_to employee_allocation.service.name,
-                          edit_service_path(employee_allocation.service_id) %> 
-            <% else %>
-              <%= employee_allocation.service.name %>
+      <% if @employee.employee_allocations.empty? %>
+        <tr>
+          <td> <%= render :partial => "/shared/can_update_employee.html.erb" %> </td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+      <% @employee.employee_allocations.each do |employee_allocation| %>
+        <tr>
+          <td>
+            <% if employee_allocation == @employee.employee_allocations.first %>
+              <%= render :partial => "/shared/can_update_employee.html.erb" %>
             <% end %>
+          </td>
+          <td> 
+            <%= render  :partial => "/shared/can_update_service.html.erb", 
+                        :locals => {:employee_allocation => employee_allocation} %>
           </td>
           <td> <%= employee_allocation.allocation %> </td>
         </tr>

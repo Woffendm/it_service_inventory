@@ -39,7 +39,6 @@ describe Employee do
     
     it "should not save if there is already an employee with the same osu username and id" do
       @employee2.should_not be_valid
-      @employee2.should have_at_least(1).error_on(:osu_id)
     end
     
     

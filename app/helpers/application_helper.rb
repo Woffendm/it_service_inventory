@@ -7,9 +7,4 @@ module ApplicationHelper
   def stylesheet(*files)
     content_for(:head) { stylesheet_link_tag(*files) }
   end
-  
-  def theme_link_tag(theme)
-    # => <link href=
-  end
-  
 end

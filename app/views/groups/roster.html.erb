@@ -31,11 +31,8 @@
           <tr class="odd">
         <% end %>
           <td>
-            <% if can? :update, employee %>
-              <%= link_to employee.full_name , edit_employee_path(employee.id) %> 
-            <% else %>
-              <%= employee.full_name %>
-            <% end %>
+            <%= render  :partial => "/shared/can_update_employee.html.erb", 
+                        :locals => {:@employee => employee} %>
           </td>
           <td>
             <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
@@ -62,7 +59,7 @@
     </tbody>
   </table>
   <%= will_paginate @paginated_employees %>
-  <%= render :partial => "/partials/partial.html.erb" %>
+  <%= render :partial => "/shared/results_per_page.html.erb" %>
 <% end %>
 
 
