@@ -69,7 +69,6 @@ class GroupsController < ApplicationController
   # Casts the selected group into an unfathomable abyss of destruction
   def destroy
     authorize! :destroy, Group
-    @employee.employee_groups.each(&:destroy)
     @group.destroy 
     flash[:notice] = t(:group) + t(:deleted)
     redirect_to groups_path 

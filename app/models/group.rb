@@ -6,7 +6,7 @@
 
 class Group < ActiveRecord::Base
   attr_accessible :name, :employees
-  has_many :employee_groups
+  has_many :employee_groups, :dependent => :delete_all
   has_many :employees, :through => :employee_groups
   validates_presence_of :name
   

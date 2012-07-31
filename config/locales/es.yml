@@ -81,7 +81,7 @@ es:
 
   # Notifications and Stuff
   #confirm_removal:    "Seguro que quiere remover este "
-  confirm_admin:      "No lo hagas! Él es un mentiroso!"
+  confirm_admin:      "¿Estás seguro de confiar en esta persona?"
   confirm_deletion:   "Seguro que quiere Eliminar? (!!Acción permanente!!)"
   confirm_removal:    "Remover de este lista? (Acción reversible)"
   first_name_optional:  "Nombre es opcional"

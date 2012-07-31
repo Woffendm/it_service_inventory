@@ -19,7 +19,6 @@ class LoginsController < ApplicationController
       flash[:notice] = t(:setting) + t(:updated)
       redirect_to request.referer
     else
-      flash[:error] = "I <3 Pie"
       redirect_to employees_home_path
     end
   end

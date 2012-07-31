@@ -5,9 +5,9 @@
 
 class Employee < ActiveRecord::Base
   attr_accessible :name_first, :name_last, :notes, :email, :preferred_theme, :preferred_language
-  has_many :employee_groups
+  has_many :employee_groups, :dependent => :delete_all
   has_many :groups, :through => :employee_groups
-  has_many :employee_allocations
+  has_many :employee_allocations, :dependent => :delete_all
   has_many :services, :through => :employee_allocations
   validates_presence_of :name_first, :name_last
   validates_uniqueness_of :osu_username, :scope => :osu_id
