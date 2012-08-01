@@ -19,7 +19,7 @@ gem 'omniauth-ldap'
 
 gem 'will_paginate'
 
-# gem 'mysql'
+gem 'mysql'
 
 group :development, :test do
   gem 'rspec'
