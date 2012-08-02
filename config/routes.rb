@@ -34,6 +34,7 @@ Project1::Application.routes.draw do
       get 'search_ldap'
       get 'ldap_search_results'
       post 'ldap_create'
+      post 'update_all_employees_via_ldap'
     end
   end
   

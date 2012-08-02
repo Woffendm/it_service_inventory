@@ -37,8 +37,3 @@ class RemoteEmployee
     return ldap_results.sort_by { |u| u.cn }
   end
 end
-
-
-
-# The following line is going to be used later on when checking for updates to employee information.
-# RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first

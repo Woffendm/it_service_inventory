@@ -5,6 +5,13 @@
   <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
 
+<% if can? :update, Employee %>
+  <br/>  <br/>
+    <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post") do %>
+      <%= submit_tag  "Update names and emails of all employees", 
+                      :confirm => "This may take a while. Are you ready?" %>
+    <% end %>
+<% end %>
 
 <table class="list issues">
   <caption> <%= t(:all_employees) %></caption>
