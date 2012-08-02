@@ -88,3 +88,4 @@ es:
   must_enter_last_name: "Debe entrar el apellido"
   needs_a_name:       "necesita un nombre"
   over_allocated:     "Su asignación total es demasiado alta!"
+  update_all:         "Update Names and Contact Information for all Employees"

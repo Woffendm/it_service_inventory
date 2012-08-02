@@ -85,6 +85,8 @@ en:
   confirm_deletion:   "Are you sure about this deletion? (Cannot be reversed!!)"
   confirm_removal:    "Confirm removal. (Reversible action)"
   first_name_optional:  "First name is optional"
+  long_time:          "This may take a while. Are you ready?"
   must_enter_last_name: "Must enter last name"
   needs_a_name:       "needs a name"
   over_allocated:     "The total allocation for a given employee cannot exceed 1. Either lower the new allocation or remove an existing service  from the employee."
+  update_all:         "Update Names and Contact Information for all Employees"

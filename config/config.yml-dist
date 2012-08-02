@@ -1,0 +1,8 @@
+# ATTENTION!!! You will want to change these values to whatever your university / organization
+# uses for your ldap server if you aren't at Oregon State University. If you are at OSU, leave
+# them alone
+treebase: 
+host: 
+port: 
+ldap_login_path: 
+ldap_login_host: 
