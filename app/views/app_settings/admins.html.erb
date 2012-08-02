@@ -1,16 +1,18 @@
 <h2> <%= t(:site_admins) %> </h2>
 
 
-<h3> <%= t(:add) + t(:admin) %> </h3>
-<div id="my-form">
-  <%= form_tag( "add_admin", :method => "post") do %>
-    <p>
-      <%= label_tag t(:name) %>
-      <%= collection_select(:employee, :id, @not_admins, :id, :full_name) %>
-      <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
-    </p>
-  <% end %>
-</div>
+<% if @not_admins %>
+  <h3> <%= t(:add) + t(:admin) %> </h3>
+  <div id="my-form">
+    <%= form_tag( "add_admin", :method => "post") do %>
+      <p>
+        <%= label_tag t(:name) %>
+        <%= collection_select(:employee, :id, @not_admins, :id, :full_name) %>
+        <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
 
 
 <table class="list issues">

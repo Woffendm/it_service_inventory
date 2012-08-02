@@ -62,13 +62,7 @@ module Project1
     config.assets.version = '1.0'
     
     
-    
-    
-    # ATTENTION!!! You will want to change these values to whatever your university / organization
-    # uses for your ldap server if you aren't at Oregon State University. If you are at OSU, leave
-    # them alone
-    config.treebase = "ou=People, o=orst.edu"
-    config.host = "client-ldap.onid.orst.edu"
-    config.port = 389
+    # Loads a bunch of configurations for the application
+    config.config = YAML.load_file("#{Rails.root}/config/config.yml")
   end
 end

@@ -25,7 +25,7 @@ $(document).ready(function(){
     if (last_name.length > 1) {
       $.ajax({
         type: "get",
-        url: "/employees/ldap_search_results?last_name=" + last_name + "&first_name=" + first_name,
+        url: pathname + "?last_name=" + last_name + "&first_name=" + first_name,
         success: popLdapSearchResults
       })
     }

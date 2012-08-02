@@ -2,7 +2,7 @@ class LoginsController < ApplicationController
  
   # Redirects to secure onid login page
   def new
-    redirect_to '/auth/ldap'
+    redirect_to Project1::Application.config.config['ldap_login_path']
   end
   
   

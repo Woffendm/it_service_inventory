@@ -5,7 +5,8 @@
 
 class GroupsController < ApplicationController
   before_filter :load_employees, :only => [:roster]
-  before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, :add_group_admin]
+  before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, 
+                :add_group_admin]
   before_filter :load_employee, :only => [:add_employee]
   
   

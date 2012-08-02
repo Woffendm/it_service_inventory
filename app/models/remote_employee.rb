@@ -29,9 +29,10 @@ class RemoteEmployee
   # This method preforms actions common to all above queries. They were consolodated into this one
   # method to avoid repetition.
   def self.subroutine(filter)
-    ldap = Net::LDAP.new :host => Project1::Application.config.host, 
-                         :port => Project1::Application.config.port
-    ldap_results = ldap.search(:base => Project1::Application.config.treebase, :filter => filter)
+    ldap = Net::LDAP.new :host => Project1::Application.config.config['host'], 
+                         :port => Project1::Application.config.config['port']
+    ldap_results = ldap.search(:base => Project1::Application.config.config['treebase'], 
+                         :filter => filter)
     return nil if ldap_results == false
     return ldap_results.sort_by { |u| u.cn }
   end

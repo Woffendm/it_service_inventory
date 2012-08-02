@@ -21,7 +21,7 @@ $(document).ready(function(){
     }
     $.ajax({
       type: "GET",
-      url: "/groups/employees?group[id]=" + groupId,
+      url: employeesPathname + "?group[id]=" + groupId,
       success: popEmployeeDropdown
     })
     return true;
@@ -38,7 +38,7 @@ $(document).ready(function(){
     }
     $.ajax({
       type: "GET",
-      url: "/employees/populate_employee_results?employee[id]=" + employeeId,
+      url: populateEmployeeResultsPathname + "?employee[id]=" + employeeId,
       success: popEmployeeResults
     })
     return true;
