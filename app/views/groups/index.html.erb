@@ -6,7 +6,7 @@
     <legend><%= t(:new_group) %></legend>
     <%= error_messages_for :group %>
     <%= form_for @group do |form| %>
-      <%= form.label t(:name) %>
+      <%= form.label :name %>
       <%= form.text_field :name %>
       </br>
       <label> &nbsp </label>

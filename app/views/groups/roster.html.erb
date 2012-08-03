@@ -6,7 +6,7 @@
   <div id="my-form">
     <%= form_tag("add_employee", :method => "post") do %>
       <p>
-        <%= label_tag t(:name) %>
+        <%= label_tag :employee_id, t(:name) %>
         <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
         <%= submit_tag  t(:add) %>
       </p>

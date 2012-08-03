@@ -4,6 +4,17 @@
 en:
 
 
+  activerecord:
+    attributes:
+      employee:
+        notes:  "Notes"
+      group:
+        name:   "Name"
+      service:
+        name:   "Name"
+
+
+
   # Nouns
   admin:              "Admin "
   all_employees:      "All Employees"

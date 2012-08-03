@@ -5,14 +5,14 @@
 <div id="my-form">
   <div id="group_dropdown">
     <%= form_tag("employees", :method => "get") do %>
-      <%= label_tag t(:group_name) %>
+      <%= label_tag :group_id, t(:group_name) %>
       <%= collection_select(:group, :id, @groups, :id, :name, {:prompt => t(:all_groups) }) %>
     <% end %>
   </div>
   <div id="employee_dropdown">
     <%= form_tag("populate_employee_results", :method => "get") do %>
       <div id="employee_select_div">
-        <%= label_tag t(:employee_name) %>
+        <%= label_tag :employee_id, t(:employee_name) %>
         <%= collection_select(:employee, :id, @employees, :id, :full_name,  
                               {:prompt => t(:select) + t(:employee) }) %>
       </div>

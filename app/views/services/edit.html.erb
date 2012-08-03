@@ -3,7 +3,7 @@
 
 <%= form_for @service do |form| %>
   <p>
-    <%= form.label t(:name) %>
+    <%= form.label :name %>
     <%= form.text_field :name %>
   </p>
   <p>
@@ -42,7 +42,7 @@
             <% end %>
           </td>
           <td>
-            <%= @service.employee_allocations.find_by_employee_id(employee.id).allocation %>
+            <%= @service.employee_allocations.find_by_employee_id(employee.id).rounded_allocation %>
           </td>
         </tr>
       <% end %>

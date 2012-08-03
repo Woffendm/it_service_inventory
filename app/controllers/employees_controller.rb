@@ -75,8 +75,12 @@ class EmployeesController < ApplicationController
   # to a thousand winds
   def destroy
     authorize! :destroy, Employee
-    @employee.destroy 
-    flash[:notice] = t(:employee) + t(:deleted)
+    if @employee != @current_user 
+      @employee.destroy 
+      flash[:notice] = t(:employee) + t(:deleted)
+    else
+      flash[:error] = "You cannot delete yourself. Get someone else to do it."
+    end
     redirect_to employees_path 
   end
 

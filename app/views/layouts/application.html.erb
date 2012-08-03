@@ -34,11 +34,9 @@
         </div>
         <div id="loggedas">
           <% if session[:current_user_name] %>
-            <%= t(:logged_in_as) %> :
+            <%= t(:logged_in_as) %>
             <%= link_to session[:current_user_name],
                 user_settings_employee_path(session[:current_user_id]) %>
-          <% else %>
-            Not logged in
           <% end %>
         </div>
         <ul>

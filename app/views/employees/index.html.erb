@@ -50,7 +50,7 @@
         </td>
         <td>
           <% employee.employee_allocations.each do |employee_allocation| %>
-            <%= employee_allocation.allocation %> 
+            <%= employee_allocation.rounded_allocation %> 
             <br/>
           <% end %>
         </td>

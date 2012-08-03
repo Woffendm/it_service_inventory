@@ -4,6 +4,17 @@
 es:
   hello: "Hola mundo!"
 
+
+  activerecord:
+    attributes:
+      employee:
+        notes:  "Notas"
+      group:
+        name:   "Nombre"
+      service:
+        name:   "Nombre"
+
+
   # Nouns
   admin:              "Gerente "
   all_employees:      "Todos los Trabajadores"
@@ -64,7 +75,7 @@ es:
   delete:             "Eliminar"
   deleted:            "eliminado"
   edit:               "Corregir "
-  logged_in_as:       "Conectado como"
+  logged_in_as:       "Conectado como: "
   login:              "Iniciar Sesión"
   logout:             "Terminar Sesión"
   logged_out:         "Sesión terminado"

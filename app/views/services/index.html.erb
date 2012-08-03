@@ -7,7 +7,7 @@
     <legend><%= t(:new_service) %></legend>
     <%= error_messages_for :service %>
     <%= form_for @service do |form| %>
-      <%= form.label t(:name) %>
+      <%= form.label :name %>
       <%= form.text_field :name %>
       </br>
       <label> &nbsp </label>

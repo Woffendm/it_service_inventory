@@ -22,7 +22,7 @@
       <% end %>
     <% end %>
     <br/><br/>
-    <%= form.label t(:notes) %> 
+    <%= form.label :notes %> 
     <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
     <br/><br/>
     <%= form.submit  t(:save_changes) %> 
@@ -38,7 +38,7 @@
   <div id="my-form" >
     <% if @employee.get_available_services != nil %>
       <%= form_tag("add_service", :method => "post") do %>
-        <%= label_tag t(:service) %>
+        <%= label_tag :employee_allocation_service_id, t(:service)  %>
         <%= collection_select(:employee_allocation, :service_id,
              @employee.get_available_services, :id, :name) %> 
         <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
@@ -73,7 +73,7 @@
               <%= render  :partial => "/shared/can_update_service.html.erb", 
                           :locals => {:employee_allocation => employee_allocation} %>
             </td>
-            <td> <%= employee_allocation.allocation %> </td>
+            <td> <%= employee_allocation.rounded_allocation %> </td>
             <td> 
               <%= form_tag("remove_service", :method => "post") do %>
                 <%= hidden_field_tag(:employee_allocation, employee_allocation.id) %>

@@ -24,7 +24,7 @@
             <%= render  :partial => "/shared/can_update_service.html.erb", 
                         :locals => {:employee_allocation => employee_allocation} %>
           </td>
-          <td> <%= employee_allocation.allocation %> </td>
+          <td> <%= employee_allocation.rounded_allocation %> </td>
         </tr>
         <% end %>
     </tbody>
