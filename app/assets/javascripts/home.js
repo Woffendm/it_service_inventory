@@ -51,6 +51,8 @@ $(document).ready(function(){
 function popEmployeeDropdown(response){
   groupSelect = $("#group")
   $("#employee_select_div").html(response);
+  employeeSelect = $("#employee")
+  $("#employee_results").html(" ");
   return false;
 }
 

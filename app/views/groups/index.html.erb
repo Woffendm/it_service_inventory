@@ -8,8 +8,6 @@
     <%= form_for @group do |form| %>
       <%= form.label :name %>
       <%= form.text_field :name %>
-      </br>
-      <label> &nbsp </label>
       <%= form.submit  t(:create) + t(:group) %>
     <% end %>
   </fieldset>
@@ -41,8 +39,13 @@
             <% end %>
           </td>
           <td> 
-            <%= link_to group.employees.length.to_s + t(:click_to_view),
-                         roster_group_path(group.id) %>
+            <% if can? :update, group %>
+              <%= link_to group.employees.length.to_s + ", " + t(:click_to_manage),
+                          roster_group_path(group.id) %>
+            <% else %>
+              <%= link_to group.employees.length.to_s + ", " + t(:click_to_view),
+                          roster_group_path(group.id) %>
+            <% end %>
           </td>
           <td> 
             <% if can? :delete, Group %>

@@ -70,6 +70,7 @@ es:
   already_in_application: "Trabajador ya está en el Sistema"
   browse_existing_employees: "Buscar Trabajadores Existentes"
   click_to_view:      " Hacer Clic Para Ver"
+  click_to_manage:      " Hacer Clic Para Administrar"
   create:             "Crear "
   created:            "creado"
   delete:             "Eliminar"

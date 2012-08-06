@@ -13,15 +13,6 @@
     <%= form.label t(:email) %> 
     <%= @employee.email %>    
     <br/><br/>
-    <%= form.label t(:groups) %> 
-    <% @employee.groups.order(:name).each do |group| %>
-      <% if group != @employee.groups.order(:name).last %>
-        <%= link_to group.name + ", ", roster_group_path(group.id) %>
-      <% else %>
-        <%= link_to group.name, roster_group_path(group.id) %>
-      <% end %>
-    <% end %>
-    <br/><br/>
     <%= form.label :notes %> 
     <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
     <br/><br/>
@@ -32,31 +23,89 @@
 
 
 
+
 <!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
-<% if @employee.get_available_services.any?%>
-  <h3><%= t(:services) %></h3>
-  <div id="my-form" >
-    <% if @employee.get_available_services != nil %>
-      <%= form_tag("add_service", :method => "post") do %>
-        <%= label_tag :employee_allocation_service_id, t(:service)  %>
-        <%= collection_select(:employee_allocation, :service_id,
-             @employee.get_available_services, :id, :name) %> 
-        <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-            0.9, 1]) %>
+<h3><%= t(:groups) %></h3>
+<% if can? :manage, :all %>
+  <% if @employee.get_available_groups.any? %>
+    <div id="my-form" >
+      <%= form_tag("add_group", :method => "post") do %>
+        <%= label_tag :employee_groups_group_id, t(:group)  %>
+        <%= collection_select(:employee_group, :group_id,
+             @employee.get_available_groups, :id, :name) %> 
         <%= submit_tag  t(:add) %> 
       <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+
+<% if @employee.employee_groups.any? %>
+  <table class="list issues">
+    <tbody>
+      <% @employee.groups.order(:name).each do |group| %>
+        <% if @odd %>
+          <% @odd = false %>
+          <tr class="even">
+        <% else %>
+          <% @odd = true %>
+          <tr class="odd">
+        <% end %>
+          <td>
+            <%= link_to group.name, roster_group_path(group.id) %>
+          </td>
+          <td>
+            <% if group.employee_groups.find_by_employee_id(@employee.id).group_admin %>
+              <%= t(:group_admin) %>
+            <% else %>
+              <% if can? :update, group %>
+                <%= form_tag("make_group_admin", :method => "post") do %>
+                   <%= hidden_field_tag(:group, group.id) %>
+                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
+                 <% end %>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <% if can? :update, group %>
+              <%= form_tag("remove_group", :method => "post") do %>
+                <%= hidden_field_tag(:group, group.id) %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) + t(:group) %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+<br/><br/>
+
+
+
+
+<!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
+<h3><%= t(:services) %></h3>
+<% if @employee.get_available_services.any?%>
+  <div id="my-form" >
+    <%= form_tag("add_service", :method => "post") do %>
+      <%= label_tag :employee_allocation_service_id, t(:service)  %>
+      <%= collection_select(:employee_allocation, :service_id,
+           @employee.get_available_services, :id, :name) %> 
+      <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
+          0.9, 1]) %>
+      <%= submit_tag  t(:add) %> 
     <% end %>
   </div>
 <% end %> 
-
 
 
 <!-- Creates table with the employee's services and allocations -->
 <% if @employee.employee_allocations.any? %>
   <table class="list issues">
     <thead>
-      <th><%= t(:services) %></th>
-      <th><%= t(:allocations) %></th>
+      <th><%= t(:service) %></th>
+      <th><%= t(:allocation) %></th>
       <th> </th>
     </thead>
     <tbody>

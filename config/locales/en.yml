@@ -69,6 +69,7 @@ en:
   add_employee_to_application: "Add Employee"
   already_in_application: "Already in System"
   browse_existing_employees: "Browse Existing Employees"
+  click_to_manage:    " Click to Manage"
   click_to_view:      " Click to View"
   create:             "Create "
   created:            "Created"

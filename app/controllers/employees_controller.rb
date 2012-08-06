@@ -6,9 +6,10 @@
 class EmployeesController < ApplicationController
 
   before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
-  before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service]
+  before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service,
+                :add_group, :remove_group, :make_group_admin]
   before_filter :load_employees, :only => [:home]
-  before_filter :load_groups, :only => [:new, :edit, :home, :populate_employee_results,  
+  before_filter :load_groups, :only => [:new, :edit, :populate_employee_results,  
                 :search_ldap]
 
 
@@ -21,7 +22,12 @@ class EmployeesController < ApplicationController
 
   # Page used to rapidly search for an employee
   def home
-    @employee = nil # This is here to prevent an error on the populate_employee_results partial
+    @groups = []
+    Group.order(:name).each do |group|
+      if group.employees.any?
+        @groups << group
+      end
+    end
   end
 
 
@@ -45,6 +51,14 @@ class EmployeesController < ApplicationController
 
 
 # Action-related methods
+
+  # Adds a new group to an employee's list of groups
+  def add_group
+    Group.find(params[:employee_group][:group_id]).add_employee_to_group(@employee)
+    flash[:notice] = t(:group) + t(:added)
+    redirect_to edit_employee_path(@employee.id)
+  end
+
 
   # Adds a new service and corresponding allocation to an employee based off info entered on the
   # "edit" page
@@ -111,6 +125,15 @@ class EmployeesController < ApplicationController
   end
 
 
+  # Makes the selected employee an administrator for the given group
+  def make_group_admin
+    group = Group.find(params[:group])
+    group.add_group_admin(@employee)
+    flash[:notice] = t(:admin) + t(:added)
+    redirect_to edit_employee_path(@employee.id)
+  end
+
+
   # Populates the employee dropdown list on the "home" page based off the employee roster of the
   # selected group
   def populate_employee_results
@@ -120,6 +143,15 @@ class EmployeesController < ApplicationController
       @employee = Employee.find(params[:employee][:id])
     end
     render :layout => false
+  end
+
+
+  # Removes the selected group from the employee's list of groups
+  def remove_group
+    group = Group.find(params[:group])
+    group.remove_employee_from_group(@employee)
+    flash[:notice] = t(:group) + t(:removed)
+    redirect_to edit_employee_path(@employee.id)
   end
 
 
@@ -145,7 +177,8 @@ class EmployeesController < ApplicationController
   end
 
 
-  #
+  # Searches OSU's ldap for all employees in the applicaiton by both their username and ids. Once 
+  # found, updates the employee's name and email. 
   def update_all_employees_via_ldap
     authorize! :manage, Employee
     Employee.all.each do |employee|

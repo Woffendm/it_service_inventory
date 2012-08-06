@@ -37,6 +37,8 @@
             <%= t(:logged_in_as) %>
             <%= link_to session[:current_user_name],
                 user_settings_employee_path(session[:current_user_id]) %>
+          <% else %>
+            &nbsp
           <% end %>
         </div>
         <ul>

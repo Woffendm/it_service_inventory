@@ -25,7 +25,10 @@ Project1::Application.routes.draw do
   resources :employees do
     member do
       get 'user_settings'
+      post 'add_group'
       post 'add_service'
+      post 'make_group_admin'
+      post 'remove_group'
       post 'remove_service'
       post 'update_settings'
     end

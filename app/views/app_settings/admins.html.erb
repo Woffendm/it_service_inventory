@@ -19,11 +19,16 @@
   <caption> <%= t(:existing_administrators) %> </caption>
   <thead>
     <th> <%= t(:name) %> </th>
-    <th> </th>
   </thead>
   <tbody>
-    <% @admins.each do |admin| %>
-      <tr>
+    <% @admins.order(:name_last, :name_first).each do |admin| %>
+      <% if @odd %>
+        <% @odd = false %>
+        <tr class="even">
+      <% else %>
+        <% @odd = true %>
+        <tr class="odd">
+      <% end %>
         <td> <%= admin.full_name %> </td>
       </tr>
     <% end %>

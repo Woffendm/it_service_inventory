@@ -46,14 +46,14 @@
               <% end %>
             <% end %>
           </td>
-          <% if can? :update, @group %>
-            <td>
+          <td>
+            <% if can? :update, @group %>
               <%= form_tag("remove_employee", :method => "post") do %>
                 <%= hidden_field_tag(:employee, employee.id) %>
                 <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) + t(:employee) %>
               <% end %>
-            </td>
-          <% end %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>

@@ -19,6 +19,12 @@ class Employee < ActiveRecord::Base
   end
   
   
+  # Returns an array of groups that the employee does not currently have
+  def get_available_groups
+    Group.order(:name) - self.groups
+  end
+  
+  
   # Returns the employee's full name, in the format "lastname, firstname"
   def full_name
     return "#{name_last}, #{name_first}"

@@ -38,7 +38,7 @@ class GroupsController < ApplicationController
   
   # Adds the employee selected on the "roster" page to the given group
   def add_employee
-    @group.employees << @employee
+    @group.add_employee_to_group(@employee)
     flash[:notice] = t(:employee) + t(:added)
     redirect_to roster_group_path(@group.id)
   end
@@ -46,9 +46,7 @@ class GroupsController < ApplicationController
   
   # Makes the selected individual an administrator for the current group
   def add_group_admin
-    temp = @group.employee_groups.find_by_employee_id(params[:employee])
-    temp.group_admin = true
-    temp.save
+    @group.add_group_admin(params[:employee])
     flash[:notice] = t(:admin) + t(:added)
     redirect_to roster_group_path(@group.id)
   end
@@ -91,7 +89,7 @@ class GroupsController < ApplicationController
   # Removes the employee selected on the "roster" page from the given group
   def remove_employee
     @employee = Employee.find(params[:employee])
-    @group.employees.delete(@employee)
+    @group.remove_employee_from_group(@employee)
     flash[:notice] = t(:employee) + t(:removed)
     redirect_to roster_group_path(@group.id)
   end
