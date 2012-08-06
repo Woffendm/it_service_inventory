@@ -24,13 +24,7 @@
   <tbody>
     <% if Group.first != nil %>
       <% @groups.each do |group| %>
-        <% if @odd %>
-          <% @odd = false %>
-          <tr class="even">
-        <% else %>
-          <% @odd = true %>
-          <tr class="odd">
-        <% end %>
+        <tr class="<%= cycle('odd', 'even') %>">
           <td> 
             <% if can? :update, group %>
               <%= link_to group.name , edit_group_path(group.id) %>

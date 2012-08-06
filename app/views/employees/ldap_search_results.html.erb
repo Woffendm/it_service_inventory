@@ -8,13 +8,7 @@
     </thead>
     <tbody>
       <% @data.each do |entry| %>
-        <% if @odd %>
-          <% @odd = false %>
-          <tr class="even">
-        <% else %>
-          <% @odd = true %>
-          <tr class="odd">
-        <% end %>
+        <tr class="<%= cycle('odd', 'even') %>">
           <td> <%= entry.cn.first %> </td>
           <td>
             <% if entry.respond_to?(:osudepartment) %>

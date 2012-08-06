@@ -23,13 +23,7 @@
     </thead>
     <tbody>
       <% @paginated_employees.each do |employee| %>
-        <% if @odd %>
-          <% @odd = false %>
-          <tr class="even">
-        <% else %>
-          <% @odd = true %>
-          <tr class="odd">
-        <% end %>
+        <tr class="<%= cycle('odd', 'even') %>">
           <td>
             <%= render  :partial => "/shared/can_update_employee.html.erb", 
                         :locals => {:@employee => employee} %>

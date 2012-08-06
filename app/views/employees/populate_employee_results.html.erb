@@ -14,7 +14,7 @@
         </tr>
       <% end %>
       <% @employee.employee_allocations.each do |employee_allocation| %>
-        <tr>
+        <tr class="<%= cycle('odd', 'even') %>">
           <td>
             <% if employee_allocation == @employee.employee_allocations.first %>
               <%= render :partial => "/shared/can_update_employee.html.erb" %>

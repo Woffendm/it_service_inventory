@@ -24,13 +24,7 @@
   </thead>
   <tbody>
     <% @services.each do |service| %>
-      <% if @odd %>
-        <% @odd = false %>
-        <tr class="even">
-      <% else %>
-        <% @odd = true %>
-        <tr class="odd">
-      <% end %>
+      <tr class="<%= cycle('odd', 'even') %>">
         <td><%= link_to  service.name, edit_service_path(service.id) %> </td>
         <td> 
           <% if can? :delete, Service %>

@@ -44,13 +44,7 @@
   <table class="list issues">
     <tbody>
       <% @employee.groups.order(:name).each do |group| %>
-        <% if @odd %>
-          <% @odd = false %>
-          <tr class="even">
-        <% else %>
-          <% @odd = true %>
-          <tr class="odd">
-        <% end %>
+        <tr class="<%= cycle('odd', 'even') %>">
           <td>
             <%= link_to group.name, roster_group_path(group.id) %>
           </td>
@@ -111,13 +105,7 @@
     <tbody>
       <% @employee.employee_allocations.each do |employee_allocation| %>
         <% if employee_allocation != @employee_allocation %>
-          <% if @odd %>
-            <% @odd = false %>
-            <tr class="even">
-          <% else %>
-            <% @odd = true %>
-            <tr class="odd">
-          <% end %>
+          <tr class="<%= cycle('odd', 'even') %>">
             <td> 
               <%= render  :partial => "/shared/can_update_service.html.erb", 
                           :locals => {:employee_allocation => employee_allocation} %>
