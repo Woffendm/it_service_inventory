@@ -1,27 +1,28 @@
 Project1::Application.routes.draw do
 
+  match 'app_settings/admins' => 'app_settings#admins'
+  match 'employees/home' => 'employees#home'
+  match 'employees/search_ldap_view' => 'employees#search_ldap_view'
+  match 'logins/new' => 'logins#new'
+  match 'logins/new_backdoor' => 'logins#new_backdoor'
+  match 'logins/destroy' => 'logins#destroy'
+  match '/auth/:provider/callback' => 'logins#create'
+  match 'logins/create_backdoor' => 'logins#create_backdoor'
 
- match 'employees/home' => 'employees#home'
- match 'employees/search_ldap_view' => 'employees#search_ldap_view'
- match 'logins/new' => 'logins#new'
- match 'logins/new_backdoor' => 'logins#new_backdoor'
- match 'logins/destroy' => 'logins#destroy'
- match '/auth/:provider/callback' => 'logins#create'
- match 'logins/create_backdoor' => 'logins#create_backdoor'
- match 'app_settings/admins' => 'app_settings#admins'
 
   resources :groups do
     member do
       get 'roster'
       post 'add_employee'
-      post 'remove_employee'
       post 'add_group_admin'
+      post 'remove_employee'
     end
     collection do
       get 'employees'
     end
   end
-  
+
+
   resources :employees do
     member do
       get 'user_settings'
@@ -33,30 +34,32 @@ Project1::Application.routes.draw do
       post 'update_settings'
     end
     collection do
+      get 'ldap_search_results'
       get 'populate_employee_results'
       get 'search_ldap'
-      get 'ldap_search_results'
       post 'ldap_create'
       post 'update_all_employees_via_ldap'
     end
   end
-  
+
+
   resources :app_settings do
     collection do
-      post 'change_active_theme'
       post 'add_admin'
+      post 'change_active_theme'
     end
   end
-  
+
+
   resources :logins do
     collection do
       get 'change_results_per_page'
     end
   end
-    
-  
-  resources :services
-  
+
+
+resources :services
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

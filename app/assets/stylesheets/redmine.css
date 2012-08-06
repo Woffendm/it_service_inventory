@@ -674,17 +674,19 @@ tr > td
 
 thead
 {
-  border: 5px solid white;
-  padding-top: 100px;
-  font-size: 13px;
+  border: 10px solid transparent;
+  font-size: 13.3px;
 }
 
 div.field_with_errors {
   display: inline;
 }
 
-
 th, td {
-    overflow: hidden;
-    width: 120px;
+  overflow: hidden;
+  width: 120px;
+}
+
+tbody {
+  border-bottom: 10px solid transparent;
 }

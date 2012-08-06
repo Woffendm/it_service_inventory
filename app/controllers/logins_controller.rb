@@ -12,12 +12,19 @@ class LoginsController < ApplicationController
   end
   
   
-  # Changes the number of results that are displayed per page. 
+  # Changes the number of results that are displayed per page. Redirects to first page if referring
+  # page was paginated. Redirects to previous page if page was not paginated. Redirects home if 
+  # no referring page.  
   def change_results_per_page
     session[:results_per_page] = params[:results_per_page]
-    if request.referer
-      flash[:notice] = t(:setting) + t(:updated)
-      redirect_to request.referer
+    referring_page = request.referer
+    if referring_page
+      flash[:notice] = t(:results_per_page) + " #{params[:results_per_page]}"
+      if referring_page.index("=")
+        redirect_to referring_page[0..referring_page.index("=")] + "1"
+      else
+        redirect_to referring_page
+      end
     else
       redirect_to employees_home_path
     end

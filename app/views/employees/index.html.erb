@@ -1,6 +1,5 @@
 <h2> <%= t(:employees) %> </h2>
-  
-  
+
 <% if can? :create, Employee %>
   <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
