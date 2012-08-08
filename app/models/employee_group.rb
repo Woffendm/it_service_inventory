@@ -7,4 +7,5 @@ class EmployeeGroup < ActiveRecord::Base
   attr_accessible :employee_id, :group_id, :group_admin, :employee, :group
   belongs_to :employee
   belongs_to :group
+  validates_presence_of :employee_id, :group_id
 end

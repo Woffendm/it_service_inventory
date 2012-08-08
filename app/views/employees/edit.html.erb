@@ -1,128 +1,151 @@
 <h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
 
+<%= form_for @employee do |employee_form| %>
 
-<h3><%= t(:basic_information) %> </h3>
-<div id="my-form">
-  <%= form_for @employee do |form| %>
-    <%= form.label t(:last_name) %>
-     <%= @employee.name_last %>
-    <br/><br/>
-    <%= form.label t(:first_name) %>
-    <%= @employee.name_first %>    
-    <br/><br/>
-    <%= form.label t(:email) %> 
-    <%= @employee.email %>    
-    <br/><br/>
-    <%= form.label :notes %> 
-    <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
-    <br/><br/>
-    <%= form.submit  t(:save_changes) %> 
-  <% end %>
-</div>
-<br/><br/>
-
-
-
-
-<!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
-<h3><%= t(:groups) %></h3>
-<% if can? :manage, :all %>
-  <% if @employee.get_available_groups.any? %>
-    <div id="my-form" >
-      <%= form_tag("add_group", :method => "post") do %>
-        <%= label_tag :employee_groups_group_id, t(:group)  %>
-        <%= collection_select(:employee_group, :group_id,
-             @employee.get_available_groups, :id, :name) %> 
-        <%= submit_tag  t(:add) %> 
-      <% end %>
-    </div>
-  <% end %>
-<% end %>
-
-
-<% if @employee.employee_groups.any? %>
-  <table class="list issues">
-    <tbody>
-      <% @employee.groups.order(:name).each do |group| %>
-        <tr class="<%= cycle('odd', 'even') %>">
-          <td>
-            <%= link_to group.name, roster_group_path(group.id) %>
-          </td>
-          <td>
-            <% if group.employee_groups.find_by_employee_id(@employee.id).group_admin %>
-              <%= t(:group_admin) %>
-            <% else %>
-              <% if can? :update, group %>
-                <%= form_tag("make_group_admin", :method => "post") do %>
-                   <%= hidden_field_tag(:group, group.id) %>
-                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
-                 <% end %>
-              <% end %>
-            <% end %>
-          </td>
-          <td>
-            <% if can? :update, group %>
-              <%= form_tag("remove_group", :method => "post") do %>
-                <%= hidden_field_tag(:group, group.id) %>
-                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) + t(:group) %>
-              <% end %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-<br/><br/>
-
-
-
-
-<!-- Drop-down list of services that can be added. Only populated with services that the employee doesn't already have. -->
-<h3><%= t(:services) %></h3>
-<% if @employee.get_available_services.any?%>
-  <div id="my-form" >
-    <%= form_tag("add_service", :method => "post") do %>
-      <%= label_tag :employee_allocation_service_id, t(:service)  %>
-      <%= collection_select(:employee_allocation, :service_id,
-           @employee.get_available_services, :id, :name) %> 
-      <%= select(:employee_allocation, :allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8,
-          0.9, 1]) %>
-      <%= submit_tag  t(:add) %> 
+  <h3><%= t(:basic_information) %> </h3>
+  <div class="my-form">
+    <%= fields_for @employee do |form| %>
+      <%= form.label t(:last_name) %>
+       <%= @employee.name_last %>
+      <br/><br/>
+      <%= form.label t(:first_name) %>
+      <%= @employee.name_first %>    
+      <br/><br/>
+      <%= form.label t(:email) %> 
+      <%= @employee.email %>    
+      <br/><br/>
+      <%= form.label :notes %> 
+      <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
+      <br/><br/>
     <% end %>
   </div>
-<% end %> 
 
 
-<!-- Creates table with the employee's services and allocations -->
-<% if @employee.employee_allocations.any? %>
-  <table class="list issues">
-    <thead>
-      <th><%= t(:service) %></th>
-      <th><%= t(:allocation) %></th>
-      <th> </th>
-    </thead>
-    <tbody>
-      <% @employee.employee_allocations.each do |employee_allocation| %>
-        <% if employee_allocation != @employee_allocation %>
+  <!-- Drop-down list of groups that can be added. Only populated with groups that the employee
+   doesn't already belong to. -->
+  <h3><%= t(:groups) %></h3>
+  <% if can? :manage, :all %>
+    <% if @employee.get_available_groups.any? %>
+      <div class="my-form" >
+        <%= fields_for "employee_groups" do |form|%>
+          <%= form.label :employee_groups_group_id, t(:group)  %>
+          <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
+               {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+          <%= form.submit t(:add), :class => "submission" %>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
+   to the employee's group membership here --> 
+  <% if @employee.employee_groups.any? %>
+    <table class="list issues">
+      <thead>
+        <th> Group </th>
+        <th> Admin? </th>
+        <th> Check to Remove </th>
+      </thead>
+      <tbody>
+        <% count = 0 %>
+        <%= employee_form.fields_for "employee_groups" do |form|%>
+          <% group = @groups[count] %>
           <tr class="<%= cycle('odd', 'even') %>">
-            <td> 
-              <%= render  :partial => "/shared/can_update_service.html.erb", 
-                          :locals => {:employee_allocation => employee_allocation} %>
+            <td>
+              <%= link_to group.name, roster_group_path(group.id) %>
             </td>
-            <td> <%= employee_allocation.rounded_allocation %> </td>
-            <td> 
-              <%= form_tag("remove_service", :method => "post") do %>
-                <%= hidden_field_tag(:employee_allocation, employee_allocation.id) %>
-                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
+            <td>
+              <% if can? :update, group %>
+                <%= form.check_box :group_admin %>
+              <% end %>
+            </td>
+            <td>
+              <% if can? :update, group %>
+                <%= form.check_box :_destroy %>
               <% end %>
             </td>
           </tr>
+          <% count += 1 %>
         <% end %>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-<br/><br/>
+      </tbody>
+    </table>
+  <% end %>
+  <br/><br/>
 
+
+
+  <h3><%= t(:services) %></h3>
+  <div id="over_allocation" class="error" hidden>
+      Error: <%= t(:over_allocated) %>
+  </div>
+
+
+  <!-- Drop-down list of services that can be added. Only populated with services that the employee
+   doesn't already have. -->
+  <% if @employee.get_available_services.any?%>
+    <div class="my-form" id="service-creation" >
+      <%= fields_for "employee_allocations" do |form|%>
+      <%= form.label :employee_allocation_service_id, t(:service)  %>
+      <%= form.select(:service_id, options_from_collection_for_select(
+                      @employee.get_available_services, :id, :name),  
+                      {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
+      <span class="allocation_value">
+        <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+                      {:include_blank => "-" + t(:select) + t(:allocation) + "-"}) %>
+      </span>
+      <%= form.submit t(:add), :class => "submission"%>
+      <% end %>
+    </div>
+  <% end %>
+
+
+
+  <!-- Creates table with the employee's services and allocations. Can be edited by employee or
+   admin -->
+  <% if @employee.employee_allocations.any? %>
+    <table class="list issues">
+      <thead>
+        <th><%= t(:service) %></th>
+        <th><%= t(:allocation) %></th>
+        <th> Check to Remove </th>
+      </thead>
+      <tbody>
+        <% count = 0 %>
+        <%= employee_form.fields_for "employee_allocations" do |form|%>
+          <% if !@services[count].nil? %>
+            <% employee_allocation =
+                          @services[count].employee_allocations.find_by_employee_id(@employee.id) %>
+            <tr class="<%= cycle('odd', 'even') %>">
+              <td> 
+                <%= render  :partial => "/shared/can_update_service.html.erb", 
+                            :locals => {:employee_allocation => employee_allocation} %>
+              </td>
+              <td> 
+                <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
+                <span class="allocation_value">
+                  <span class="in_table">
+                    <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+                                :selected => employee_allocation.rounded_allocation) %>
+                  </span>
+                </span>
+              </td>
+              <td> 
+                <%= form.check_box :_destroy %>
+              </td>
+            </tr>
+          <% end %>
+          <% count += 1 %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  <br/><br/>
+
+
+  <%= employee_form.submit  t(:save_changes), :class => "submission" %> 
+<% end %>
+
+
+<br/><br/>
 <%= link_to t(:return_to) + t(:all_employees), employees_path %>

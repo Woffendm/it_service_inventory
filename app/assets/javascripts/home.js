@@ -2,8 +2,8 @@
 * This file serves two primary purposes on the home view.
 * First: dynamically populate the dropdown list of employees based on the selection made in the 
 *         group dropdown
-*  Second: dynamically populate the search-results section of the page based on the selection made in 
-*          the employees dropdown
+*  Second: dynamically populate the search-results section of the page based on the selection made
+*         in the employees dropdown
 */
 
 $(document).ready(function(){
@@ -49,9 +49,7 @@ $(document).ready(function(){
 // Replaces the employee dropdown list on the home view with the updated list provided via the
 // "employees" method in the groups controller
 function popEmployeeDropdown(response){
-  groupSelect = $("#group")
   $("#employee_select_div").html(response);
-  employeeSelect = $("#employee")
   $("#employee_results").html(" ");
   return false;
 }
@@ -60,7 +58,6 @@ function popEmployeeDropdown(response){
 // Populates the employee results div on the home view with relevant information provided via the 
 // "populate_employee_results" method in employees controller
 function popEmployeeResults(response){
-  employeeSelect = $("#employee")
   $("#employee_results").html(response);
   return false;
 }

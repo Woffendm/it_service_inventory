@@ -6,17 +6,17 @@
 class EmployeesController < ApplicationController
 
   before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
-  before_filter :load_employee, :only => [:update, :destroy, :edit, :add_service, :remove_service,
-                :add_group, :remove_group, :make_group_admin]
+  before_filter :load_employee, :only => [:update, :destroy, :edit]
   before_filter :load_employees, :only => [:home]
-  before_filter :load_groups, :only => [:new, :edit, :populate_employee_results,  
-                :search_ldap]
+  before_filter :load_groups, :only => [:new, :edit, :populate_employee_results, :search_ldap]
 
 
 # View-related methods
 
   # Page for editing an existing employee
   def edit
+    @services = @employee.services.order(:name)
+    @groups = @employee.groups.order(:name)
   end
 
 
@@ -51,27 +51,6 @@ class EmployeesController < ApplicationController
 
 
 # Action-related methods
-
-  # Adds a new group to an employee's list of groups
-  def add_group
-    Group.find(params[:employee_group][:group_id]).add_employee_to_group(@employee)
-    flash[:notice] = t(:group) + t(:added)
-    redirect_to edit_employee_path(@employee.id)
-  end
-
-
-  # Adds a new service and corresponding allocation to an employee based off info entered on the
-  # "edit" page
-  def add_service
-    @employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
-    if @employee_allocation.save
-      flash[:notice] = t(:service) + t(:added)
-      redirect_to edit_employee_path(@employee.id)
-      return
-    end
-    flash[:error] = t(:over_allocated)
-    render :edit
-  end
 
 
   # Creates a new employee using info entered on the "new" page
@@ -125,15 +104,6 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Makes the selected employee an administrator for the given group
-  def make_group_admin
-    group = Group.find(params[:group])
-    group.add_group_admin(@employee)
-    flash[:notice] = t(:admin) + t(:added)
-    redirect_to edit_employee_path(@employee.id)
-  end
-
-
   # Populates the employee dropdown list on the "home" page based off the employee roster of the
   # selected group
   def populate_employee_results
@@ -146,31 +116,27 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Removes the selected group from the employee's list of groups
-  def remove_group
-    group = Group.find(params[:group])
-    group.remove_employee_from_group(@employee)
-    flash[:notice] = t(:group) + t(:removed)
-    redirect_to edit_employee_path(@employee.id)
-  end
-
-
-  # Removes a service and corresponding allocation from an employee based off selection made on the
-  # "edit" page
-  def remove_service
-    @employee_allocation = @employee.employee_allocations.find(params[:employee_allocation])
-    @employee_allocation.delete
-    @employee.save
-    flash[:notice] = t(:service) + t(:removed)
-    redirect_to edit_employee_path(@employee.id)
-  end
-
-
-  # Updates an employee based on info entered on the "edit" page
+  # Updates an employee based on info entered on the "edit" page.
   def update
-    if @employee.update_attributes(params[:employee])
-      flash[:notice] = t(:employee) + t(:updated)
-      redirect_to edit_employee_path 
+    # If a new group was sent with the params, adds it to the employee's list of groups
+    if params[:employee_groups]
+      if params[:employee_groups][:group_id] != ""
+        Group.find(params[:employee_groups][:group_id]).add_employee_to_group(@employee)
+      end
+    end
+    # If a new service and allocation were sent with the params, adds them to the employee
+    if params[:employee_allocations]
+      if (params[:employee_allocations][:service_id] != "") &&
+         (params[:employee_allocations][:allocation] != "")
+        new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
+        new_employee_allocation.save
+      end
+    end
+    @services = @employee.services.order(:name)
+    @groups = @employee.groups.order(:name)
+    if (@employee.update_attributes(params[:employee]))
+      flash[:notice] = t(:employee) + t(:updated)      
+      redirect_to edit_employee_path(@employee.id)
       return
     end
     render :edit
