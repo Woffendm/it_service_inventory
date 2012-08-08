@@ -8,7 +8,7 @@ class EmployeeAllocation < ActiveRecord::Base
   attr_accessible :allocation, :employee_id, :service_id, :employee
   belongs_to :employee
   belongs_to :service
-  validates_presence_of :employee_id, :service_id
+  validates_presence_of :employee_id, :service_id, :allocation
 
 
   # Because mysql is bad at storing floats which aren't a power of 2, before the allocation value 

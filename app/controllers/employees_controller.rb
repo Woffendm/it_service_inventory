@@ -147,16 +147,7 @@ class EmployeesController < ApplicationController
   # found, updates the employee's name and email. 
   def update_all_employees_via_ldap
     authorize! :manage, Employee
-    Employee.all.each do |employee|
-      updated_info = RemoteEmployee.find_by_username_and_id(employee.osu_username,
-                                    employee.osu_id).first
-      temp = updated_info.cn.first.gsub(/[,]/, '').split(" ")
-      employee.name_last = temp[0]
-      employee.name_first = temp[1]
-      employee.name_MI = temp[2]
-      employee.email = updated_info.mail.first
-      employee.save
-    end
+    RemoteEmployee.update_all_employees
     flash[:notice] = t(:all_employees) + " " + t(:updated)
     redirect_to employees_path
   end

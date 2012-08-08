@@ -36,4 +36,22 @@ class RemoteEmployee
     return nil if ldap_results == false
     return ldap_results.sort_by { |u| u.cn }
   end
+  
+  
+  # Updates the names and emails of all employees in the application using the latest information
+  # retrieved from the ldap server specified
+  def self.update_all_employees
+    Employee.all.each do |employee|
+      updated_info = self.find_by_username_and_id(employee.osu_username,
+                     employee.osu_id).first
+      updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
+      employee.name_last = updated_name[0]
+      employee.name_first = updated_name[1]
+      employee.name_MI = updated_name[2]
+      if updated_info.respond_to?(:mail)
+        employee.email = updated_info.mail.first
+      end
+      employee.save
+    end
+  end
 end

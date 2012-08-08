@@ -4,7 +4,7 @@
   <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
 
-<% if can? :update, Employee %>
+<% if can? :manage, Employee %>
   <br/>  <br/>
     <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post") do %>
       <%= submit_tag  "Update names and emails of all employees", 
