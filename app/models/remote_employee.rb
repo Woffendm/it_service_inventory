@@ -1,20 +1,10 @@
-# This class is used to search the OSU LDAP directory for a given employee and return an array of
-#    results
+# This class is used to preform actions related to ldap directories, such as returning an array of
+#   employees whose names match a given query
 #
 # Author: Michael Woffendin 
 # Copyright:
 
 class RemoteEmployee
-  
-  # This method searches the OSU LDAP directory for a given employee by first and last name and
-  # returns an array of results
-  def self.search(last_name, first_name)
-    last_name_filter = Net::LDAP::Filter.eq("cn", last_name.to_s + "*")
-    first_name_filter = Net::LDAP::Filter.eq("cn", "*,*" + first_name.to_s + "*")
-    filter = last_name_filter & first_name_filter
-    subroutine(filter)
-  end
-  
   
   # This method searches the OSU LDAP directory for a given employee by OSU id and ONID username and
   # returns an array with one result. 
@@ -22,6 +12,16 @@ class RemoteEmployee
     id_filter = Net::LDAP::Filter.eq("osuuid", osu_id)
     username_filter = Net::LDAP::Filter.eq("uid", osu_username)
     filter = id_filter & username_filter
+    subroutine(filter)
+  end
+  
+  
+  # This method searches the OSU LDAP directory for a given employee by first and last name and
+  # returns an array of results
+  def self.search(last_name, first_name)
+    last_name_filter = Net::LDAP::Filter.eq("cn", last_name.to_s + "*")
+    first_name_filter = Net::LDAP::Filter.eq("cn", "*,*" + first_name.to_s + "*")
+    filter = last_name_filter & first_name_filter
     subroutine(filter)
   end
 
@@ -50,6 +50,8 @@ class RemoteEmployee
       employee.name_MI = updated_name[2]
       if updated_info.respond_to?(:mail)
         employee.email = updated_info.mail.first
+      else
+        employee.email = ""
       end
       employee.save
     end

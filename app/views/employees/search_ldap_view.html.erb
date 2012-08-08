@@ -4,16 +4,16 @@
 <h3> <%= t(:search_OSU_directory) %> </h3>
 <div class="my-form">
   <div id="search_div">
-  <%= form_tag("search_ldap", :method => "get") do %>
-    <div id="last_name_search">
-      <%= label_tag :last_name, t(:last_name) %>
-      <%= text_field_tag :last_name, nil, :placeholder => t(:must_enter_last_name) %>
-    </div>
-    <div id="first_name_search">
-      <%= label_tag :first_name, t(:first_name) %>
-      <%= text_field_tag :first_name, nil, :placeholder => t(:first_name_optional) %>
-    </div>
-  <% end %>
+    <%= form_tag("search_ldap", :method => "get") do %>
+      <div id="last_name_search">
+        <%= label_tag :last_name, t(:last_name) %>
+        <%= text_field_tag :last_name, nil, :placeholder => t(:must_enter_last_name) %>
+      </div>
+      <div id="first_name_search">
+        <%= label_tag :first_name, t(:first_name) %>
+        <%= text_field_tag :first_name, nil, :placeholder => t(:first_name_optional) %>
+      </div>
+    <% end %>
   </div>
 </div>
 

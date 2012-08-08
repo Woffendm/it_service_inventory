@@ -5,10 +5,10 @@
 # Copyright:
 
 class EmployeeAllocation < ActiveRecord::Base
-  attr_accessible :allocation, :employee_id, :service_id, :employee
+  attr_accessible :allocation, :employee, :employee_id, :service_id
   belongs_to :employee
   belongs_to :service
-  validates_presence_of :employee_id, :service_id, :allocation
+  validates_presence_of :allocation, :employee_id, :service_id
 
 
   # Because mysql is bad at storing floats which aren't a power of 2, before the allocation value 

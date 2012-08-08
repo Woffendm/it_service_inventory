@@ -2,7 +2,7 @@
 * This file serves two primary purposes on the home view.
 * First: dynamically populate the dropdown list of employees based on the selection made in the 
 *         group dropdown
-*  Second: dynamically populate the search-results section of the page based on the selection made
+* Second: dynamically populate the search-results section of the page based on the selection made
 *         in the employees dropdown
 */
 

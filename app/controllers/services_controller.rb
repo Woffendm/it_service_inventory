@@ -4,7 +4,7 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-  before_filter :load_service, :only => [:update, :destroy, :edit]
+  before_filter :load_service, :only => [:destroy, :edit, :update]
   before_filter :load_permissions
 
   

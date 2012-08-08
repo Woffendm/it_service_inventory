@@ -34,9 +34,9 @@
             <% else %>
               <% if can? :update, @group %>
                 <%= form_tag("add_group_admin", :method => "post") do %>
-                   <%= hidden_field_tag(:employee, employee.id) %>
-                   <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
-                 <% end %>
+                  <%= hidden_field_tag(:employee, employee.id) %>
+                  <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
+                <% end %>
               <% end %>
             <% end %>
           </td>

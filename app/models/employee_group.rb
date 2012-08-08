@@ -4,7 +4,7 @@
 # Author: Michael Woffendin 
 # Copyright:
 class EmployeeGroup < ActiveRecord::Base
-  attr_accessible :employee_id, :group_id, :group_admin, :employee, :group
+  attr_accessible :employee, :employee_id, :group, :group_admin, :group_id
   belongs_to :employee
   belongs_to :group
   validates_presence_of :employee_id, :group_id

@@ -4,11 +4,10 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_employees, :only => [:roster]
-  before_filter :load_group, :only => [:edit, :update, :add_employee, :remove_employee, :destroy, 
-                :add_group_admin]
-  before_filter :load_employee, :only => [:add_employee]
-  
+  before_filter :load_employee,   :only => [:add_employee]
+  before_filter :load_employees,  :only => [:roster]
+  before_filter :load_group,      :only => [:add_employee, :add_group_admin, :destroy, :edit,
+                                            :remove_employee, :update]  
   
   
 # View-related methods

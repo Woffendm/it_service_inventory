@@ -5,10 +5,11 @@
 
 class EmployeesController < ApplicationController
 
-  before_filter :authorize_creation, :only => [:new, :search_ldap_view, :create, :ldap_create]
-  before_filter :load_employee, :only => [:update, :destroy, :edit]
-  before_filter :load_employees, :only => [:home]
-  before_filter :load_groups, :only => [:new, :edit, :populate_employee_results, :search_ldap]
+  before_filter :authorize_creation, :only => [:create, :ldap_create, :new, :search_ldap_view]
+  before_filter :load_employee,      :only => [:destroy, :edit, :update]
+  before_filter :load_employees,     :only => [:home]
+  before_filter :load_groups,        :only => [:edit, :new, :populate_employee_results,
+                                              :search_ldap]
 
 
 # View-related methods
