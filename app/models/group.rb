@@ -19,9 +19,9 @@ class Group < ActiveRecord::Base
   
   # Gives the selected employee administrative abilities for the group
   def add_group_admin(employee_id)
-    temp = self.employee_groups.find_by_employee_id(employee_id)
-    temp.group_admin = true
-    temp.save
+    new_group_admin = self.employee_groups.find_by_employee_id(employee_id)
+    new_group_admin.group_admin = true
+    new_group_admin.save
   end
   
   

@@ -1,7 +1,7 @@
 <h2> <%= t(:site_admins) %> </h2>
 
 
-<% if !@not_admins.empty? %>
+<% unless @not_admins.empty? %>
   <h3> <%= t(:add) + t(:admin) %> </h3>
   <div class="my-form">
     <%= form_tag( "add_admin", :method => "post") do %>

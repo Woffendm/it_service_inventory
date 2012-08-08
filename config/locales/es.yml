@@ -69,8 +69,9 @@ es:
   add_employee_to_application: "Añadir Trabajador"
   already_in_application: "Trabajador ya está en el Sistema"
   browse_existing_employees: "Buscar Trabajadores Existentes"
+  check_to_remove:    "Marque para remover"
   click_to_view:      " Hacer Clic Para Ver"
-  click_to_manage:      " Hacer Clic Para Administrar"
+  click_to_manage:    " Hacer Clic Para Administrar"
   create:             "Crear "
   created:            "creado"
   delete:             "Eliminar"
@@ -92,12 +93,12 @@ es:
 
 
   # Notifications and Stuff
-  #confirm_removal:    "Seguro que quiere remover este "
+  cannot_delete_self: "No puedes eliminar tú mismo. Pregunta un amigo hacerlo para tú."
   confirm_admin:      "¿Estás seguro de confiar en esta persona?"
   confirm_deletion:   "Seguro que quiere Eliminar? (!!Acción permanente!!)"
   confirm_removal:    "Remover de este lista? (Acción reversible)"
   first_name_optional:  "Nombre es opcional"
   must_enter_last_name: "Debe entrar el apellido"
   needs_a_name:       "necesita un nombre"
-  over_allocated:     "Su asignación total es demasiado alta!"
+  over_allocated:     "Su asignación total es demasiada alta!"
   update_all:         "Update Names and Contact Information for all Employees"

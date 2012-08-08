@@ -6,7 +6,7 @@
   <div class="my-form">
     <%= fields_for @employee do |form| %>
       <%= form.label t(:last_name) %>
-       <%= @employee.name_last %>
+      <%= @employee.name_last %>
       <br/><br/>
       <%= form.label t(:first_name) %>
       <%= @employee.name_first %>    
@@ -43,9 +43,9 @@
   <% if @employee.employee_groups.any? %>
     <table class="list issues">
       <thead>
-        <th> Group </th>
-        <th> Admin? </th>
-        <th> Check to Remove </th>
+        <th> <%= t(:group) %> </th>
+        <th> <%= t(:admin) %>? </th>
+        <th> <%= t(:check_to_remove) %> </th>
       </thead>
       <tbody>
         <% count = 0 %>
@@ -108,7 +108,7 @@
       <thead>
         <th><%= t(:service) %></th>
         <th><%= t(:allocation) %></th>
-        <th> Check to Remove </th>
+        <th> <%= t(:check_to_remove) %> </th>
       </thead>
       <tbody>
         <% count = 0 %>

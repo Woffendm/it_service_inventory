@@ -69,6 +69,7 @@ en:
   add_employee_to_application: "Add Employee"
   already_in_application: "Already in System"
   browse_existing_employees: "Browse Existing Employees"
+  check_to_remove:    "Check to remove"
   click_to_manage:    " Click to Manage"
   click_to_view:      " Click to View"
   create:             "Create "
@@ -92,7 +93,7 @@ en:
 
 
   # Notifications and Stuff
-  #confirm_removal:    "Are you sure you want to remove this "
+  cannot_delete_self: "You cannot delete yourself. Get someone else to do it."
   confirm_admin:      "Are you sure you want this person to be an admin? Only choose people you trust."
   confirm_deletion:   "Are you sure about this deletion? (Cannot be reversed!!)"
   confirm_removal:    "Confirm removal. (Reversible action)"
@@ -100,5 +101,5 @@ en:
   long_time:          "This may take a while. Are you ready?"
   must_enter_last_name: "Must enter last name"
   needs_a_name:       "needs a name"
-  over_allocated:     "The total allocation for a given employee cannot exceed 1. Either lower the new allocation or remove an existing service  from the employee."
+  over_allocated:     "The total allocation for a given employee cannot exceed 1. You must lower the employee's total allocation before proceeding."
   update_all:         "Update Names and Contact Information for all Employees"

@@ -72,7 +72,7 @@ class EmployeesController < ApplicationController
       @employee.destroy 
       flash[:notice] = t(:employee) + t(:deleted)
     else
-      flash[:error] = "You cannot delete yourself. Get someone else to do it."
+      flash[:error] = t(:cannot_delete_self)
     end
     redirect_to employees_path 
   end

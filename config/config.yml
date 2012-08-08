@@ -6,3 +6,4 @@ host: "client-ldap.onid.orst.edu"
 port: 389
 ldap_login_path: "/staging/it-service-inventory/auth/ldap"
 ldap_login_host: "https://secure.oregonstate.edu"
+results_per_page_options: [10, 25, 50]
