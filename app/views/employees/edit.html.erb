@@ -91,7 +91,7 @@
                       @employee.get_available_services, :id, :name),  
                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
       <span class="allocation_value">
-        <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+        <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                       {:include_blank => "-" + t(:select) + t(:allocation) + "-"}) %>
       </span>
       <%= form.submit t(:add), :class => "submission"%>
@@ -125,7 +125,7 @@
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
                 <span class="allocation_value">
                   <span class="in_table">
-                    <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+                    <%= form.select(:allocation, [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
                                 :selected => employee_allocation.rounded_allocation) %>
                   </span>
                 </span>
