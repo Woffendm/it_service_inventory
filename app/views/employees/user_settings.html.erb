@@ -19,7 +19,7 @@
       <td>
         <%= form_tag("update_settings", :method => "post") do %>
           <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
-           :selected => @current_user.preferred_language) %>
+                     :selected => @current_user.preferred_language) %>
           <%= submit_tag  t(:save_changes) %>
         <% end %>
       </td>

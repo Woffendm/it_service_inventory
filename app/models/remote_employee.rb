@@ -39,11 +39,17 @@ class RemoteEmployee
   
   
   # Updates the names and emails of all employees in the application using the latest information
-  # retrieved from the ldap server specified
+  # retrieved from the ldap server specified. If the employee is no longer listed in the ldap server
+  # then they are deleted from the application because they are no longer employeed at the 
+  # institution
   def self.update_all_employees
     Employee.all.each do |employee|
       updated_info = self.find_by_username_and_id(employee.osu_username,
                      employee.osu_id).first
+      if updated_info.empty?
+        employee.destroy
+        next
+      end
       updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
       employee.name_last = updated_name[0]
       employee.name_first = updated_name[1]

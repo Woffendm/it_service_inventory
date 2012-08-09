@@ -37,7 +37,7 @@
         </td>
         <td>
           <% employee.services.each do |service| %>
-            <%= service.name %>
+            <%= service.name.truncate(20) %>
             <br/>
           <% end %>
         </td>

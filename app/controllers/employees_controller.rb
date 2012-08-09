@@ -5,19 +5,16 @@
 
 class EmployeesController < ApplicationController
 
-  before_filter :authorize_creation, :only => [:create, :ldap_create, :new, :search_ldap_view]
-  before_filter :load_employee,      :only => [:destroy, :edit, :update]
-  before_filter :load_employees,     :only => [:home]
-  before_filter :load_groups,        :only => [:edit, :new, :populate_employee_results,
-                                              :search_ldap]
+  before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
+  before_filter :load_employee,        :only => [:destroy, :edit, :update]
+  before_filter :load_employees,       :only => [:home]
+  before_filter :load_groups_services, :only => [:edit, :update]
 
 
 # View-related methods
 
   # Page for editing an existing employee
   def edit
-    @services = @employee.services.order(:name)
-    @groups = @employee.groups.order(:name)
   end
 
 
@@ -48,6 +45,7 @@ class EmployeesController < ApplicationController
   # Page where a user can change some prefrences, such as language. 
   def user_settings
   end
+
 
 
 
@@ -121,20 +119,18 @@ class EmployeesController < ApplicationController
   def update
     # If a new group was sent with the params, adds it to the employee's list of groups
     if params[:employee_groups]
-      if params[:employee_groups][:group_id] != ""
+      unless params[:employee_groups][:group_id].blank?
         Group.find(params[:employee_groups][:group_id]).add_employee_to_group(@employee)
       end
     end
     # If a new service and allocation were sent with the params, adds them to the employee
     if params[:employee_allocations]
-      if (params[:employee_allocations][:service_id] != "") &&
-         (params[:employee_allocations][:allocation] != "")
+      unless (params[:employee_allocations][:service_id].blank?) &&
+             (params[:employee_allocations][:allocation].blank?)
         new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
         new_employee_allocation.save
       end
     end
-    @services = @employee.services.order(:name)
-    @groups = @employee.groups.order(:name)
     if (@employee.update_attributes(params[:employee]))
       flash[:notice] = t(:employee) + t(:updated)      
       redirect_to edit_employee_path(@employee.id)
@@ -193,9 +189,9 @@ class EmployeesController < ApplicationController
     end
 
 
-    # Loads all groups and services alphabetically
-    def load_groups
-      @groups = Group.order(:name)
-      @services = Service.order(:name)
+    # Loads all groups and services assigned to the current employee
+    def load_groups_services
+      @services = @employee.services.order(:name)
+      @groups = @employee.groups.order(:name)
     end
 end
