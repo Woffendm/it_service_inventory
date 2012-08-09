@@ -50,18 +50,19 @@
       <tbody>
         <% count = 0 %>
         <%= employee_form.fields_for "employee_groups" do |form|%>
-          <% group = @groups[count] %>
+          <% employee_group = @employee.employee_groups.find_by_group_id(@groups[count].id) %>
           <tr class="<%= cycle('odd', 'even') %>">
             <td>
-              <%= link_to group.name, roster_group_path(group.id) %>
+              <%= link_to employee_group.group.name, roster_group_path(employee_group.group_id) %>
             </td>
             <td>
-              <% if can? :update, group %>
+              <% if can? :update, employee_group.group %>
+                <%= form.hidden_field(:group_id, :value => employee_group.group_id) %>
                 <%= form.check_box :group_admin %>
               <% end %>
             </td>
             <td>
-              <% if can? :update, group %>
+              <% if can? :update, employee_group.group %>
                 <%= form.check_box :_destroy %>
               <% end %>
             </td>
