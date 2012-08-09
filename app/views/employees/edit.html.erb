@@ -28,7 +28,7 @@
     <% if @employee.get_available_groups.any? %>
       <div class="my-form" >
         <%= fields_for "employee_groups" do |form|%>
-          <%= form.label :employee_groups_group_id, t(:group)  %>
+          <%= form.label :group_id, t(:group)  %>
           <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
                {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
           <%= form.submit t(:add), :class => "submission" %>
@@ -86,7 +86,7 @@
   <% if @employee.get_available_services.any?%>
     <div class="my-form" id="service-creation" >
       <%= fields_for "employee_allocations" do |form|%>
-      <%= form.label :employee_allocation_service_id, t(:service)  %>
+      <%= form.label :service_id, t(:service)  %>
       <%= form.select(:service_id, options_from_collection_for_select(
                       @employee.get_available_services, :id, :name),  
                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 

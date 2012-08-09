@@ -4,8 +4,6 @@
 # Copyright:
 
 class Employee < ActiveRecord::Base
-  accepts_nested_attributes_for :employee_allocations, :allow_destroy => true
-  accepts_nested_attributes_for :employee_groups, :allow_destroy => true
   attr_accessible :email, :employee_allocations_attributes, :employee_groups_attributes,
                   :name_first, :name_last, :notes, :preferred_language, :preferred_theme
   has_many :employee_allocations, :dependent => :delete_all
@@ -14,6 +12,8 @@ class Employee < ActiveRecord::Base
   has_many :services, :through => :employee_allocations
   validates_presence_of :name_first, :name_last
   validates_uniqueness_of :osu_username, :scope => :osu_id
+  accepts_nested_attributes_for :employee_allocations, :allow_destroy => true
+  accepts_nested_attributes_for :employee_groups, :allow_destroy => true
 
   
   # Returns an array of services that the employee does not currently have
