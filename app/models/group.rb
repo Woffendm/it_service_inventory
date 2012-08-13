@@ -35,4 +35,14 @@ class Group < ActiveRecord::Base
   def remove_employee_from_group(employee)
     self.employees.delete(employee)
   end
+  
+  
+  # Returns an array of services that the employees of the group have. The array is sorted by the
+  # services' names, and does not contain duplicates. 
+  def services
+    array_of_services = self.employees.collect{ |employee| 
+      employee.services
+    }.flatten.uniq
+    return array_of_services.sort_by &:name
+  end
 end

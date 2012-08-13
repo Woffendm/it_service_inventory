@@ -6,6 +6,7 @@
 class ServicesController < ApplicationController
   before_filter :load_service, :only => [:destroy, :edit, :update]
   before_filter :load_permissions
+  before_filter :load_group, :only => [:total_allocation_within_group]
 
   
 # View-related methods
@@ -47,6 +48,28 @@ class ServicesController < ApplicationController
   end
 
 
+  # Populates the group dropdown list on the "pages/home" page based on the service selected
+  def groups
+    @selected_group = params[:selected_group]
+    if params[:service][:id] == "0"
+      @groups = Group.order(:name)
+    else 
+      @service = Service.find(params[:service][:id])
+      @groups = @service.groups
+    end
+    render :layout => false
+  end
+
+
+   def total_allocation_within_group
+     service_names_and_allocations = []
+     @group.services.each do |service|
+       service_names_and_allocations << service.total_allocation_within_group(@group)
+     end
+     render :json => service_names_and_allocations
+   end
+
+
   # Updates an existing service using info entered on the "edit" page
   def update
     if @service.update_attributes(params[:service])
@@ -66,10 +89,15 @@ class ServicesController < ApplicationController
     def load_permissions
       authorize! :update, Service
     end
-  
-  
+
+
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
+    end
+
+
+    def load_group
+      @group = Group.find(params[:group])
     end
 end

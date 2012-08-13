@@ -1,0 +1,48 @@
+<h2> Home </h2>
+
+
+<h3> <%= t(:browse_existing_employees) %> </h3>
+<div class="my-form">
+  <div id="group_dropdown">
+    <%= form_tag("group_form") do %>
+      <div id="group_select_div">
+        <%= label_tag :group_id, t(:group_name) %>
+        <%= collection_select(:group, :id, @groups, :id, :name, 
+                             {:prompt => t(:select) + t(:group) }) %>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="service_dropdown">
+    <%= form_tag("service_form") do %>
+      <div id="service_select_div">
+        <%= label_tag :service_id, t(:service_name) %>
+        <%= collection_select(:service, :id, @services, :id, :name,  
+                             {:prompt => t(:select) + t(:service) }) %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="search">
+  <button> Search </button>
+</div>
+<br/><br/>
+
+
+
+<h3> <%= t(:graphs_and_data) %> </h3>
+<div id="chart_div"></div>
+
+
+
+<div id = "employee_results">
+</div>
+
+
+
+<script type="text/javascript">
+  var servicesPathname = "<%= services_groups_path %>";
+  var groupsPathname = "<%= groups_services_path %>";
+  var totalAllocationWithinGroupPathname = "<%= total_allocation_within_group_services_path %>";
+</script>

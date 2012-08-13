@@ -4,6 +4,11 @@
   <title><%= t(:IT_service_inventory) %></title>
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
+  <%= javascript_include_tag "https://www.google.com/jsapi" %>
+  <script type="text/javascript">
+    // Load the Visualization API and the piechart package.
+    google.load('visualization', '1.0', {'packages':['corechart']});
+  </script>
   <%= stylesheet_link_tag "redmine" %>
   <!-- The following line will load an additional "theme" stylesheet for the application later on.
        Currently however, there are no themes and thus it is commented out for the time being. -->
@@ -42,7 +47,7 @@
           <% end %>
         </div>
         <ul>
-          <li><%= link_to t(:home), employees_home_path %> </li>
+          <li><%= link_to t(:home), pages_home_path %> </li>
           <li><%= link_to t(:employees), employees_path %></li>
           <li><%= link_to t(:groups), groups_path %></li>
           <% if can? :update, Service %>

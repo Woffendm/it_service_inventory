@@ -44,22 +44,28 @@ class RemoteEmployee
   # institution
   def self.update_all_employees
     Employee.all.each do |employee|
-      updated_info = self.find_by_username_and_id(employee.osu_username,
-                     employee.osu_id).first
-      if updated_info.empty?
-        employee.destroy
+      if employee.osu_username.nil? || employee.osu_id.nil?
         next
-      end
-      updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
-      employee.name_last = updated_name[0]
-      employee.name_first = updated_name[1]
-      employee.name_MI = updated_name[2]
-      if updated_info.respond_to?(:mail)
-        employee.email = updated_info.mail.first
       else
-        employee.email = ""
+        updated_info = self.find_by_username_and_id(employee.osu_username,
+                       employee.osu_id)
+        if updated_info.empty?
+          employee.destroy
+          next
+        else
+          updated_info = updated_info.first
+        end
+        updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
+        employee.name_last = updated_name[0]
+        employee.name_first = updated_name[1]
+        employee.name_MI = updated_name[2]
+        if updated_info.respond_to?(:mail)
+          employee.email = updated_info.mail.first
+        else
+          employee.email = ""
+        end
+        employee.save
       end
-      employee.save
     end
   end
 end

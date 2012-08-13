@@ -131,7 +131,7 @@ class EmployeesController < ApplicationController
         new_employee_allocation.save
       end
     end
-    if (@employee.update_attributes(params[:employee]))
+    if (@employee.update_attributes(params[:employee]))        
       flash[:notice] = t(:employee) + t(:updated)      
       redirect_to edit_employee_path(@employee.id)
       return

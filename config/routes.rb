@@ -8,7 +8,7 @@ Project1::Application.routes.draw do
   match 'logins/destroy' => 'logins#destroy'
   match '/auth/:provider/callback' => 'logins#create'
   match 'logins/create_backdoor' => 'logins#create_backdoor'
-
+  match 'pages/home' => 'pages#home'
 
   resources :groups do
     member do
@@ -19,6 +19,7 @@ Project1::Application.routes.draw do
     end
     collection do
       get 'employees'
+      get 'services'
     end
   end
 
@@ -53,7 +54,15 @@ Project1::Application.routes.draw do
   end
 
 
-resources :services
+  resources :pages
+
+
+  resources :services do
+    collection do 
+      get 'groups'
+      get 'total_allocation_within_group'
+    end
+  end
 
 
   # The priority is based upon order of creation:
@@ -105,7 +114,7 @@ resources :services
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'employees#home'
+  root :to => 'pages#home'
 
   # See how all your routes lay out with "rake routes"
 

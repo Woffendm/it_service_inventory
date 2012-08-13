@@ -94,6 +94,19 @@ class GroupsController < ApplicationController
   end
   
   
+  # Populates the service dropdown list on the "pages/home" page based on the group selected
+  def services
+    @selected_service = params[:selected_service]
+    if params[:group][:id] == "0"
+      @services = Service.order(:name)
+    else 
+      @group = Group.find(params[:group][:id])
+      @services = @group.services
+    end
+    render :layout => false
+  end
+  
+  
   # Updates a group based on the information endered on the "edit" page
   def update
     if @group.update_attributes(params[:group])

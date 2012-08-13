@@ -1,0 +1,3 @@
+<%= label_tag :service_id, t(:service_name) %>
+<%= collection_select(:service, :id, @services, :id, :name,  
+                     {:prompt => t(:all_services), :selected => @selected_service }) %>

@@ -1,0 +1,3 @@
+<%= label_tag :group_id, t(:group_name) %>
+<%= collection_select(:group, :id, @groups, :id, :name, 
+                     {:prompt => t(:all_groups), :selected => @selected_group }) %>
