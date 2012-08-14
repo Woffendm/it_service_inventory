@@ -1,23 +1,9 @@
-<h2> <%= t(:employees) %> </h2>
-
-<% if can? :create, Employee %>
-  <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
-<% end %>
-
-<% if can? :manage, Employee %>
-  <br/><br/>
-  <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post") do %>
-    <%= submit_tag "Update names and emails of all employees", 
-                   :confirm => "This may take a while. Are you ready?" %>
-  <% end %>
-<% end %>
-
+<br/><br/>
 <table class="list issues">
-  <caption> <%= t(:all_employees) %></caption>
+  <caption> <%= t(:matching_employees) %></caption>
   <thead>
     <th> <%= t(:name) %> </th>
-    <th> <%= t(:email) %> </th>
-    <th> <%= t(:notes) %> </th>
+    <th> <%= t(:groups) %> </th>
     <th> <%= t(:services) %> </th>
     <th> <%= t(:allocations) %> </th>
     <th>  </th>
@@ -29,10 +15,13 @@
           <%= render  :partial => "/shared/can_update_employee.html.erb", 
                       :locals => {:@employee => employee} %>  
         </td>
-        <td> <%= employee.email %> </td>
         <td>  
-          <% if employee.notes %> 
-            <%= employee.notes.truncate(20) %>
+          <% employee.groups.order(:name).each do |group| %>
+              <% if group != employee.groups.order(:name).last %>
+                <%= link_to group.name + ", ", roster_group_path(group.id) %>
+              <% else %>
+                <%= link_to group.name, roster_group_path(group.id) %>
+              <% end %>
           <% end %>
         </td>
         <td>
@@ -59,9 +48,3 @@
     <% end %>
   </tbody>
 </table>
-
-
-<div>
-  <%= will_paginate @employees %>
-  <%= render :partial => "/shared/results_per_page.html.erb" %>
-</div>

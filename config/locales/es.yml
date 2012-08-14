@@ -54,6 +54,7 @@ es:
   search_results:     "Resultados de Búsqueda"
   service:            "Servicio "
   services:           "Servicios "
+  service_name:       "Servicio: "
   setting:            "Configuración "
   settings:           "Configuraciones "
   site_admin:         "Gerente del Sitio"

@@ -1,48 +1,50 @@
 <h2> Home </h2>
 
 
-<h3> <%= t(:browse_existing_employees) %> </h3>
+<h3> <%= t(:browse_group_and_service_data) %> </h3>
 <div class="my-form">
-  <div id="group_dropdown">
-    <%= form_tag("group_form") do %>
-      <div id="group_select_div">
-        <%= label_tag :group_id, t(:group_name) %>
+  <%= form_tag("home_search", :method => "get") do %>
+    <span id="group_dropdown">
+      <span id="group_select_div">
+        <%= label_tag :group_id, t(:group_name), :class => "inline" %>
         <%= collection_select(:group, :id, @groups, :id, :name, 
-                             {:prompt => t(:select) + t(:group) }) %>
-      </div>
-    <% end %>
-  </div>
-
-  <div id="service_dropdown">
-    <%= form_tag("service_form") do %>
-      <div id="service_select_div">
-        <%= label_tag :service_id, t(:service_name) %>
+                             {:include_blank => t(:all_groups) }) %>
+      </span>
+    </span>
+    &nbsp &nbsp
+    <span id="service_dropdown">
+      <span id="service_select_div">
+        <%= label_tag :service_id, t(:service_name), :class => "inline" %>
         <%= collection_select(:service, :id, @services, :id, :name,  
-                             {:prompt => t(:select) + t(:service) }) %>
-      </div>
-    <% end %>
-  </div>
+                             {:include_blank => t(:all_services) }) %>
+      </span>
+    </span>
+    &nbsp &nbsp
+    <%= submit_tag "Search" %> 
+    &nbsp &nbsp
+    <%= submit_tag "Clear Form", :id => "clear", :type => :button %>
+  <% end %>
 </div>
 
-<div id="search">
-  <button> Search </button>
-</div>
-<br/><br/>
 
-
-
-<h3> <%= t(:graphs_and_data) %> </h3>
 <div id="chart_div"></div>
+<% if @data_to_graph != "none" %>
+  <button id="toggle"> Toggle Graph Type </button>
+<% end %>
 
 
-
-<div id = "employee_results">
-</div>
-
+<% if @employees %>
+  <%= render  :partial => "/pages/employee_results.html.erb",
+              :locals => {:@employees => @employees} %>
+<% end %>
 
 
 <script type="text/javascript">
   var servicesPathname = "<%= services_groups_path %>";
   var groupsPathname = "<%= groups_services_path %>";
-  var totalAllocationWithinGroupPathname = "<%= total_allocation_within_group_services_path %>";
+  if("<%= @data_to_graph %>" != "none") {
+    var dataToGraph = <%= @data_to_graph %>;
+    var graphTitle = "<%= @graph_title %>";
+    var xAxisTitle = "<%= @x_axis_title %>";
+  }
 </script>

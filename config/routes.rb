@@ -54,13 +54,16 @@ Project1::Application.routes.draw do
   end
 
 
-  resources :pages
+  resources :pages do
+    collection do
+      get 'home_search'
+    end
+  end
 
 
   resources :services do
     collection do 
       get 'groups'
-      get 'total_allocation_within_group'
     end
   end
 

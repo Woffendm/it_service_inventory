@@ -13,18 +13,63 @@ $(document).ready(function(){
 
 
   //
-  var search = $("#search");
-  search.click(function(e) {
-    var serviceId = 1;
-    var groupId = 1;
-    //var serviceId = $("#service_id").val();
-    //var groupId = $("#group_id").val();
-    $.ajax({
-      type: "GET",
-      url: totalAllocationWithinGroupPathname + "?group=" + groupId + "&service=" + serviceId,
-      success: drawGraph
-    })
-    return true;
+  var data;
+  var options;
+  var graphType = "column";
+
+
+  // Load the Visualization API and the piechart package.
+  google.load('visualization', '1.0', {'packages':['corechart']});
+
+
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.setOnLoadCallback(drawChart);
+
+
+  // Callback that creates and populates a data table,
+  // instantiates the pie chart, passes in the data and
+  // draws it.
+  function drawChart() {
+    if(typeof dataToGraph != 'undefined' && dataToGraph instanceof Array && dataToGraph.length > 0){
+
+      // Create the data table.
+      data = new google.visualization.DataTable();
+      data.addColumn('string', 'Service');
+      data.addColumn('number', 'Allocation');
+      data.addRows(dataToGraph);
+
+      // Set chart options
+      options = {'title': graphTitle,
+                     'width':800,
+                     'height':300,
+                     'colors' : ['#3B98A9', '#3B78A9', '#3B58A9', '#3B38A9', '#3B18A9', '#5B18A9'],
+                     'legend' : 'left',
+                     hAxis: {title: xAxisTitle,
+                            titlePosition: 'out'},
+                     vAxis: {title: 'Allocation (FTE)',
+                            titlePosition: 'out'}
+                     };
+
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+  }
+
+
+  //
+  var toggleGraphType = $("#toggle");
+  toggleGraphType.click(function(e) {
+    if (graphType == "column") {
+      chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+      graphType = "pie";
+    }
+    else {
+      chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+      graphType = "column";
+    }
   });
 
 
@@ -43,8 +88,8 @@ $(document).ready(function(){
     })
     return true;
   });
-  
-  
+
+
   // Gets id of selected employee, passes it to "populate_employee_results" method in employees   
   // controller 
   var serviceSelect = $("#service_dropdown");
@@ -61,43 +106,15 @@ $(document).ready(function(){
     })
     return true;
   });
+
+
+  // Clears the user's selections from both of the dropdowns, returning them to the default values.
+  var clearForm = $("#clear");
+  clearForm.click(function(e) {
+    $("#group_id option")[0].selected = true;
+    $("#service_id option")[0].selected = true;
+  });
 });
-
-
-
-
-//
-function drawGraph(response){
-  
-  // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
-  
-  // Set a callback to run when the Google Visualization API is loaded.
-  google.setOnLoadCallback(drawChart);
-  
-  
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
-  function drawChart() {
-
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Service');
-    data.addColumn('number', 'Allocation');
-    data.addRows(response);
-
-    // Set chart options
-    var options = {'title':'Total Allocations for Group',
-                   'width':400,
-                   'height':300};
-
-    // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-  return false;
-}
 
 
 

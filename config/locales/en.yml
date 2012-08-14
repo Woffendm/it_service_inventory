@@ -54,6 +54,7 @@ en:
   search_results:     "Search Results"
   service:            "Service "
   services:           "Services"
+  service_name:       "Service Name: "
   setting:            "Setting "
   settings:           "Settings "
   site_admin:         "Site Admin"

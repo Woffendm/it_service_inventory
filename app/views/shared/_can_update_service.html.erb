@@ -1,6 +1,6 @@
 <% if can? :update, Service %>
-  <%= link_to employee_allocation.service.name,
+  <%= link_to employee_allocation.service.name.truncate(20),
               edit_service_path(employee_allocation.service.id) %>
 <% else %>
-  <%= employee_allocation.service.name %> 
+  <%= employee_allocation.service.name.truncate(20) %> 
 <% end %>

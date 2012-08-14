@@ -6,3 +6,4 @@ host:
 port: 
 ldap_login_path: 
 ldap_login_host: 
+results_per_page_options: 

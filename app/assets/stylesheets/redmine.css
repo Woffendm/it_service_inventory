@@ -689,3 +689,7 @@ th, td {
 tbody {
   border-bottom: 10px solid transparent;
 }
+
+select {
+  width: 130px;
+}

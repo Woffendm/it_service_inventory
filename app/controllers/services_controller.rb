@@ -61,15 +61,6 @@ class ServicesController < ApplicationController
   end
 
 
-   def total_allocation_within_group
-     service_names_and_allocations = []
-     @group.services.each do |service|
-       service_names_and_allocations << service.total_allocation_within_group(@group)
-     end
-     render :json => service_names_and_allocations
-   end
-
-
   # Updates an existing service using info entered on the "edit" page
   def update
     if @service.update_attributes(params[:service])
@@ -79,7 +70,7 @@ class ServicesController < ApplicationController
     end
     redirect_to services_path 
   end
-  
+
 
 
 # Loading methods
