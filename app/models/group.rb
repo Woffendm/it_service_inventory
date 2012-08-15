@@ -31,6 +31,16 @@ class Group < ActiveRecord::Base
   end
   
   
+  #
+  def get_total_allocation
+    total_allocation = 0.0
+    self.employees.each do |employee|
+      total_allocation += employee.get_total_allocation
+    end
+    return total_allocation
+  end
+  
+  
   # Removes the given employee from the group
   def remove_employee_from_group(employee)
     self.employees.delete(employee)

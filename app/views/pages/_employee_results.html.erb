@@ -6,7 +6,6 @@
     <th> <%= t(:groups) %> </th>
     <th> <%= t(:services) %> </th>
     <th> <%= t(:allocations) %> </th>
-    <th>  </th>
   </thead>
   <tbody>
     <% @employees.each do |employee| %>
@@ -36,12 +35,6 @@
           <% employee.services.order(:name).each do |service| %>
             <%= employee.employee_allocations.find_by_service_id(service.id).rounded_allocation %> 
             <br/>
-          <% end %>
-        </td>
-        <td> 
-          <% if can? :destroy, employee %>
-            <%= link_to t(:delete), employee_path(employee.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion) %> 
           <% end %>
         </td>
       </tr> 

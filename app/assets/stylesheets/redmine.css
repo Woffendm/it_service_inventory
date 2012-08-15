@@ -693,3 +693,12 @@ tbody {
 select {
   width: 130px;
 }
+
+div.chart_div{
+  float: left;
+  display: inline;
+}
+
+div.chart_footer{
+ background: #A9FCFE;
+}

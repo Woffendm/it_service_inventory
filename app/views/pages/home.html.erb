@@ -26,17 +26,46 @@
   <% end %>
 </div>
 
+<div class="chart_div_container">
+  <div id="chart_div_1" class="chart_div"></div>
+  <div id="chart_div_2" class="chart_div"></div>
+</div>
 
-<div id="chart_div"></div>
+<br/>
+<div class="chart_footer">
 <% if @data_to_graph != "none" %>
-  <button id="toggle"> Toggle Graph Type </button>
+  <!--<button id="toggle"> Toggle Graph Type </button>-->
+  
+  <table class="list issues">
+    <tbody>
+      <tr>
+        <td> 
+          <% if @group && @service %>
+            <%= "Group: " + @group.name %> 
+            <br/> 
+            <%= "Service: " + @service.name %>
+          <% elsif @service %>
+            <%= "Service: " + @service.name %>
+          <% else %>
+            <%= "Group: " + @group.name %>
+          <% end %>
+        </td>
+        <td> Full Time Employees: <%= @full_time_employees %> </td>
+        <td> Employee Headcount: <%= @employee_headcount %> </td>
+        <td> <button id="toggle-employees">Show each employee </button> </td>
+      </tr>
+    </tbody>
+  </table>
 <% end %>
+</div>
 
 
-<% if @employees %>
-  <%= render  :partial => "/pages/employee_results.html.erb",
-              :locals => {:@employees => @employees} %>
-<% end %>
+<div id="employee_results" hidden>
+  <% if @employees %>
+    <%= render  :partial => "/pages/employee_results.html.erb",
+                :locals => {:@employees => @employees} %>
+  <% end %>
+</div>
 
 
 <script type="text/javascript">

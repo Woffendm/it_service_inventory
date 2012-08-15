@@ -21,27 +21,25 @@ class PagesController < ApplicationController
     unless params[:service][:id].blank?
       @service = Service.find(params[:service][:id])
     end
-    @data_to_graph = ""
+    data_array = []
     if @group && @service.nil?
       @employees = @group.employees.order(:name_last, :name_first)
       @graph_title = "Allocations for group: #{@group.name}"
       @x_axis_title = "Service"
+      @employee_headcount = @group.employees.length
+      @full_time_employees = @group.get_total_allocation
       @group.services.each do |service|
-        @data_to_graph += service.total_allocation_within_group(@group)
-        unless service == @group.services.last
-          @data_to_graph += ","
-        end
+        data_array << service.total_allocation_within_group(@group)
       end
     end
     if @group.nil? && @service
       @employees = @service.employees.order(:name_last, :name_first)
       @graph_title = "Allocations for service: #{@service.name}"
       @x_axis_title = "Group"
+      @employee_headcount = @service.employees.length
+      @full_time_employees = @service.get_total_allocation
       @service.groups.each do |group|
-        @data_to_graph += @service.total_allocation_for_group(group)
-        unless group == @service.groups.last
-          @data_to_graph += ","
-        end
+        data_array << @service.total_allocation_for_group(group)
       end
     end
     if @group && @service
@@ -56,7 +54,23 @@ class PagesController < ApplicationController
       end
       @graph_title = "Allocations for group: #{@group.name}, and service: #{@service.name}"
       @x_axis_title = "Employee"
-      @data_to_graph = @service.employee_allocations_within_group(@group)
+      data_array = @service.employee_allocations_within_group(@group)
+      @employee_headcount = data_array.length
+      @full_time_employees = @service.total_allocation_for_group(@group)[1]
+    end
+    @data_to_graph = ""
+    data_array.each do |subarray|
+      @data_to_graph += "["
+      subarray.each do |subarray_entry|
+        @data_to_graph += subarray_entry.to_s
+        unless subarray_entry == subarray.last
+          @data_to_graph += ","
+        end
+      end
+      @data_to_graph += "]"
+      unless subarray == data_array.last
+        @data_to_graph += ","
+      end
     end
     @data_to_graph = "[" + @data_to_graph + "]"
     render pages_home_path  

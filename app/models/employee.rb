@@ -15,19 +15,29 @@ class Employee < ActiveRecord::Base
   accepts_nested_attributes_for :employee_allocations, :allow_destroy => true
   accepts_nested_attributes_for :employee_groups, :allow_destroy => true
 
-  
+
   # Returns an array of services that the employee does not currently have
   def get_available_services
     Service.order(:name) - self.services
   end
-  
-  
+
+
   # Returns an array of groups that the employee does not currently have
   def get_available_groups
     Group.order(:name) - self.groups
   end
-  
-  
+
+
+  #
+  def get_total_allocation
+    total_allocation = 0.0
+    self.employee_allocations.each do |employee_allocation|
+      total_allocation += employee_allocation.rounded_allocation
+    end
+    return total_allocation
+  end
+
+
   # Returns the employee's full name, in the format "lastname, firstname"
   def full_name
     return "#{name_last}, #{name_first}"

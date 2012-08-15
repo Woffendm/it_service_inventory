@@ -16,6 +16,7 @@ $(document).ready(function(){
   var data;
   var options;
   var graphType = "column";
+  var employeeResultsHidden = true;
 
 
   // Load the Visualization API and the piechart package.
@@ -30,28 +31,32 @@ $(document).ready(function(){
   // instantiates the pie chart, passes in the data and
   // draws it.
   function drawChart() {
-    if(typeof dataToGraph != 'undefined' && dataToGraph instanceof Array && dataToGraph.length > 0){
+    if(typeof dataToGraph != 'undefined' && dataToGraph != "none" && dataToGraph.length > 0){
 
       // Create the data table.
       data = new google.visualization.DataTable();
       data.addColumn('string', 'Service');
-      data.addColumn('number', 'Allocation');
+      data.addColumn('number', 'Full Time Employees');
+      data.addColumn('number', 'Employee Headcount');
       data.addRows(dataToGraph);
 
       // Set chart options
-      options = {'title': graphTitle,
-                     'width':800,
-                     'height':300,
-                     'colors' : ['#3B98A9', '#3B78A9', '#3B58A9', '#3B38A9', '#3B18A9', '#5B18A9'],
-                     'legend' : 'left',
-                     hAxis: {title: xAxisTitle,
-                            titlePosition: 'out'},
-                     vAxis: {title: 'Allocation (FTE)',
-                            titlePosition: 'out'}
-                     };
+      options = { 'title': graphTitle,
+                  'width': 650,
+                  'height': 300,
+                  'colors' : ['#3B98A9', '#3B78A9', '#3B58A9', '#3B38A9', '#3B18A9', '#5B18A9'],
+                  'legend' : 'top',
+                  hAxis: {  titlePosition: 'in',
+                            title: xAxisTitle,
+                            titleTextStyle:{ fontSize: 14 }
+                         },
+                  chartArea: {  width: "80%" }
+                };
 
       // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
+      chart.draw(data, options);
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div_2'));
       chart.draw(data, options);
     }
   }
@@ -61,14 +66,27 @@ $(document).ready(function(){
   var toggleGraphType = $("#toggle");
   toggleGraphType.click(function(e) {
     if (graphType == "column") {
-      chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart = new google.visualization.PieChart(document.getElementById('chart_div_1'));
       chart.draw(data, options);
       graphType = "pie";
     }
     else {
-      chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+      chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
       chart.draw(data, options);
       graphType = "column";
+    }
+  });
+
+
+  //
+  var toggleEmployeeResults = $("#toggle-employees");
+  toggleEmployeeResults.click(function(e) {
+    if(employeeResultsHidden) {
+      $("#employee_results").show();
+      employeeResultsHidden = false;
+    } else {
+      $("#employee_results").hide();
+      employeeResultsHidden = true;
     }
   });
 
