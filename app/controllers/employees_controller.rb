@@ -7,7 +7,6 @@ class EmployeesController < ApplicationController
 
   before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
   before_filter :load_employee,        :only => [:destroy, :edit, :update]
-  before_filter :load_employees,       :only => [:home]
   before_filter :load_groups_services, :only => [:edit, :update]
 
 
@@ -15,17 +14,6 @@ class EmployeesController < ApplicationController
 
   # Page for editing an existing employee
   def edit
-  end
-
-
-  # Page used to rapidly search for an employee
-  def home
-    @groups = []
-    Group.order(:name).each do |group|
-      if group.employees.any?
-        @groups << group
-      end
-    end
   end
 
 
@@ -180,12 +168,6 @@ class EmployeesController < ApplicationController
     def load_employee
       @employee = Employee.find(params[:id])
       authorize! :update, @employee
-    end
-
-
-    # Loads all employees in alphabetical order
-    def load_employees
-      @employees = Employee.order(:name_last, :name_first)
     end
 
 

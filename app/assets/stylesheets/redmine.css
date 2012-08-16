@@ -696,9 +696,18 @@ select {
 
 div.chart_div{
   float: left;
-  display: inline;
 }
 
 div.chart_footer{
- background: #A9FCFE;
+  background: #E2F4FD;
+  padding: .5em .5em .5em 5em;
+  border: 1px solid #2268AB;
+  margin-bottom: 1em;
+  margin-top: 328px;
+  -webkit-box-shadow: 0 0 7px #2268AB;
+  -moz-box-shadow: 0 0 7px #2268AB;
+  box-shadow: 0 0 7px #2268AB;
+  min-height: 1.5em;
+  width: 95.2% !important;
+  clear: both;
 }

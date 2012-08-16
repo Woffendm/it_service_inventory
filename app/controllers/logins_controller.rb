@@ -8,7 +8,7 @@ class LoginsController < ApplicationController
   
   # Development tool for logging in without a password
   def new_backdoor
-    redirect_to employees_home_path unless Rails.env.development?
+    redirect_to pages_home_path unless Rails.env.development?
   end
   
   
@@ -26,7 +26,7 @@ class LoginsController < ApplicationController
         redirect_to referring_page
       end
     else
-      redirect_to employees_home_path
+      redirect_to pages_home_path
     end
   end
   
@@ -39,7 +39,7 @@ class LoginsController < ApplicationController
       session[:current_user_name] = employee_exists.full_name
       session[:results_per_page] = 25
       flash[:notice] = t(:logged_in_as) + session[:current_user_name]
-      redirect_to employees_home_path
+      redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
       render :new
@@ -56,7 +56,7 @@ class LoginsController < ApplicationController
       session[:current_user_name] = employee_exists.full_name
       session[:results_per_page] = 25
       flash[:notice] = t(:logged_in_as) + session[:current_user_name]
-      redirect_to employees_home_path
+      redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
       render :new
@@ -70,6 +70,6 @@ class LoginsController < ApplicationController
     session[:current_user_name] = nil
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
-    redirect_to employees_home_path
+    redirect_to logins_new_path
   end
 end

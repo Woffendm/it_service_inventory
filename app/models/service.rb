@@ -43,7 +43,7 @@ class Service < ActiveRecord::Base
     end
     array_of_employees_and_allocations = []
     array_of_employees_with_service_within_group.each do |employee|
-      array_of_employees_and_allocations << ["'#{employee.full_name}'", self.employee_allocations.find_by_employee_id(employee.id).allocation.round(1), 'null']
+      array_of_employees_and_allocations << ["'#{employee.full_name}'", self.employee_allocations.find_by_employee_id(employee.id).allocation.round(1), nil]
     end
     return array_of_employees_and_allocations    
   end

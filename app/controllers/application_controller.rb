@@ -15,10 +15,18 @@ class ApplicationController < ActionController::Base
 
   private
     # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
-    # someone is logged in. If they are, then it stores the corresponding Employee/User in
-    # @current_user
+    # the persion described by the session still exists in the database. If they do, then it stores 
+    # the corresponding Employee/User in @current_user. If they don't, then it clears the session. 
+    # This should be accomplished by a redirect to the destroy action of the logins controller, but
+    # unfortunately Chrome gets upset when there are more than two redirects at once.
     def current_user
-      @current_user ||= session[:current_user_id] && Employee.find(session[:current_user_id])
+      unless Employee.where(:id => session[:current_user_id]).empty? 
+        @current_user = Employee.find(session[:current_user_id])
+      else
+        session[:current_user_id] = nil
+        session[:current_user_name] = nil
+        session[:results_per_page] = nil
+      end
     end
 
 

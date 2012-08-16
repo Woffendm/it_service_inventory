@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 
   // Load the Visualization API and the piechart package.
-  google.load('visualization', '1.0', {'packages':['corechart']});
+  //google.load('visualization', '1.0', {'packages':['corechart']});
 
 
   // Set a callback to run when the Google Visualization API is loaded.
@@ -129,8 +129,17 @@ $(document).ready(function(){
   // Clears the user's selections from both of the dropdowns, returning them to the default values.
   var clearForm = $("#clear");
   clearForm.click(function(e) {
-    $("#group_id option")[0].selected = true;
-    $("#service_id option")[0].selected = true;
+    $.ajax({
+      type: "GET",
+      url: groupsPathname + "?service[id]=0&selected_group=nil",
+      success: popGroupDropdown
+    })
+    $.ajax({
+      type: "GET",
+      url: servicesPathname + "?group[id]=0&selected_service=nil",
+      success: popServiceDropdown
+    })
+    return true;
   });
 });
 

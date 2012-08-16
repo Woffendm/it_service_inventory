@@ -31,9 +31,11 @@
   <div id="chart_div_2" class="chart_div"></div>
 </div>
 
-<br/>
-<div class="chart_footer">
+
+
 <% if @data_to_graph != "none" %>
+  <div class="chart_footer">
+  
   <!--<button id="toggle"> Toggle Graph Type </button>-->
   
   <table class="list issues">
@@ -56,8 +58,10 @@
       </tr>
     </tbody>
   </table>
+  </div>
+  
 <% end %>
-</div>
+
 
 
 <div id="employee_results" hidden>
@@ -72,7 +76,7 @@
   var servicesPathname = "<%= services_groups_path %>";
   var groupsPathname = "<%= groups_services_path %>";
   if("<%= @data_to_graph %>" != "none") {
-    var dataToGraph = <%= @data_to_graph %>;
+    var dataToGraph = <%= raw @data_to_graph %>;
     var graphTitle = "<%= @graph_title %>";
     var xAxisTitle = "<%= @x_axis_title %>";
   }

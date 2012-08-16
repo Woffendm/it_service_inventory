@@ -9,7 +9,26 @@ class PagesController < ApplicationController
 
   # Page used to rapidly search for an employee
   def home
-    @data_to_graph = "none"
+    if @current_user
+      if @current_user.groups.first
+        data_array = []
+        @group = @current_user.groups.first
+        @services = @group.services
+        @employees = @group.employees.order(:name_last, :name_first)
+        @graph_title = "Allocations for group: #{@group.name}"
+        @x_axis_title = "Service"
+        @employee_headcount = @group.employees.length
+        @full_time_employees = @group.get_total_allocation
+        @group.services.each do |service|
+          data_array << service.total_allocation_within_group(@group)
+        end
+        @data_to_graph = data_array.to_json
+      else
+        @data_to_graph = "none"
+      end
+    else
+      redirect_to logins_new_path
+    end
   end
 
 
@@ -23,6 +42,7 @@ class PagesController < ApplicationController
     end
     data_array = []
     if @group && @service.nil?
+      @services = @group.services
       @employees = @group.employees.order(:name_last, :name_first)
       @graph_title = "Allocations for group: #{@group.name}"
       @x_axis_title = "Service"
@@ -33,6 +53,7 @@ class PagesController < ApplicationController
       end
     end
     if @group.nil? && @service
+      @groups = @service.groups
       @employees = @service.employees.order(:name_last, :name_first)
       @graph_title = "Allocations for service: #{@service.name}"
       @x_axis_title = "Group"
@@ -43,6 +64,8 @@ class PagesController < ApplicationController
       end
     end
     if @group && @service
+      @services = @group.services
+      @groups = @service.groups
       @employees = []
       @service.employees.order(:name_last, :name_first).each do |employee|
         employee.groups.each do |group|
@@ -58,21 +81,11 @@ class PagesController < ApplicationController
       @employee_headcount = data_array.length
       @full_time_employees = @service.total_allocation_for_group(@group)[1]
     end
-    @data_to_graph = ""
-    data_array.each do |subarray|
-      @data_to_graph += "["
-      subarray.each do |subarray_entry|
-        @data_to_graph += subarray_entry.to_s
-        unless subarray_entry == subarray.last
-          @data_to_graph += ","
-        end
-      end
-      @data_to_graph += "]"
-      unless subarray == data_array.last
-        @data_to_graph += ","
-      end
+    if @group || @service
+      @data_to_graph = data_array.to_json
+    else
+      @data_to_graph = "none"
     end
-    @data_to_graph = "[" + @data_to_graph + "]"
     render pages_home_path  
   end
 
