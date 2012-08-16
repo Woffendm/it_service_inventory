@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   # themes, but will be used later)
   # before_filter :load_theme
   before_filter :current_user
-
+  before_filter :set_user_language
 
 
   private
@@ -33,5 +33,17 @@ class ApplicationController < ActionController::Base
     # Loads the active theme.
     def load_theme
       @current_theme = AppSetting.find_by_code('active-theme').active
+    end
+
+
+    #
+    def set_user_language
+      if @current_user
+        if @current_user.preferred_language
+          I18n.locale = @current_user.preferred_language
+        else
+          I18n.locale = :en
+        end
+      end
     end
 end
