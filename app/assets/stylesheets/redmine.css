@@ -698,16 +698,27 @@ div.chart_div{
   float: left;
 }
 
+div.chart_div_container{
+  margin-bottom: 38em;
+}
+
 div.chart_footer{
+  text-align: center;  
   background: #E2F4FD;
   padding: .5em .5em .5em 5em;
   border: 1px solid #2268AB;
-  margin-bottom: 1em;
-  margin-top: 328px;
+  margin: 1em;
   -webkit-box-shadow: 0 0 7px #2268AB;
   -moz-box-shadow: 0 0 7px #2268AB;
   box-shadow: 0 0 7px #2268AB;
   min-height: 1.5em;
-  width: 95.2% !important;
   clear: both;
+}
+
+p.footer_entry{
+  font-size: 1.1em;
+  font-weight: bold;
+  display: inline;
+  padding-left: 3em; 
+  padding-right: 3em; 
 }

@@ -2145,8 +2145,7 @@ label.inline {
   -moz-box-shadow: 0 0 7px #006600;
   box-shadow: 0 0 7px #006600;
   min-height: 1.5em;
-  width: 78.3% !important;
- }
+}
 
 .error {
    background: url("../assets/status-error.png") 0.4em center no-repeat #fee7d8;

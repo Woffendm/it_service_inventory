@@ -41,23 +41,36 @@ $(document).ready(function(){
       data.addRows(dataToGraph);
 
       // Set chart options
-      options = { 'title': graphTitle,
+      options_with_color = { 'title': graphTitle,
                   'width': 650,
-                  'height': 300,
-                  'colors' : ['#3B98A9', '#3B78A9', '#3B58A9', '#3B38A9', '#3B18A9', '#5B18A9'],
+                  'height': (250 + (25 * dataToGraph.length)),
+                  'colors' : ['#c34500', '#000000' ],
                   'legend' : 'top',
                   hAxis: {  titlePosition: 'in',
                             title: xAxisTitle,
                             titleTextStyle:{ fontSize: 14 }
                          },
-                  chartArea: {  width: "80%" }
+                  chartArea: {  left: 100, width: "90%", height: '75%' }
                 };
 
+     //
+     options_without_color = { 'title': graphTitle,
+                 'width': 650,
+                 'height': (250 + (25 * dataToGraph.length)),
+                 'legend' : 'top',
+                 //'colors' : ['#c34500', '#0a0852', '#af0200', '#3c3952', '#730200', '#680070', '#666666', '#3e1600', '#003f9e', '#9c8017', '#064706', '#3d0042', '#333333', '#ab5e42', '#032103', '#420100', '#000000', '#6AB29F', '#559FDE', '#28465E' ],
+                 hAxis: {  titlePosition: 'in',
+                           title: xAxisTitle,
+                           titleTextStyle:{ fontSize: 14 }
+                        },
+                 chartArea: {  left: 100, width: "90%", height: '75%' }
+               };
+
       // Instantiate and draw our chart, passing in some options.
-      var chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
-      chart.draw(data, options);
-      var chart = new google.visualization.PieChart(document.getElementById('chart_div_2'));
-      chart.draw(data, options);
+      var chart1 = new google.visualization.BarChart(document.getElementById('chart_div_1'));
+      chart1.draw(data, options_with_color);
+      var chart2 = new google.visualization.PieChart(document.getElementById('chart_div_2'));
+      chart2.draw(data, options_without_color);
     }
   }
 

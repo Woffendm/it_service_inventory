@@ -35,29 +35,26 @@
 
 <% if @data_to_graph != "none" %>
   <div class="chart_footer">
-  
-  <!--<button id="toggle"> Toggle Graph Type </button>-->
-  
-  <table class="list issues">
-    <tbody>
-      <tr>
-        <td> 
-          <% if @group && @service %>
-            <%= "Group: " + @group.name %> 
-            <br/> 
-            <%= "Service: " + @service.name %>
-          <% elsif @service %>
-            <%= "Service: " + @service.name %>
-          <% else %>
-            <%= "Group: " + @group.name %>
-          <% end %>
-        </td>
-        <td> Full Time Employees: <%= @full_time_employees %> </td>
-        <td> Employee Headcount: <%= @employee_headcount %> </td>
-        <td> <button id="toggle-employees">Show each employee </button> </td>
-      </tr>
-    </tbody>
-  </table>
+    <% if @service %>
+      <p class="footer_entry">
+        Service: &nbsp <%= @service.name %>
+      </p>
+    <% end %>
+    <% if @group %>
+      <p class="footer_entry">
+        Group: &nbsp <%= @group.name %>
+      </p>
+    <% end %>
+    <p class="footer_entry">
+      Full Time Employees: &nbsp <%= @full_time_employees %>
+    </p> 
+    <p class="footer_entry">
+      Employee Headcount: &nbsp <%= @employee_headcount %> 
+    </p>
+    <p class="footer_entry">
+      <br/><br/>
+      <button id="toggle-employees">Show each employee </button>
+    </p> 
   </div>
   
 <% end %>
