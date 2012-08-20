@@ -20,13 +20,21 @@ class Service < ActiveRecord::Base
   end
 
 
-  #
+  # Returns the total allocation for this service. This is defined as the sum of every allocation 
+  # within this service's employee_allocations array
   def get_total_allocation
     total_allocation = 0.0
     self.employee_allocations.each do |employee_allocation|
       total_allocation += employee_allocation.rounded_allocation
     end
     return total_allocation
+  end
+
+
+  # Returns an EmployeeAllocation object which has a service_id matching this service's id and an
+  # employee_id matching the given employee's id
+  def get_employee_allocation(employee)
+   self.employee_allocations.find_by_employee_id(employee.id) 
   end
 
 

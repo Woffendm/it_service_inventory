@@ -1,5 +1,5 @@
 <% if can? :update, @employee %>
-  <%= link_to @employee.full_name , edit_employee_path(@employee.id) %> 
+  <%= link_to @employee.full_name, edit_employee_path(@employee.id) %> 
 <% else %>
   <%= @employee.full_name %>
 <% end %>

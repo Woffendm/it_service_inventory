@@ -92,7 +92,7 @@
                       @employee.get_available_services, :id, :name),  
                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
       <span class="allocation_value">
-        <%= form.select(:allocation, EmployeeAllocation::POSSIBLE_ALLOCATIONS,
+        <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
                       {:include_blank => "-" + t(:select) + t(:allocation) + "-"}) %>
       </span>
       <%= form.submit t(:add), :class => "submission"%>
@@ -115,8 +115,7 @@
         <% count = 0 %>
         <%= employee_form.fields_for "employee_allocations" do |form|%>
           <% unless @services[count].nil? %>
-            <% employee_allocation =
-                          @services[count].employee_allocations.find_by_employee_id(@employee.id) %>
+            <% employee_allocation = @services[count].get_employee_allocation(@employee) %>
             <tr class="<%= cycle('odd', 'even') %>">
               <td> 
                 <%= render  :partial => "/shared/can_update_service.html.erb", 
@@ -126,7 +125,8 @@
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
                 <span class="allocation_value">
                   <span class="in_table">
-                    <%= form.select(:allocation, EmployeeAllocation::POSSIBLE_ALLOCATIONS,
+                    <%= form.select(:allocation,
+                                    @employee_allocation_used_for_methods.possible_allocations,
                                     :selected => employee_allocation.rounded_allocation) %>
                   </span>
                 </span>

@@ -36,7 +36,8 @@ class ApplicationController < ActionController::Base
     end
 
 
-    #
+    # If there is a current user, and if they have a preferred language, then it will set the
+    # language to the current user's preferred language. 
     def set_user_language
       if @current_user
         if @current_user.preferred_language

@@ -7,7 +7,9 @@ class PagesController < ApplicationController
 
   before_filter :load_groups_services
 
-  # Page used to rapidly search for an employee
+  # Page used to rapidly search for information about groups, services, and employees. If user is
+  # not logged in, will redirect them to login page. If user is logged in, will display information
+  # related to their first group (provided they have one). 
   def home
     if @current_user
       if @current_user.groups.first
@@ -23,8 +25,6 @@ class PagesController < ApplicationController
           data_array << service.total_allocation_within_group(@group)
         end
         @data_to_graph = data_array.to_json
-      else
-        @data_to_graph = "none"
       end
     else
       redirect_to logins_new_path
@@ -32,14 +32,11 @@ class PagesController < ApplicationController
   end
 
 
-  #
+  # Retrieves and sets information related to the group and/or service selected by the user on the 
+  # home page. Will not retrieve information if neither a group nor service is selected.
   def home_search
-    unless params[:group][:id].blank?
-      @group = Group.find(params[:group][:id])
-    end
-    unless params[:service][:id].blank?
-      @service = Service.find(params[:service][:id])
-    end
+    @group = Group.find(params[:group][:id]) unless params[:group][:id].blank?
+    @service = Service.find(params[:service][:id]) unless params[:service][:id].blank?
     data_array = []
     if @group && @service.nil?
       @services = @group.services
@@ -71,8 +68,8 @@ class PagesController < ApplicationController
         employee.groups.each do |group|
           if group == @group
             @employees << employee
+            break;
           end
-          break;
         end
       end
       @graph_title = "Allocations for group: #{@group.name}, and service: #{@service.name}"
@@ -81,13 +78,10 @@ class PagesController < ApplicationController
       @employee_headcount = data_array.length
       @full_time_employees = @service.total_allocation_for_group(@group)[1]
     end
-    if @group || @service
-      @data_to_graph = data_array.to_json
-    else
-      @data_to_graph = "none"
-    end
+    @data_to_graph = data_array.to_json if @group || @service
     render pages_home_path  
   end
+
 
 
   private
@@ -95,15 +89,11 @@ class PagesController < ApplicationController
     def load_groups_services
       @services = []
       Service.order(:name).each do |service|
-        if service.employees.any?
-          @services << service
-        end
+        @services << service if service.employees.any?
       end
       @groups = []
       Group.order(:name).each do |group|
-        if group.employees.any?
-          @groups << group
-        end
+        @groups << group if group.employees.any?
       end
     end
 end

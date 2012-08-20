@@ -28,7 +28,7 @@ class Employee < ActiveRecord::Base
   end
 
 
-  #
+  # Returns the total allocation for the given employee.
   def get_total_allocation
     total_allocation = 0.0
     self.employee_allocations.each do |employee_allocation|

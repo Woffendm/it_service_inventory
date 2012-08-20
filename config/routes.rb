@@ -1,7 +1,6 @@
 Project1::Application.routes.draw do
 
   match 'app_settings/admins' => 'app_settings#admins'
-  match 'employees/home' => 'employees#home'
   match 'employees/search_ldap_view' => 'employees#search_ldap_view'
   match 'logins/new' => 'logins#new'
   match 'logins/new_backdoor' => 'logins#new_backdoor'
@@ -18,8 +17,7 @@ Project1::Application.routes.draw do
       post 'remove_employee'
     end
     collection do
-      get 'employees'
-      get 'services'
+      get '_services'
     end
   end
 
@@ -31,7 +29,6 @@ Project1::Application.routes.draw do
     end
     collection do
       get 'ldap_search_results'
-      get 'populate_employee_results'
       get 'search_ldap'
       post 'ldap_create'
       post 'update_all_employees_via_ldap'
@@ -63,7 +60,7 @@ Project1::Application.routes.draw do
 
   resources :services do
     collection do 
-      get 'groups'
+      get '_groups'
     end
   end
 

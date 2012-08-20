@@ -1,9 +1,13 @@
 /**
-* This file serves two primary purposes on the home view.
-* First: dynamically populate the dropdown list of employees based on the selection made in the 
-*         group dropdown
-* Second: dynamically populate the search-results section of the page based on the selection made
-*         in the employees dropdown
+* This file serves controlls the javascript for the home page. Currently there are three primary 
+* tasks that this file serves:
+* First: When a user selects a group from the group dropdown list, the service dropdown list will be
+*        automatically updated to only show services that employees of the selected group
+*        have. Visa versa is also true with the service dropdown. 
+* Second: If the user has submitted their selected choices, then relevant information will be
+*        graphed on the page using Google's graphing api. The chosen graph types are bar and pie.
+* Third: If the user wants to see detailed information about the employees belonging to a group or
+*        service, then they can click a button to toggle the viewing of this information.
 */
 
 $(document).ready(function(){
@@ -12,24 +16,14 @@ $(document).ready(function(){
   })
 
 
-  //
-  var data;
-  var options;
-  var graphType = "column";
-  var employeeResultsHidden = true;
-
-
-  // Load the Visualization API and the piechart package.
-  //google.load('visualization', '1.0', {'packages':['corechart']});
-
 
   // Set a callback to run when the Google Visualization API is loaded.
   google.setOnLoadCallback(drawChart);
 
 
-  // Callback that creates and populates a data table,
-  // instantiates the pie chart, passes in the data and
-  // draws it.
+
+  // Callback that creates and populates a data table, instantiates the pie chart, passes in 
+  // the data and draws it.
   function drawChart() {
     if(typeof dataToGraph != 'undefined' && dataToGraph != "none" && dataToGraph.length > 0){
 
@@ -40,68 +34,49 @@ $(document).ready(function(){
       data.addColumn('number', 'Employee Headcount');
       data.addRows(dataToGraph);
 
-      // Set chart options
-      options_with_color = { 'title': graphTitle,
-                  'width': 650,
-                  'height': (250 + (25 * dataToGraph.length)),
-                  'colors' : ['#c34500', '#000000' ],
-                  'legend' : 'top',
-                  hAxis: {  titlePosition: 'in',
-                            title: xAxisTitle,
-                            titleTextStyle:{ fontSize: 14 }
-                         },
-                  chartArea: {  left: 100, width: "90%", height: '75%' }
-                };
+      // Set bar graph options
+      options_for_bar_graph = {  'title'  : graphTitle,
+                                 'width'  : 650,
+                                 'height' : (250 + (25 * dataToGraph.length)),
+                                 'colors' : ['#c34500', '#000000' ],
+                                 'legend' : 'top',
+                                 hAxis    : {  titlePosition  : 'in',
+                                               title          : xAxisTitle,
+                                               titleTextStyle :{ fontSize: 14 } },
+                                 chartArea: {  left  : 100, 
+                                               width : "90%", 
+                                               height: '75%' }
+                               };
 
-     //
-     options_without_color = { 'title': graphTitle,
-                 'width': 650,
-                 'height': (250 + (25 * dataToGraph.length)),
-                 'legend' : 'top',
-                 //'colors' : ['#c34500', '#0a0852', '#af0200', '#3c3952', '#730200', '#680070', '#666666', '#3e1600', '#003f9e', '#9c8017', '#064706', '#3d0042', '#333333', '#ab5e42', '#032103', '#420100', '#000000', '#6AB29F', '#559FDE', '#28465E' ],
-                 hAxis: {  titlePosition: 'in',
-                           title: xAxisTitle,
-                           titleTextStyle:{ fontSize: 14 }
-                        },
-                 chartArea: {  left: 100, width: "90%", height: '75%' }
-               };
+     // Set pie chart options
+     options_for_pie_chart = {  'title'   : graphTitle,
+                                'width'   : 650,
+                                'height'  : (250 + (25 * dataToGraph.length)),
+                                'legend'  : 'top',
+                                hAxis     : {  titlePosition  : 'in',
+                                               title          : xAxisTitle,
+                                              titleTextStyle  :{ fontSize: 14 }},
+                                chartArea : {  left   : 100, 
+                                               width  : "90%", 
+                                               height : '75%' }
+                              };
 
-      // Instantiate and draw our chart, passing in some options.
-      var chart1 = new google.visualization.BarChart(document.getElementById('chart_div_1'));
-      chart1.draw(data, options_with_color);
-      var chart2 = new google.visualization.PieChart(document.getElementById('chart_div_2'));
-      chart2.draw(data, options_without_color);
+      // Instantiate and draw  chart, passing in options.
+      var chart1 = new google.visualization.BarChart(document.getElementById('bar_graph_div'));
+      chart1.draw(data, options_for_bar_graph);
+      var chart2 = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
+      chart2.draw(data, options_for_pie_chart);
     }
   }
 
 
-  //
-  var toggleGraphType = $("#toggle");
-  toggleGraphType.click(function(e) {
-    if (graphType == "column") {
-      chart = new google.visualization.PieChart(document.getElementById('chart_div_1'));
-      chart.draw(data, options);
-      graphType = "pie";
-    }
-    else {
-      chart = new google.visualization.ColumnChart(document.getElementById('chart_div_1'));
-      chart.draw(data, options);
-      graphType = "column";
-    }
-  });
 
-
-  //
+  // Toggles visibility of 'Employee Results' page section
   var toggleEmployeeResults = $("#toggle-employees");
   toggleEmployeeResults.click(function(e) {
-    if(employeeResultsHidden) {
-      $("#employee_results").show();
-      employeeResultsHidden = false;
-    } else {
-      $("#employee_results").hide();
-      employeeResultsHidden = true;
-    }
+    $("#employee_results").toggle();
   });
+
 
 
   // Gets id of selected group, passes it to "services" method in groups controller. Default is 0.
@@ -113,44 +88,45 @@ $(document).ready(function(){
       groupId =  e.target.value;
     }
     $.ajax({
-      type: "GET",
-      url: servicesPathname + "?group[id]=" + groupId + "&selected_service=" + selectedService,
-      success: popServiceDropdown
+      type    : "GET",
+      url     : servicesPathname + "?group[id]=" + groupId + "&selected_service=" + selectedService,
+      success : popServiceDropdown
     })
     return true;
   });
 
 
-  // Gets id of selected employee, passes it to "populate_employee_results" method in employees   
-  // controller 
+
+  // Gets id of selected service, passes it to "groups" method in services controller. Default is 0   
   var serviceSelect = $("#service_dropdown");
   serviceSelect.change(function(e) {
     var selectedGroup = $("#group_id").val();
     var serviceId = "0";
     if (e.target.value) {
-       serviceId = e.target.value;
+      serviceId = e.target.value;
     }
     $.ajax({
-      type: "GET",
-      url: groupsPathname + "?service[id]=" + serviceId + "&selected_group=" + selectedGroup,
-      success: popGroupDropdown
+      type    : "GET",
+      url     : groupsPathname + "?service[id]=" + serviceId + "&selected_group=" + selectedGroup,
+      success : popGroupDropdown
     })
     return true;
   });
+
 
 
   // Clears the user's selections from both of the dropdowns, returning them to the default values.
   var clearForm = $("#clear");
   clearForm.click(function(e) {
     $.ajax({
-      type: "GET",
-      url: groupsPathname + "?service[id]=0&selected_group=nil",
-      success: popGroupDropdown
+      type    : "GET",
+      url     : groupsPathname + "?service[id]=0&selected_group=nil",
+      success : popGroupDropdown
     })
     $.ajax({
-      type: "GET",
-      url: servicesPathname + "?group[id]=0&selected_service=nil",
-      success: popServiceDropdown
+      type    : "GET",
+      url     : servicesPathname + "?group[id]=0&selected_service=nil",
+      success : popServiceDropdown
     })
     return true;
   });
@@ -159,16 +135,16 @@ $(document).ready(function(){
 
 
 
-// Replaces the employee dropdown list on the home view with the updated list provided via the
-// "employees" method in the groups controller
+// Replaces the group dropdown list on the home view with the updated list provided via the
+// "groups" method in the services controller
 function popGroupDropdown(response){
   $("#group_select_div").html(response);
   return false;
 }
 
 
-// Populates the employee results div on the home view with relevant information provided via the 
-// "populate_employee_results" method in employees controller
+// Replaces the service dropdown list on the home view with the updated list provided via the
+// "services" method in the groups controller
 function popServiceDropdown(response){
   $("#service_select_div").html(response);
   return false;

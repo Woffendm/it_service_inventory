@@ -62,8 +62,8 @@ class GroupsController < ApplicationController
     end
     redirect_to groups_path
   end
-  
-  
+
+
   # Casts the selected group into an unfathomable abyss of destruction
   def destroy
     authorize! :destroy, Group
@@ -71,20 +71,8 @@ class GroupsController < ApplicationController
     flash[:notice] = t(:group) + t(:deleted)
     redirect_to groups_path 
   end
-  
-  
-  # Populates the employee dropdown list on the "employee/home" page based on the group selected
-  def employees
-    if params[:group][:id] == "0"
-      @employees = Employee.order(:name_last, :name_first)
-    else 
-      @group = Group.find(params[:group][:id])
-      @employees = @group.employees.order(:name_last, :name_first)
-    end
-    render :layout => false
-  end
-  
-  
+
+
   # Removes the employee selected on the "roster" page from the given group
   def remove_employee
     @employee = Employee.find(params[:employee])
@@ -92,10 +80,10 @@ class GroupsController < ApplicationController
     flash[:notice] = t(:employee) + t(:removed)
     redirect_to roster_group_path(@group.id)
   end
-  
-  
+
+
   # Populates the service dropdown list on the "pages/home" page based on the group selected
-  def services
+  def _services
     @selected_service = params[:selected_service]
     if params[:group][:id] == "0"
       @services = Service.order(:name)
@@ -105,8 +93,8 @@ class GroupsController < ApplicationController
     end
     render :layout => false
   end
-  
-  
+
+
   # Updates a group based on the information endered on the "edit" page
   def update
     if @group.update_attributes(params[:group])
@@ -117,9 +105,9 @@ class GroupsController < ApplicationController
     flash[:error] = t(:group) + t(:needs_a_name)
     redirect_to edit_group_path(@group.id) 
   end
-  
-  
-  
+
+
+
 # Loading methods
 
   private
@@ -127,15 +115,14 @@ class GroupsController < ApplicationController
     def load_employee
       @employee = Employee.find(params[:employee][:id])
     end
-  
-  
+
+
     # Loads all employees
     def load_employees
       @employees = Employee.order(:name_last, :name_first)
-     
     end
-  
-  
+
+
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])

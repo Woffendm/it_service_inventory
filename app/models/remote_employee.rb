@@ -12,7 +12,7 @@ class RemoteEmployee
     id_filter = Net::LDAP::Filter.eq("osuuid", osu_id)
     username_filter = Net::LDAP::Filter.eq("uid", osu_username)
     filter = id_filter & username_filter
-    subroutine(filter)
+    search_by_filter(filter)
   end
   
   
@@ -22,13 +22,13 @@ class RemoteEmployee
     last_name_filter = Net::LDAP::Filter.eq("cn", last_name.to_s + "*")
     first_name_filter = Net::LDAP::Filter.eq("cn", "*,*" + first_name.to_s + "*")
     filter = last_name_filter & first_name_filter
-    subroutine(filter)
+    search_by_filter(filter)
   end
 
 
   # This method preforms actions common to all above queries. They were consolodated into this one
   # method to avoid repetition.
-  def self.subroutine(filter)
+  def self.search_by_filter(filter)
     ldap = Net::LDAP.new :host => Project1::Application.config.config['host'], 
                          :port => Project1::Application.config.config['port']
     ldap_results = ldap.search(:base => Project1::Application.config.config['treebase'], 
@@ -44,28 +44,25 @@ class RemoteEmployee
   # institution
   def self.update_all_employees
     Employee.all.each do |employee|
-      if employee.osu_username.nil? || employee.osu_id.nil?
+      next if employee.osu_username.nil? || employee.osu_id.nil?
+      updated_info = self.find_by_username_and_id(employee.osu_username,
+                     employee.osu_id)
+      if updated_info.empty?
+        employee.destroy
         next
       else
-        updated_info = self.find_by_username_and_id(employee.osu_username,
-                       employee.osu_id)
-        if updated_info.empty?
-          employee.destroy
-          next
-        else
-          updated_info = updated_info.first
-        end
-        updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
-        employee.name_last = updated_name[0]
-        employee.name_first = updated_name[1]
-        employee.name_MI = updated_name[2]
-        if updated_info.respond_to?(:mail)
-          employee.email = updated_info.mail.first
-        else
-          employee.email = ""
-        end
-        employee.save
+        updated_info = updated_info.first
       end
+      updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
+      employee.name_last = updated_name[0]
+      employee.name_first = updated_name[1]
+      employee.name_MI = updated_name[2]
+      if updated_info.respond_to?(:mail)
+        employee.email = updated_info.mail.first
+      else
+        employee.email = ""
+      end
+      employee.save
     end
   end
 end

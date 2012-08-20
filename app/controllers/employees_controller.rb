@@ -8,6 +8,7 @@ class EmployeesController < ApplicationController
   before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
   before_filter :load_employee,        :only => [:destroy, :edit, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
+  before_filter :load_allocation,      :only => [:edit, :update]
 
 
 # View-related methods
@@ -91,18 +92,6 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Populates the employee dropdown list on the "home" page based off the employee roster of the
-  # selected group
-  def populate_employee_results
-    if params[:employee][:id] == "0"
-      @employee = nil
-    else
-      @employee = Employee.find(params[:employee][:id])
-    end
-    render :layout => false
-  end
-
-
   # Updates an employee based on info entered on the "edit" page.
   def update
     # If a new group was sent with the params, adds it to the employee's list of groups
@@ -161,6 +150,12 @@ class EmployeesController < ApplicationController
     # Ensures that the user is authorized to create new employees
     def authorize_creation
       authorize! :create, Employee
+    end
+
+
+    # Creates a blank EmployeeAllocation object so its methods can be used
+    def load_allocation
+      @employee_allocation_used_for_methods = EmployeeAllocation.new
     end
 
 

@@ -26,9 +26,11 @@
   <% end %>
 </div>
 
+
+
 <div class="chart_div_container">
-  <div id="chart_div_1" class="chart_div"></div>
-  <div id="chart_div_2" class="chart_div"></div>
+  <div id="bar_graph_div" class="chart_div"></div>
+  <div id="pie_chart_div" class="chart_div"></div>
 </div>
 
 
@@ -69,12 +71,13 @@
 </div>
 
 
+
 <script type="text/javascript">
-  var servicesPathname = "<%= services_groups_path %>";
-  var groupsPathname = "<%= groups_services_path %>";
-  if("<%= @data_to_graph %>" != "none") {
+  var servicesPathname = "<%= _services_groups_path %>";
+  var groupsPathname = "<%= _groups_services_path %>";
+  <% if @data_to_graph %>
     var dataToGraph = <%= raw @data_to_graph %>;
     var graphTitle = "<%= @graph_title %>";
     var xAxisTitle = "<%= @x_axis_title %>";
-  }
+  <% end %>
 </script>

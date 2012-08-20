@@ -33,7 +33,7 @@
             <% end %>
           </td>
           <td>
-            <%= @service.employee_allocations.find_by_employee_id(employee.id).rounded_allocation %>
+            <%= @service.get_employee_allocation(employee).rounded_allocation %>
           </td>
         </tr>
       <% end %>

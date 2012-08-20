@@ -31,7 +31,8 @@ class Group < ActiveRecord::Base
   end
   
   
-  #
+  # Returns the total the total allocation for the group. This is defined as the sum of the total
+  # allocations for every employee in the group 
   def get_total_allocation
     total_allocation = 0.0
     self.employees.each do |employee|
