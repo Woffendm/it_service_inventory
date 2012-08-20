@@ -49,7 +49,7 @@ class ServicesController < ApplicationController
 
 
   # Populates the group dropdown list on the "pages/home" page based on the service selected
-  def _groups
+  def groups
     @selected_group = params[:selected_group]
     if params[:service][:id] == "0"
       @groups = Group.order(:name)

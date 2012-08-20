@@ -17,7 +17,7 @@ Project1::Application.routes.draw do
       post 'remove_employee'
     end
     collection do
-      get '_services'
+      get 'services'
     end
   end
 
@@ -60,7 +60,7 @@ Project1::Application.routes.draw do
 
   resources :services do
     collection do 
-      get '_groups'
+      get 'groups'
     end
   end
 

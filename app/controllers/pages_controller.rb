@@ -68,7 +68,7 @@ class PagesController < ApplicationController
         employee.groups.each do |group|
           if group == @group
             @employees << employee
-            break;
+            break
           end
         end
       end
