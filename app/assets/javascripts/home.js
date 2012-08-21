@@ -14,7 +14,6 @@ $(document).ready(function(){
   jQuery.ajaxSetup({
     'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
   })
-  var data;
 
 
 
@@ -26,7 +25,7 @@ $(document).ready(function(){
   // Callback that creates and populates a data table, instantiates the pie chart, passes in 
   // the data and draws it.
   function drawChart() {
-    if(typeof dataToGraph != 'undefined' && dataToGraph != "none" && dataToGraph.length > 0){
+    if(typeof dataToGraph != 'undefined' && dataToGraph.length > 0){
 
       // Create the data table.
       data = new google.visualization.DataTable();
@@ -57,7 +56,7 @@ $(document).ready(function(){
                                 hAxis     : {  titlePosition  : 'in',
                                                title          : xAxisTitle,
                                                titleTextStyle :{ fontSize: 14 }},
-                                chartArea : {  left   : 100,
+                                chartArea : {  left   : 50,
                                                width  : "90%", 
                                                height : '75%' }
                               };
