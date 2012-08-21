@@ -14,6 +14,7 @@ $(document).ready(function(){
   jQuery.ajaxSetup({
     'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
   })
+  var data;
 
 
 
@@ -36,7 +37,7 @@ $(document).ready(function(){
 
       // Set bar graph options
       options_for_bar_graph = {  'title'  : graphTitle,
-                                 'width'  : 650,
+                                 'width'  : $("#employee_results").width,
                                  'height' : (250 + (25 * dataToGraph.length)),
                                  'colors' : ['#c34500', '#000000' ],
                                  'legend' : 'top',
@@ -50,13 +51,13 @@ $(document).ready(function(){
 
      // Set pie chart options
      options_for_pie_chart = {  'title'   : graphTitle,
-                                'width'   : 650,
+                                'width'   : $("#employee_results").width,
                                 'height'  : (250 + (25 * dataToGraph.length)),
                                 'legend'  : 'top',
                                 hAxis     : {  titlePosition  : 'in',
                                                title          : xAxisTitle,
-                                              titleTextStyle  :{ fontSize: 14 }},
-                                chartArea : {  left   : 100, 
+                                               titleTextStyle :{ fontSize: 14 }},
+                                chartArea : {  left   : 100,
                                                width  : "90%", 
                                                height : '75%' }
                               };

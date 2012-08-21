@@ -692,6 +692,7 @@ select {
 
 div.chart_div{
   float: left;
+  width: 50%;
 }
 
 div.chart_div_container{
