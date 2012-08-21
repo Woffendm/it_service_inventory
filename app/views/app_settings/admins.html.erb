@@ -24,6 +24,14 @@
     <% @admins.order(:name_last, :name_first).each do |admin| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td> <%= admin.full_name %> </td>
+        <td>
+          <% if admin != @current_user %>
+            <%= form_tag("remove_admin", :method => "post") do %>
+              <%= hidden_field_tag(:employee, admin.id) %>
+              <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
+            <% end %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

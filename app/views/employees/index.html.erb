@@ -36,7 +36,6 @@
           <% if employee.notes && !employee.notes.blank? %> 
             <div class="tooltip_trigger">
               <%= employee.notes.truncate(20) %> 
-              <img src="../assets/information.png" />
             </div>
             <div class="tooltip" hidden>
               <p class="tooltip_paragraph"> <%= employee.notes %> </p>

@@ -17,14 +17,6 @@ class Group < ActiveRecord::Base
   end
   
   
-  # Gives the selected employee administrative abilities for the group
-  def add_group_admin(employee_id)
-    new_group_admin = self.employee_groups.find_by_employee_id(employee_id)
-    new_group_admin.group_admin = true
-    new_group_admin.save
-  end
-  
-  
   # Returns array of employees not currently in the given group
   def get_available_employees
     Employee.order(:name_last) - self.employees

@@ -220,7 +220,6 @@ h4, .wiki h3 {
     border-right: 1px solid #DDDDDD;
     margin: 0;
     padding: 6px 10px 10px;
-    width: 75%;
     z-index: 10;
 }
 * html #content {
@@ -2140,9 +2139,9 @@ label.inline {
 
 .notice, .error {
   background: url("../assets/status-success.png") 0.4em center no-repeat #e4fdf6;
-  padding: .5em .5em .5em 5em;
+  padding: .5em 5em .5em;
   border: 1px solid #006600;
-  margin-bottom: 1em;
+  margin: 7px;
   -webkit-box-shadow: 0 0 7px #006600;
   -moz-box-shadow: 0 0 7px #006600;
   box-shadow: 0 0 7px #006600;

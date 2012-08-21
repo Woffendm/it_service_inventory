@@ -387,6 +387,8 @@ body.action-login #login-form table {
 }
 #main {
     margin-left: 165px;
+    overflow: auto;
+    width: 81%;
 }
 #quick-search {
     float: right;
@@ -395,10 +397,6 @@ body.action-login #login-form table {
 }
 #sidebar {
     width: 15% !important;
-}
-#content {
-    overflow: auto;
-    width: 81% !important;
 }
 #main.nosidebar #content {
     width: auto !important;
@@ -737,6 +735,9 @@ div.tooltip{
 
 div.tooltip_trigger{
   cursor: help;
+}
+div.tooltip_trigger:after{
+  content: url("../assets/information.png");
 }
 
 tr.tooltip_odd{

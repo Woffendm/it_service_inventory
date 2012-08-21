@@ -34,6 +34,17 @@ class AppSettingsController < ApplicationController
     @new_admin = Employee.find(params[:employee][:id])
     @new_admin.site_admin = true
     @new_admin.save
+    flash[:notice] = t(:site_admin) + t(:added)
+    redirect_to app_settings_admins_path 
+  end
+  
+  
+  # Removes site administrator privilages from an employee
+  def remove_admin
+    @new_admin = Employee.find(params[:employee])
+    @new_admin.site_admin = false
+    @new_admin.save
+    flash[:notice] = t(:site_admin) + t(:removed)
     redirect_to app_settings_admins_path 
   end
   

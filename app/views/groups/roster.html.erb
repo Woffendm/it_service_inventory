@@ -29,22 +29,22 @@
                         :locals => {:@employee => employee} %>
           </td>
           <td>
-            <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
-              <%= t(:group_admin) %>
-            <% else %>
               <% if can? :update, @group %>
-                <%= form_tag("add_group_admin", :method => "post") do %>
+                <%= form_tag("toggle_group_admin", :method => "post") do %>
                   <%= hidden_field_tag(:employee, employee.id) %>
-                  <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
+                  <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
+                    <%= submit_tag  t(:remove) + t(:group_admin), :confirm => t(:confirm_removal) %>
+                  <% else %>
+                    <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
+                  <% end %>
                 <% end %>
               <% end %>
-            <% end %>
           </td>
           <td>
             <% if can? :update, @group %>
               <%= form_tag("remove_employee", :method => "post") do %>
                 <%= hidden_field_tag(:employee, employee.id) %>
-                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) + t(:employee) %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
               <% end %>
             <% end %>
           </td>

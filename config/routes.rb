@@ -13,7 +13,7 @@ Project1::Application.routes.draw do
     member do
       get 'roster'
       post 'add_employee'
-      post 'add_group_admin'
+      post 'toggle_group_admin'
       post 'remove_employee'
     end
     collection do
@@ -39,6 +39,7 @@ Project1::Application.routes.draw do
   resources :app_settings do
     collection do
       post 'add_admin'
+      post 'remove_admin'
       post 'change_active_theme'
     end
   end

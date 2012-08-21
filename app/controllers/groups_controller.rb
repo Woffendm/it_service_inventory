@@ -6,7 +6,7 @@
 class GroupsController < ApplicationController
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_employees,  :only => [:roster]
-  before_filter :load_group,      :only => [:add_employee, :add_group_admin, :destroy, :edit,
+  before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :update]  
   
   
@@ -43,10 +43,15 @@ class GroupsController < ApplicationController
   end
   
   
-  # Makes the selected individual an administrator for the current group
-  def add_group_admin
-    @group.add_group_admin(params[:employee])
-    flash[:notice] = t(:admin) + t(:added)
+  # Gives / removes the selected employee administrative abilities for the group
+  def toggle_group_admin
+    employee_group = Employee.find(params[:employee]).employee_groups.find_by_group_id(params[:id])
+    employee_group.update_attributes(:group_admin => !employee_group.group_admin)
+    if employee_group.group_admin
+      flash[:notice] = t(:admin) + t(:added)
+    else
+      flash[:notice] = t(:admin) + t(:removed)
+    end
     redirect_to roster_group_path(@group.id)
   end
   
