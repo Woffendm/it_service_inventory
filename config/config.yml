@@ -1,9 +1,9 @@
 # ATTENTION!!! You will want to change these values to whatever your university / organization
-# uses for your ldap server if you aren't at Oregon State University. If you are at OSU, leave
-# them alone
+# uses for your ldap server.
 treebase: "ou=People, o=orst.edu"
 host: "client-ldap.onid.orst.edu"
-port: 389
+port: 636
+encryption: :simple_tls
 ldap_login_path: "/staging/it-service-inventory/auth/ldap"
 ldap_login_host: "https://secure.oregonstate.edu"
 results_per_page_options: [10, 25, 50]

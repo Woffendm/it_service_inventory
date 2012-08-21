@@ -12,11 +12,11 @@ class EmployeeAllocation < ActiveRecord::Base
 
 
 
-  # Generates an array of floats between 0.01 and 1.00 inclusive, incrementing by 0.01. 
+  # Generates an array of floats between 0.1 and 1.00 inclusive, incrementing by 0.1. 
   def possible_allocations
     array_of_floats = []
-    (1..100).each do |integer|
-      array_of_floats << (integer.to_f / 100)
+    (1..10).each do |integer|
+      array_of_floats << (integer.to_f / 10)
     end
     return array_of_floats
   end

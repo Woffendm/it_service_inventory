@@ -11,9 +11,17 @@ class ApplicationController < ActionController::Base
   # before_filter :load_theme
   before_filter :current_user
   before_filter :set_user_language
+  before_filter :require_login
+
 
 
   private
+    # Redirects user to login page unless they are logged in
+    def require_login
+        redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user
+    end
+    
+    
     # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
     # the persion described by the session still exists in the database. If they do, then it stores 
     # the corresponding Employee/User in @current_user. If they don't, then it clears the session. 

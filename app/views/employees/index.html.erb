@@ -1,8 +1,10 @@
 <h2> <%= t(:employees) %> </h2>
 
+
 <% if can? :create, Employee %>
   <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
 <% end %>
+
 
 <% if can? :manage, Employee %>
   <br/><br/>
@@ -12,42 +14,38 @@
   <% end %>
 <% end %>
 
+
 <table class="list issues">
   <caption> <%= t(:all_employees) %></caption>
   <thead>
     <th> <%= t(:name) %> </th>
     <th> <%= t(:email) %> </th>
     <th> <%= t(:notes) %> </th>
-    <th> <%= t(:services) %> </th>
-    <th> <%= t(:allocations) %> </th>
+    <th> <%= t(:total_allocation) %> </th>
     <th>  </th>
   </thead>
   <tbody>
     <% @employees.each do |employee| %>
-      <tr class="<%= cycle('odd', 'even') %>">
+      <tr class="<%= cycle('odd', 'even', :name => 'employee_table_alternation') %>">
         <td> 
           <%= render  :partial => "/shared/can_update_employee.html.erb", 
                       :locals => {:@employee => employee} %>  
         </td>
         <td> <%= employee.email %> </td>
         <td>  
-          <% if employee.notes %> 
-            <%= employee.notes.truncate(20) %>
+          <% if employee.notes && !employee.notes.blank? %> 
+            <div class="tooltip_trigger">
+              <%= employee.notes.truncate(20) %> 
+              <img src="../assets/information.png" />
+            </div>
+            <div class="tooltip" hidden>
+              <p class="tooltip_paragraph"> <%= employee.notes %> </p>
+            </div>
           <% end %>
         </td>
         <td>
-          <% employee.services.order(:name).each do |service| %>
-            <%= render  :partial => "/shared/can_update_service.html.erb", 
-                        :locals => {:employee_allocation =>
-                                  employee.employee_allocations.find_by_service_id(service.id)} %>
-            <br/>
-          <% end %>
-        </td>
-        <td>
-          <% employee.services.order(:name).each do |service| %>
-            <%= employee.employee_allocations.find_by_service_id(service.id).rounded_allocation %> 
-            <br/>
-          <% end %>
+          <%= render  :partial => "/shared/employee_services_and_allocations.html.erb", 
+                      :locals => {:employee => employee} %>
         </td>
         <td> 
           <% if can? :destroy, employee %>

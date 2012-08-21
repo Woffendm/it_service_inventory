@@ -9,6 +9,8 @@
     // Load the Visualization API and the piechart package.
     google.load('visualization', '1.0', {'packages':['corechart']});
   </script>
+  <!-- Loads jquery tools library -->
+  <script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
   <%= stylesheet_link_tag "redmine" %>
   <!-- The following line will load an additional "theme" stylesheet for the application later on.
        Currently however, there are no themes and thus it is commented out for the time being. -->
@@ -19,24 +21,17 @@
   <div id="wrapper">
     <div id="wrapper2">
       <div id="top-menu">
-        <div id="account">
-          <ul>
-            <li> 
-              <% if session[:current_user_id] %>
-                <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
-              <% else %>
-                 <%= link_to t(:login), logins_new_path %>
-              <% end %>
-            </li>
-          </ul>
-        </div>
         <div id="loggedas">
           <% if session[:current_user_name] %>
             <%= t(:logged_in_as) %>
             <%= link_to session[:current_user_name],
                 user_settings_employee_path(session[:current_user_id]) %>
+          <% end %>
+          <% if session[:current_user_id] %>
+            &nbsp&nbsp
+            <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
           <% else %>
-            &nbsp
+             <%= link_to t(:login), logins_new_path %>
           <% end %>
         </div>
         <ul>

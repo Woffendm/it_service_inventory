@@ -14,10 +14,7 @@ body, #wrapper {
     background: none repeat scroll 0 0 #F2F2F2;
     margin: 15px 15px 0;
 }
-#top-menu {
-    background: none repeat scroll 0 0 #000000;
-    padding: 7px 10px 2px 20px;
-}
+
 div#quick-search select {
     max-width: 200px;
 }
@@ -575,16 +572,12 @@ tr.odd.priority-1, tr.even.priority-1 {
     font-size: 11px;
 }
 #top-menu #loggedas {
-    border-radius: 4px 0 0 4px;
-    margin-right: 0;
-    padding: 0.4em 0.6em 0.65em 1.2em;
+    border-radius: 4px 4px 4px 4px;
+    margin-right: 4px;
+    padding: 0.4em 0.6em ;
 }
 #top-menu > ul {
     padding-left: 1.2em;
-}
-#top-menu #account {
-    border-radius: 0 4px 4px 0;
-    padding-bottom: 0;
 }
 .controller-account.action-login #top-menu #account {
     border-radius: 4px 4px 4px 4px;
@@ -655,6 +648,8 @@ span.tip {
 
 
 
+
+
 h3 {
    border-bottom: 5px solid black; 
    padding-bottom:5px;
@@ -669,6 +664,7 @@ tr > td
 {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
+  padding-left: 10px;
 }
 
 thead
@@ -721,4 +717,32 @@ p.footer_entry{
   display: inline;
   padding-left: 3em; 
   padding-right: 3em; 
+}
+
+
+div.tooltip{
+  position: absolute;
+  background: #E2F4FD;
+  padding: .5em .5em .5em .5em;
+  border: 1px solid #2268AB;
+  margin: 1em;
+  -webkit-box-shadow: 0 0 7px #2268AB;
+  -moz-box-shadow: 0 0 7px #2268AB;
+  box-shadow: 0 0 7px #2268AB;
+  min-height: 1.5em;
+  width: 22em;
+  border-radius: 10px;
+}
+
+div.tooltip_trigger{
+  cursor: help;
+}
+
+tr.tooltip_odd{
+  background: #FAFDFF; 
+}
+
+p.tooltip_paragraph{
+  margin: 5px;
+  line-height: 150%;
 }

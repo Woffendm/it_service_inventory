@@ -4,8 +4,7 @@
   <thead>
     <th> <%= t(:name) %> </th>
     <th> <%= t(:groups) %> </th>
-    <th> <%= t(:services) %> </th>
-    <th> <%= t(:allocations) %> </th>
+    <th> <%= t(:total_allocation) %> </th>
   </thead>
   <tbody>
     <% @employees.each do |employee| %>
@@ -24,18 +23,8 @@
           <% end %>
         </td>
         <td>
-          <% employee.services.order(:name).each do |service| %>
-            <%= render  :partial => "/shared/can_update_service.html.erb", 
-                        :locals => {:employee_allocation =>
-                                  employee.employee_allocations.find_by_service_id(service.id)} %>
-            <br/>
-          <% end %>
-        </td>
-        <td>
-          <% employee.services.order(:name).each do |service| %>
-            <%= employee.employee_allocations.find_by_service_id(service.id).rounded_allocation %> 
-            <br/>
-          <% end %>
+          <%= render  :partial => "/shared/employee_services_and_allocations.html.erb", 
+                      :locals => {:employee => employee} %>
         </td>
       </tr> 
     <% end %>

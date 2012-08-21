@@ -1,4 +1,11 @@
+# This class controls logins and session information. 
+#
+# Author: Michael Woffendin 
+# Copyright:
 class LoginsController < ApplicationController
+  skip_before_filter :require_login
+ 
+ 
  
   # Redirects to secure onid login page
   def new

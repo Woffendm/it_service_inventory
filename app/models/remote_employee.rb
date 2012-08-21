@@ -30,7 +30,8 @@ class RemoteEmployee
   # method to avoid repetition.
   def self.search_by_filter(filter)
     ldap = Net::LDAP.new :host => Project1::Application.config.config['host'], 
-                         :port => Project1::Application.config.config['port']
+                         :port => Project1::Application.config.config['port'],
+                         :encryption => Project1::Application.config.config['encryption']
     ldap_results = ldap.search(:base => Project1::Application.config.config['treebase'], 
                          :filter => filter)
     return nil if ldap_results == false
