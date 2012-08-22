@@ -48,8 +48,8 @@ $(document).ready(function(){
                                                height: '75%' }
                                };
 
-     // Set pie chart options
-     options_for_pie_chart = {  'title'   : graphTitle,
+      // Set pie chart options
+      options_for_pie_chart = { 'title'   : graphTitle,
                                 'width'   : $("#employee_results").width,
                                 'height'  : (250 + (25 * dataToGraph.length)),
                                 'legend'  : 'top',

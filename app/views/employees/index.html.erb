@@ -33,7 +33,7 @@
         </td>
         <td> <%= employee.email %> </td>
         <td>  
-          <% if employee.notes && !employee.notes.blank? %> 
+          <% unless employee.notes.blank? %> 
             <div class="tooltip_trigger">
               <%= employee.notes.truncate(20) %> 
             </div>

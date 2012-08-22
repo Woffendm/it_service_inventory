@@ -60,6 +60,7 @@ es:
   site_admin:         " Gerente del Sitio "
   site_admins:        " Gerentes del Sitio"
   total_employees:    "Trabajadores Totales"
+  total_allocation:   "Asignación Total"
   user_settings:      "Configuraciones del Usario"
 
 

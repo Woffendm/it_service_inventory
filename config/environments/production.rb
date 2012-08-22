@@ -47,7 +47,7 @@ Project1::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   
-  config.assets.precompile += %w( redmine.css home.js ldap_search_results.js edit.js tooltip.js)
+  config.assets.precompile += %w( redmine.css home.js ldap_search_results.js edit.js tooltip.js jquery.tools.min.js)
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false

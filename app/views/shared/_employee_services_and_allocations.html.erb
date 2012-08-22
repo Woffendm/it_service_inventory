@@ -1,10 +1,6 @@
 <% if employee.get_total_allocation > 0 %> 
   <div class="tooltip_trigger">
-    <% if can? :update, employee %>
-      <%= link_to employee.get_total_allocation.to_s + " FTE", edit_employee_path(employee.id) %> 
-    <% else %>
-      <%= employee.get_total_allocation %> FTE
-    <% end %>
+    <%= employee.get_total_allocation %> FTE
   </div>
   <div class="tooltip" hidden>
     <table>
