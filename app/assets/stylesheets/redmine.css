@@ -677,7 +677,7 @@ div.field_with_errors {
 
 th, td {
   overflow: hidden;
-  width: 120px;
+  width: 125px;
 }
 
 tbody {
@@ -729,7 +729,7 @@ div.tooltip{
   -moz-box-shadow: 0 0 7px #2268AB;
   box-shadow: 0 0 7px #2268AB;
   min-height: 1.5em;
-  width: 22em;
+  width: 24em;
   border-radius: 10px;
 }
 
@@ -748,3 +748,16 @@ p.tooltip_paragraph{
   margin: 5px;
   line-height: 150%;
 }
+
+td.tooltip_first_column{
+  width: 18em;
+}
+
+td.tooltip_last_column{
+  width: 6em;
+}
+
+
+
+
+
