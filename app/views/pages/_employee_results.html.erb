@@ -10,7 +10,7 @@
     <% @employees.each do |employee| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td> 
-          <%= render  :partial => "/shared/can_update_employee.html.erb", 
+          <%= render  :partial => "/shared/can_update_employee", 
                       :locals => {:@employee => employee} %>  
         </td>
         <td>  
@@ -23,7 +23,7 @@
           <% end %>
         </td>
         <td>
-          <%= render  :partial => "/shared/employee_services_and_allocations.html.erb", 
+          <%= render  :partial => "/shared/employee_services_and_allocations", 
                       :locals => {:employee => employee} %>
         </td>
       </tr> 

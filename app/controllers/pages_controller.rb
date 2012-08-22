@@ -75,7 +75,7 @@ class PagesController < ApplicationController
       @full_time_employees = @service.total_allocation_for_group(@group)[1]
     end
     @data_to_graph = data_array.to_json if @group || @service
-    render pages_home_path  
+    render :home
   end
 
 
