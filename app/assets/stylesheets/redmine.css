@@ -691,10 +691,10 @@ select {
 div.chart_div{
   float: left;
   width: 50%;
+  height: 520px;
 }
 
 div.chart_div_container{
-  margin-bottom: 38em;
 }
 
 div.chart_footer{
@@ -708,6 +708,13 @@ div.chart_footer{
   box-shadow: 0 0 7px #2268AB;
   min-height: 1.5em;
   clear: both;
+}
+
+#chart_title{
+  padding-top: 1.5em;
+  text-align: center;
+  font-size: 130%;
+  font-weight: bold;
 }
 
 p.footer_entry{
@@ -736,9 +743,12 @@ div.tooltip{
 div.tooltip_trigger{
   cursor: help;
 }
+
+/*
 div.tooltip_trigger:after{
   content: url("../assets/information.png");
 }
+*/
 
 tr.tooltip_odd{
   background: #FAFDFF; 
@@ -757,7 +767,6 @@ td.tooltip_last_column{
   width: 6em;
 }
 
-
-
-
-
+div#content{
+  margin-bottom: 100px;
+}

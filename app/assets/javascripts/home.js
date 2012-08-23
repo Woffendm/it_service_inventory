@@ -35,34 +35,31 @@ $(document).ready(function(){
       data.addRows(dataToGraph);
 
       // Set bar graph options
-      options_for_bar_graph = {  'title'  : graphTitle,
-                                 'width'  : $("#employee_results").width,
-                                 'height' : (250 + (25 * dataToGraph.length)),
+      options_for_bar_graph = {  'height' : 475,
                                  'colors' : ['#c34500', '#000000' ],
-                                 'legend' : 'top',
-                                 hAxis    : {  titlePosition  : 'in',
-                                               title          : xAxisTitle,
-                                               titleTextStyle :{ fontSize: 14 } },
-                                 chartArea: {  left  : 100, 
-                                               width : "90%", 
-                                               height: '75%' }
+                                 isStacked: false,
+                                 legend   : { position        : 'top',
+                                              alignment       : 'start' },
+                                 hAxis    : { titlePosition   : 'in',
+                                              title           : xAxisTitle,
+                                              slantedText     : true,
+                                              slantedTextAngle: 25,
+                                              titleTextStyle  :{ fontSize: 14 } },
+                                 chartArea: { left  : 50, 
+                                              top   : 25,
+                                              width : "90%"}
                                };
 
       // Set pie chart options
-      options_for_pie_chart = { 'title'   : graphTitle,
-                                'width'   : $("#employee_results").width,
-                                'height'  : (250 + (25 * dataToGraph.length)),
-                                'legend'  : 'top',
-                                hAxis     : {  titlePosition  : 'in',
-                                               title          : xAxisTitle,
-                                               titleTextStyle :{ fontSize: 14 }},
-                                chartArea : {  left   : 50,
-                                               width  : "90%", 
-                                               height : '75%' }
+      options_for_pie_chart = { 'height'  : 475,
+                                'legend'  : 'right',
+                                chartArea : { left  : 50,
+                                              top   : 25,
+                                              width : "90%"}
                               };
 
       // Instantiate and draw  chart, passing in options.
-      var chart1 = new google.visualization.BarChart(document.getElementById('bar_graph_div'));
+      var chart1 = new google.visualization.ColumnChart(document.getElementById('bar_graph_div'));
       chart1.draw(data, options_for_bar_graph);
       var chart2 = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
       chart2.draw(data, options_for_pie_chart);

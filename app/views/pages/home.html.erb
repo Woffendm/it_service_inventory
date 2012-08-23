@@ -19,16 +19,17 @@
                              {:include_blank => t(:all_services) }) %>
       </span>
     </span>
-    &nbsp &nbsp
-    <%= submit_tag "Search" %> 
-    &nbsp &nbsp
-    <%= submit_tag "Clear Form", :id => "clear", :type => :button %>
+    &nbsp &nbsp 
+    <%= submit_tag "View" %> 
+    &nbsp &nbsp &nbsp
+    <%= submit_tag "Reset", :id => "clear", :type => :button %>
   <% end %>
 </div>
 
 
 
 <div class="chart_div_container">
+  <p id="chart_title"> <%= @graph_title %> </p>
   <div id="bar_graph_div" class="chart_div"></div>
   <div id="pie_chart_div" class="chart_div"></div>
 </div>
