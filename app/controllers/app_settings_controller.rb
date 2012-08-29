@@ -12,8 +12,8 @@ class AppSettingsController < ApplicationController
   
   # View with a list of all current site admins, and a form to add additional admins
   def admins
-    @not_admins = Employee.where(:site_admin => nil).order(:name_last)
-    @admins = Employee.where(:site_admin => true)
+    @admins = Employee.where(:site_admin => true).order(:name_last, :name_first)
+    @not_admins = Employee.order(:name_last, :name_first) - @admins
   end
   
   
@@ -42,7 +42,7 @@ class AppSettingsController < ApplicationController
   # Removes site administrator privilages from an employee
   def remove_admin
     @new_admin = Employee.find(params[:employee])
-    @new_admin.site_admin = false
+    @new_admin.site_admin = nil
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:removed)
     redirect_to app_settings_admins_path 

@@ -21,7 +21,7 @@
     <th> <%= t(:name) %> </th>
   </thead>
   <tbody>
-    <% @admins.order(:name_last, :name_first).each do |admin| %>
+    <% @admins.each do |admin| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td> <%= admin.full_name %> </td>
         <td>

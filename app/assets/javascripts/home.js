@@ -30,8 +30,8 @@ $(document).ready(function(){
       // Create the data table.
       data = new google.visualization.DataTable();
       data.addColumn('string', 'Service');
-      data.addColumn('number', 'Full Time Employees');
-      data.addColumn('number', 'Employee Headcount');
+      data.addColumn('number', dataTitle1);
+      data.addColumn('number', dataTitle2);
       data.addRows(dataToGraph);
 
       // Set bar graph options

@@ -13,11 +13,13 @@ class PagesController < ApplicationController
   def home
     if @current_user.groups.first
       data_array = []
+      @data_title_1 = t(:full_time_employees)
+      @data_title_2 = t(:employee_headcount)
       @group = @current_user.groups.first
       @services = @group.services
       @employees = @group.employees.order(:name_last, :name_first)
-      @graph_title = "Allocations for group: #{@group.name}"
-      @x_axis_title = "Service"
+      @graph_title = t(:allocations_for_group) + @group.name
+      @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
       @full_time_employees = @group.get_total_allocation
       @group.services.each do |service|
@@ -34,11 +36,13 @@ class PagesController < ApplicationController
     @group = Group.find(params[:group][:id]) unless params[:group][:id].blank?
     @service = Service.find(params[:service][:id]) unless params[:service][:id].blank?
     data_array = []
+    @data_title_1 = t(:full_time_employees)
+    @data_title_2 = t(:employee_headcount)
     if @group && @service.nil?
       @services = @group.services
       @employees = @group.employees.order(:name_last, :name_first)
-      @graph_title = "Allocations for group: #{@group.name}"
-      @x_axis_title = "Service"
+      @graph_title = t(:allocations_for_group) + @group.name
+      @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
       @full_time_employees = @group.get_total_allocation
       @group.services.each do |service|
@@ -48,8 +52,8 @@ class PagesController < ApplicationController
     if @group.nil? && @service
       @groups = @service.groups
       @employees = @service.employees.order(:name_last, :name_first)
-      @graph_title = "Allocations for service: #{@service.name}"
-      @x_axis_title = "Group"
+      @graph_title = t(:allocations_for_service) + @service.name 
+      @x_axis_title = t(:group)
       @employee_headcount = @service.employees.length
       @full_time_employees = @service.get_total_allocation
       @service.groups.each do |group|
@@ -68,8 +72,8 @@ class PagesController < ApplicationController
           end
         end
       end
-      @graph_title = "Allocations for group: #{@group.name}, and service: #{@service.name}"
-      @x_axis_title = "Employee"
+      @graph_title = t(:allocations_for_group) + @group.name + t(:and) +t(:service) + @service.name
+      @x_axis_title = t(:employee)
       data_array = @service.employee_allocations_within_group(@group)
       @employee_headcount = data_array.length
       @full_time_employees = @service.total_allocation_for_group(@group)[1]
