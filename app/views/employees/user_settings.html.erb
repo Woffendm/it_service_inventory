@@ -7,12 +7,12 @@
 <div class="my-form" id="chart_footer">
   <%= form_tag("update_settings", :method => "post", :id => "chart_footer") do %>
     <br/>
-    <%= label_tag "Preferred Language: " %>
+    <%= label_tag t(:preferred_language) %>
     <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
                  :selected => @current_user.preferred_language) %>
     <br/><br/>
-    <%= label_tag "New user reminder: " %>
-    <%= select(:employee, :new_user_reminder, [["Automatic", true], ["Disabled", false]],
+    <%= label_tag t(:new_user_reminder) %>
+    <%= select(:employee, :new_user_reminder, [[t(:automatic), true], [t(:disabled), false]],
                  :selected => @current_user.new_user_reminder) %>
     <br/><br/>
     <%= submit_tag  t(:save_changes) %>

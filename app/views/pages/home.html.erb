@@ -1,4 +1,4 @@
-<h2> Home </h2>
+<h2> <%= t(:home) %> </h2>
 
 
 <div class="my-form" id="home_header">
@@ -18,15 +18,15 @@
       </span>
     </span>
     <span id="home_header_buttons">
-      <%= submit_tag "View", :id => "search" %> 
-      <%= submit_tag "Reset", :id => "clear", :type => :button %>
+      <%= submit_tag t(:view), :id => "search" %> 
+      <%= submit_tag t(:reset), :id => "clear", :type => :button %>
     </span>
   <% end %>
 </div>
 
 
 <div id="no_filters" class="error" hidden>
-    Error: You must select a group and/or service to view data. 
+    Error: <%= t(:need_selection) %>
 </div>
 
 
@@ -39,13 +39,13 @@
 <% else %>
   <br/> <br/>
   <p class="error"> 
-    The group you are viewing has employees, but none of them have entered their service allocations. You can fix this by following these steps. 
+    <%= t(:group_no_allocations_0) %>
     <br/> <br/>
-    1: Click on your name if you are an employee, or anyone's name if you are a group administrator.
+    <%= t(:group_no_allocations_1) %>
     <br/>
-    2: Add a service and corresponding allocation under the "SERVICES" page section
+    <%= t(:group_no_allocations_2) %>
     <br/>
-    3: The next time you visit the home page, there will be nice graphs waiting for you!
+    <%= t(:group_no_allocations_3) %>
   </p>
   <% if @employees %>
     <%= render  :partial => "/pages/employee_results.html.erb",
@@ -57,20 +57,20 @@
 <% if @data_to_graph && @full_time_employees > 0 %>
   <div class="my-form" id="chart_footer">
     <% if @group %>
-      <%= label_tag t(:group) %>
+      <%= label_tag t(:group) + ":" %>
       <%= @group.name %>
       <br/>
     <% end %>
     <% if @service %>
-      <%= label_tag t(:service) %>
+      <%= label_tag t(:service) + ":" %>
       <%= @service.name %>
       <br/>
     <% end %>
-    <%= label_tag :full_time_employees %>
+    <%= label_tag t(:full_time_employees) + " :" %>
     <%= @full_time_employees %>
     <br/>
-    <%= label_tag :employee_headcount %>
-    <a id="toggle-employees"><%= @employee_headcount %> (Click to view) </a>
+    <%= label_tag t(:employee_headcount) + " :" %>
+    <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
   </div>
 <% end %>
 

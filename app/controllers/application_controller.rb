@@ -62,9 +62,12 @@ class ApplicationController < ActionController::Base
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
       if @current_user.new_user_reminder && @current_user.get_total_allocation.zero?
-        edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + "\"> HERE </a>"
-        user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + "\">  User Settings </a>"
-        flash[:message] = "Welcome to IT Service Inventory! Please take a moment to set up your information by clicking #{edit_employee_link}. <br/><br/> This notice will disable automatically once you add a service allocation, or can be disabled manually from #{user_settings_link}.".html_safe
+        edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + 
+                             "\">" + t(:here) + "</a>"
+        user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + 
+                             "\">" + t(:user_settings) + " </a>"
+        flash[:message] = (t(:new_user_message_0) + edit_employee_link + 
+                          t(:new_user_message_1) + user_settings_link).html_safe
       end
     end
 end

@@ -779,6 +779,20 @@ a{
   cursor: pointer; 
 }
 
-.selected > a{
-  color: orange !important;    
+.pagination_footer{
+  border-top: 1px dotted gray;
+  padding-top: .5em
 }
+.pagination_option{
+  font-weight: bold;
+  display: inline;
+  padding: .25em;
+  width: 8%; 
+}
+#pagination_selected > a{
+  font-weight: bold;
+  padding: .25em;
+  width: 8%;
+  background-color: #888;
+  border-radius: 3px 3px 3px 3px;
+  color: #FFFFFF;}
