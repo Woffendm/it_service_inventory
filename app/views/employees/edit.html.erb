@@ -7,16 +7,16 @@
     <%= fields_for @employee do |form| %>
       <%= form.label t(:last_name) %>
       <%= @employee.name_last %>
-      <br/><br/>
+      <br/>
       <%= form.label t(:first_name) %>
       <%= @employee.name_first %>    
-      <br/><br/>
+      <br/>
       <%= form.label t(:email) %> 
       <%= @employee.email %>    
-      <br/><br/>
+      <br/>
       <%= form.label :notes %> 
       <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
-      <br/><br/>
+      <br/>
     <% end %>
   </div>
 

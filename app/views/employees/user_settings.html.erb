@@ -4,25 +4,17 @@
 <%= link_to t(:my_edit_page), edit_employee_path(@current_user.id) %>
 
 
-<table class="list issues">
-  <caption> <%= t(:all_settings) %> </caption>
-  <thead>
-    <th> <%= t(:setting) %> </th>
-    <th> <%= t(:current_setting) %> </th>
-    <th> <%= t(:options) %> </th>
-    <th> </th>
-  </thead>
-  <tbody>
-    <tr>
-      <td> <%= t(:preferred_language) %> </td>
-      <td> <%= @current_user.preferred_language %> </td>
-      <td>
-        <%= form_tag("update_settings", :method => "post") do %>
-          <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
-                     :selected => @current_user.preferred_language) %>
-          <%= submit_tag  t(:save_changes) %>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="my-form" id="chart_footer">
+  <%= form_tag("update_settings", :method => "post", :id => "chart_footer") do %>
+    <br/>
+    <%= label_tag "Preferred Language: " %>
+    <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
+                 :selected => @current_user.preferred_language) %>
+    <br/><br/>
+    <%= label_tag "New user reminder: " %>
+    <%= select(:employee, :new_user_reminder, [["Automatic", true], ["Disabled", false]],
+                 :selected => @current_user.new_user_reminder) %>
+    <br/><br/>
+    <%= submit_tag  t(:save_changes) %>
+  <% end %>
+</div>

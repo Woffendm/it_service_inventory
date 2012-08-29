@@ -656,6 +656,8 @@ h3 {
 div.my-form {
   padding-top: 5px;
   margin-bottom: 20px;
+  line-height: 225%;
+  
 }
 
 tr > td
@@ -691,23 +693,10 @@ select {
 div.chart_div{
   float: left;
   width: 50%;
-  height: 520px;
+  height: 480px;
 }
 
 div.chart_div_container{
-}
-
-div.chart_footer{
-  text-align: center;  
-  background: #E2F4FD;
-  padding: .5em .5em .5em 5em;
-  border: 1px solid #2268AB;
-  margin: 1em;
-  -webkit-box-shadow: 0 0 7px #2268AB;
-  -moz-box-shadow: 0 0 7px #2268AB;
-  box-shadow: 0 0 7px #2268AB;
-  min-height: 1.5em;
-  clear: both;
 }
 
 #chart_title{
@@ -717,12 +706,20 @@ div.chart_footer{
   font-weight: bold;
 }
 
-p.footer_entry{
+
+div#chart_footer{
+  border: 1px dotted #DDDDDD;
+  text-align: left;  
+  margin: 1em;
+  padding: .5em .5em .5em 5em;
+  clear: both;
   font-size: 1.1em;
   font-weight: bold;
-  display: inline;
-  padding-left: 3em; 
-  padding-right: 3em; 
+  line-height: 150%;
+}
+#chart_footer > label{
+  clear: both;
+  width: 180px;
 }
 
 
@@ -769,4 +766,19 @@ td.tooltip_last_column{
 
 div#content{
   margin-bottom: 100px;
+}
+#home_header{
+  font-size: 125%;
+}
+#group_select_div > select, #service_select_div > select, #home_header_buttons > input {
+  font-size: 0.75em;
+  margin-right: 2em;
+}
+
+a{
+  cursor: pointer; 
+}
+
+.selected > a{
+  color: orange !important;    
 }

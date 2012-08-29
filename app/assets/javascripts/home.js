@@ -55,7 +55,8 @@ $(document).ready(function(){
                                 'legend'  : 'right',
                                 chartArea : { left  : 50,
                                               top   : 25,
-                                              width : "90%"}
+                                              width : "90%",
+                                              height: "70%" }
                               };
 
       // Instantiate and draw  chart, passing in options.
@@ -68,10 +69,11 @@ $(document).ready(function(){
 
 
 
-  // Toggles visibility of 'Employee Results' page section
+  // Toggles visibility of 'Employee Results' page section. Scrolls to the section on click
   var toggleEmployeeResults = $("#toggle-employees");
   toggleEmployeeResults.click(function(e) {
     $("#employee_results").toggle();
+    $(window).scrollTop(900);  
   });
 
 
@@ -108,6 +110,21 @@ $(document).ready(function(){
       success : popGroupDropdown
     })
     return true;
+  });
+
+
+
+  // User cannot search unless either a group or service is selected. Shows a div explaining this if
+  // they try to search without anything selected.  
+  var search = $("#search");
+  search.click(function(e) {
+    if($("#group_id").val() || $("#service_id").val()) {
+      return true;
+    }
+    else{
+      $("#no_filters").show();
+      return false;
+    }
   });
 
 

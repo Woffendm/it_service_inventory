@@ -2137,7 +2137,7 @@ label.inline {
   padding-left: 5px;
 }
 
-.notice, .error {
+.notice, .error, .message {
   background: url("../assets/status-success.png") 0.4em center no-repeat #e4fdf6;
   padding: .5em 5em .5em;
   border: 1px solid #006600;
@@ -2154,6 +2154,14 @@ label.inline {
   -webkit-box-shadow: 0 0 7px #d85a1a;
   -moz-box-shadow: 0 0 7px #d85a1a;
   box-shadow: 0 0 7px #d85a1a; 
+}
+
+.message {
+  background: #E2F4FD;
+  border-color:#2268AB;
+  -webkit-box-shadow: 0 0 7px #2268AB;
+  -moz-box-shadow: 0 0 7px #2268AB;
+  box-shadow: 0 0 7px #2268AB;
 }
 
 .notice h3 {

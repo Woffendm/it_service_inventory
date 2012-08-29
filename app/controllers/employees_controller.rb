@@ -41,17 +41,6 @@ class EmployeesController < ApplicationController
 # Action-related methods
 
 
-  # Creates a new employee using info entered on the "new" page
-  def create
-    @employee = Employee.new(params[:employee])
-    if @employee.save
-      redirect_to edit_employee_path(@employee.id)
-      return
-    end
-    render :new
-  end
-
-
   # Obliterates selected employee with the mighty hammer of Thor and scatters their data like dust  
   # to a thousand winds
   def destroy
@@ -92,8 +81,10 @@ class EmployeesController < ApplicationController
   end
 
 
+
   # Updates an employee based on info entered on the "edit" page.
   def update
+    new_total_allocation = 0.0
     # If a new group was sent with the params, adds it to the employee's list of groups
     if params[:employee_groups]
       unless params[:employee_groups][:group_id].blank?
@@ -102,19 +93,30 @@ class EmployeesController < ApplicationController
     end
     # If a new service and allocation were sent with the params, adds them to the employee
     if params[:employee_allocations]
-      unless (params[:employee_allocations][:service_id].blank?) &&
+      unless (params[:employee_allocations][:service_id].blank?) ||
              (params[:employee_allocations][:allocation].blank?)
         new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
         new_employee_allocation.save
+        new_total_allocation += new_employee_allocation.allocation
       end
     end
-    if (@employee.update_attributes(params[:employee]))        
+    # Calculates the total allocation passed in params.
+    if params["employee"]["employee_allocations_attributes"]
+      params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
+        new_total_allocation += new_allocation.last["allocation"].to_f
+      end
+    end
+    # Validates that the total allocation passed in params does not exceed 1FTE. It is only possible
+    # to over-allocate a user if javascript is disabled.
+    if (new_total_allocation <= 1) && (@employee.update_attributes(params[:employee]))        
       flash[:notice] = t(:employee) + t(:updated)      
       redirect_to edit_employee_path(@employee.id)
       return
     end
+    flash[:error] = t(:over_allocated)
     render :edit
   end
+
 
 
   # Searches OSU's ldap for all employees in the applicaiton by both their username and ids. Once 
@@ -127,7 +129,7 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Updates an employee based on info entered on the "edit" page
+  # Updates a user's preferred setting based on their selections from the "User Settings" page
   def update_settings
     @employee = Employee.find(@current_user.id)
     @employee.update_attributes(params[:employee])

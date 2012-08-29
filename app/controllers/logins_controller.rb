@@ -4,6 +4,8 @@
 # Copyright:
 class LoginsController < ApplicationController
   skip_before_filter :require_login
+  skip_before_filter :remind_user_to_set_allocations
+  
  
  
  
@@ -42,8 +44,8 @@ class LoginsController < ApplicationController
   def create
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)
     if employee_exists
-      session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
+      session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
       flash[:notice] = t(:logged_in_as) + session[:current_user_name]
       redirect_to pages_home_path
@@ -59,10 +61,10 @@ class LoginsController < ApplicationController
     redirect_to home_path unless Rails.env.development?
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)
     if employee_exists
-      session[:current_user_id] = employee_exists.id
       session[:current_user_name] = employee_exists.full_name
+      session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
-      flash[:notice] = t(:logged_in_as) + session[:current_user_name]
+      flash[:notice] = "Welcome " + employee_exists.name_first + "!"
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
@@ -73,8 +75,8 @@ class LoginsController < ApplicationController
   
   # Removes session value (logout)
   def destroy
-    session[:current_user_id] = nil
     session[:current_user_name] = nil
+    session[:current_user_osu_username] = nil
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
     redirect_to logins_new_path

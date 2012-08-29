@@ -1,8 +1,7 @@
 <h2> Home </h2>
 
 
-<h3> <%= t(:browse_group_and_service_data) %> </h3>
-<div class="my-form">
+<div class="my-form" id="home_header">
   <%= form_tag("home_search", :method => "get") do %>
     <span id="group_dropdown">
       <span id="group_select_div">
@@ -11,7 +10,6 @@
                              {:include_blank => t(:all_groups) }) %>
       </span>
     </span>
-    &nbsp &nbsp
     <span id="service_dropdown">
       <span id="service_select_div">
         <%= label_tag :service_id, t(:service_name), :class => "inline" %>
@@ -19,47 +17,61 @@
                              {:include_blank => t(:all_services) }) %>
       </span>
     </span>
-    &nbsp &nbsp 
-    <%= submit_tag "View" %> 
-    &nbsp &nbsp &nbsp
-    <%= submit_tag "Reset", :id => "clear", :type => :button %>
+    <span id="home_header_buttons">
+      <%= submit_tag "View", :id => "search" %> 
+      <%= submit_tag "Reset", :id => "clear", :type => :button %>
+    </span>
   <% end %>
 </div>
 
 
+<div id="no_filters" class="error" hidden>
+    Error: You must select a group and/or service to view data. 
+</div>
 
+
+<% if @data_to_graph && @full_time_employees > 0 %>
 <div class="chart_div_container">
   <p id="chart_title"> <%= @graph_title %> </p>
   <div id="bar_graph_div" class="chart_div"></div>
   <div id="pie_chart_div" class="chart_div"></div>
 </div>
+<% else %>
+  <br/> <br/>
+  <p class="error"> 
+    The group you are viewing has employees, but none of them have entered their service allocations. You can fix this by following these steps. 
+    <br/> <br/>
+    1: Click on your name if you are an employee, or anyone's name if you are a group administrator.
+    <br/>
+    2: Add a service and corresponding allocation under the "SERVICES" page section
+    <br/>
+    3: The next time you visit the home page, there will be nice graphs waiting for you!
+  </p>
+  <% if @employees %>
+    <%= render  :partial => "/pages/employee_results.html.erb",
+                :locals => {:@employees => @employees} %>
+  <% end %>
+<% end %>
 
 
-
-<% if @data_to_graph %>
-  <div class="chart_footer">
-    <% if @service %>
-      <p class="footer_entry">
-        Service: &nbsp <%= @service.name %>
-      </p>
-    <% end %>
+<% if @data_to_graph && @full_time_employees > 0 %>
+  <div class="my-form" id="chart_footer">
     <% if @group %>
-      <p class="footer_entry">
-        Group: &nbsp <%= @group.name %>
-      </p>
+      <%= label_tag t(:group) %>
+      <%= @group.name %>
+      <br/>
     <% end %>
-    <p class="footer_entry">
-      Full Time Employees: &nbsp <%= @full_time_employees %>
-    </p> 
-    <p class="footer_entry">
-      Employee Headcount: &nbsp <%= @employee_headcount %> 
-    </p>
-    <p class="footer_entry">
-      <br/><br/>
-      <button id="toggle-employees">Show each employee </button>
-    </p> 
+    <% if @service %>
+      <%= label_tag t(:service) %>
+      <%= @service.name %>
+      <br/>
+    <% end %>
+    <%= label_tag :full_time_employees %>
+    <%= @full_time_employees %>
+    <br/>
+    <%= label_tag :employee_headcount %>
+    <a id="toggle-employees"><%= @employee_headcount %> (Click to view) </a>
   </div>
-  
 <% end %>
 
 

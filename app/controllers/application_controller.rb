@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_filter :current_user
   before_filter :set_user_language
   before_filter :require_login
+  before_filter :remind_user_to_set_allocations
 
 
 
@@ -28,12 +29,12 @@ class ApplicationController < ActionController::Base
     # This should be accomplished by a redirect to the destroy action of the logins controller, but
     # unfortunately Chrome gets upset when there are more than two redirects at once.
     def current_user
-      unless Employee.where(:id => session[:current_user_id]).empty? 
-        @current_user = Employee.find(session[:current_user_id])
+      unless Employee.where(:osu_username => session[:current_user_osu_username]).empty? 
+        @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
       else
-        session[:current_user_id] = nil
         session[:current_user_name] = nil
         session[:results_per_page] = nil
+        session[:current_user_osu_username] = nil
       end
     end
 
@@ -53,6 +54,17 @@ class ApplicationController < ActionController::Base
         else
           I18n.locale = :en
         end
+      end
+    end
+    
+    
+    # If the current user has no allocations AND they have not disabled this preference, then a 
+    # flash message will display on every page load instructing them to set up their allocations.
+    def remind_user_to_set_allocations
+      if @current_user.new_user_reminder && @current_user.get_total_allocation.zero?
+        edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + "\"> HERE </a>"
+        user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + "\">  User Settings </a>"
+        flash[:message] = "Welcome to IT Service Inventory! Please take a moment to set up your information by clicking #{edit_employee_link}. <br/><br/> This notice will disable automatically once you add a service allocation, or can be disabled manually from #{user_settings_link}.".html_safe
       end
     end
 end

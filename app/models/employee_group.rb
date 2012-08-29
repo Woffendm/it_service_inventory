@@ -8,4 +8,5 @@ class EmployeeGroup < ActiveRecord::Base
   belongs_to :employee
   belongs_to :group
   validates_presence_of :employee_id, :group_id
+  
 end

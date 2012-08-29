@@ -13,7 +13,9 @@ class Group < ActiveRecord::Base
   
   # Adds the given employee to the group
   def add_employee_to_group(employee)
-    self.employees << employee
+    added_employee = self.employee_groups.new
+    added_employee.employee_id = employee.id
+    added_employee.save
   end
   
   

@@ -24,9 +24,9 @@
           <% if session[:current_user_name] %>
             <%= t(:logged_in_as) %>
             <%= link_to session[:current_user_name],
-                user_settings_employee_path(session[:current_user_id]) %>
+                user_settings_employee_path(@current_user.id) %>
           <% end %>
-          <% if session[:current_user_id] %>
+          <% if session[:current_user_name] %>
             &nbsp&nbsp
             <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
           <% else %>
@@ -50,15 +50,13 @@
       </div>
       <div id="main">
         <% if flash[:notice] %>
-          <p class="notice">
-            <%= flash[:notice] %>
-          </p>
+          <p class="notice">  <%= flash[:notice] %>       </p>
         <% end %>
         <% if flash[:error] %>
-          <p class="error">
-            Error: 
-            <%= flash[:error] %>
-          </p>
+          <p class="error">   Error: <%= flash[:error] %> </p>
+        <% end %>
+        <% if flash[:message] %>
+          <p class="message"> <%= flash[:message] %>      </p>
         <% end %>
         <div id="content">
           <%= yield %>

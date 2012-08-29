@@ -32,7 +32,8 @@
               <% if can? :update, @group %>
                 <%= form_tag("toggle_group_admin", :method => "post") do %>
                   <%= hidden_field_tag(:employee, employee.id) %>
-                  <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin %>
+                  <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin &&
+                        ((employee != @current_user) || @current_user.site_admin )%>
                     <%= submit_tag  t(:remove) + t(:group_admin), :confirm => t(:confirm_removal) %>
                   <% else %>
                     <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
