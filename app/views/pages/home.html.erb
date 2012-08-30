@@ -48,14 +48,14 @@
     <%= t(:group_no_allocations_3) %>
   </p>
   <% if @employees %>
-    <%= render  :partial => "/pages/employee_results.html.erb",
+    <%= render  :partial => "/pages/employee_results",
                 :locals => {:@employees => @employees} %>
   <% end %>
 <% end %>
 
 
 <% if @data_to_graph && @full_time_employees > 0 %>
-  <div class="form_with_light_border">
+  <div class="light_border">
     <% if @group %>
       <%= label_tag t(:group) + ":" %>
       <%= @group.name %>
@@ -78,7 +78,7 @@
 
 <div id="employee_results" hidden>
   <% if @employees %>
-    <%= render  :partial => "/pages/employee_results.html.erb",
+    <%= render  :partial => "/pages/employee_results",
                 :locals => {:@employees => @employees} %>
   <% end %>
 </div>
@@ -90,6 +90,8 @@
   var groupsPathname = "<%= groups_services_path %>";
   var dataTitle1 = "<%= @data_title_1 %>";
   var dataTitle2 = "<%= @data_title_2 %>";
+  var show = "<%= @employee_headcount.to_s + ", " + t(:click_to_view) %>";
+  var hide = "<%= @employee_headcount.to_s + ", " + t(:click_to_hide) %>";
   <% if @data_to_graph %>
     var dataToGraph = <%= raw @data_to_graph %>;
     var graphTitle = "<%= @graph_title %>";

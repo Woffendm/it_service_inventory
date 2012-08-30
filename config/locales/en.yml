@@ -84,6 +84,7 @@ en:
   already_in_application:       "Already in System"
   browse_existing_employees:    "Browse Existing Employees"
   check_to_remove:              "Check to remove"
+  click_to_hide:                " Click to Hide"
   click_to_manage:              " Click to Manage"
   click_to_view:                " Click to View"
   create:                       "Create "

@@ -4,8 +4,8 @@
 <%= link_to t(:my_edit_page), edit_employee_path(@current_user.id) %>
 
 
-<div class="form_with_light_border">
-  <%= form_tag("update_settings", :method => "post", :class => "form_with_light_border") do %>
+<%= form_tag("update_settings", :method => "post") do %>
+  <div class="light_border">
     <%= label_tag t(:preferred_language) %>
     <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
                  :selected => @current_user.preferred_language) %>
@@ -32,5 +32,5 @@
     </span>
     <br/>
     <%= submit_tag  t(:save_changes) %>
-  <% end %>
-</div>
+  </div>
+<% end %>

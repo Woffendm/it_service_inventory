@@ -20,7 +20,7 @@
       <% @service.employees.order(:name_last, :name_first).each do |employee| %>
         <tr class="<%= cycle('odd', 'even') %>">
           <td>
-            <%= render  :partial => "/shared/can_update_employee.html.erb", 
+            <%= render  :partial => "/shared/can_update_employee", 
                         :locals => {:@employee => employee} %>
           </td>
           <td>

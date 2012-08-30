@@ -91,7 +91,10 @@ class GroupsController < ApplicationController
   def services
     @selected_service = params[:selected_service]
     if params[:group][:id] == "0"
-      @services = Service.order(:name)
+      @services = []
+      Service.order(:name).each do |service|
+        @services << service if service.employees.any?
+      end
     else 
       @group = Group.find(params[:group][:id])
       @services = @group.services

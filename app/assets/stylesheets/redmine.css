@@ -659,7 +659,7 @@ div.my-form {
   line-height: 225%;
   
 }
-div.form_with_light_border{
+.light_border{
   border: 1px dotted #DDDDDD;
   text-align: left;  
   margin: 1em;
@@ -670,13 +670,13 @@ div.form_with_light_border{
   line-height: 150%;
 }
 
-.form_with_light_border > label{
+.light_border > label{
   display: inline-block;
   float: none; 
   width: 15em;
 }
 
-.form_with_light_border > select{
+.light_border > select{
   margin-top: 1em;
   margin-bottom: 1em
 }
@@ -711,13 +711,18 @@ select {
   width: 130px;
 }
 
-div.chart_div{
+div#pie_chart_div{
   float: left;
-  width: 50%;
-  height: 480px;
+  width: 45%;
+}
+div#bar_graph_div{
+  width: 55%;
+  float: left;
 }
 
 div.chart_div_container{
+  height: 480px;
+  width: 100%;
 }
 
 #chart_title{
@@ -749,11 +754,17 @@ div.chart_div_container{
 }
 
 .tooltip_trigger{
+  min-width: 10px;
   cursor: help;
+  display: inline;
 }
 
-
-.information:after{
+/**
+.help:after{
+  content: url("../assets/information.png");
+}
+*/
+.information, .information:after{
   content: url("../assets/information.png");
 }
 
@@ -811,9 +822,7 @@ a{
   background-color: #888;
   border-radius: 3px 3px 3px 3px;
   color: #FFFFFF;
-}
-.disabled{
-}
+
 
 
 

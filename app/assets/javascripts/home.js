@@ -43,19 +43,19 @@ $(document).ready(function(){
                                  hAxis    : { titlePosition   : 'in',
                                               title           : xAxisTitle,
                                               slantedText     : true,
-                                              slantedTextAngle: 25,
+                                              slantedTextAngle: 50,
                                               titleTextStyle  :{ fontSize: 14 } },
-                                 chartArea: { left  : 50, 
+                                 chartArea: { left  : 75, 
                                               top   : 25,
-                                              width : "90%"}
+                                              width : "100%"}
                                };
 
       // Set pie chart options
       options_for_pie_chart = { 'height'  : 475,
                                 'legend'  : 'right',
-                                chartArea : { left  : 50,
+                                chartArea : { left  : 25,
                                               top   : 25,
-                                              width : "90%",
+                                              width : "100%",
                                               height: "70%" }
                               };
 
@@ -69,11 +69,23 @@ $(document).ready(function(){
 
 
 
+  // Stores whether or not "Employee Results" are visible
+  var visible = false;
+
+
   // Toggles visibility of 'Employee Results' page section. Scrolls to the section on click
   var toggleEmployeeResults = $("#toggle-employees");
   toggleEmployeeResults.click(function(e) {
-    $("#employee_results").toggle();
-    $(window).scrollTop(900);  
+    if(visible) {
+      visible = false;
+      $("#toggle-employees").html(show);
+    } else {
+      visible = true;
+      $("#toggle-employees").html(hide);
+    }
+    $("#employee_results").slideToggle(600, function(){
+      $("html, body").animate({scrollTop: $("#employee_results").offset().top}, 800); 
+    });
   });
 
 

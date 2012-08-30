@@ -29,7 +29,7 @@
     <% @employees.each do |employee| %>
       <tr class="<%= cycle('odd', 'even', :name => 'employee_table_alternation') %>">
         <td> 
-          <%= render  :partial => "/shared/can_update_employee.html.erb", 
+          <%= render  :partial => "/shared/can_update_employee", 
                       :locals => {:@employee => employee} %>  
         </td>
         <td> <%= employee.email %> </td>
@@ -44,7 +44,7 @@
           <% end %>
         </td>
         <td>
-          <%= render  :partial => "/shared/employee_services_and_allocations.html.erb", 
+          <%= render  :partial => "/shared/employee_services_and_allocations", 
                       :locals => {:employee => employee} %>
         </td>
         <td> 
@@ -61,5 +61,5 @@
 
 <div class="pagination_footer">
   <%= will_paginate @employees %>
-  <%= render :partial => "/shared/results_per_page.html.erb" %>
+  <%= render :partial => "/shared/results_per_page" %>
 </div>

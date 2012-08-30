@@ -25,7 +25,7 @@
       <% @paginated_employees.each do |employee| %>
         <tr class="<%= cycle('odd', 'even') %>">
           <td>
-            <%= render  :partial => "/shared/can_update_employee.html.erb", 
+            <%= render  :partial => "/shared/can_update_employee", 
                         :locals => {:@employee => employee} %>
           </td>
           <td>
@@ -55,7 +55,7 @@
   </table>
   <div class="pagination_footer">
     <%= will_paginate @paginated_employees %>
-    <%= render :partial => "/shared/results_per_page.html.erb" %>
+    <%= render :partial => "/shared/results_per_page" %>
   </div>
 <% end %>
 
