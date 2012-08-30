@@ -53,8 +53,10 @@
       <% end %>
     </tbody>
   </table>
-  <%= will_paginate @paginated_employees %>
-  <%= render :partial => "/shared/results_per_page.html.erb" %>
+  <div class="pagination_footer">
+    <%= will_paginate @paginated_employees %>
+    <%= render :partial => "/shared/results_per_page.html.erb" %>
+  </div>
 <% end %>
 
 

@@ -659,6 +659,27 @@ div.my-form {
   line-height: 225%;
   
 }
+div.form_with_light_border{
+  border: 1px dotted #DDDDDD;
+  text-align: left;  
+  margin: 1em;
+  padding: .5em .5em .5em 5em;
+  clear: both;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 150%;
+}
+
+.form_with_light_border > label{
+  display: inline-block;
+  float: none; 
+  width: 15em;
+}
+
+.form_with_light_border > select{
+  margin-top: 1em;
+  margin-bottom: 1em
+}
 
 tr > td
 {
@@ -706,24 +727,14 @@ div.chart_div_container{
   font-weight: bold;
 }
 
-
-div#chart_footer{
-  border: 1px dotted #DDDDDD;
-  text-align: left;  
-  margin: 1em;
-  padding: .5em .5em .5em 5em;
-  clear: both;
-  font-size: 1.1em;
-  font-weight: bold;
-  line-height: 150%;
-}
 #chart_footer > label{
   clear: both;
   width: 180px;
 }
 
 
-div.tooltip{
+.tooltip{
+  display: none;
   position: absolute;
   background: #E2F4FD;
   padding: .5em;
@@ -737,21 +748,22 @@ div.tooltip{
   border-radius: 10px;
 }
 
-div.tooltip_trigger{
+.tooltip_trigger{
   cursor: help;
 }
 
-/*
-div.tooltip_trigger:after{
+
+.information:after{
   content: url("../assets/information.png");
 }
-*/
+
 
 tr.tooltip_odd{
   background: #FAFDFF; 
 }
 
-p.tooltip_paragraph{
+.tooltip_paragraph, .tooltip_li{
+  font-weight: normal;
   margin: 5px;
   line-height: 150%;
 }
@@ -778,21 +790,31 @@ div#content{
 a{
   cursor: pointer; 
 }
-
+.pagination, #results_per_page{
+ font-size: 100%; 
+ padding: .5em;
+}
 .pagination_footer{
   border-top: 1px dotted gray;
   padding-top: .5em
 }
-.pagination_option{
+.pagination_option, .pagination >a{
   font-weight: bold;
   display: inline;
   padding: .25em;
   width: 8%; 
 }
-#pagination_selected > a{
+#pagination_selected > a, .pagination > em{
   font-weight: bold;
-  padding: .25em;
+  padding: .1em .33em .2em .25em;
   width: 8%;
   background-color: #888;
   border-radius: 3px 3px 3px 3px;
-  color: #FFFFFF;}
+  color: #FFFFFF;
+}
+.disabled{
+}
+
+
+
+

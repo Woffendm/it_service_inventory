@@ -1,17 +1,14 @@
-<br/>
-<%= t(:results_per_page) %>
-<% Project1::Application.config.config['results_per_page_options'].each do |number_of_results|%>
-  <% if number_of_results.to_s == session[:results_per_page].to_s %>
-    <span id="pagination_selected">
-      <%= link_to "#{number_of_results}", 
-                  change_results_per_page_logins_path + 
-                  "?results_per_page=#{number_of_results}" %>
-    </span>
-  <% else %>
-    <span class="pagination_option">
-      <%= link_to "#{number_of_results}", 
-                  change_results_per_page_logins_path + 
-                  "?results_per_page=#{number_of_results}" %>
+<div id="results_per_page">
+  <%= t(:results_per_page) %>
+  <% Project1::Application.config.config['results_per_page_options'].each do |number_of_results|%>
+    <% if number_of_results.to_s == session[:results_per_page].to_s %>
+      <span id="pagination_selected">
+    <% else %>
+      <span class="pagination_option">
+    <% end %>
+    <%= link_to "#{number_of_results}", 
+                change_results_per_page_logins_path + 
+                "?results_per_page=#{number_of_results}" %>
     </span>
   <% end %>
-<% end %>
+</div>
