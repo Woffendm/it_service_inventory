@@ -5,14 +5,14 @@
   <%= form_tag("home_search", :method => "get") do %>
     <span id="group_dropdown">
       <span id="group_select_div">
-        <%= label_tag :group_id, t(:group_name), :class => "inline" %>
+        <%= label_tag :group_id, t(:group), :class => "inline" %>
         <%= collection_select(:group, :id, @groups, :id, :name, 
                              {:include_blank => t(:all_groups) }) %>
       </span>
     </span>
     <span id="service_dropdown">
       <span id="service_select_div">
-        <%= label_tag :service_id, t(:service_name), :class => "inline" %>
+        <%= label_tag :service_id, t(:service), :class => "inline" %>
         <%= collection_select(:service, :id, @services, :id, :name,  
                              {:include_blank => t(:all_services) }) %>
       </span>

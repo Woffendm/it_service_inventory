@@ -113,15 +113,15 @@ en:
 
   # Notifications and Stuff
   cannot_delete_self:           "You cannot delete yourself. Get someone else to do it."
-  
+
   confirm_admin:                "Are you sure you want this person to be an admin? Only choose people you trust."
 
   confirm_deletion:             "Are you sure about this deletion? (Cannot be reversed!!)"
-  
+
   confirm_removal:              "Confirm removal. (Reversible action)"
-  
+
   first_name_optional:          "First name is optional"
-  
+
   group_no_allocations_0:       "The group you are viewing has employees, but none of them have entered their service allocations. You can fix this by following these steps."
 
   group_no_allocations_1:       "1: Click on your name below if you are an employee, or anyone's name if you are a group administrator."
@@ -131,23 +131,23 @@ en:
   group_no_allocations_3:       "3: The next time you visit the home page, there will be nice graphs waiting for you!"
 
   long_time:                    "This may take a while. Are you ready?"
-  
+
   must_enter_last_name:         "Must enter last name"
-  
+
   needs_a_name:                 "needs a name"
-  
+
   need_selection:               "You must select a group and/or service to view data. "
-  
+
   new_user_message_0:           "Welcome to IT Service Inventory! Please take a moment to set up your information by clicking "
 
   new_user_message_1:           ". <br/><br/> This notice will disable automatically once you add a service allocation, or can be disabled manually from "
-  
+
   new_user_reminder_info_0:     "Automatic: reminds you to set up your service allocations. Disables once you set up your service allocations."
-  
+
   new_user_reminder_info_1:     "Disabled: disables the reminder."
 
   over_allocated:               "The total allocation for a given employee cannot exceed 1. You must lower the employee's total allocation before proceeding."
-  
+
   preferred_language_info:      "Translates the application into the language of your choice"
 
   update_all:                   "Update Names and Contact Information for all Employees"

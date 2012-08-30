@@ -59,7 +59,7 @@ $(document).ready(function(){
                                               height: "70%" }
                               };
 
-      // Instantiate and draw  chart, passing in options.
+      // Instantiate and draw chart, passing in options.
       var chart1 = new google.visualization.ColumnChart(document.getElementById('bar_graph_div'));
       chart1.draw(data, options_for_bar_graph);
       var chart2 = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
@@ -79,7 +79,8 @@ $(document).ready(function(){
     if(visible) {
       visible = false;
       $("#toggle-employees").html(show);
-    } else {
+    }
+    else {
       visible = true;
       $("#toggle-employees").html(hide);
     }
