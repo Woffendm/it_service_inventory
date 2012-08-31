@@ -27,7 +27,7 @@
                 user_settings_employee_path(@current_user.id) %>
           <% end %>
           <% if session[:current_user_name] %>
-            &nbsp&nbsp
+            &nbsp;&nbsp;
             <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
           <% else %>
              <%= link_to t(:login), logins_new_path %>

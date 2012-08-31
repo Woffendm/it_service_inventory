@@ -113,6 +113,8 @@ en:
 
   # Notifications and Stuff
   cannot_delete_self:           "You cannot delete yourself. Get someone else to do it."
+  
+  compatability_message:        "If you are using Internet Explorer 8, the graphs will not show up on this page. Either upgrade to Internet Explorer 9 or switch to a different browser."
 
   confirm_admin:                "Are you sure you want this person to be an admin? Only choose people you trust."
 

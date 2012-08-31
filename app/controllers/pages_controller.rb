@@ -6,6 +6,7 @@
 class PagesController < ApplicationController
 
   before_filter :load_groups_services
+  before_filter :check_for_internet_explorer
 
   # Page used to rapidly search for information about groups, services, and employees. If user is
   # not logged in, will redirect them to login page. If user is logged in, will display information
@@ -94,6 +95,16 @@ class PagesController < ApplicationController
       @groups = []
       Group.order(:name).each do |group|
         @groups << group if group.employees.any?
+      end
+    end
+    
+    
+    # Checks to see if the user's browser is Internet Explorer. If so, warns them that IE8 does not 
+    # display the graphs properly
+    def check_for_internet_explorer
+      result  = request.env['HTTP_USER_AGENT']
+      if result =~ /MSIE/
+        flash[:error] = t(:compatability_message)
       end
     end
 end

@@ -112,6 +112,8 @@ es:
   # Notifications and Stuff
   cannot_delete_self:           "No puedes eliminar tú mismo. Pregunta un amigo hacerlo para tú."
 
+  compatability_message:        "Si estás utilizando Internet Explorer 8, los gráficos no funcionan. Actualiza a Internet Explorer 9 o cambia a otro navegador"
+
   confirm_admin:                "¿Estás seguro de confiar en esta persona?"
 
   confirm_deletion:             "Seguro que quiere Eliminar? (!!Acción permanente!!)"
