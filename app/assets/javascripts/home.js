@@ -18,7 +18,7 @@ $(document).ready(function(){
 
 
   // Set a callback to run when the Google Visualization API is loaded.
-  google.setOnLoadCallback(drawChart);
+  drawChart();
 
 
 
@@ -35,8 +35,8 @@ $(document).ready(function(){
       data.addRows(dataToGraph);
 
       // Set bar graph options
-      options_for_bar_graph = {  'height' : 475,
-                                 'colors' : ['#c34500', '#000000' ],
+      options_for_bar_graph = {  height   : 475,
+                                 colors   : ['#c34500', '#000000'],
                                  isStacked: false,
                                  legend   : { position        : 'top',
                                               alignment       : 'start' },
@@ -44,15 +44,15 @@ $(document).ready(function(){
                                               title           : xAxisTitle,
                                               slantedText     : true,
                                               slantedTextAngle: 50,
-                                              titleTextStyle  :{ fontSize: 14 } },
+                                              titleTextStyle  : { fontSize: 14 } },
                                  chartArea: { left  : 75, 
                                               top   : 25,
-                                              width : "100%"}
+                                              width : "100%" }
                                };
 
       // Set pie chart options
-      options_for_pie_chart = { 'height'  : 475,
-                                'legend'  : 'right',
+      options_for_pie_chart = { height    : 475,
+                                legend    : 'right',
                                 chartArea : { left  : 25,
                                               top   : 25,
                                               width : "100%",

@@ -824,6 +824,8 @@ a{
   color: #FFFFFF;
 }
 
-
+.hidden{
+  display: none;
+}
 
 
