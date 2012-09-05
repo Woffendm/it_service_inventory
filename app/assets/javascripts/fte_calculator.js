@@ -31,13 +31,16 @@ $(document).ready(function(){
   // the trigger when user clicks on the trigger. Sets the corresponding select box to whichever
   // select box came directly before the trigger. 
   $(".fte_calculator_trigger").click(function(e){ 
-    hoursPerDay.val("");
-    hoursPerMonth.val("");
-    $("#fte_calculator").dialog("close");
-    correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
-    $("#fte_calculator").dialog("option", "position", [this.offsetLeft + 20, this.offsetTop -
-                                $(window).scrollTop() - 60]);
-    $("#fte_calculator").dialog("open");
+    if(correspondingSelectBox != $(".calculator_select")[$(".fte_calculator_trigger").index(this)]){
+      correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
+      hoursPerDay.val("");
+      hoursPerMonth.val("");
+      popAllocationResult(0)
+      $("#fte_calculator").dialog("close");
+      $("#fte_calculator").dialog("option", "position", [this.offsetLeft + 20, this.offsetTop -
+                                  $(window).scrollTop() - 60]);
+      $("#fte_calculator").dialog("open");
+    }
   });
 
 

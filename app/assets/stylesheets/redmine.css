@@ -663,7 +663,7 @@ div.my-form {
   border: 1px dotted #DDDDDD;
   text-align: left;  
   margin: 1em;
-  padding: .5em .5em .5em 5em;
+  padding: .5em .5em .5em 2em;
   clear: both;
   font-size: 1.1em;
   font-weight: bold;
@@ -741,6 +741,7 @@ div.chart_div_container{
   font-weight: normal;
   line-height: 100%;
   font-size: 1em;
+  padding-right: 1.5em;
 }
 
 
@@ -770,8 +771,14 @@ div.chart_div_container{
   content: url("../assets/information.png");
 }
 */
-.information, .information:after{
-  content: url("../assets/information.png");
+.information{
+  display: inline;
+  cursor: pointer; 
+  position: relative;
+  background: url("../assets/information.png") 0px no-repeat;
+  top: 1px;
+  padding-right: 1.5em;
+  margin-right: 3.5em;
 }
 
 

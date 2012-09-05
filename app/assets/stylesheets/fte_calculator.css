@@ -1,9 +1,11 @@
-.calculator, .calculator:after{
+.calculator{
+  display: inline;
   cursor: pointer; 
   position: relative;
-  content: url("../assets/calculator.png");
+  background: url("../assets/calculator.png") 0px no-repeat;
   top: 1px;
-  padding-right: 1.2em;
+  padding-right: 1.5em;
+  margin-right: 3.5em;
 }
 
 

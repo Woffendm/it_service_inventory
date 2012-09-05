@@ -9,7 +9,7 @@
     <%= label_tag t(:preferred_language) %>
     <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
                  :selected => @current_user.preferred_language) %>
-    <span class="tooltip_trigger information"> </span>
+    <span class="tooltip_trigger information"> &nbsp; </span>
     <span class="tooltip">
       <p class="tooltip_paragraph"> 
         <%= t(:preferred_language_info) %> 
@@ -19,7 +19,7 @@
     <%= label_tag t(:new_user_reminder) %>
     <%= select(:employee, :new_user_reminder, [[t(:automatic), true], [t(:disabled), false]],
                  :selected => @current_user.new_user_reminder) %>
-    <span class="tooltip_trigger information"> </span>
+    <span class="tooltip_trigger information"> &nbsp; </span>
     <span class="tooltip">
       <ul>
         <li class="tooltip_li">
