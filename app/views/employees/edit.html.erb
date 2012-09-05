@@ -98,7 +98,6 @@
                         :class => "calculator_select") %>
       </span>
       <%= render  :partial => "/shared/fte_calculator_trigger" %>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <%= form.submit t(:add), :class => "submission"%>
       <% end %>
     </div>
@@ -145,7 +144,7 @@
       </tbody>
     </table>
   <% end %>
-  <br/><br/>
+  <br/>
 
 
   <%= employee_form.submit  t(:save_changes), :class => "submission" %> 
@@ -154,5 +153,6 @@
 
 <br/><br/>
 <%= link_to t(:return_to) + t(:all_employees), employees_path %>
+
 
 <%= render  :partial => "/shared/fte_calculator_body" %>

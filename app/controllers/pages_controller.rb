@@ -99,12 +99,12 @@ class PagesController < ApplicationController
     end
     
     
-    # Checks to see if the user's browser is Internet Explorer. If so, warns them that IE8 does not 
-    # display the graphs properly
+    # Checks to see if the user's browser is a version of Internet Explorer 8. If so, warns them
+    # that IE8 does not display the graphs properly
     def check_for_internet_explorer
       result  = request.env['HTTP_USER_AGENT']
-      if(result =~ /MSIE/) #&& (version = result.split('MSIE')[1].split(' ').first)
-        flash[:error] = t(:compatability_message) + "VERSION: " + result.split('MSIE')[1].split(' ').first.to_s
+      if(result.index("MSIE") && result.index("8."))
+        flash[:error] = t(:compatability_message)
       end
     end
 end
