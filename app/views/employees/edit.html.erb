@@ -82,6 +82,7 @@
   </div>
 
 
+
   <!-- Drop-down list of services that can be added. Only populated with services that the employee
    doesn't already have. -->
   <% if @employee.get_available_services.any?%>
@@ -93,8 +94,11 @@
                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
       <span class="allocation_value">
         <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
-                      {:include_blank => "-" + t(:select) + t(:allocation) + "-"}) %>
+                        {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
+                        :class => "calculator_select") %>
       </span>
+      <%= render  :partial => "/shared/fte_calculator_trigger" %>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <%= form.submit t(:add), :class => "submission"%>
       <% end %>
     </div>
@@ -118,18 +122,18 @@
             <% employee_allocation = @services[count].get_employee_allocation(@employee) %>
             <tr class="<%= cycle('odd', 'even') %>">
               <td> 
-                <%= render  :partial => "/shared/can_update_service.html.erb", 
-                            :locals => {:employee_allocation => employee_allocation} %>
+                <%= render  :partial => "/shared/can_update_service", 
+                            :locals => {:service => employee_allocation.service} %>
               </td>
               <td> 
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
-                <span class="allocation_value">
-                  <span class="in_table">
-                    <%= form.select(:allocation,
-                                    @employee_allocation_used_for_methods.possible_allocations,
-                                    :selected => employee_allocation.rounded_allocation) %>
-                  </span>
+                <span class="allocation_value in_table">
+                  <%= form.select(:allocation,
+                                  @employee_allocation_used_for_methods.possible_allocations, 
+                                  {:selected => employee_allocation.rounded_allocation}, 
+                                  :class => "calculator_select") %>
                 </span>
+                <%= render  :partial => "/shared/fte_calculator_trigger" %>
               </td>
               <td> 
                 <%= form.check_box :_destroy %>
@@ -150,3 +154,5 @@
 
 <br/><br/>
 <%= link_to t(:return_to) + t(:all_employees), employees_path %>
+
+<%= render  :partial => "/shared/fte_calculator_body" %>

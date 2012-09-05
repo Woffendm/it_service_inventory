@@ -21,7 +21,7 @@ $(document).ready(function(){
     // Gets total of all allocations on page
     while(count < numberOfSelectBoxesInTable) {
       var currentAllocationValue = $("#employee_employee_allocations_attributes_" + count +
-                          "_allocation").val();
+                                    "_allocation").val();
       totalAllocation += parseFloat(currentAllocationValue);
       count += 1;
     }

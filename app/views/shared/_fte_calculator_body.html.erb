@@ -1,0 +1,16 @@
+<div id="fte_calculator">
+  Hours per day:
+  <span class="form_input">
+    <%= number_field_tag 'hours_per_day', nil, :placeholder => "Maximum is 8" %>
+  </span>
+  <div id="or_div"> or </div>
+  Hours per month:
+  <span class="form_input">
+    <%= number_field_tag 'hours_per_month', nil, :placeholder => "Maximum is 173" %>
+  </span>
+  <br/><br/>
+  <div id="allocation_result_container">
+    Your allocation is 0 FTE
+  </div>
+  <div id="use_this_number"> </div>
+</div>

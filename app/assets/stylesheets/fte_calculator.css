@@ -1,0 +1,65 @@
+.calculator, .calculator:after{
+  cursor: pointer; 
+  position: relative;
+  content: url("../assets/calculator.png");
+  top: 1px;
+}
+
+
+/*
+#fte_calculator{
+  display: none;
+  position: absolute;
+  background: #E2F4FD;
+  padding: .5em;
+  border: 1px solid #2268AB;
+  margin: 1em;
+  -webkit-box-shadow: 0 0 7px #2268AB;
+  -moz-box-shadow: 0 0 7px #2268AB;
+  box-shadow: 0 0 7px #2268AB;
+  min-height: 1.5em;
+  width: 24em;
+  border-radius: 10px;
+}
+*/
+
+#allocation_result{
+  font-weight: bold;
+  font-size: 110%;
+}
+
+#or_div{
+  padding: 5px;
+  padding-left: 3em;
+}
+
+#allocation_result_container{
+  clear: both;
+  text-align: center;
+}
+
+span.form_input{
+  float: right;
+}
+
+#ui-dialog-titlebar-close{
+  display: none;
+}
+
+.ui-widget-content a {
+  color: blue;
+}
+
+.ui-widget-header {
+  background: #c34500;
+  color: white;
+}
+
+.hidden{
+  display: none;
+}
+
+#use_this_number{
+  clear: both;
+  text-align: center;
+}

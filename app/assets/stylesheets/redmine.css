@@ -737,6 +737,12 @@ div.chart_div_container{
   width: 180px;
 }
 
+#employee_results{
+  font-weight: normal;
+  line-height: 100%;
+  font-size: 1em;
+}
+
 
 .tooltip{
   display: none;

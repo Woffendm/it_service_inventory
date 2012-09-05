@@ -1,0 +1,15 @@
+<span id="fte_calculator_trigger" class="calculator"> </span>
+<div id="fte_calculator">
+  Hours per day:
+  <span class="form_input">
+    <%= number_field_tag 'hours_per_day', nil%>
+  </span>
+  <div id="or_div"> or </div>
+  Hours per month:
+  <span class="form_input">
+    <%= number_field_tag 'hours_per_month', nil%>
+  </span>
+  <div id="allocation_result_container">
+    Your allocation is 0 FTE
+  </div>
+</div>

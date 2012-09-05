@@ -1,6 +1,20 @@
-<% if can? :update, Service %>
-  <%= link_to employee_allocation.service.name.truncate(20),
-              edit_service_path(employee_allocation.service.id) %>
+<% if service.name.length > 20 %>
+  <% if can? :update, Service %>
+    <div class="tooltip_trigger">
+      <%= link_to service.name.truncate(20), edit_service_path(service.id) %>
+    </div>
+  <% else %>
+    <div class="tooltip_trigger">
+      <%= service.name.truncate(20) %>
+    </div>
+  <% end %>
+  <div class="tooltip">
+    <p class="tooltip_paragraph"> <%= service.name %> </p>
+  </div>
 <% else %>
-  <%= employee_allocation.service.name.truncate(20) %> 
+  <% if can? :update, Service %>
+    <%= link_to service.name, edit_service_path(service.id) %>
+  <% else %>
+    <%= service.name %> 
+  <% end %>
 <% end %>

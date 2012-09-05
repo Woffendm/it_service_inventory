@@ -32,7 +32,7 @@
 
 <% if @data_to_graph && @full_time_employees > 0 %>
 <div class="chart_div_container">
-  <p id="chart_title"> <%= @graph_title %> </p>
+  <h3> <%= @graph_title %> </h3>
   <div id="bar_graph_div" class="chart_div"></div>
   <div id="pie_chart_div" class="chart_div"></div>
 </div>
@@ -71,17 +71,12 @@
     <br/>
     <%= label_tag t(:employee_headcount) + " :" %>
     <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
+    <div id="employee_results" class="hidden">
+      <%= render  :partial => "/pages/employee_results",
+                  :locals => {:@employees => @employees} %>
+    </div>
   </div>
 <% end %>
-
-
-
-<div id="employee_results" class="hidden">
-  <% if @employees %>
-    <%= render  :partial => "/pages/employee_results",
-                :locals => {:@employees => @employees} %>
-  <% end %>
-</div>
 
 
 

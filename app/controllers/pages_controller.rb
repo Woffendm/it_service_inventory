@@ -73,7 +73,7 @@ class PagesController < ApplicationController
           end
         end
       end
-      @graph_title = t(:allocations_for_group) + @group.name + t(:and) +t(:service) + @service.name
+      @graph_title = t(:allocations_for_group) + @group.name + "," + t(:and_service) + @service.name
       @x_axis_title = t(:employee)
       data_array = @service.employee_allocations_within_group(@group)
       @employee_headcount = data_array.length
@@ -103,8 +103,8 @@ class PagesController < ApplicationController
     # display the graphs properly
     def check_for_internet_explorer
       result  = request.env['HTTP_USER_AGENT']
-      if result =~ /MSIE/
-        flash[:error] = t(:compatability_message)
+      if(result =~ /MSIE/) #&& (version = result.split('MSIE')[1].split(' ').first)
+        flash[:error] = t(:compatability_message) + "VERSION: " + result.split('MSIE')[1].split(' ').first.to_s
       end
     end
 end
