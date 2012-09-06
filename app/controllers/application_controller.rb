@@ -79,28 +79,28 @@ class ApplicationController < ActionController::Base
     end
 
 
-
-    def log_error(exception)
+    def log_error(exception, raised_on)
       logger.error "\n\n!!!!!!!!!!!!!!!!!! ERROR  BEGINS !!!!!!!!!!!!!!!!!!!!!! \n"
       logger.error exception
+      logger.error ("Raised on: .../it-service-inventory" + raised_on)
       logger.error "\n!!!!!!!!!!!!!!!!!! ERROR  ENDS !!!!!!!!!!!!!!!!!!!!!!\n\n"
     end
 
 
     def permission_denied(exception)
-      log_error(exception)
-      redirect_to permission_denied_errors_path
+      log_error(exception, request.fullpath)
+      redirect_to permission_denied_errors_path + "?path=" + request.fullpath
     end
 
 
     def page_not_found(exception)
-      log_error(exception)
-      redirect_to page_not_found_errors_path
+      log_error(exception, request.fullpath)
+      redirect_to page_not_found_errors_path + "?path=" + request.fullpath
     end
 
 
     def record_not_found(exception)
-      log_error(exception)
-      redirect_to record_not_found_errors_path
+      log_error(exception, request.fullpath)
+      redirect_to record_not_found_errors_path + "?path=" + request.fullpath
     end
 end
