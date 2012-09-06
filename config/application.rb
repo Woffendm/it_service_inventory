@@ -61,6 +61,7 @@ module Project1
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
     
+    config.exceptions_app = self.routes
     
     # Loads a bunch of configurations for the application
     config.config = YAML.load_file("#{Rails.root}/config/config.yml")

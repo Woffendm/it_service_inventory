@@ -8,6 +8,7 @@ Project1::Application.routes.draw do
   match '/auth/:provider/callback' => 'logins#create'
   match 'logins/create_backdoor' => 'logins#create_backdoor'
   match 'pages/home' => 'pages#home'
+  match '/404' => 'errors#page_not_found'
 
   resources :groups do
     member do
@@ -41,6 +42,15 @@ Project1::Application.routes.draw do
       post 'add_admin'
       post 'remove_admin'
       post 'change_active_theme'
+    end
+  end
+
+
+  resources :errors do
+    collection do
+      get 'permission_denied'
+      get 'page_not_found'
+      get 'record_not_found'
     end
   end
 

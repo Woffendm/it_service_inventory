@@ -16,6 +16,13 @@ class ApplicationController < ActionController::Base
 
 
 
+  #rescue_from Exception, :with => :cheese
+  rescue_from CanCan::AccessDenied, :with => :permission_denied
+  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+  rescue_from ActionController::RoutingError, :with => :page_not_found
+
+
+
   private
     # Redirects user to login page unless they are logged in
     def require_login
@@ -56,8 +63,8 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    
-    
+
+
     # If the current user has no allocations AND they have not disabled this preference, then a 
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
@@ -69,5 +76,31 @@ class ApplicationController < ActionController::Base
         flash[:message] = (t(:new_user_message_0) + edit_employee_link + 
                           t(:new_user_message_1) + user_settings_link).html_safe
       end
+    end
+
+
+
+    def log_error(exception)
+      logger.error "\n\n!!!!!!!!!!!!!!!!!! ERROR  BEGINS !!!!!!!!!!!!!!!!!!!!!! \n"
+      logger.error exception
+      logger.error "\n!!!!!!!!!!!!!!!!!! ERROR  ENDS !!!!!!!!!!!!!!!!!!!!!!\n\n"
+    end
+
+
+    def permission_denied(exception)
+      log_error(exception)
+      redirect_to permission_denied_errors_path
+    end
+
+
+    def page_not_found(exception)
+      log_error(exception)
+      redirect_to page_not_found_errors_path
+    end
+
+
+    def record_not_found(exception)
+      log_error(exception)
+      redirect_to record_not_found_errors_path
     end
 end
