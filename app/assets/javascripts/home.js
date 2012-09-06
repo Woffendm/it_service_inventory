@@ -53,9 +53,9 @@ $(document).ready(function(){
           } 
         },
         chartArea: { 
-          left            : 75, 
-          top             : 25,
-          width           : "100%" 
+          left   : 75, 
+          top    : 25,
+          width  : "100%" 
         }
       };
 

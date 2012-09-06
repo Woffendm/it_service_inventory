@@ -5,7 +5,7 @@
 
 class ServicesController < ApplicationController
   before_filter :load_service, :only => [:destroy, :edit, :update]
-  before_filter :load_permissions
+  before_filter :load_permissions, :except => [:groups]
   before_filter :load_group, :only => [:total_allocation_within_group]
 
   
