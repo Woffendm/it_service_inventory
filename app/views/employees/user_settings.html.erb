@@ -4,7 +4,7 @@
 <%= link_to t(:my_edit_page), edit_employee_path(@current_user.id) %>
 
 
-<%= form_tag("update_settings", :method => "post") do %>
+<%= form_tag("update_settings", :method => "post", :class => "prevent_double_submit") do %>
   <div class="light_border">
     <%= label_tag t(:preferred_language) %>
     <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],

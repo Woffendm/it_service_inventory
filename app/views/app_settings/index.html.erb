@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <% AppSetting.all.each do |setting| %>
-      <%= form_for setting do |form| %>
+      <%= form_for(setting, :html => {:class => "prevent_double_submit"}) do |form| %>
         <tr>
           <td> <%= setting.code %> </td>
           <td> <%= setting.active.from(7) %> </td>

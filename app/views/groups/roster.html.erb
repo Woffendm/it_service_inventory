@@ -4,7 +4,7 @@
 <% if (@group.get_available_employees.length > 0)  && (can? :update, @group) %>
   <h3> <%= t(:add) + t(:employee) %> </h3>
   <div class="my-form">
-    <%= form_tag("add_employee", :method => "post") do %>
+    <%= form_tag("add_employee", :method => "post", :class => "prevent_double_submit") do %>
       <p>
         <%= label_tag :employee_id, t(:name) %>
         <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
@@ -30,7 +30,8 @@
           </td>
           <td>
               <% if can? :update, @group %>
-                <%= form_tag("toggle_group_admin", :method => "post") do %>
+                <%= form_tag("toggle_group_admin", :method => "post", 
+                            :class => "prevent_double_submit") do %>
                   <%= hidden_field_tag(:employee, employee.id) %>
                   <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin &&
                         ((employee != @current_user) || @current_user.site_admin )%>

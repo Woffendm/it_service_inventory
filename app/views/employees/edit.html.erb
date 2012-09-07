@@ -1,6 +1,6 @@
 <h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
 
-<%= form_for @employee do |employee_form| %>
+<%= form_for(@employee, :html => {:class => "prevent_double_submit"}) do |employee_form| %>
 
   <h3><%= t(:basic_information) %> </h3>
   <div class="my-form">

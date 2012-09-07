@@ -13,10 +13,6 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_language
   before_filter :require_login
   before_filter :remind_user_to_set_allocations
-
-
-
-  #rescue_from Exception, :with => :cheese
   rescue_from CanCan::AccessDenied, :with => :permission_denied
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from ActionController::RoutingError, :with => :page_not_found
@@ -79,6 +75,7 @@ class ApplicationController < ActionController::Base
     end
 
 
+    # Logs an exception's contents, along with what page it was raised on.
     def log_error(exception, raised_on)
       logger.error "\n\n!!!!!!!!!!!!!!!!!! ERROR  BEGINS !!!!!!!!!!!!!!!!!!!!!! \n"
       logger.error exception
@@ -87,18 +84,21 @@ class ApplicationController < ActionController::Base
     end
 
 
+    # Redirects user to 'permission denied' error page
     def permission_denied(exception)
       log_error(exception, request.fullpath)
       redirect_to permission_denied_errors_path + "?path=" + request.fullpath
     end
 
 
+    # Redirects user to 'page not found' error page
     def page_not_found(exception)
       log_error(exception, request.fullpath)
       redirect_to page_not_found_errors_path + "?path=" + request.fullpath
     end
 
 
+    # Redirects user to 'page not found' error page
     def record_not_found(exception)
       log_error(exception, request.fullpath)
       redirect_to record_not_found_errors_path + "?path=" + request.fullpath

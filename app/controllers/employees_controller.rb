@@ -103,7 +103,9 @@ class EmployeesController < ApplicationController
     # Calculates the total allocation passed in params.
     if params["employee"]["employee_allocations_attributes"]
       params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
-        new_total_allocation += new_allocation.last["allocation"].to_f
+        if new_allocation.last["_destroy"].to_f != 1
+          new_total_allocation += new_allocation.last["allocation"].to_f
+        end
       end
     end
     # Validates that the total allocation passed in params does not exceed 1FTE. It is only possible

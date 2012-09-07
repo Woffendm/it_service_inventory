@@ -25,7 +25,7 @@
                   Employee.find_by_osu_username(entry.uid.first) %>
               <%= t(:already_in_application) %>
             <% else %>
-              <%= form_tag("ldap_create", :method => "post") do %>
+              <%= form_tag("ldap_create", :method => "post", :class => "prevent_double_submit") do %>
                 <% @temp = entry.cn.first.gsub(/[,]/, '').split(" ") %>
                 <%= hidden_field_tag(:name_last, @temp[0]) %>
                 <%= hidden_field_tag(:name_first, @temp[1]) %>
