@@ -91,12 +91,10 @@
       <%= form.label :service_id, t(:service)  %>
       <%= form.select(:service_id, options_from_collection_for_select(
                       @employee.get_available_services, :id, :name),  
-                      {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
-      <span class="allocation_value">
-        <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
-                        {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
-                        :class => "calculator_select") %>
-      </span>
+                     {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
+      <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
+                     {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
+                      :class => "calculator_select allocation_value") %>
       <%= render  :partial => "/shared/fte_calculator_trigger" %>
       <%= form.submit t(:add), :class => "submission"%>
       <% end %>
@@ -126,16 +124,14 @@
               </td>
               <td> 
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
-                <span class="allocation_value in_table">
-                  <%= form.select(:allocation,
-                                  @employee_allocation_used_for_methods.possible_allocations, 
-                                  {:selected => employee_allocation.rounded_allocation}, 
-                                  :class => "calculator_select") %>
-                </span>
+                <%= form.select(:allocation,
+                                @employee_allocation_used_for_methods.possible_allocations, 
+                               {:selected => employee_allocation.rounded_allocation}, 
+                                :class => "calculator_select allocation_value") %>
                 <%= render  :partial => "/shared/fte_calculator_trigger" %>
               </td>
               <td> 
-                <%= form.check_box :_destroy %>
+                <%= form.check_box :_destroy, :class => "remove_allocation" %>
               </td>
             </tr>
           <% end %>
