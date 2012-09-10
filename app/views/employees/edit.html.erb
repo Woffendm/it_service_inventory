@@ -3,20 +3,40 @@
 <%= form_for(@employee, :html => {:class => "prevent_double_submit"}) do |employee_form| %>
 
   <h3><%= t(:basic_information) %> </h3>
-  <div class="my-form">
+  <div class="form-horizontal">
     <%= fields_for @employee do |form| %>
-      <%= form.label t(:last_name) %>
-      <%= @employee.name_last %>
-      <br/>
-      <%= form.label t(:first_name) %>
-      <%= @employee.name_first %>    
-      <br/>
-      <%= form.label t(:email) %> 
-      <%= @employee.email %>    
-      <br/>
-      <%= form.label :notes %> 
-      <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
-      <br/>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:last_name) %>
+        </span>
+        <span class="controls">
+          <%= @employee.name_last %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:first_name) %>
+        </span>
+        <span class="controls">
+          <%= @employee.name_first %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:email) %> 
+        </span>
+        <span class="controls">
+          <%= @employee.email %>    
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :notes %> 
+        </span>
+        <span class="controls">
+          <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
+        </span>
+      </div>
     <% end %>
   </div>
 
@@ -26,7 +46,7 @@
   <h3><%= t(:groups) %></h3>
   <% if can? :manage, :all %>
     <% if @employee.get_available_groups.any? %>
-      <div class="my-form" >
+      <div class="form-inline" >
         <%= fields_for "employee_groups" do |form|%>
           <%= form.label :group_id, t(:group)  %>
           <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
@@ -41,23 +61,26 @@
   <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
    to the employee's group membership here --> 
   <% if @employee.employee_groups.any? %>
-    <table class="list issues">
+    <table class="table table-striped">
       <thead>
-        <th> <%= t(:group) %> </th>
-        <th> <%= t(:admin) %>? </th>
-        <th> <%= t(:check_to_remove) %> </th>
+        <tr>
+          <th> <%= t(:group) %> </th>
+          <th> <%= t(:admin) %>? </th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
       </thead>
       <tbody>
         <% count = 0 %>
-        <%= employee_form.fields_for "employee_groups" do |form|%>
+        <%= employee_form.fields_for "employee_groups" do |form| %>
           <% employee_group = @employee.employee_groups.find_by_group_id(@groups[count].id) %>
-          <tr class="<%= cycle('odd', 'even') %>">
+          <tr>
             <td>
               <%= link_to employee_group.group.name, roster_group_path(employee_group.group_id) %>
             </td>
             <td>
               <% if can? :update, employee_group.group %>
                 <%= form.hidden_field(:group_id, :value => employee_group.group_id) %>
+                <%= form.hidden_field :id %>
                 <%= form.check_box :group_admin %>
               <% end %>
             </td>
@@ -86,17 +109,17 @@
   <!-- Drop-down list of services that can be added. Only populated with services that the employee
    doesn't already have. -->
   <% if @employee.get_available_services.any?%>
-    <div class="my-form" id="service-creation" >
+    <div class="form-inline" >
       <%= fields_for "employee_allocations" do |form|%>
-      <%= form.label :service_id, t(:service)  %>
-      <%= form.select(:service_id, options_from_collection_for_select(
-                      @employee.get_available_services, :id, :name),  
-                     {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
-      <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
-                     {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
-                      :class => "calculator_select allocation_value") %>
-      <%= render  :partial => "/shared/fte_calculator_trigger" %>
-      <%= form.submit t(:add), :class => "submission"%>
+        <%= form.label :service_id, t(:service)  %>
+        <%= form.select(:service_id, options_from_collection_for_select(
+                        @employee.get_available_services, :id, :name),  
+                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
+        <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
+                       {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
+                        :class => "calculator_select allocation_value") %>
+        <%= render  :partial => "/shared/fte_calculator_trigger" %>
+        <%= form.submit t(:add), :class => "submission"%>
       <% end %>
     </div>
   <% end %>
@@ -106,24 +129,27 @@
   <!-- Creates table with the employee's services and allocations. Can be edited by employee or
    admin -->
   <% if @employee.employee_allocations.any? %>
-    <table class="list issues">
+    <table class="table table-striped">
       <thead>
-        <th><%= t(:service) %></th>
-        <th><%= t(:allocation) %></th>
-        <th> <%= t(:check_to_remove) %> </th>
+        <tr>
+          <th><%= t(:service) %></th>
+          <th><%= t(:allocation) %></th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
       </thead>
       <tbody>
         <% count = 0 %>
         <%= employee_form.fields_for "employee_allocations" do |form|%>
           <% unless @services[count].nil? %>
             <% employee_allocation = @services[count].get_employee_allocation(@employee) %>
-            <tr class="<%= cycle('odd', 'even') %>">
+            <tr>
               <td> 
                 <%= render  :partial => "/shared/can_update_service", 
                             :locals => {:service => employee_allocation.service} %>
               </td>
-              <td> 
+              <td class="form-inline"> 
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
+                <%= form.hidden_field :id %>
                 <%= form.select(:allocation,
                                 @employee_allocation_used_for_methods.possible_allocations, 
                                {:selected => employee_allocation.rounded_allocation}, 

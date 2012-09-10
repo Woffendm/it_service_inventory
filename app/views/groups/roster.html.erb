@@ -16,14 +16,10 @@
 
 
 <% if @paginated_employees.any? %>
-  <table class="list issues"><caption> <%= t(:existing_employees) %> </caption>
-    <thead>
-      <th> </th>
-      <th> </th>
-    </thead>
+  <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
     <tbody>
       <% @paginated_employees.each do |employee| %>
-        <tr class="<%= cycle('odd', 'even') %>">
+        <tr>
           <td>
             <%= render  :partial => "/shared/can_update_employee", 
                         :locals => {:@employee => employee} %>

@@ -1,0 +1,256 @@
+.topbar {
+    height: 40px;
+    left: 0;
+    overflow: visible;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    background: url("../assets/tophat-bg.jpg") repeat-x scroll left top #2F2A2B;
+    color: white;
+    -webkit-box-shadow: 0 0 4px black;
+    -moz-box-shadow: 0 0 4px black;
+    box-shadow: 0 0 4px black;
+}
+
+#login{
+  float: right;
+}
+
+body{
+  background-color: #F2F2F2;
+}
+
+#main{
+  margin: 100px;
+}
+
+#content-wrapper{
+  background: white;
+  padding: 10px 10px 10px 10px;
+}
+
+.controls {
+  position: relative;
+  top: 5px;
+}
+
+.navbar-inverse .brand, .navbar-inverse .nav > li > a{  
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-inverse .nav > li > i {
+  position: relative;
+  float: left;
+  top: 12px;
+  left: 1px;
+}
+
+
+#header{
+  position: fixed;
+  left: 10px;
+  top: -13px;
+  color: orange;
+  z-index: 100000;
+}
+
+
+
+
+
+h3 {
+   border-bottom: 5px solid black; 
+   padding-bottom:5px;
+}
+
+
+.light-border{
+  border: 1px dotted #DDDDDD;
+  text-align: left;  
+  margin: 1em;
+  padding: .5em .5em .5em 1em;
+  clear: both;
+}
+
+
+tr > td
+{
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 10px;
+}
+
+thead
+{
+  border: 10px solid transparent;
+  font-size: 13.3px;
+}
+
+div.field_with_errors {
+  display: inline;
+}
+
+th, td {
+  overflow: hidden;
+  width: 125px;
+}
+
+tbody {
+  border-bottom: 10px solid transparent;
+}
+
+select {
+  width: 130px;
+}
+
+div#pie_chart_div{
+  float: left;
+  width: 45%;
+}
+div#bar_graph_div{
+  width: 55%;
+  float: left;
+}
+
+div.chart_div_container{
+  height: 480px;
+  width: 100%;
+}
+
+#chart_title{
+  padding-top: 1.5em;
+  text-align: center;
+  font-size: 130%;
+  font-weight: bold;
+}
+
+#chart_footer > label{
+  clear: both;
+  width: 180px;
+}
+
+#employee_results{
+  font-weight: normal;
+  line-height: 100%;
+  font-size: 1em;
+  padding-right: 1.5em;
+}
+
+
+.tooltip_trigger{
+  min-width: 10px;
+  cursor: help;
+  display: inline;
+}
+
+/**
+.help:after{
+  content: url("../assets/information.png");
+}
+*/
+.information{
+  display: inline;
+  cursor: pointer; 
+  position: relative;
+  background: url("../assets/information.png") 0px no-repeat;
+  top: 1px;
+  padding-right: 1.5em;
+  margin-right: 3.5em;
+}
+
+
+tr.tooltip_odd{
+  background: #FAFDFF; 
+}
+
+.tooltip_paragraph, .tooltip_li{
+  font-weight: normal;
+  margin: 5px;
+  line-height: 150%;
+}
+
+#tooltip-table{
+  width: 900px;
+}
+
+td.tooltip_first_column{
+  width: 18em;
+}
+
+td.tooltip_last_column{
+  width: 1em;
+}
+
+div#content{
+  margin-bottom: 100px;
+}
+#home_header{
+  font-size: 125%;
+}
+#group_select_div > select, #service_select_div > select, #home_header_buttons > input {
+  margin-right: 2em;
+}
+
+a{
+  cursor: pointer; 
+}
+.pagination, #results_per_page{
+ font-size: 100%; 
+ padding: .5em;
+}
+.pagination_footer{
+  border-top: 1px dotted gray;
+  padding-top: .5em
+}
+.pagination_option, .pagination >a{
+  font-weight: bold;
+  display: inline;
+  padding: .25em;
+  width: 8%; 
+}
+#pagination_selected > a, .pagination > em{
+  font-weight: bold;
+  padding: .1em .33em .2em .25em;
+  width: 8%;
+  background-color: #888;
+  border-radius: 3px 3px 3px 3px;
+  color: #FFFFFF;
+}
+
+.hidden{
+  display: none;
+}
+
+
+.notice, .error, .message {
+  background: url("../assets/status-success.png") 0.4em center no-repeat #e4fdf6;
+  padding: .5em 5em .5em;
+  border: 1px solid #006600;
+  margin: 7px;
+  -webkit-box-shadow: 0 0 7px #006600;
+  -moz-box-shadow: 0 0 7px #006600;
+  box-shadow: 0 0 7px #006600;
+  min-height: 1.5em;
+}
+
+.error {
+  background: url("../assets/status-error.png") 0.4em center no-repeat #fee7d8;
+  border-color: #D85A1A;
+  -webkit-box-shadow: 0 0 7px #d85a1a;
+  -moz-box-shadow: 0 0 7px #d85a1a;
+  box-shadow: 0 0 7px #d85a1a; 
+}
+
+.message {
+  background: #E2F4FD;
+  border-color:#2268AB;
+  -webkit-box-shadow: 0 0 7px #2268AB;
+  -moz-box-shadow: 0 0 7px #2268AB;
+  box-shadow: 0 0 7px #2268AB;
+}
+
+.notice h3 {
+  color: #006600; 
+}

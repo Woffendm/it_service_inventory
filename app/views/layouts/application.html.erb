@@ -2,14 +2,18 @@
 <html>
 <head>
   <title><%= t(:IT_service_inventory) %></title>
-  <%= stylesheet_link_tag "application", :media => "all" %>
+  <%# stylesheet_link_tag "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= javascript_include_tag "https://www.google.com/jsapi" %>
   <script type="text/javascript">
     // Load the Visualization API and the piechart package.
     google.load('visualization', '1.0', {packages:['corechart']});
   </script>
-  <%# stylesheet_link_tag "redmine" %>
+  <%= stylesheet_link_tag "bootstrap-responsive" %>
+  <%= stylesheet_link_tag "bootstrap" %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <% stylesheet_link_tag "bootstrap-responsive.css" %>
+  <%= stylesheet_link_tag "i_love_pie" %>
   <%= stylesheet_link_tag "jquery-ui-1.8.23.custom.css" %>
   <%= stylesheet_link_tag "fte_calculator" %>
   <!-- The following line will load an additional "theme" stylesheet for the application later on.
@@ -17,51 +21,56 @@
   <!-- <%# stylesheet_link_tag @current_theme %> -->
   <%= csrf_meta_tags %>
 </head>
-<body class="theme-Osu highrise controller-issues action-index">
-  <div id="wrapper">
-    <div id="wrapper2">
-      <div id="top-menu">
-        <div id="loggedas">
-          <% if session[:current_user_name] %>
-            <%= t(:logged_in_as) %>
-            <%= link_to session[:current_user_name],
-                user_settings_employee_path(@current_user.id) %>
-          <% end %>
-          <% if session[:current_user_name] %>
-            &nbsp;&nbsp;
-            <%= link_to t(:logout), logins_destroy_path, :class => "logout" %>
-          <% else %>
-             <%= link_to t(:login), logins_new_path %>
-          <% end %>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li> <i class="icon-home icon-white"></i> <%= link_to t(:home), pages_home_path %> </li>
+            <li><%= link_to t(:employees), employees_path %></li>
+            <li><%= link_to t(:groups), groups_path %></li>
+            <% if can? :update, Service %>
+              <li><%= link_to t(:services), services_path %></li>
+            <% end %>
+            <% if can? :manage, AppSetting %>
+              <li> 
+                <%= link_to t(:settings), app_settings_path %>
+              </li>
+            <% end %>
+          </ul>
+          <ul class="nav" id="login">
+            <% if session[:current_user_name] %>
+              <li> 
+                <i class="icon-user icon-white"></i>
+                <%= link_to session[:current_user_name],
+                    user_settings_employee_path(@current_user.id) %>
+              </li>
+              <li> <%= link_to t(:logout), logins_destroy_path, :class => "logout" %> </li>
+            <% else %>
+              <li> <%= link_to t(:login), logins_new_path %> </li>
+            <% end %>
+          </ul>
         </div>
-        <ul>
-          <li><%= link_to t(:home), pages_home_path %> </li>
-          <li><%= link_to t(:employees), employees_path %></li>
-          <li><%= link_to t(:groups), groups_path %></li>
-          <% if can? :update, Service %>
-            <li><%= link_to t(:services), services_path %></li>
-          <% end %>
-          <% if can? :manage, AppSetting %>
-            <li><%= link_to t(:settings), app_settings_path %></li>
-          <% end %>
-        </ul>
       </div>
-      <div id="header">
-        <h1> IT Service Inventory </h1>
-      </div>
-      <div id="main">
-        <% if flash[:notice] %>
-          <p class="notice">  <%= flash[:notice] %>       </p>
-        <% end %>
-        <% if flash[:error] %>
-          <p class="error">   Error: <%= flash[:error] %> </p>
-        <% end %>
-        <% if flash[:message] %>
-          <p class="message"> <%= flash[:message] %>      </p>
-        <% end %>
-        <div id="content">
-          <%= yield %>
-        </div>
+    </div>
+  </div>
+  <div id="header">
+    <h1> IT Service Inventory </h1>
+  </div>
+  <div id="main">
+    <% if flash[:notice] %>
+      <p class="notice">  <%= flash[:notice] %>       </p>
+    <% end %>
+    <% if flash[:error] %>
+      <p class="error">   Error: <%= flash[:error] %> </p>
+    <% end %>
+    <% if flash[:message] %>
+      <p class="message"> <%= flash[:message] %>      </p>
+    <% end %>
+    <div id="content-wrapper">
+      <div id="content">
+        <%= yield %>
       </div>
     </div>
   </div>

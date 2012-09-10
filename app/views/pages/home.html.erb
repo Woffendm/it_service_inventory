@@ -1,8 +1,7 @@
 <h2> <%= t(:home) %> </h2>
 
 
-<div class="my-form" id="home_header">
-  <%= form_tag(home_search_pages_path, :method => "get") do %>
+  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-inline") do %>
     <span id="group_dropdown">
       <span id="group_select_div">
         <%= label_tag :group_id, t(:group), :class => "inline" %>
@@ -22,7 +21,6 @@
       <%= submit_tag t(:reset), :id => "clear", :type => :button %>
     </span>
   <% end %>
-</div>
 
 
 <div id="no_filters" class="error hidden">
@@ -55,27 +53,48 @@
 
 
 <% if @data_to_graph && @full_time_employees > 0 %>
-  <div class="light_border">
+  <form class="form-horizontal light-border">
     <% if @group %>
-      <%= label_tag t(:group) + ":" %>
-      <%= @group.name %>
-      <br/>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:group) + ":" %>
+        </span>
+        <span class="controls">
+          <%= @group.name %>
+        </span>
+      </div>
     <% end %>
     <% if @service %>
-      <%= label_tag t(:service) + ":" %>
-      <%= @service.name %>
-      <br/>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:service) + ":" %>
+        </span>
+        <span class="controls">
+          <%= @service.name %>
+        </span>
+      </div>
     <% end %>
-    <%= label_tag t(:full_time_employees) + " :" %>
-    <%= @full_time_employees %>
-    <br/>
-    <%= label_tag t(:employee_headcount) + " :" %>
-    <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
+    <div class="control-group">
+      <span class="control-label">
+        <%= label_tag t(:full_time_employees) + ":" %>
+      </span>
+      <span class="controls">
+        <%= @full_time_employees %>
+      </span>
+    </div>
+    <div class="control-group">
+      <span class="control-label">
+        <%= label_tag t(:employee_headcount) + ":" %>
+      </span>
+      <span class="controls">
+        <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
+      </span>
+    </div>
     <div id="employee_results" class="hidden">
       <%= render  :partial => "/pages/employee_results",
                   :locals => {:@employees => @employees} %>
     </div>
-  </div>
+  </form>
 <% end %>
 
 
