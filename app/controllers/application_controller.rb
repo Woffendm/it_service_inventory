@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
+  rescue_from OmniAuth::Error, :with => :invalid_credentials
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from ActionController::RoutingError, :with => :page_not_found
 
@@ -77,30 +78,38 @@ class ApplicationController < ActionController::Base
 
     # Logs an exception's contents, along with what page it was raised on.
     def log_error(exception, raised_on)
-      logger.error "\n\n!!!!!!!!!!!!!!!!!! ERROR  BEGINS !!!!!!!!!!!!!!!!!!!!!! \n"
+      current_user_string = ""
+      current_user_string = (", User ID: " + @current_user.id.to_s) if @current_user
+      logger.error "\n!!!!!!!!!!!!!!!!!! ERROR  BEGINS !!!!!!!!!!!!!!!!!!!!!!"
       logger.error exception
-      logger.error ("Raised on: .../it-service-inventory" + raised_on)
-      logger.error "\n!!!!!!!!!!!!!!!!!! ERROR  ENDS !!!!!!!!!!!!!!!!!!!!!!\n\n"
+      logger.error ("Raised on: " + raised_on + current_user_string + "\n")
+    end
+
+
+    #
+    def invalid_credentials(exception)
+      log_error(exception, request.fullpath)
+      render "errors/invalid_credentials"
     end
 
 
     # Redirects user to 'permission denied' error page
     def permission_denied(exception)
       log_error(exception, request.fullpath)
-      redirect_to permission_denied_errors_path + "?path=" + request.fullpath
+      render "errors/permission_denied"
     end
 
 
     # Redirects user to 'page not found' error page
     def page_not_found(exception)
       log_error(exception, request.fullpath)
-      redirect_to page_not_found_errors_path + "?path=" + request.fullpath
+      render "errors/page_not_found"
     end
 
 
     # Redirects user to 'page not found' error page
     def record_not_found(exception)
       log_error(exception, request.fullpath)
-      redirect_to record_not_found_errors_path + "?path=" + request.fullpath
+      render "errors/record_not_found"
     end
 end

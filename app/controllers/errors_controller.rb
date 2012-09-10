@@ -1,7 +1,9 @@
 class ErrorsController < ApplicationController
   
+  def invalid_credentials
+  end
+  
   def permission_denied
-    @path = params[:path] 
   end
   
   def page_not_found
