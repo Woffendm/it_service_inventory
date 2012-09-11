@@ -8,12 +8,12 @@
 
 <% if can? :manage, Employee %>
   <br/><br/>
-  <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post", 
-                :class => "prevent_double_submit") do %>
+  <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post", :class => "prevent_double_submit") do %>
     <%= submit_tag "Update names and emails of all employees", 
                    :confirm => "This may take a while. Are you ready?" %>
   <% end %>
 <% end %>
+
 
 
 <table class="table table-striped">
@@ -27,7 +27,7 @@
   </thead>
   <tbody>
     <% @employees.each do |employee| %>
-      <tr>
+      <tr class="<%= cycle('odd', 'even', :name => 'employee_table_alternation') %>">
         <td> 
           <%= render  :partial => "/shared/can_update_employee", 
                       :locals => {:@employee => employee} %>  
@@ -35,7 +35,7 @@
         <td> <%= employee.email %> </td>
         <td>  
           <% unless employee.notes.blank? %> 
-            <div class="tooltip_trigger" title="<%= employee.notes %>">
+            <div class="tooltip_trigger">
               <%= employee.notes.truncate(20) %> 
             </div>
             <div class="tooltip">

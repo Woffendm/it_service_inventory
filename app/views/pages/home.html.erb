@@ -53,48 +53,50 @@
 
 
 <% if @data_to_graph && @full_time_employees > 0 %>
-  <form class="form-horizontal light-border">
-    <% if @group %>
+  <div class="light-border">
+    <form class="form-horizontal">
+      <% if @group %>
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag t(:group) + ":" %>
+          </span>
+          <span class="controls">
+            <%= @group.name %>
+          </span>
+        </div>
+      <% end %>
+      <% if @service %>
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag t(:service) + ":" %>
+          </span>
+          <span class="controls">
+            <%= @service.name %>
+          </span>
+        </div>
+      <% end %>
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag t(:group) + ":" %>
+          <%= label_tag t(:full_time_employees) + ":" %>
         </span>
         <span class="controls">
-          <%= @group.name %>
+          <%= @full_time_employees %>
         </span>
       </div>
-    <% end %>
-    <% if @service %>
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag t(:service) + ":" %>
+          <%= label_tag t(:employee_headcount) + ":" %>
         </span>
         <span class="controls">
-          <%= @service.name %>
+          <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
         </span>
       </div>
-    <% end %>
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag t(:full_time_employees) + ":" %>
-      </span>
-      <span class="controls">
-        <%= @full_time_employees %>
-      </span>
-    </div>
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag t(:employee_headcount) + ":" %>
-      </span>
-      <span class="controls">
-        <a id="toggle-employees"><%= @employee_headcount.to_s + ", " + t(:click_to_view) %> </a>
-      </span>
-    </div>
-    <div id="employee_results" class="hidden">
+    </form>
+    <div id="employee_results">
       <%= render  :partial => "/pages/employee_results",
                   :locals => {:@employees => @employees} %>
     </div>
-  </form>
+  </div>
 <% end %>
 
 

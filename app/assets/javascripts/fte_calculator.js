@@ -1,14 +1,22 @@
 /**
-* This file sets up the Full Time Employee calculator modalue window on the Edit Employee page.
+* This file sets up the Full Time Employee calculator dialogue window on the Edit Employee page.
 * The Full Time Employee calculator is used to calculate the user's allocation to a given service, 
 * because most people don't know their allocations off the top of their heads.
 */
 $(document).ready(function(){
   
-  // Sets the specified content to be a modal window, and also sets some options for it. 
-  $("#fte_calculator").modal();
-  $("#fte_calculator").modal("hide");
-  
+  // Sets the specified content to be a dialog window, and also sets some options for it. 
+  $("#fte_calculator").dialog({ 
+    autoOpen  : false,
+    width     : 320,
+    modal     : false,
+    closeText : "",
+    show      : "drop",
+    title     : "Allocation Calculator",
+    close     : function(event){
+      correspondingSelectBox = null;
+    } 
+  });
 
 
 
@@ -22,17 +30,19 @@ $(document).ready(function(){
 
 
 
-  // Closes and clears any show FTE calculator modalue windows. Opens the FTE calculator next to
+  // Closes and clears any open FTE calculator dialogue windows. Opens the FTE calculator next to
   // the trigger when user clicks on the trigger. Sets the corresponding select box to whichever
   // select box came directly before the trigger. 
   $(".fte_calculator_trigger").click(function(e){ 
     if(correspondingSelectBox != $(".calculator_select")[$(".fte_calculator_trigger").index(this)]){
-      $("#fte_calculator").modal("hide");
+      $("#fte_calculator").dialog("close");
       correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
       hoursPerDay.val("");
       hoursPerMonth.val("");
-      popAllocationResult(0);
-      $("#fte_calculator").modal("show");
+      popAllocationResult(0)
+      $("#fte_calculator").dialog("option", "position", [this.offsetLeft + 20, this.offsetTop -
+                                  $(window).scrollTop() - 60]);
+      $("#fte_calculator").dialog("open");
     }
   });
 
@@ -66,7 +76,7 @@ $(document).ready(function(){
   useThisNumber.click(function(e) {
     correspondingSelectBox.value = fteResult.toFixed(1);
     $(".calculator_select").trigger("change");
-    $("#fte_calculator").modal("hide");
+    $("#fte_calculator").dialog("close");
   });
 });
 

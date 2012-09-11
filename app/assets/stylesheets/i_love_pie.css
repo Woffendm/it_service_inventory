@@ -13,6 +13,14 @@
     box-shadow: 0 0 4px black;
 }
 
+.page-header {
+  background: -moz-linear-gradient(45deg, #020031 0%, #c34500 100%) repeat scroll 0 0 transparent;
+  color: white;       
+  border-bottom: 1px solid #EEEEEE;
+  margin: -20px -10px 30px;
+  padding: 5px 5px 5px 20px;
+}
+
 #login{
   float: right;
 }
@@ -35,6 +43,10 @@ body{
   top: 5px;
 }
 
+.form-horizontal .control-group {
+    margin-bottom: 3px;
+}
+
 .navbar-inverse .brand, .navbar-inverse .nav > li > a{  
   color: white;
   padding: 10px 20px;
@@ -47,18 +59,34 @@ body{
   left: 1px;
 }
 
+.navbar-inverse .navbar-inner {
+  background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;
+  min-height: 60px;
+}
+
 
 #header{
   position: fixed;
-  left: 10px;
-  top: -13px;
-  color: orange;
+  left: 14px;
+  top: -7px;
+  color: white;
   z-index: 100000;
+}
+
+input, textarea, .uneditable-input {
+    width: 400px;
 }
 
 
 
 
+h1 {
+  font-size: 30px;
+}
+
+h2 {
+  font-size: 24px;
+}
 
 h3 {
    border-bottom: 5px solid black; 
@@ -132,6 +160,7 @@ div.chart_div_container{
 }
 
 #employee_results{
+  display: none;
   font-weight: normal;
   line-height: 100%;
   font-size: 1em;
@@ -183,9 +212,7 @@ td.tooltip_last_column{
   width: 1em;
 }
 
-div#content{
-  margin-bottom: 100px;
-}
+
 #home_header{
   font-size: 125%;
 }
