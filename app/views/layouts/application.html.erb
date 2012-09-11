@@ -9,10 +9,9 @@
     // Load the Visualization API and the piechart package.
     google.load('visualization', '1.0', {packages:['corechart']});
   </script>
-  <%= stylesheet_link_tag "bootstrap-responsive" %>
   <%= stylesheet_link_tag "bootstrap" %>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <% stylesheet_link_tag "bootstrap-responsive.css" %>
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <%# stylesheet_link_tag "bootstrap-responsive.css" %>
   <%= stylesheet_link_tag "i_love_pie" %>
   <%= stylesheet_link_tag "jquery-ui-1.8.23.custom.css" %>
   <%= stylesheet_link_tag "fte_calculator" %>
@@ -23,6 +22,9 @@
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
+    <div id="header">
+      <h1> IT Service Inventory </h1>
+    </div>
     <div class="navbar-inner">
       <div class="container">
         <div class="nav-collapse collapse">
@@ -54,9 +56,6 @@
         </div>
       </div>
     </div>
-  </div>
-  <div id="header">
-    <h1> IT Service Inventory </h1>
   </div>
   <div id="main">
     <% if flash[:notice] %>

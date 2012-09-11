@@ -8,7 +8,7 @@ $(document).ready(function(){
   // Sets the specified content to be a dialog window, and also sets some options for it. 
   $("#fte_calculator").dialog({ 
     autoOpen  : false,
-    width     : 320,
+    width     : "auto",
     modal     : false,
     closeText : "",
     show      : "drop",

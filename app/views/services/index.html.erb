@@ -3,15 +3,16 @@
 
 
 <% if can? :create, Service %>
-  <fieldset>
-    <legend><%= t(:new_service) %></legend>
-    <%= error_messages_for :service %>
-    <%= form_for @service do |form| %>
-      <%= form.label :name %>
-      <%= form.text_field :name %>
-      <%= form.submit  t(:create) + t(:service) %>
-    <% end %>
-  </fieldset>  
+  <div class="form-inline">
+    <fieldset class="light-border">
+      <legend><%= t(:new_service) %></legend>
+      <%= form_for @service do |form| %>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+        <%= form.submit  t(:create) + t(:service) %>
+      <% end %>
+    </fieldset>  
+  </div>
 <% end %>
 
 

@@ -1,13 +1,12 @@
 <h2> <%= t(:edit) + t(:service) %>: <%= @service.name %> </h2>
 
-
-<%= form_for @service do |form| %>
-  <p>
+<div class="form-inline light-border">
+  <%= form_for @service do |form| %>
     <%= form.label :name %>
     <%= form.text_field :name %>
     <%= form.submit  t(:save_changes) %>
-  </p>
-<% end %>
+  <% end %>
+</div>
 
 <% if @service.employees.any? %>
   <table class="table table-striped"><caption> <%= t(:employees_with_this_service) %> </caption>

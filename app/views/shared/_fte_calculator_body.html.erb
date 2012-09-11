@@ -1,14 +1,13 @@
-<div id="fte_calculator" class="modal" roll="dialog"aria-hidden="true">
-  Hours per day:
-  <span class="form_input">
+<div id="fte_calculator">
+  <div class="form-inline">
+    <%= label_tag :hours_per_day, "Hours per day:" %>
     <%= number_field_tag 'hours_per_day', nil, :placeholder => "Maximum is 8" %>
-  </span>
+  </div>
   <div id="or_div"> or </div>
-  Hours per month:
-  <span class="form_input">
+  <div class="form-inline">
+    <%= label_tag :hours_per_month, "Hours per month:" %>
     <%= number_field_tag 'hours_per_month', nil, :placeholder => "Maximum is 173" %>
-  </span>
-  <br/><br/>
+  </div>
   <div id="allocation_result_container">
     Your allocation is 0 FTE
   </div>

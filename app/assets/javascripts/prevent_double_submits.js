@@ -4,7 +4,7 @@ $(document).ready(function(){
   
   
   //Only allows form to be submitted once.
-  $(".prevent_double_submit").submit(function() {
+  $("form").submit(function() {
     if (beenSubmitted) { return false; }
     beenSubmitted = true;
   });

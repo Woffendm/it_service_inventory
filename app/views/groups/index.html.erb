@@ -2,15 +2,16 @@
 
 
 <% if can? :create, Group %>
-  <fieldset>
-    <legend><%= t(:new_group) %></legend>
-    <%= error_messages_for :group %>
-    <%= form_for @group do |form| %>
-      <%= form.label :name %>
-      <%= form.text_field :name %>
-      <%= form.submit  t(:create) + t(:group) %>
-    <% end %>
-  </fieldset>
+  <div class="form-inline">
+    <fieldset class="light-border">
+      <legend><%= t(:new_group) %></legend>
+      <%= form_for @group do |form| %>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+        <%= form.submit  t(:create) + t(:group) %>
+      <% end %>
+    </fieldset>
+  </div>
 <% end %>
 
   

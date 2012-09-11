@@ -22,6 +22,7 @@
 #allocation_result_container{
   clear: both;
   text-align: center;
+  margin-top: 20px;
 }
 
 span.form_input{
@@ -49,3 +50,7 @@ span.form_input{
   clear: both;
   text-align: center;
 }
+
+#fte_calculator > .form-inline > label {
+  width: 150px;
+} 

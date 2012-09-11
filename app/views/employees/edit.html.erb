@@ -1,6 +1,4 @@
-<div class="page-header">
-  <h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
-</div>
+<h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
 
 
 <%= form_for(@employee, :html => {:class => "prevent_double_submit"}) do |employee_form| %>
@@ -51,12 +49,15 @@
   <% if can? :manage, :all %>
     <% if @employee.get_available_groups.any? %>
       <div class="form-inline" >
-        <%= fields_for "employee_groups" do |form|%>
-          <%= form.label :group_id, t(:group)  %>
-          <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
-                         {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
-          <%= form.submit t(:add), :class => "submission" %>
-        <% end %>
+        <fieldset class="light-border">
+          <legend>Add to Group</legend>
+          <%= fields_for "employee_groups" do |form|%>
+            <%= form.label :group_id, t(:group)  %>
+            <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
+                           {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+            <%= form.submit t(:add), :class => "submission" %>
+          <% end %>
+        </fieldset>
       </div>
     <% end %>
   <% end %>
@@ -99,7 +100,6 @@
       </tbody>
     </table>
   <% end %>
-  <br/><br/>
 
 
 
@@ -114,17 +114,20 @@
    doesn't already have. -->
   <% if @employee.get_available_services.any?%>
     <div class="form-inline" >
-      <%= fields_for "employee_allocations" do |form|%>
-        <%= form.label :service_id, t(:service)  %>
-        <%= form.select(:service_id, options_from_collection_for_select(
-                        @employee.get_available_services, :id, :name),  
-                       {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
-        <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
-                       {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
-                        :class => "calculator_select allocation_value") %>
-        <%= render  :partial => "/shared/fte_calculator_trigger" %>
-        <%= form.submit t(:add), :class => "submission"%>
-      <% end %>
+      <fieldset class="light-border">
+        <legend>Add New Allocation</legend>
+        <%= fields_for "employee_allocations" do |form|%>
+          <%= form.label :service_id, t(:service) %>
+          <%= form.select(:service_id, options_from_collection_for_select(
+                          @employee.get_available_services, :id, :name),  
+                         {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
+          <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
+                         {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
+                          :class => "calculator_select allocation_value") %>
+          <%= render  :partial => "/shared/fte_calculator_trigger" %>
+          <%= form.submit t(:add), :class => "submission"%>
+        <% end %>
+      </fieldset>
     </div>
   <% end %>
 

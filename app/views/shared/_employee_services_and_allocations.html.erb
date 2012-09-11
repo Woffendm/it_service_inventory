@@ -1,22 +1,25 @@
 <% if employee.get_total_allocation > 0 %> 
-  <div class="tooltip_trigger" title="<table class='table' id='tooltip-table'>
-    <thead>
-      <tr>
-        <th> <%= t(:service) %> </th>
-        <th> <%= t(:allocation) %> </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% employee.services.order(:name).each do |service| %>
-        <tr>
-          <td class='tooltip_first_column'> <%= service.name.truncate(20) %> </td>
-          <td class='tooltip_last_column'>
-             <%=service.get_employee_allocation(employee).rounded_allocation %> 
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>">
+  <div class="tooltip_trigger">
     <%= employee.get_total_allocation %> FTE
+  </div>
+  <div class="tooltip">
+    <table class="tooltip-table">
+      <thead>
+        <tr>
+          <th class="tooltip_first_column"> <%= t(:service) %> </th>
+          <th class="tooltip_last_column"> <%= t(:allocation) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% employee.services.order(:name).each do |service| %>
+          <tr>
+            <td class="tooltip_first_column"> <%= service.name.truncate(20) %> </td>
+            <td class="tooltip_last_column">
+               <%=service.get_employee_allocation(employee).rounded_allocation %> 
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 <% end %>

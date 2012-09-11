@@ -1,17 +1,17 @@
 <h2> <%= t(:home) %> </h2>
 
 
-  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-inline") do %>
+  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-inline home-header") do %>
     <span id="group_dropdown">
       <span id="group_select_div">
-        <%= label_tag :group_id, t(:group), :class => "inline" %>
+        <%= label_tag :group_id, t(:group)%>
         <%= collection_select(:group, :id, @groups, :id, :name, 
                              {:include_blank => t(:all_groups) }) %>
       </span>
     </span>
     <span id="service_dropdown">
       <span id="service_select_div">
-        <%= label_tag :service_id, t(:service), :class => "inline" %>
+        <%= label_tag :service_id, t(:service)%>
         <%= collection_select(:service, :id, @services, :id, :name,  
                              {:include_blank => t(:all_services) }) %>
       </span>

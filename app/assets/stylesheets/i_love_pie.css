@@ -60,48 +60,81 @@ body{
 }
 
 .navbar-inverse .navbar-inner {
-  background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;
-  min-height: 60px;
+  background: #444;
+  /*background: -moz-linear-gradient(45deg, #020031 0%, #6D3353 100%) repeat scroll 0 0 transparent;*/
+  min-height: 45px;
 }
 
+.form-search label, .form-inline label, .form-search .btn-group, .form-inline .btn-group {
+    width: 100px;
+}
 
 #header{
   position: fixed;
   left: 14px;
-  top: -7px;
+  top: -8px;
   color: white;
   z-index: 100000;
 }
 
-input, textarea, .uneditable-input {
+textarea {
     width: 400px;
 }
 
+form {
+  margin: 0;
+}
 
 
 
 h1 {
-  font-size: 30px;
+  font-size: 26px;
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 20px;
+  background: -moz-linear-gradient(45deg, #fff 0%, #F2F2F2 100%) repeat scroll 0 0 transparent;
+  /*border-bottom: 4px solid #555555;*/
+  font-weight: bold;
+  text-align: left;
+  
+  border-bottom: 1px solid #F2F2F2;
+  margin: -10px -10px 20px;
+  padding: 5px 5px 5px 20px;
 }
 
-h3 {
-   border-bottom: 5px solid black; 
-   padding-bottom:5px;
+h3, caption {
+  margin-top: 20px;
+  font-size: 16px;
+  border-bottom: 2px solid #555555;
+  font-weight: bold;
+  text-align: left;
+}
+
+caption {
+  padding-bottom: 10px;
+}
+
+legend {
+  border-width: 0;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  margin-bottom: 0px;
+  position: relative;
+  width: auto;
 }
 
 
-.light-border{
+.light-border {
   border: 1px dotted #DDDDDD;
   text-align: left;  
   margin: 1em;
   padding: .5em .5em .5em 1em;
   clear: both;
+  padding-bottom: 15px;
 }
-
 
 tr > td
 {
@@ -109,6 +142,11 @@ tr > td
   padding-bottom: 0.5em;
   padding-left: 10px;
 }
+
+.table-striped > tbody > tr:nth-child(odd){
+  background-color: #f9f9f9;
+}
+
 
 thead
 {
@@ -167,13 +205,6 @@ div.chart_div_container{
   padding-right: 1.5em;
 }
 
-
-.tooltip_trigger{
-  min-width: 10px;
-  cursor: help;
-  display: inline;
-}
-
 /**
 .help:after{
   content: url("../assets/information.png");
@@ -190,8 +221,24 @@ div.chart_div_container{
 }
 
 
-tr.tooltip_odd{
-  background: #FAFDFF; 
+.tooltip{
+  display: none;
+  position: relative;
+  max-width: 300px;
+  padding: 3px 8px;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #444;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+
+.tooltip_trigger{
+  min-width: 10px;
+  cursor: help;
+  display: inline;
 }
 
 .tooltip_paragraph, .tooltip_li{
@@ -200,22 +247,31 @@ tr.tooltip_odd{
   line-height: 150%;
 }
 
-#tooltip-table{
-  width: 900px;
+.tooltip > ul{
+  text-align: left;
 }
 
-td.tooltip_first_column{
-  width: 18em;
+.tooltip-table > tbody > tr:nth-child(odd){
+  background-color: #333;
 }
 
-td.tooltip_last_column{
+.tooltip-table > thead {
+  border-bottom: 1px solid #eee;
+}
+
+.tooltip_first_column{
+  width: 10em;
+}
+
+.tooltip_last_column{
   width: 1em;
 }
 
 
-#home_header{
-  font-size: 125%;
+#group_select_div > label, #service_select_div > label{
+  width: 60px;
 }
+
 #group_select_div > select, #service_select_div > select, #home_header_buttons > input {
   margin-right: 2em;
 }
