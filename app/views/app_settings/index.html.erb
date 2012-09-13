@@ -4,26 +4,42 @@
 <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
 
 
-<table class="table table-striped">
-  <caption> <%= t(:all_settings) %> </caption>
-  <thead>
-    <th> <%= t(:setting) %> </th>
-    <th> <%= t(:current_setting) %> </th>
-    <th> <%= t(:options) %> </th>
-    <th> </th>
-  </thead>
-  <tbody>
-    <% AppSetting.all.each do |setting| %>
-      <%= form_for(setting, :html => {:class => "prevent_double_submit"}) do |form| %>
-        <tr>
-          <td> <%= setting.code %> </td>
-          <td> <%= setting.active.from(7) %> </td>
-          <td> 
-            <%= form.select(:active, options_for_select(@themes), :selected => setting.active) %>
-          </td>
-          <td> <%= form.submit  t(:save_changes) %> </td>
-        </tr>
-      <% end %>
-    <% end %>
-  </tbody>
-</table>
+<%= form_for @app_settings do |form| %>
+  <div class="light-border form-horizontal">
+    <div class="control-group">
+      <span class="control-label">
+        <%= label_tag t(:allocation_precision) %>
+      </span>
+      <span class="controls">
+        <%= form.select(:allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
+                        :selected => @app_settings.allocation_precision) %>
+        <span class="tooltip_trigger information"> &nbsp; </span>
+      </span>
+      <span class="tooltip">
+        <p class="tooltip_paragraph"> 
+          <%= t(:allocation_precision_info) %> 
+        </p>
+      </span>
+    </div>
+    <div class="control-group">
+      <span class="control-label">
+        <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
+      </span>
+      <span class="controls">
+        <%= form.number_field :fte_hours_per_week, {:class => "small", 
+                              :value => @app_settings.rounded_fte_hours_per_week } %>
+        <span class="tooltip_trigger information"> &nbsp; </span>
+      </span>
+      <span class="tooltip">
+        <p class="tooltip_paragraph"> 
+          <%= t(:fte_hours_per_week_info) %> 
+        </p>
+      </span>
+    </div>
+    <div class="control-group">
+      <div class="control-label">
+        <%= submit_tag  t(:save_changes) %>
+      </div>
+    </div>
+  </div>
+<% end %>

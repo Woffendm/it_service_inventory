@@ -24,7 +24,7 @@ $(document).ready(function(){
   var correspondingSelectBox;
   var fteResult;
   var hoursPerDay = $('#hours_per_day');
-  var hoursPerMonth = $('#hours_per_month');
+  var hoursPerWeek = $('#hours_per_week');
   var useThisNumber = $('#use_this_number');
   var TABKEY = 9;
 
@@ -38,7 +38,7 @@ $(document).ready(function(){
       $("#fte_calculator").dialog("close");
       correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
       hoursPerDay.val("");
-      hoursPerMonth.val("");
+      hoursPerWeek.val("");
       popAllocationResult(0)
       $("#fte_calculator").dialog("option", "position", [this.offsetLeft + 20, this.offsetTop -
                                   $(window).scrollTop() - 60]);
@@ -52,20 +52,20 @@ $(document).ready(function(){
   // it calculates the FTE value of the entry, clears the other box, and calls popAllocationResult 
   hoursPerDay.keyup(function(e) {
     if (e.keyCode != TABKEY) {
-      fteResult = (e.target.value / 8);
-      hoursPerMonth.val("");
+      fteResult = (e.target.value / (fteHoursPerWeek / 5));
+      hoursPerWeek.val("");
       popAllocationResult(fteResult);
     }
   });
 
 
 
-  // Watches for a keypress in the hours-per-month box. If one is detected and it is not a tab, then
+  // Watches for a keypress in the hours-per-Week box. If one is detected and it is not a tab, then
   // it calculates the FTE value of the entry, clears the other box, and calls popAllocationResult
-  hoursPerMonth.keyup(function(e) {
+  hoursPerWeek.keyup(function(e) {
     if (e.keyCode != TABKEY) {
       hoursPerDay.val("");
-      fteResult = (e.target.value / 173.33);
+      fteResult = (e.target.value / fteHoursPerWeek);
       popAllocationResult(fteResult);
     }
   });
@@ -74,7 +74,7 @@ $(document).ready(function(){
   // Sets the selected value in the corresponding select box to the calculated value. Fires the 
   // 'change' event for the select box.
   useThisNumber.click(function(e) {
-    correspondingSelectBox.value = fteResult.toFixed(1);
+    correspondingSelectBox.value = fteResult.toFixed(allocationPrecision);
     $(".calculator_select").trigger("change");
     $("#fte_calculator").dialog("close");
   });
@@ -96,10 +96,10 @@ function popAllocationResult(fteResult){
     $("#allocation_result_container").html("Time incorrectly entered!");
   } 
   else {
-    fteResult = (Math.round(fteResult * 10) / 10);
     $("#allocation_result_container").html("");
     if(fteResult > 0) {
-      $("#use_this_number").html("Your allocation is <a>" + fteResult.toFixed(1) + " FTE </a>");
+      $("#use_this_number").html("Your allocation is <a>" + 
+                                 fteResult.toFixed(allocationPrecision) + " FTE </a>");
     }
     else {
       $("#use_this_number").html("Your allocation is 0 FTE");

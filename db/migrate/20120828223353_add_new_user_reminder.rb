@@ -4,6 +4,6 @@ class AddNewUserReminder < ActiveRecord::Migration
   end
 
   def down
-    remove_column :employees, :new_user_reminder, :boolean
+    remove_column :employees, :new_user_reminder
   end
 end

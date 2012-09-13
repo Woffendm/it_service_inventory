@@ -19,10 +19,10 @@ class AppSettingsController < ApplicationController
   
   # View with all configurable settings for the application, and forms to alter said settings
   def index
-    @themes = Dir.glob("app/assets/stylesheets/themes/**/*")
-    (0..@themes.length-1).each do |i|
-      @themes[i] = @themes[i].from(23) # Takes substring to get rid of useless directory information
+    unless AppSetting.first
+      AppSetting.create
     end
+    @app_settings = AppSetting.first
   end
   
   
@@ -51,12 +51,13 @@ class AppSettingsController < ApplicationController
   
   # Updates the application's settings based off selection made on "index" view. 
   def update
-    @setting = AppSetting.find(params[:id])
-    if @setting.update_attributes(params[:app_setting])
-      flash[:notice] = t(:setting) + t(:updated)
+    @app_settings = AppSetting.find(params[:id])
+    if @app_settings.update_attributes(params[:app_setting])
+      flash[:notice] = t(:settings) + t(:updated)
       redirect_to app_settings_path 
       return
     end
+    flash[:error] = "something went wrong"
     render :index
   end
 

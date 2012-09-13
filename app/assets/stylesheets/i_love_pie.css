@@ -337,3 +337,11 @@ a{
 .notice h3 {
   color: #006600; 
 }
+
+input.small {
+  width: 117px;
+}
+
+.groovy{
+  -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent 
+}

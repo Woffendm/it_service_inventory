@@ -22,6 +22,7 @@ en:
   all_services:                 "All Services"
   all_settings:                 "All Settings"
   allocation:                   "Allocation"
+  allocation_precision:         "Allocation precision: "
   allocations:                  "Allocations"
   allocations_for_group:        "Allocations for Group: "
   allocations_for_service:      "Allocations for Service: "
@@ -43,6 +44,7 @@ en:
   existing_employees:           "Existing Employees"
   existing_administrators:      "Existing Administrators"
   first_name:                   "First Name" 
+  fte_hours_per_week:           "FTE hours per week: "
   full_time_employees:          "Full time employees"
   group:                        "Group "
   groups:                       "Groups"
@@ -113,6 +115,8 @@ en:
 
 
   # Notifications and Stuff
+  allocation_precision_info:    "Sets precision for employee allocations. Default is 0.1"
+  
   cannot_delete_self:           "You cannot delete yourself. Get someone else to do it."
   
   compatability_message:        "If you are using Internet Explorer 8, the graphs will not show up on this page. Either upgrade to Internet Explorer 9 or switch to a different browser."
@@ -124,6 +128,8 @@ en:
   confirm_removal:              "Confirm removal. (Reversible action)"
 
   first_name_optional:          "First name is optional"
+  
+  fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
 
   group_no_allocations_0:       "The group you are viewing has employees, but none of them have entered their service allocations. You can fix this by following these steps."
 
