@@ -6,6 +6,7 @@
   <%= form_tag("add_employee", :method => "post", :class => "form-inline") do %>
     <%= label_tag :employee_id, t(:name) %>
     <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
+    <input id="test" name="test" type="text" value="">
     <%= submit_tag  t(:add) %>
   <% end %>
 <% end %>

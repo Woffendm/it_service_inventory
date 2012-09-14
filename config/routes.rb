@@ -43,7 +43,7 @@ Project1::Application.routes.draw do
     collection do
       post 'add_admin'
       post 'remove_admin'
-      post 'change_active_theme'
+      post 'update_settings'
     end
   end
 

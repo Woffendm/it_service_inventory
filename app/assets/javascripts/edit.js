@@ -8,7 +8,7 @@
 */
 $(document).ready(function(){
   var overAllocationMessage = $("#over_allocation");
-  var submissionButtons = $('input.submission');
+  var submissionButtons = $('.submission');
   var allocationValues = $('.allocation_value');
   var removeAllocations = $('.remove_allocation');
   var newAllocationValue = $("#employee_allocations_allocation")
@@ -43,23 +43,15 @@ $(document).ready(function(){
     
     // Hides submit buttons and shows error message if employee is over-allocated
     if( totalAllocation > 1 ) {
-      count = 0;
-      while(count < submissionButtons.length) {
-        submissionButtons[count].hidden = true;
-        overAllocationMessage.show();
-        count += 1;
-      }
+      submissionButtons.hide();
+      overAllocationMessage.show();
     } 
     
     
     // Shows submit buttons and hides error message if employee allocation is acceptable
     else {
-      count = 0;
-      while(count < submissionButtons.length) {
-        submissionButtons[count].hidden = false;
-        overAllocationMessage.hide();
-        count += 1;
-      }
+      submissionButtons.show();
+      overAllocationMessage.hide();
     }
   });
 });

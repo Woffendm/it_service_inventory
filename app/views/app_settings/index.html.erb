@@ -4,42 +4,40 @@
 <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
 
 
-<%= form_for @app_settings do |form| %>
-  <div class="light-border form-horizontal">
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag t(:allocation_precision) %>
-      </span>
-      <span class="controls">
-        <%= form.select(:allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
-                        :selected => @app_settings.allocation_precision) %>
-        <span class="tooltip_trigger information"> &nbsp; </span>
-      </span>
-      <span class="tooltip">
-        <p class="tooltip_paragraph"> 
-          <%= t(:allocation_precision_info) %> 
-        </p>
-      </span>
-    </div>
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
-      </span>
-      <span class="controls">
-        <%= form.number_field :fte_hours_per_week, {:class => "small", 
-                              :value => @app_settings.rounded_fte_hours_per_week } %>
-        <span class="tooltip_trigger information"> &nbsp; </span>
-      </span>
-      <span class="tooltip">
-        <p class="tooltip_paragraph"> 
-          <%= t(:fte_hours_per_week_info) %> 
-        </p>
-      </span>
-    </div>
-    <div class="control-group">
-      <div class="control-label">
-        <%= submit_tag  t(:save_changes) %>
-      </div>
+<%= form_tag( update_settings_app_settings_path, :method => "POST", :class => "light-border form-horizontal") do %>
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag t(:allocation_precision) %>
+    </span>
+    <span class="controls">
+      <%= select(:app_setting, :allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
+                {:selected => AppSetting.get_allocation_precision} ) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <p class="tooltip_paragraph"> 
+        <%= t(:allocation_precision_info) %> 
+      </p>
+    </span>
+  </div>
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
+    </span>
+    <span class="controls">
+      <%= number_field_tag :fte_hours_per_week, AppSetting.get_fte_hours_per_week, 
+                          {:class => "small"} %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <p class="tooltip_paragraph"> 
+        <%= t(:fte_hours_per_week_info) %> 
+      </p>
+    </span>
+  </div>
+  <div class="control-group">
+    <div class="control-label">
+      <%= submit_tag  t(:save_changes) %>
     </div>
   </div>
 <% end %>

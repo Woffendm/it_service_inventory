@@ -19,6 +19,8 @@ gem 'will_paginate'
 
 gem 'mysql'
 
+gem 'seed-fu', '~> 2.2.0'
+
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec'

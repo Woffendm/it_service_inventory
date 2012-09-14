@@ -4,12 +4,40 @@
 # Copyright:
 
 class AppSetting < ActiveRecord::Base
-  attr_accessible :allocation_precision, :fte_hours_per_week
-  validates :fte_hours_per_week, :numericality => { :greater_than => 0 }
+  attr_accessible :code, :value
 
 
-  # Rounds fte_hours_per_day to the nearest tenth. 
-  def rounded_fte_hours_per_week
-    return fte_hours_per_week.round(1)
+
+  # Sets the number of hours full-time employees work per week
+  def self.set_fte_hours_per_week(new_value)
+    app_setting = AppSetting.find_by_code("fte_hours_per_week")
+    if new_value.to_f > 0
+      app_setting.value = new_value
+      app_setting.save
+      return true
+    else
+      app_setting.errors.add(:value, "Invalid entry")
+      return false
+    end
+  end
+  
+  
+  # Gets the number of hours full-time employees work per week
+  def self.get_fte_hours_per_week
+    return AppSetting.find_by_code("fte_hours_per_week").value.to_f.round(1)
+  end
+  
+  
+  # Sets level of decimal precision for allocations. 
+  def self.set_allocation_precision(new_value)
+    app_setting = AppSetting.find_by_code("allocation_precision")
+    app_setting.value = new_value
+    app_setting.save
+  end
+  
+  
+  # Gets level of decimal precision for allocations.
+  def self.get_allocation_precision
+    return AppSetting.find_by_code("allocation_precision").value.to_f.to_int
   end
 end

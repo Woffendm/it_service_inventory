@@ -16,7 +16,7 @@ class EmployeeAllocation < ActiveRecord::Base
   def possible_allocations
     array_of_floats = []
     upper_bound_of_incrementation = 1
-    for i in 1..AppSetting.first.allocation_precision
+    for i in 1..AppSetting.get_allocation_precision
       upper_bound_of_incrementation = upper_bound_of_incrementation * 10
     end
     (1..upper_bound_of_incrementation).each do |integer|
@@ -30,7 +30,7 @@ class EmployeeAllocation < ActiveRecord::Base
   # Because mysql is bad at storing floats which aren't a power of 2, before the allocation value 
   # can be used in a display or calculation it must first be rounded to two decimal places. 
   def rounded_allocation
-    return allocation.round(AppSetting.first.allocation_precision)
+    return allocation.round(AppSetting.get_allocation_precision)
   end
 
 end
