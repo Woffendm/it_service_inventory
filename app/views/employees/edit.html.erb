@@ -184,4 +184,6 @@
 <%= link_to t(:return_to) + t(:all_employees), employees_path %>
 
 
-<%= render  :partial => "/shared/fte_calculator_body" %>
+<%= render  :partial => "/shared/fte_calculator_body", 
+            :locals => {:@allocation_precision => @allocation_precision,
+                        :@fte_hours_per_week => @fte_hours_per_week } %>

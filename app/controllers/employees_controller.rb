@@ -6,15 +6,21 @@
 class EmployeesController < ApplicationController
 
   before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
-  before_filter :load_employee,        :only => [:destroy, :edit, :update]
+  before_filter :load_employee,        :only => [:destroy, :edit, :find_an_employee, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
   before_filter :load_allocation,      :only => [:edit, :update]
+  before_filter :load_allocation_precision, :only => [:edit, :update]
 
 
 # View-related methods
 
   # Page for editing an existing employee
   def edit
+  end
+
+
+  # Table with an employee
+  def find_an_employee
   end
 
 
@@ -160,6 +166,13 @@ class EmployeesController < ApplicationController
     # Creates a blank EmployeeAllocation object so its methods can be used
     def load_allocation
       @employee_allocation_used_for_methods = EmployeeAllocation.new
+    end
+
+
+    # Loads the application settings fte_hours_per_week and allocation_precision
+    def load_allocation_precision
+      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 

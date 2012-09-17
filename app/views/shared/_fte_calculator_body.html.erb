@@ -2,13 +2,13 @@
   <div class="form-inline">
     <%= label_tag :hours_per_day, "Hours per day:" %>
     <%= number_field_tag 'hours_per_day', nil, 
-      :placeholder => "Maximum is #{(AppSetting.get_fte_hours_per_week / 5)}" %>
+      :placeholder => "Maximum is #{(@fte_hours_per_week / 5)}" %>
   </div>
   <div id="or_div"> or </div>
   <div class="form-inline">
     <%= label_tag :hours_per_week, "Hours per week:" %>
     <%= number_field_tag 'hours_per_week', nil, 
-        :placeholder => "Maximum is #{AppSetting.get_fte_hours_per_week}" %>
+        :placeholder => "Maximum is #{@fte_hours_per_week}" %>
   </div>
   <div id="allocation_result_container">
     Your allocation is 0 FTE
@@ -17,6 +17,6 @@
 </div>
 
 <script type="text/javascript">
-  var fteHoursPerWeek = <%= AppSetting.get_fte_hours_per_week %>;
-  var allocationPrecision = <%= AppSetting.get_allocation_precision %>;
+  var fteHoursPerWeek = <%= @fte_hours_per_week %>;
+  var allocationPrecision = <%= @allocation_precision %>;
 </script>
