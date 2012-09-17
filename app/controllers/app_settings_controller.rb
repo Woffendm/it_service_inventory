@@ -19,10 +19,8 @@ class AppSettingsController < ApplicationController
 
   # View with all configurable settings for the application, and forms to alter said settings
   def index
-    unless AppSetting.first
-      AppSetting.create
-    end
-    @app_settings = AppSetting.first
+    @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+    @allocation_precision = AppSetting.get_allocation_precision
   end
 
 
@@ -51,14 +49,15 @@ class AppSettingsController < ApplicationController
 
   # Updates the application's settings based off selections made on "index" view. 
   def update_settings
-    AppSetting.set_allocation_precision(params[:app_setting][:allocation_precision])
-    if AppSetting.set_fte_hours_per_week(params[:fte_hours_per_week])
-      flash[:notice] = t(:settings) + t(:updated)
-      redirect_to app_settings_path 
-      return
+    AppSetting.all.each do |app_setting|
+      unless AppSetting.save_setting(app_setting, params[:app_setting][app_setting.code])
+        flash[:error] = "One or more of your fields is invalid! Only beets and turnips are allowed!"
+        render :index
+        return
+      end
     end
-    flash[:error] = "Invalid input on FTE hours per week field"
-    render :index
+    flash[:notice] = t(:settings) + t(:updated)
+    redirect_to app_settings_path 
   end
 
 

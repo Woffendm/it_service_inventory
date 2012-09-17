@@ -11,7 +11,7 @@
     </span>
     <span class="controls">
       <%= select(:app_setting, :allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
-                {:selected => AppSetting.get_allocation_precision} ) %>
+                {:selected => @allocation_precision} ) %>
       <span class="tooltip_trigger information"> &nbsp; </span>
     </span>
     <span class="tooltip">
@@ -25,7 +25,7 @@
       <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
     </span>
     <span class="controls">
-      <%= number_field_tag :fte_hours_per_week, AppSetting.get_fte_hours_per_week, 
+      <%= number_field_tag "app_setting[fte_hours_per_week]", @fte_hours_per_week, 
                           {:class => "small"} %>
       <span class="tooltip_trigger information"> &nbsp; </span>
     </span>
