@@ -6,9 +6,9 @@
     <% else %>
       <span class="pagination_option">
     <% end %>
-    <%= link_to "#{number_of_results}", 
-                change_results_per_page_logins_path + 
-                "?results_per_page=#{number_of_results}" %>
+    <%= link_to "#{number_of_results}", change_results_per_page_logins_path + 
+                "?results_per_page=#{number_of_results}" +  
+                "&name_to_search_for=#{params[:name_to_search_for]}" %>
     </span>
   <% end %>
 </div>

@@ -6,12 +6,11 @@
 </h2>
 
 
-
 <fieldset class="light-border">
   <legend><%= t(:search_for_employee) %></legend>
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
     <%= label_tag :name_to_search_for, t(:name) %>
-    <%= text_field_tag :name_to_search_for %>
+    <%= text_field_tag :name_to_search_for, params[:name_to_search_for] %>
     <%= submit_tag "Search" %>
   <% end %>
 </fieldset>

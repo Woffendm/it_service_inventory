@@ -21,14 +21,8 @@ class EmployeesController < ApplicationController
 
   # Starts out as a list of all employees, but can be restricted by a search
   def index
-    if params[:name_to_search_for] || session[:previous_params]
-      if params[:name_to_search_for]
-        session[:previous_params] = params[:name_to_search_for]
-        array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
-      elsif session[:previous_params]
-        array_of_strings_to_search_for = session[:previous_params].split(" ")
-        session[:previous_params] = nil
-      end
+    if params[:name_to_search_for]
+      array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
       # Puts in dummy second entry if no second entry was given
       array_of_strings_to_search_for[1] = "!?!" if array_of_strings_to_search_for.length < 2
       # Searches the database for any employee whose first or last name has a partial match
