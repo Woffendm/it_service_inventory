@@ -1,11 +1,7 @@
 /**
-* This file sets up tooltips throughout the application. Tooltips are text boxes that show up when
-*    you hover over text, and provide additional information. 
+* This file sets up hybrid autocomplete-select boxes throughout the application. You can either use
+*    it like a regular select box, or type stuff in. Nifty!
 */
-$(document).ready(function(){
-  var testArray = [{label: "bob", id: "1"}, {label: "frank", id: "2"}];
-  // 
-  $("#test").autocomplete({
-    source: testArray
-  });
+jQuery(document).ready(function(){
+  jQuery(".autocomplete").chosen();
 });

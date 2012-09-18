@@ -6,7 +6,7 @@
 class EmployeesController < ApplicationController
 
   before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
-  before_filter :load_employee,        :only => [:destroy, :edit, :find_an_employee, :update]
+  before_filter :load_employee,        :only => [:destroy, :edit, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
   before_filter :load_allocation,      :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :update]
@@ -19,15 +19,31 @@ class EmployeesController < ApplicationController
   end
 
 
-  # Table with an employee
-  def find_an_employee
-  end
-
-
-  # List of all employees
+  # Starts out as a list of all employees, but can be restricted by a search
   def index
-    @employees = Employee.order(:name_last, :name_first).paginate(:page => params[:page], 
-                :per_page => session[:results_per_page])
+    if params[:name_to_search_for] || session[:previous_params]
+      if params[:name_to_search_for]
+        session[:previous_params] = params[:name_to_search_for]
+        array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
+      elsif session[:previous_params]
+        array_of_strings_to_search_for = session[:previous_params].split(" ")
+        session[:previous_params] = nil
+      end
+      # Puts in dummy second entry if no second entry was given
+      array_of_strings_to_search_for[1] = "!?!" if array_of_strings_to_search_for.length < 2
+      # Searches the database for any employee whose first or last name has a partial match
+      @employees = Employee.where('name_last LIKE ? OR name_first LIKE ? 
+                                  OR name_last LIKE ? OR name_first LIKE ?',
+                                  "%#{array_of_strings_to_search_for[0]}%",
+                                  "%#{array_of_strings_to_search_for[0]}%",
+                                  "%#{array_of_strings_to_search_for[1]}%", 
+                                  "%#{array_of_strings_to_search_for[1]}%")
+      @employees = @employees.order(:name_last, :name_first)
+    else
+      @employees = Employee.order(:name_last, :name_first)
+    end
+    @employees = @employees.paginate(:page => params[:page], 
+                                     :per_page => session[:results_per_page])
   end
 
 
@@ -85,7 +101,6 @@ class EmployeesController < ApplicationController
     @data = RemoteEmployee.search(params[:last_name], params[:first_name])
     render :layout => false
   end
-
 
 
   # Updates an employee based on info entered on the "edit" page.

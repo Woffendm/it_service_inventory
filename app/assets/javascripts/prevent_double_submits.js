@@ -3,7 +3,7 @@ $(document).ready(function(){
   var beenSubmitted = false;
   
   
-  //Only allows form to be submitted once.
+  //Only allows forms to be submitted once.
   $("form").submit(function() {
     if (beenSubmitted) { return false; }
     beenSubmitted = true;

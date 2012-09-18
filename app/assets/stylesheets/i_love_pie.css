@@ -342,6 +342,14 @@ input.small {
   width: 117px;
 }
 
+.large-select {
+  width: 200px;
+}
+
+.blank-icon {
+  padding-right: 17px;
+}
+
 .groovy{
   -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent 
 }

@@ -2,12 +2,18 @@
 
 
 <% unless @not_admins.empty? %>
-  <h3> <%= t(:add) + t(:admin) %> </h3>
-  <%= form_tag( "add_admin", :method => "post", :class => "prevent_double_submit form-inline") do %>
-    <%= label_tag :employee_id, t(:name) %>
-    <%= collection_select(:employee, :id, @not_admins, :id, :full_name) %>
-    <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
-  <% end %>
+  <div class="form-inline">
+    <fieldset class="light-border">
+      <legend><%= t(:add) + t(:admin) %></legend>
+      <%= form_tag( "add_admin", :method => "post") do %>
+        <%= label_tag :employee_id, t(:name) %>
+        <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
+                             {:include_blank => true}, {:class => "autocomplete large-select", 
+                             "data-placeholder" => "Choose an employee"}) %>
+        <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
+      <% end %>
+    </fieldset>
+  </div>
 <% end %>
 
 

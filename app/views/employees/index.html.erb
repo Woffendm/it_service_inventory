@@ -1,18 +1,20 @@
-<h2> <%= t(:employees) %> </h2>
-
-
-<% if can? :create, Employee %>
-  <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
-<% end %>
-
-
-<% if can? :manage, Employee %>
-  <br/><br/>
-  <%= form_tag( update_all_employees_via_ldap_employees_path, :method => "post", :class => "prevent_double_submit hidden") do %>
-    <%= submit_tag "Update names and emails of all employees", 
-                   :confirm => "This may take a while. Are you ready?" %>
+<h2> 
+  <%= t(:employees) %> 
+  <% if can? :create, Employee %>
+    <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
   <% end %>
-<% end %>
+</h2>
+
+
+
+<fieldset class="light-border">
+  <legend><%= t(:search_for_employee) %></legend>
+  <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
+    <%= label_tag :name_to_search_for, t(:name) %>
+    <%= text_field_tag :name_to_search_for %>
+    <%= submit_tag "Search" %>
+  <% end %>
+</fieldset>
 
 
 
@@ -20,7 +22,6 @@
   <caption> <%= t(:all_employees) %></caption>
   <thead>
     <th> <%= t(:name) %> </th>
-    <th> <%= t(:email) %> </th>
     <th> <%= t(:notes) %> </th>
     <th> <%= t(:total_allocation) %> </th>
     <th>  </th>
@@ -29,10 +30,21 @@
     <% @employees.each do |employee| %>
       <tr>
         <td> 
-          <%= render  :partial => "/shared/can_update_employee", 
-                      :locals => {:@employee => employee} %>  
+          <% unless employee.email.blank? %>
+            <span class="tooltip_trigger">
+              <i class="icon-envelope"></i>
+            </span>
+            <div class="tooltip">
+              <p class="tooltip_paragraph"> <%= employee.email %> </p>
+            </div>
+          <% else %>
+            <span class="blank-icon"></span>
+          <% end %>
+          <span class="before_icon">
+            <%= render  :partial => "/shared/can_update_employee", 
+                        :locals => {:@employee => employee} %>
+          </span>
         </td>
-        <td> <%= employee.email %> </td>
         <td>  
           <% unless employee.notes.blank? %> 
             <div class="tooltip_trigger">

@@ -2,13 +2,18 @@
 
 
 <% if (@group.get_available_employees.length > 0)  && (can? :update, @group) %>
-  <h3> <%= t(:add) + t(:employee) %> </h3>
-  <%= form_tag("add_employee", :method => "post", :class => "form-inline") do %>
-    <%= label_tag :employee_id, t(:name) %>
-    <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name) %>
-    <input id="test" name="test" type="text" value="">
-    <%= submit_tag  t(:add) %>
-  <% end %>
+  <div class="form-inline">
+    <fieldset class="light-border">
+      <legend><%= t(:add) + t(:employee) %></legend>
+      <%= form_tag( "add_employee", :method => "post") do %>
+        <%= label_tag :employee_id, t(:name) %>
+        <%= collection_select(:employee, :id, @group.get_available_employees, :id, :full_name,
+                             {:include_blank => true}, {:class => "autocomplete large-select", 
+                             "data-placeholder" => "Choose an employee"}) %>
+        <%= submit_tag  t(:add) %>
+      <% end %>
+    </fieldset>
+  </div>
 <% end %>
 
 

@@ -47,7 +47,8 @@ class LoginsController < ApplicationController
       session[:current_user_name] = employee_exists.full_name
       session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
-      flash[:notice] = t(:logged_in_as) + session[:current_user_name]
+      session[:previous_params] = nil
+      flash[:notice] = "Welcome " + employee_exists.name_first + "!"
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
@@ -64,6 +65,7 @@ class LoginsController < ApplicationController
       session[:current_user_name] = employee_exists.full_name
       session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
+      session[:previous_params] = nil
       flash[:notice] = "Welcome " + employee_exists.name_first + "!"
       redirect_to pages_home_path
     else
@@ -78,6 +80,7 @@ class LoginsController < ApplicationController
     session[:current_user_name] = nil
     session[:current_user_osu_username] = nil
     session[:results_per_page] = nil
+    session[:previous_params] = nil
     flash[:notice] = t(:logged_out)
     redirect_to logins_new_path
   end
