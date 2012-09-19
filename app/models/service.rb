@@ -5,8 +5,10 @@
 
 class Service < ActiveRecord::Base
   attr_accessible :name
-  has_many :employee_allocations, :dependent => :delete_all
-  has_many :employees, :through => :employee_allocations
+  has_many :employee_allocations, :dependent  => :delete_all
+  has_many :employees,            :through    => :employee_allocations
+  has_many :product_services,     :dependent  => :delete_all
+  has_many :products,             :through    => :product_services
   validates_presence_of :name
 
 

@@ -74,8 +74,7 @@ $(document).ready(function(){
   // Sets the selected value in the corresponding select box to the calculated value. Fires the 
   // 'change' event for the select box.
   useThisNumber.click(function(e) {
-    correspondingSelectBox.value = Math.round(fteResult * Math.pow(10, allocationPrecision)) /
-                                   Math.pow(10, allocationPrecision);
+    correspondingSelectBox.value = fteResult.toFixed(allocationPrecision);
     $(".calculator_select").trigger("change");
     $("#fte_calculator").dialog("close");
   });

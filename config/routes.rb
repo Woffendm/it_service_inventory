@@ -1,5 +1,7 @@
 Project1::Application.routes.draw do
 
+  resources :products
+
   match 'app_settings/admins' => 'app_settings#admins'
   match 'employees/search_ldap_view' => 'employees#search_ldap_view'
   match 'logins/new' => 'logins#new'

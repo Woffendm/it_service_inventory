@@ -1,0 +1,57 @@
+<h2> <%= t(:products) %> </h2>
+
+
+
+<% if can? :create, Product %>
+  <div class="form-inline">
+    <fieldset class="light-border">
+      <legend><%= t(:new_product) %></legend>
+      <%= form_for @product do |form| %>
+        <%= form.label :name %>
+        <%= form.text_field :name %>
+        <%= form.submit  t(:create) + t(:product) %>
+      <% end %>
+    </fieldset>  
+  </div>
+<% end %>
+
+
+
+<table class="table table-striped">
+  <caption> <%= t(:all_products) %> </caption>
+  <thead>
+    <th> <%= t(:name) %> </th>
+    <th> <%= t(:description) %> </th>
+    <th>  </th>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td> <%= link_to  product.name, edit_product_path(product.id) %> </td>
+        <td>  
+          <% unless product.description.blank? %> 
+            <div class="tooltip_trigger">
+              <%= product.description.truncate(20) %> 
+            </div>
+            <div class="tooltip">
+              <p class="tooltip_paragraph"> <%= product.description %> </p>
+            </div>
+          <% end %>
+        </td>
+        <td> 
+          <% if can? :delete, Product %>
+            <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
+                        t(:confirm_deletion) %> 
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<div class="pagination_footer">
+  <%= will_paginate @products %>
+  <%= render :partial => "/shared/results_per_page" %>
+</div>
+

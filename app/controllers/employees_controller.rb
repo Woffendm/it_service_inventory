@@ -9,6 +9,7 @@ class EmployeesController < ApplicationController
   before_filter :load_employee,        :only => [:destroy, :edit, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :update]
+  before_filter :load_possible_allocations, :only => [:edit, :update]
 
 
 # View-related methods
@@ -187,5 +188,11 @@ class EmployeesController < ApplicationController
     def load_groups_services
       @services = @employee.services.order(:name)
       @groups = @employee.groups.order(:name)
+    end
+    
+    
+    # Loads possible allocations
+    def load_possible_allocations
+      @possible_allocations = EmployeeAllocation.possible_allocations
     end
 end

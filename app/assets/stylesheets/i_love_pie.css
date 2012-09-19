@@ -168,7 +168,7 @@ tbody {
 }
 
 select {
-  width: 130px;
+  width: 150px;
 }
 
 div#pie_chart_div{
@@ -339,7 +339,7 @@ a{
 }
 
 input.small {
-  width: 117px;
+  width: 136px;
 }
 
 .large-select {
@@ -351,5 +351,5 @@ input.small {
 }
 
 .groovy{
-  -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent 
+  background: -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent;
 }

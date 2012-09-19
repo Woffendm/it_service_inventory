@@ -1,7 +1,7 @@
 <h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
 
 
-<%= form_for(@employee, :html => {:class => "prevent_double_submit"}) do |employee_form| %>
+<%= form_for @employee do |employee_form| %>
 
 
   <h3><%= t(:basic_information) %> </h3>
@@ -121,7 +121,7 @@
           <%= form.select(:service_id, options_from_collection_for_select(
                           @employee.get_available_services, :id, :name),  
                          {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
-          <%= form.select(:allocation, @employee_allocation_used_for_methods.possible_allocations,
+          <%= form.select(:allocation, @possible_allocations,
                          {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
                           :class => "calculator_select allocation_value") %>
           <%= render  :partial => "/shared/fte_calculator_trigger" %>
@@ -157,8 +157,7 @@
               <td class="form-inline"> 
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
                 <%= form.hidden_field :id %>
-                <%= form.select(:allocation,
-                                @employee_allocation_used_for_methods.possible_allocations, 
+                <%= form.select(:allocation, @possible_allocations, 
                                {:selected => employee_allocation.rounded_allocation}, 
                                 :class => "calculator_select allocation_value") %>
                 <%= render  :partial => "/shared/fte_calculator_trigger" %>

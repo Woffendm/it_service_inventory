@@ -24,6 +24,7 @@ class Ability
           if group.group_admin
             can :update, Group, :id => group.group_id
             can [:create, :update], Service
+            can [:create, :update], Product
             can :create, Employee
             # Group admins can edit info of all employees within their group
             Group.find(group.group_id).employees.each do |employee|
@@ -31,7 +32,10 @@ class Ability
             end
           end
         end
-        # Everyone else can only edit themself
+        # Everyone else can only edit themself and products they're assigned to
+        user.products.each do |product|
+          can :update, Product, :id => product.id
+        end
         can :read, :all
         can :update, Employee, :id => user.id
       end

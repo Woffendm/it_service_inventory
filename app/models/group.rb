@@ -8,6 +8,7 @@ class Group < ActiveRecord::Base
   attr_accessible :employees, :name
   has_many :employee_groups, :dependent => :delete_all
   has_many :employees, :through => :employee_groups
+  has_many :products
   validates_presence_of :name
   
   

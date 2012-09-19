@@ -1,0 +1,172 @@
+<h2> <%= t(:edit) + t(:product) %>: <%= @product.name %></h2>
+
+
+<%= form_for @product do |product_form| %>
+
+
+  <h3> <%= t(:basic_information) %> </h3>
+  <div class="form-horizontal">
+    <%= fields_for @product do |form| %>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:name) %>
+        </span>
+        <span class="controls">
+          <%= @product.name %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :group_id, "Parent group" %>
+        </span>
+        <span class="controls">
+          <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name,
+                         {:selected => @product.group_id})) %>     
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :description %> 
+        </span>
+        <span class="controls">
+          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+
+
+  <!-- Drop-down list of services that can be added. Only populated with services that the product
+   doesn't already belong to. -->
+  <h3> <%= t(:services) %> </h3>
+  <% if can? :create, Product %>
+    <% if @product.get_available_services.any? %>
+      <div class="form-inline" >
+        <fieldset class="light-border">
+          <legend> Add to Service </legend>
+          <%= fields_for "product_services" do |form|%>
+            <%= form.label :service_id, t(:service)  %>
+            <%= form.select(:service_id, options_from_collection_for_select(
+                            @product.get_available_services, :id, :name),  
+                           {:include_blank => "-" + t(:select) + t(:service) + "-"}) %>
+            <%= form.submit t(:add) %>
+          <% end %>
+        </fieldset>
+      </div>
+    <% end %>
+  <% end %>
+
+
+  <!-- Table of all services that the product currently belongs to. Admins are able to make changes
+   to the product's services here --> 
+  <% if @product.services.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> <%= t(:service) %> </th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% count = 0 %>
+        <%= product_form.fields_for "product_services" do |form| %>
+          <% unless @services[count].nil? %>
+            <% service = @services[count] %>
+            <tr>
+              <td>
+                <%= render  :partial => "/shared/can_update_service", 
+                            :locals => {:service => service} %>                
+              </td>
+              <td>
+                <% if can? :create, Product %>
+                  <%= form.check_box :_destroy %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+          <% count += 1 %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+
+
+  <h3> <%= t(:employees) %> </h3>
+  <!-- Drop-down list of employees that can be added. Only populated with employees that the product
+   doesn't already have. -->
+  <% if @product.get_available_employees.any?%>
+    <div class="form-inline" >
+      <fieldset class="light-border">
+        <legend> Add Employee </legend>
+        <%= fields_for "employee_products" do |form|%>
+          <%= form.label :employee_id, t(:employee) %>
+          <%= form.select(:employee_id, options_from_collection_for_select(
+                          @product.get_available_employees, :id, :full_name),  
+                         {:include_blank => "-" + t(:select) + t(:employee) + "-"}) %> 
+          <%= form.select(:allocation, @possible_allocations,
+                         {:include_blank => "-" + t(:optional) + t(:allocation) + "-"},
+                          :class => "calculator_select allocation_value") %>
+          <%= render  :partial => "/shared/fte_calculator_trigger" %>
+          <%= form.submit t(:add) %>
+        <% end %>
+      </fieldset>
+    </div>
+  <% end %>
+
+
+
+  <!-- Creates table with the product's services and allocations. Can be edited by product or
+   admin -->
+  <% if @product.employee_products.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> <%= t(:employee) %> </th>
+          <th> <%= t(:allocation) %> </th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% count = 0 %>
+        <%= product_form.fields_for "employee_products" do |form|%>
+          <% unless @employees[count].nil? %>
+            <% employee_product =
+                        @product.employee_products.find_by_employee_id(@employees[count].id) %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_employee", 
+                            :locals => {:@employee => employee_product.employee} %>
+              </td>
+              <td class="form-inline"> 
+                <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
+                <%= form.hidden_field :id %>
+                <%= form.select(:allocation, @possible_allocations, 
+                               {:selected => employee_product.rounded_allocation}, 
+                                :class => "calculator_select allocation_value") %>
+                <%= render  :partial => "/shared/fte_calculator_trigger" %>
+              </td>
+              <td> 
+                <%= form.check_box :_destroy, :class => "remove_allocation" %>
+              </td>
+            </tr>
+          <% end %>
+          <% count += 1 %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  <br/>
+
+
+  <%= product_form.submit  t(:save_changes) %> 
+<% end %>
+
+
+<br/><br/>
+<%= link_to t(:return_to) + t(:all_products), products_path %>
+
+
+<%= render  :partial => "/shared/fte_calculator_body", 
+            :locals => {:@allocation_precision => @allocation_precision,
+                        :@fte_hours_per_week => @fte_hours_per_week } %>

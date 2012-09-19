@@ -36,6 +36,9 @@
             <% if can? :update, Service %>
               <li><%= link_to t(:services), services_path %></li>
             <% end %>
+            <% if can? :create, Product %>
+              <li><%= link_to t(:products), products_path %></li>
+            <% end %>
             <% if can? :manage, AppSetting %>
               <li> 
                 <%= link_to t(:settings), app_settings_path %>
