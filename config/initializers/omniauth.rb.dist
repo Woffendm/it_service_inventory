@@ -1,6 +1,7 @@
+OmniAuth.config.full_host = Project1::Application.config.config['ldap_login_host']
 Rails.application.config.middleware.use OmniAuth::Strategies::LDAP, 
-  :host => Project1::Application.config.host,
-  :port => Project1::Application.config.port,
-  :method => :plain,
-  :base => Project1::Application.config.treebase,
+  :host => Project1::Application.config.config['host'],
+  :port => Project1::Application.config.config['port'],
+  :method => :ssl,
+  :base => Project1::Application.config.config['treebase'],
   :uid => 'uid'
