@@ -22,14 +22,6 @@ class EmployeesController < ApplicationController
   def index
     if params[:name_to_search_for]
       array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
-      
-      # Searches the database for any employee whose first or last name has a partial match
-      #@employees = Employee.where('name_last LIKE ? OR name_first LIKE ? 
-     #                             OR name_last LIKE ? OR name_first LIKE ?',
-      #                            "%#{array_of_strings_to_search_for[0]}%",
-     #                             "%#{array_of_strings_to_search_for[0]}%",
-     #                             "%#{array_of_strings_to_search_for[1]}%", 
-     #                             "%#{array_of_strings_to_search_for[1]}%")
       conditions = []
       conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
       conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
@@ -37,8 +29,7 @@ class EmployeesController < ApplicationController
         conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
         conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
       end
-      @employees = Employee.where(conditions.join(" OR "))
-      @employees = @employees.order(:name_last, :name_first)
+      @employees = Employee.where(conditions.join(" OR ")).order(:name_last, :name_first)
     else
       @employees = Employee.order(:name_last, :name_first)
     end
