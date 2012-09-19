@@ -8,7 +8,6 @@ class EmployeesController < ApplicationController
   before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
   before_filter :load_employee,        :only => [:destroy, :edit, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
-  before_filter :load_allocation,      :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :update]
 
 
@@ -23,15 +22,22 @@ class EmployeesController < ApplicationController
   def index
     if params[:name_to_search_for]
       array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
-      # Puts in dummy second entry if no second entry was given
-      array_of_strings_to_search_for[1] = "!?!" if array_of_strings_to_search_for.length < 2
+      
       # Searches the database for any employee whose first or last name has a partial match
-      @employees = Employee.where('name_last LIKE ? OR name_first LIKE ? 
-                                  OR name_last LIKE ? OR name_first LIKE ?',
-                                  "%#{array_of_strings_to_search_for[0]}%",
-                                  "%#{array_of_strings_to_search_for[0]}%",
-                                  "%#{array_of_strings_to_search_for[1]}%", 
-                                  "%#{array_of_strings_to_search_for[1]}%")
+      #@employees = Employee.where('name_last LIKE ? OR name_first LIKE ? 
+     #                             OR name_last LIKE ? OR name_first LIKE ?',
+      #                            "%#{array_of_strings_to_search_for[0]}%",
+     #                             "%#{array_of_strings_to_search_for[0]}%",
+     #                             "%#{array_of_strings_to_search_for[1]}%", 
+     #                             "%#{array_of_strings_to_search_for[1]}%")
+      conditions = []
+      conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
+      conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+      if array_of_strings_to_search_for.length > 1
+        conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
+        conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
+      end
+      @employees = Employee.where(conditions.join(" OR "))
       @employees = @employees.order(:name_last, :name_first)
     else
       @employees = Employee.order(:name_last, :name_first)
@@ -169,12 +175,6 @@ class EmployeesController < ApplicationController
     # Ensures that the user is authorized to create new employees
     def authorize_creation
       authorize! :create, Employee
-    end
-
-
-    # Creates a blank EmployeeAllocation object so its methods can be used
-    def load_allocation
-      @employee_allocation_used_for_methods = EmployeeAllocation.new
     end
 
 
