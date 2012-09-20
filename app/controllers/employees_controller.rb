@@ -10,6 +10,8 @@ class EmployeesController < ApplicationController
   before_filter :load_groups_services, :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
+  skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :user_settings]
+
 
 
 # View-related methods

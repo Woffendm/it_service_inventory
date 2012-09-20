@@ -22,8 +22,9 @@ class EmployeeProduct < ActiveRecord::Base
       upper_bound_of_incrementation = upper_bound_of_incrementation * 10
     end
     (0..upper_bound_of_incrementation).each do |integer|
-      array_of_floats << "%.#{allocation_precision}f" % 
-                         (integer.to_f / upper_bound_of_incrementation)
+      array_of_floats << ["%.#{allocation_precision}f" % 
+                          (integer.to_f / upper_bound_of_incrementation),
+                          (integer.to_f / upper_bound_of_incrementation)]
     end
     return array_of_floats
   end

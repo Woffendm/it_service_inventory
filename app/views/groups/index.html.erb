@@ -1,20 +1,16 @@
-<h2> <%= t(:groups) %> </h2>
+<h2> 
+  <%= t(:groups) %> 
+  <% if can? :create, Group %>
+    <%= link_to "#{content_tag :i, '', :class => 'icon-plus'}
+                 #{t(:new_group)}".html_safe, "#", :class => "modal_trigger" %>
+  <% end %>
+</h2>
 
 
-<% if can? :create, Group %>
-  <div class="form-inline">
-    <fieldset class="light-border">
-      <legend><%= t(:new_group) %></legend>
-      <%= form_for @group do |form| %>
-        <%= form.label :name %>
-        <%= form.text_field :name %>
-        <%= form.submit  t(:create) + t(:group) %>
-      <% end %>
-    </fieldset>
-  </div>
-<% end %>
+<%= render  :partial => "/groups/new_group", 
+            :locals => {:@group => @group} %>
 
-  
+
 <table class="table table-striped">
   <caption> <%= t(:all_groups) %> </caption>
   <thead>

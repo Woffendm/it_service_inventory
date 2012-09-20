@@ -65,6 +65,16 @@ body{
   min-height: 45px;
 }
 
+.navbar-inverse .nav > li > a:focus,
+.navbar-inverse .nav > li > a:hover {
+  color: #ffffff;
+  background-color: #888;
+}
+
+.current_page {
+  background-color: #666;
+}
+
 .form-search label, .form-inline label, .form-search .btn-group, .form-inline .btn-group {
     width: 100px;
 }
@@ -348,6 +358,12 @@ input.small {
 
 .blank-icon {
   padding-right: 17px;
+}
+
+h2 > a {
+  margin-left: 30px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .groovy{

@@ -12,16 +12,7 @@
           <%= form.label t(:name) %>
         </span>
         <span class="controls">
-          <%= @product.name %>
-        </span>
-      </div>
-      <div class="control-group">
-        <span class="control-label">
-          <%= form.label :group_id, "Parent group" %>
-        </span>
-        <span class="controls">
-          <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name,
-                         {:selected => @product.group_id})) %>     
+          <%= form.text_field :name %>
         </span>
       </div>
       <div class="control-group">
@@ -34,6 +25,8 @@
       </div>
     <% end %>
   </div>
+
+
 
 
   <!-- Drop-down list of services that can be added. Only populated with services that the product
@@ -92,6 +85,7 @@
 
 
 
+
   <h3> <%= t(:employees) %> </h3>
   <!-- Drop-down list of employees that can be added. Only populated with employees that the product
    doesn't already have. -->
@@ -113,7 +107,6 @@
       </fieldset>
     </div>
   <% end %>
-
 
 
   <!-- Creates table with the product's services and allocations. Can be edited by product or
@@ -144,7 +137,7 @@
                 <%= form.select(:allocation, @possible_allocations, 
                                {:selected => employee_product.rounded_allocation}, 
                                 :class => "calculator_select allocation_value") %>
-                <%= render  :partial => "/shared/fte_calculator_trigger" %>
+                <%= render :partial => "/shared/fte_calculator_trigger" %>
               </td>
               <td> 
                 <%= form.check_box :_destroy, :class => "remove_allocation" %>
@@ -157,6 +150,8 @@
     </table>
   <% end %>
   <br/>
+
+
 
 
   <%= product_form.submit  t(:save_changes) %> 

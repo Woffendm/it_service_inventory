@@ -1,5 +1,8 @@
 class ErrorsController < ApplicationController
   
+  def internal_server_error
+  end
+  
   def invalid_credentials
   end
   

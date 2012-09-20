@@ -33,6 +33,12 @@ class Employee < ActiveRecord::Base
   end
 
 
+  # Returns an array of groups that the employee does not currently have
+  def get_available_products
+    Product.order(:name) - self.products
+  end
+
+
   # Returns the total allocation for the given employee.
   def get_total_allocation
     total_allocation = 0.0

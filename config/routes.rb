@@ -11,7 +11,7 @@ Project1::Application.routes.draw do
   match 'logins/create_backdoor' => 'logins#create_backdoor'
   match 'pages/home' => 'pages#home'
   match '/404' => 'errors#page_not_found'
-  match '/500' => 'errors#invalid_credentials'
+  match '/500' => 'errors#internal_server_error'
 
 
   resources :groups do
@@ -52,6 +52,7 @@ Project1::Application.routes.draw do
 
   resources :errors do
     collection do
+      get 'internal_server_error'
       get 'invalid_credentials'
       get 'permission_denied'
       get 'page_not_found'

@@ -1,0 +1,30 @@
+<% if can? :create, Product %>
+  <div class="form-horizontal" id="modal_content">
+    <%= form_for @product do |form| %>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:name) %>
+        </span>
+        <span class="controls">
+          <%= form.text_field :name %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :description %> 
+        </span>
+        <span class="controls">
+          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.submit  t(:create) + t(:product) %>
+        </span>
+      </div>
+    <% end %>
+  </div>
+  <script type="text/javascript">
+    var modalTitle = "<%= t(:new_product) %>";
+  </script>
+<% end %>

@@ -1,0 +1,12 @@
+<% if can? :create, Group %>
+  <div class="form-inline light-border" id="modal_content">
+    <%= form_for @group do |form| %>
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+      <%= form.submit  t(:create) + t(:group) %>
+    <% end %>
+  </div>
+  <script type="text/javascript">
+    var modalTitle = "<%= t(:new_group) %>";
+  </script>
+<% end %>

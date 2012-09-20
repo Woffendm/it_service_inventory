@@ -1,0 +1,12 @@
+<% if can? :create, Service %>
+  <div class="form-inline light-border" id="modal_content">
+    <%= form_for @service do |form| %>
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+      <%= form.submit  t(:create) + t(:service) %>
+    <% end %>
+  </div>
+  <script type="text/javascript">
+    var modalTitle = "<%= t(:new_service) %>";
+  </script>
+<% end %>

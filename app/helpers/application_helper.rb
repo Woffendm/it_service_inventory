@@ -7,4 +7,10 @@ module ApplicationHelper
   def stylesheet(*files)
     content_for(:head) { stylesheet_link_tag(*files) }
   end
+  
+  
+  # Returns a 'current' tag if given the current page
+  def cp(path)
+    "current_page" if current_page?(path)
+  end
 end

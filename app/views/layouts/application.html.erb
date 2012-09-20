@@ -30,27 +30,50 @@
       <div class="container">
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li> <i class="icon-home icon-white"></i> <%= link_to t(:home), pages_home_path %> </li>
-            <li><%= link_to t(:employees), employees_path %></li>
-            <li><%= link_to t(:groups), groups_path %></li>
+            <li> 
+              <%= link_to "#{content_tag :i, '', :class => 'icon-home icon-white'}
+                           #{t(:home)}".html_safe, pages_home_path, 
+                           :class => cp(pages_home_path) %>
+            </li>
+            <li>
+              <%= link_to "#{content_tag :i, '', :class => ''}
+                           #{t(:employees)}".html_safe, employees_path, 
+                           :class => cp(employees_path) %>
+            </li>
+            <li>
+              <%= link_to "#{content_tag :i, '', :class => ''}
+                           #{t(:groups)}".html_safe, groups_path, 
+                           :class => cp(groups_path) %>
+            </li>
             <% if can? :update, Service %>
-              <li><%= link_to t(:services), services_path %></li>
+              <li>
+                <%= link_to "#{content_tag :i, '', :class => ''}
+                             #{t(:services)}".html_safe, services_path, 
+                             :class => cp(services_path) %>
+              </li>
             <% end %>
             <% if can? :create, Product %>
-              <li><%= link_to t(:products), products_path %></li>
+              <li>
+                <%= link_to "#{content_tag :i, '', :class => ''}
+                             #{t(:products)}".html_safe, products_path, 
+                             :class => cp(products_path) %>
+              </li>
             <% end %>
             <% if can? :manage, AppSetting %>
               <li> 
-                <%= link_to t(:settings), app_settings_path %>
+                <%= link_to "#{content_tag :i, '', :class => ''}
+                             #{t(:settings)}".html_safe, app_settings_path, 
+                             :class => cp(app_settings_path) %>
               </li>
             <% end %>
           </ul>
           <ul class="nav" id="login">
             <% if session[:current_user_name] %>
               <li> 
-                <i class="icon-user icon-white"></i>
-                <%= link_to session[:current_user_name],
-                    user_settings_employee_path(@current_user.id) %>
+                <%= link_to "#{content_tag :i, '', :class => 'icon-user icon-white'}
+                             #{session[:current_user_name]}".html_safe,
+                             user_settings_employee_path(@current_user.id),
+                             :class => cp(user_settings_employee_path(@current_user.id)) %>
               </li>
               <li> <%= link_to t(:logout), logins_destroy_path, :class => "logout" %> </li>
             <% else %>

@@ -35,10 +35,11 @@ class ProductsController < ApplicationController
     @product = Product.new(params[:product])
     if @product.save
       flash[:notice] = t(:product) + t(:created)
-    else
-      flash[:error] = t(:product) + t(:needs_a_name)
+      redirect_to edit_product_path(@product.id)
+      return
     end
-    redirect_to products_path  
+    flash[:error] = t(:product) + t(:needs_a_name)
+    render :index
   end
 
 
@@ -58,6 +59,13 @@ class ProductsController < ApplicationController
       unless params[:product_services][:service_id].blank?
         new_product_service = @product.product_services.new(params[:product_services])
         new_product_service.save
+      end
+    end
+    # If a new group was sent with the params, adds it to the product's list of group
+    if params[:product_groups]
+      unless params[:product_groups][:group_id].blank?
+        new_product_group = @product.product_groups.new(params[:product_groups])
+        new_product_group.save
       end
     end
     # If a new employee was sent with the params, adds them to the product
@@ -100,14 +108,14 @@ class ProductsController < ApplicationController
     end
 
 
-    # Loads all employees and services belonging to the product, and all groups
+    # Loads all employees, groups, and services belonging to the product
     def load_employees_services_groups
+      @groups = @product.groups.order(:name)
       @services = @product.services.order(:name)
       @employees = @product.employees.order(:name_last, :name_first)
-      @groups = Group.order(:name)
     end
-    
-    
+
+
     # Loads possible allocations
     def load_possible_allocations
       @possible_allocations = EmployeeProduct.possible_allocations

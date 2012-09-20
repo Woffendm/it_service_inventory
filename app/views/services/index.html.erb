@@ -1,20 +1,14 @@
-<h2> <%= t(:services) %> </h2>
+<h2> 
+  <%= t(:services) %> 
+  <% if can? :create, Service %>
+    <%= link_to "#{content_tag :i, '', :class => 'icon-plus'}
+                 #{t(:new_service)}".html_safe, "#", :class => "modal_trigger" %>
+  <% end %>
+</h2>
 
 
-
-<% if can? :create, Service %>
-  <div class="form-inline">
-    <fieldset class="light-border">
-      <legend><%= t(:new_service) %></legend>
-      <%= form_for @service do |form| %>
-        <%= form.label :name %>
-        <%= form.text_field :name %>
-        <%= form.submit  t(:create) + t(:service) %>
-      <% end %>
-    </fieldset>  
-  </div>
-<% end %>
-
+<%= render  :partial => "/services/new_service", 
+            :locals => {:@service => @service} %>
 
 
 <table class="table table-striped">

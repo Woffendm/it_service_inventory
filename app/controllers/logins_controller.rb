@@ -29,11 +29,12 @@ class LoginsController < ApplicationController
     if referring_page
       flash[:notice] = t(:results_per_page) + " #{params[:results_per_page]}"
       if referring_page.index("=")
-        redirect_to referring_page[0..referring_page.index("=")] + "1" +
-                    "&name_to_search_for=#{params[:name_to_search_for]}"
-      else
-        redirect_to referring_page + "&name_to_search_for=#{params[:name_to_search_for]}"
+        referring_page = referring_page[0..referring_page.index("=")] + "1"
       end
+      if !params[:name_to_search_for].blank?
+        referring_page += "&name_to_search_for=#{params[:name_to_search_for]}"
+      end
+      redirect_to referring_page
     else
       redirect_to pages_home_path
     end

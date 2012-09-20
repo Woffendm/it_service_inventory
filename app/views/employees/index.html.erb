@@ -1,7 +1,8 @@
 <h2> 
   <%= t(:employees) %> 
   <% if can? :create, Employee %>
-    <%= link_to t(:new_employee) , employees_search_ldap_view_path %>
+    <%= link_to "#{content_tag :i, '', :class => 'icon-plus'}
+                 #{t(:new_employee)}".html_safe, employees_search_ldap_view_path %>
   <% end %>
 </h2>
 

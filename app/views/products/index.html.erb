@@ -1,20 +1,14 @@
-<h2> <%= t(:products) %> </h2>
+<h2> 
+  <%= t(:products) %> 
+  <% if can? :create, Product %>
+    <%= link_to "#{content_tag :i, '', :class => 'icon-plus'}
+                 #{t(:new_product)}".html_safe, "#", :class => "modal_trigger" %>
+  <% end %>
+</h2>
 
 
-
-<% if can? :create, Product %>
-  <div class="form-inline">
-    <fieldset class="light-border">
-      <legend><%= t(:new_product) %></legend>
-      <%= form_for @product do |form| %>
-        <%= form.label :name %>
-        <%= form.text_field :name %>
-        <%= form.submit  t(:create) + t(:product) %>
-      <% end %>
-    </fieldset>  
-  </div>
-<% end %>
-
+<%= render  :partial => "/products/new_product", 
+            :locals => {:@product => @product, :@groups => @groups} %>
 
 
 <table class="table table-striped">
