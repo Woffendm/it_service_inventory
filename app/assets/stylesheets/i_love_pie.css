@@ -21,12 +21,17 @@
   padding: 5px 5px 5px 20px;
 }
 
+.navbar-fixed-top + .container {
+ margin-top: 60px; 
+}
+
 #login{
   float: right;
+  margin-right: 0;
 }
 
 body{
-  background-color: #F2F2F2;
+  background-color: #FFF;
 }
 
 #main{
@@ -66,9 +71,22 @@ body{
 }
 
 .navbar-inverse .nav > li > a:focus,
-.navbar-inverse .nav > li > a:hover {
-  color: #ffffff;
+.navbar-inverse .nav > li > a:hover,
+.brand > a:hover,
+.brand > a:focus {
+  color: #fff;
   background-color: #888;
+}
+
+
+.brand, .brand > a {
+  color: white;
+  padding-top: 8px;
+  padding-bottom: 7px;
+  padding-right: 5px;
+  padding-left: 5px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .current_page {
@@ -95,21 +113,15 @@ form {
   margin: 0;
 }
 
-
-
 h1 {
   font-size: 26px;
 }
 
 h2 {
   font-size: 20px;
-  background: -moz-linear-gradient(45deg, #fff 0%, #F2F2F2 100%) repeat scroll 0 0 transparent;
-  /*border-bottom: 4px solid #555555;*/
   font-weight: bold;
   text-align: left;
-  
   border-bottom: 1px solid #F2F2F2;
-  margin: -10px -10px 20px;
   padding: 5px 5px 5px 20px;
 }
 
@@ -181,15 +193,6 @@ select {
   width: 150px;
 }
 
-div#pie_chart_div{
-  float: left;
-  width: 45%;
-}
-div#bar_graph_div{
-  width: 55%;
-  float: left;
-}
-
 div.chart_div_container{
   height: 480px;
   width: 100%;
@@ -237,7 +240,7 @@ div.chart_div_container{
   max-width: 300px;
   padding: 3px 8px;
   color: #fff;
-  text-align: center;
+  text-align: left;
   text-decoration: none;
   background-color: #444;
   -webkit-border-radius: 4px;
@@ -319,9 +322,10 @@ a{
 
 .notice, .error, .message {
   background: url("../assets/status-success.png") 0.4em center no-repeat #e4fdf6;
-  padding: .5em 5em .5em;
+  padding: .5em 5em;
   border: 1px solid #006600;
   margin: 7px;
+  margin-left: 35px;
   -webkit-box-shadow: 0 0 7px #006600;
   -moz-box-shadow: 0 0 7px #006600;
   box-shadow: 0 0 7px #006600;
@@ -356,6 +360,7 @@ input.small {
   width: 200px;
 }
 
+
 .blank-icon {
   padding-right: 17px;
 }
@@ -368,4 +373,10 @@ h2 > a {
 
 .groovy{
   background: -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent;
+}
+
+@media (max-width: 979px) {
+  #login {
+    float: left;
+  }
 }

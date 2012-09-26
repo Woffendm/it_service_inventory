@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML>
+<!--[if lte IE 7]> <html lang="en" class="ie ie7"> <![endif]-->
+<!--[if IE 8]> <html lang="en" class="ie ie8"> <![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
 <head>
   <title><%= t(:IT_service_inventory) %></title>
   <%# stylesheet_link_tag "application", :media => "all" %>
@@ -11,7 +13,7 @@
   </script>
   <%= stylesheet_link_tag "bootstrap" %>
   <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-  <%# stylesheet_link_tag "bootstrap-responsive.css" %>
+  <%= stylesheet_link_tag "bootstrap-responsive.css" %>
   <%= stylesheet_link_tag "i_love_pie" %>
   <%= stylesheet_link_tag "jquery-ui-1.8.23.custom.css" %>
   <%= stylesheet_link_tag "fte_calculator" %>
@@ -23,45 +25,46 @@
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
-    <div id="header">
-      <h1> IT Service Inventory </h1>
-    </div>
     <div class="navbar-inner">
       <div class="container">
+        <button data-target=".nav-collapse" data-toggle="collapse" 
+          class="btn btn-navbar" type="button">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <span class="brand">
+          <%= link_to t(:IT_service_inventory), pages_home_path, :class => cp(pages_home_path) %>
+        </span>
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li> 
-              <%= link_to "#{content_tag :i, '', :class => 'icon-home icon-white'}
-                           #{t(:home)}".html_safe, pages_home_path, 
-                           :class => cp(pages_home_path) %>
-            </li>
             <li>
-              <%= link_to "#{content_tag :i, '', :class => ''}
+              <%= link_to "#{content_tag :em, '', :class => ''}
                            #{t(:employees)}".html_safe, employees_path, 
                            :class => cp(employees_path) %>
             </li>
             <li>
-              <%= link_to "#{content_tag :i, '', :class => ''}
+              <%= link_to "#{content_tag :em, '', :class => ''}
                            #{t(:groups)}".html_safe, groups_path, 
                            :class => cp(groups_path) %>
             </li>
             <% if can? :update, Service %>
               <li>
-                <%= link_to "#{content_tag :i, '', :class => ''}
+                <%= link_to "#{content_tag :em, '', :class => ''}
                              #{t(:services)}".html_safe, services_path, 
                              :class => cp(services_path) %>
               </li>
             <% end %>
             <% if can? :create, Product %>
               <li>
-                <%= link_to "#{content_tag :i, '', :class => ''}
+                <%= link_to "#{content_tag :em, '', :class => ''}
                              #{t(:products)}".html_safe, products_path, 
                              :class => cp(products_path) %>
               </li>
             <% end %>
             <% if can? :manage, AppSetting %>
               <li> 
-                <%= link_to "#{content_tag :i, '', :class => ''}
+                <%= link_to "#{content_tag :em, '', :class => ''}
                              #{t(:settings)}".html_safe, app_settings_path, 
                              :class => cp(app_settings_path) %>
               </li>
@@ -70,7 +73,7 @@
           <ul class="nav" id="login">
             <% if session[:current_user_name] %>
               <li> 
-                <%= link_to "#{content_tag :i, '', :class => 'icon-user icon-white'}
+                <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
                              #{session[:current_user_name]}".html_safe,
                              user_settings_employee_path(@current_user.id),
                              :class => cp(user_settings_employee_path(@current_user.id)) %>
@@ -84,20 +87,20 @@
       </div>
     </div>
   </div>
-  <div id="main">
-    <% if flash[:notice] %>
-      <p class="notice">  <%= flash[:notice] %>       </p>
-    <% end %>
-    <% if flash[:error] %>
-      <p class="error">   Error: <%= flash[:error] %> </p>
-    <% end %>
-    <% if flash[:message] %>
-      <p class="message"> <%= flash[:message] %>      </p>
-    <% end %>
-    <div id="content-wrapper">
-      <div id="content">
-        <%= yield %>
-      </div>
+  <div class="container">
+    <div class="row">
+      <% if flash[:notice] %>
+        <p class="notice">  <%= flash[:notice] %>       </p>
+      <% end %>
+      <% if flash[:error] %>
+        <p class="error">   Error: <%= flash[:error] %> </p>
+      <% end %>
+      <% if flash[:message] %>
+        <p class="message"> <%= flash[:message] %>      </p>
+      <% end %>
+    </div>
+    <div class="content">
+      <%= yield %>
     </div>
   </div>
 </body>

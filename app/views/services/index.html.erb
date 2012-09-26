@@ -1,7 +1,7 @@
 <h2> 
   <%= t(:services) %> 
   <% if can? :create, Service %>
-    <%= link_to "#{content_tag :i, '', :class => 'icon-plus'}
+    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
                  #{t(:new_service)}".html_safe, "#", :class => "modal_trigger" %>
   <% end %>
 </h2>

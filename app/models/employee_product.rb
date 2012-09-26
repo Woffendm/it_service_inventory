@@ -13,7 +13,8 @@ class EmployeeProduct < ActiveRecord::Base
 
 
   # Generates an array of floats between 0.0 and 1.00 inclusive. Incrementation determined by app
-  # settings
+  # settings. Each entry in the array contains a formatted decimal for the user's visual pleausure
+  # along with a non-formatted decimal for the actual value.
   def self.possible_allocations
     array_of_floats = []
     allocation_precision = AppSetting.get_allocation_precision
