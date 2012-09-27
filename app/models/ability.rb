@@ -33,9 +33,6 @@ class Ability
           end
         end
         # Everyone else can only edit themself and products they're assigned to
-        user.products.each do |product|
-          can :update, Product, :id => product.id
-        end
         can :read, :all
         can :update, Employee, :id => user.id
       end

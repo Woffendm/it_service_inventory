@@ -7,8 +7,8 @@ class ProductsController < ApplicationController
   before_filter :load_product, :only => [:destroy, :edit, :update]
   before_filter :load_permissions
   before_filter :load_employees_services_groups, :only => [:edit, :update]
-  before_filter :load_allocation_precision, :only => [:edit, :update]
-  before_filter :load_possible_allocations, :only => [:edit, :update]
+  before_filter :load_application_settings,      :only => [:edit, :update]
+  before_filter :load_possible_allocations,      :only => [:edit, :update]
 
 
 
@@ -90,9 +90,11 @@ class ProductsController < ApplicationController
 
   private
     # Loads the application settings fte_hours_per_week and allocation_precision
-    def load_allocation_precision
+    def load_application_settings
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
       @allocation_precision = AppSetting.get_allocation_precision
+      @product_states = AppSetting.get_product_states
+      @product_types = AppSetting.get_product_types
     end
 
 

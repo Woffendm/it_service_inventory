@@ -1,12 +1,30 @@
 <h2> <%= t(:edit) + t(:service) %>: <%= @service.name %> </h2>
 
-<div class="form-inline light-border">
-  <%= form_for @service do |form| %>
-    <%= form.label :name %>
-    <%= form.text_field :name %>
-    <%= form.submit  t(:save_changes) %>
-  <% end %>
-</div>
+  <div class="form-horizontal light-border">
+    <%= form_for @service do |form| %>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:name) %>
+        </span>
+        <span class="controls">
+          <%= form.text_field :name %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :description %> 
+        </span>
+        <span class="controls">
+          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.submit  t(:save_changes) %>
+        </span>
+      </div>
+    <% end %>
+  </div>
 
 <% if @service.employees.any? %>
   <table class="table table-striped"><caption> <%= t(:employees_with_this_service) %> </caption>

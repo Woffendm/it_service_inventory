@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120920210837) do
+ActiveRecord::Schema.define(:version => 20120927171254) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -82,14 +82,18 @@ ActiveRecord::Schema.define(:version => 20120920210837) do
   create_table "products", :force => true do |t|
     t.string   "name"
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "url"
+    t.string   "product_state"
+    t.string   "product_type"
   end
 
   create_table "services", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.text     "description"
   end
 
 end

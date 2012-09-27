@@ -1,0 +1,40 @@
+<h2> 
+  <%= t(:product_states) %> 
+  <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
+               #{t(:new_product_state)}".html_safe, "#", :class => "modal_trigger" %>
+</h2>
+
+
+<%= render  :partial => "/app_settings/new_product_state", 
+            :locals => {:@new_product_state => @new_product_state} %>
+
+
+<% if !@product_states.empty? %>
+  <table class="table table-striped">
+    <thead>
+      <th> <%= t(:title) %> </th>
+      <th> </th>
+    </thead>
+    <tbody>
+      <% @count = 0 %>
+      <% @product_states.each do |product_state| %>
+        <tr>
+          <td> 
+            <%= link_to "#{content_tag :em, '', :class => ''}
+                         #{product_state.value}".html_safe, "#", :class => "modal_trigger_2" %>
+            <%= render  :partial => "/app_settings/edit_product_state", 
+                        :locals => {:@product_state => product_state, :@count => @count} %>
+          </td>
+          <td> 
+            <%= link_to t(:delete), app_setting_path(product_state.id), :method => :delete, 
+                        :confirm => t(:confirm_deletion) %> 
+          </td>
+        </tr>  
+        <% @count += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+
+<%= link_to t(:return_to) + t(:application_settings), app_settings_path %>

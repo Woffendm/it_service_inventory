@@ -1,0 +1,11 @@
+<div class="form-inline light-border" id="modal_content">
+  <%= form_for @new_product_state do |form| %>
+    <%= form.label :value, "Title" %>
+    <%= form.text_field :value %>
+    <%= form.hidden_field(:code, :value => @new_product_state.code) %>
+    <%= form.submit  t(:create) + t(:product_state) %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  var modalTitle = "<%= t(:new_product_state) %>";
+</script>

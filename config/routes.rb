@@ -43,6 +43,8 @@ Project1::Application.routes.draw do
 
   resources :app_settings do
     collection do
+      get 'product_states'
+      get 'product_types'
       post 'add_admin'
       post 'remove_admin'
       post 'update_settings'

@@ -19,6 +19,14 @@
       </div>
       <div class="control-group">
         <span class="control-label">
+          <%= form.label :url, "URL (optional)" %>
+        </span>
+        <span class="controls">
+          <%= form.text_field :url %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
           <%= form.submit  t(:create) + t(:product) %>
         </span>
       </div>

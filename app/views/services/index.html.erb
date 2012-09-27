@@ -15,12 +15,23 @@
   <caption> <%= t(:all_services) %> </caption>
   <thead>
     <th> <%= t(:name) %> </th>
+    <th> <%= t(:description) %> </th>
     <th>  </th>
   </thead>
   <tbody>
     <% @services.each do |service| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td><%= link_to  service.name, edit_service_path(service.id) %> </td>
+        <td>  
+          <% unless service.description.blank? %> 
+            <div class="tooltip_trigger">
+              <%= service.description.truncate(20) %> 
+            </div>
+            <div class="tooltip">
+              <p class="tooltip_paragraph"> <%= service.description %> </p>
+            </div>
+          <% end %>
+        </td>
         <td> 
           <% if can? :delete, Service %>
             <%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>

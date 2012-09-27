@@ -4,7 +4,7 @@
 # Copyright:
 
 class Service < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :description
   has_many :employee_allocations, :dependent  => :delete_all
   has_many :employees,            :through    => :employee_allocations
   has_many :product_services,     :dependent  => :delete_all
@@ -46,6 +46,7 @@ class Service < ActiveRecord::Base
   # one decimal.
   def employee_allocations_within_group(group)
     array_of_employees_with_service_within_group = []
+    allocation_precision = AppSetting.get_allocation_precision
     self.employees.each do |employee|
       if employee.groups.index(group)
         array_of_employees_with_service_within_group << employee
@@ -53,7 +54,8 @@ class Service < ActiveRecord::Base
     end
     array_of_employees_and_allocations = []
     array_of_employees_with_service_within_group.each do |employee|
-      array_of_employees_and_allocations << ["#{employee.full_name}", self.employee_allocations.find_by_employee_id(employee.id).allocation.round(1), nil]
+      array_of_employees_and_allocations << ["#{employee.full_name}",       self.employee_allocations.find_by_employee_id(employee.id).allocation.round(allocation_precision),
+      nil]
     end
     return array_of_employees_and_allocations    
   end
@@ -64,19 +66,21 @@ class Service < ActiveRecord::Base
   def total_allocation_for_group(group)
     total_allocation = 0.0
     total_headcount = 0.0
+    allocation_precision = AppSetting.get_allocation_precision
     self.employees.each do |employee|
       if employee.groups.index(group)
         total_allocation += self.employee_allocations.find_by_employee_id(employee.id).allocation
         total_headcount += 1
       end
     end
-    return ["#{group.name}", total_allocation.round(1), total_headcount]
+    return ["#{group.name}", total_allocation.round(allocation_precision), total_headcount]
   end
 
 
   # Returns an array which contains the name of this service, and the total allocation for this
   # service within the given group. The total allocation is rounded to one decimal.
   def total_allocation_within_group(group)
+    allocation_precision = AppSetting.get_allocation_precision
     total_allocation = 0.0
     total_headcount = 0.0
     self.employees.each do |employee|
@@ -85,6 +89,6 @@ class Service < ActiveRecord::Base
         total_headcount += 1
       end
     end
-    return ["#{self.name}", total_allocation.round(1), total_headcount]
+    return ["#{self.name}", total_allocation.round(allocation_precision), total_headcount]
   end
 end

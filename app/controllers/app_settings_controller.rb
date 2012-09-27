@@ -24,6 +24,20 @@ class AppSettingsController < ApplicationController
   end
 
 
+  # View with a list of all current product states, and a form to add additional states
+  def product_states
+    @new_product_state = AppSetting.new(:code => "product_state")
+    @product_states = AppSetting.get_product_states
+  end
+  
+  
+  # View with a list of all current product types, and a form to add additional types
+  def product_types
+    @new_product_type = AppSetting.new(:code => "product_type")
+    @product_types = AppSetting.get_product_types
+  end
+
+
 
   # Action-related methods
 
@@ -37,6 +51,24 @@ class AppSettingsController < ApplicationController
   end
 
 
+  # Creates a new application setting
+  def create
+    new_product_state = AppSetting.new(params[:app_setting])
+    new_product_state.save
+    flash[:notice] = t(:setting) + t(:created)
+    redirect_to request.referrer
+  end
+  
+
+  # Deletes selected application setting
+  def destroy
+    app_setting = AppSetting.find(params[:id])
+    app_setting.destroy 
+    flash[:notice] = t(:setting) + t(:deleted)
+    redirect_to request.referrer
+  end
+
+
   # Removes site administrator privilages from an employee
   def remove_admin
     @new_admin = Employee.find(params[:employee])
@@ -47,11 +79,20 @@ class AppSettingsController < ApplicationController
   end
 
 
+  #
+  def update
+    app_setting = AppSetting.find(params[:id])
+    app_setting.update_attributes(params[:app_setting])
+    flash[:notice] = t(:setting) + t(:updated)
+    redirect_to request.referrer
+  end
+
+
   # Updates the application's settings based off selections made on "index" view. 
   def update_settings
     AppSetting.all.each do |app_setting|
       unless AppSetting.save_setting(app_setting, params[:app_setting][app_setting.code])
-        flash[:error] = "One or more of your fields is invalid! Only beets and turnips are allowed!"
+        flash[:error] = "One or more of your fields is invalid!"
         render :index
         return
       end

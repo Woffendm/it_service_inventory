@@ -23,6 +23,34 @@
           <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
         </span>
       </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :product_state %> 
+        </span>
+        <span class="controls">
+          <%= form.select(:product_state, options_from_collection_for_select( @product_states, 
+                          :value, :value, :selected => @product.product_state),  
+                         {:include_blank => "-" + t(:select) + t(:product_state) + "-"}) %> 
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :product_type %> 
+        </span>
+        <span class="controls">
+          <%= form.select(:product_type, options_from_collection_for_select( @product_types, 
+                          :value, :value, :selected => @product.product_type),  
+                         {:include_blank => "-" + t(:select) + t(:product_type) + "-"}) %> 
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :url, "URL" %>
+        </span>
+        <span class="controls">
+          <%= form.text_field :url %>
+        </span>
+      </div>
     <% end %>
   </div>
 

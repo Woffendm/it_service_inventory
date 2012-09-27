@@ -1,9 +1,27 @@
 <% if can? :create, Service %>
-  <div class="form-inline light-border" id="modal_content">
+  <div class="form-horizontal" id="modal_content">
     <%= form_for @service do |form| %>
-      <%= form.label :name %>
-      <%= form.text_field :name %>
-      <%= form.submit  t(:create) + t(:service) %>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label t(:name) %>
+        </span>
+        <span class="controls">
+          <%= form.text_field :name %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.label :description %> 
+        </span>
+        <span class="controls">
+          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.submit  t(:create) + t(:service) %>
+        </span>
+      </div>
     <% end %>
   </div>
   <script type="text/javascript">

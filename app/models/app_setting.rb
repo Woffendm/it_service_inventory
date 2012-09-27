@@ -39,4 +39,16 @@ class AppSetting < ActiveRecord::Base
   def self.get_allocation_precision
     return AppSetting.find_by_code("allocation_precision").value.to_f.to_int
   end
+
+
+  # Gets an array of existing product states
+  def self.get_product_states
+    AppSetting.where("code LIKE 'product_state'").order(:value)
+  end
+  
+  
+  # Gets and array of existing product types
+  def self.get_product_types
+    AppSetting.where("code LIKE 'product_type'").order(:value)
+  end
 end

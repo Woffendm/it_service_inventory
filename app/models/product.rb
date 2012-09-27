@@ -1,6 +1,7 @@
 class Product < ActiveRecord::Base
-  attr_accessible :name, :description, :group_id, :employee_products_attributes, 
-                  :product_services_attributes, :product_groups_attributes
+  attr_accessible :name, :description, :url, :product_type, :product_state, 
+                  :employee_products_attributes, :product_services_attributes,
+                  :product_groups_attributes
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
   has_many :product_groups,     :dependent => :delete_all
