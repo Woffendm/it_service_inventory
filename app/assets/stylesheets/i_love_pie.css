@@ -32,6 +32,7 @@
 
 body{
   background-color: #FFF;
+  margin-bottom: 50px;
 }
 
 #main{
@@ -94,7 +95,7 @@ body{
 }
 
 .form-search label, .form-inline label, .form-search .btn-group, .form-inline .btn-group {
-    width: 100px;
+    width: 130px;
 }
 
 #header{
@@ -190,7 +191,11 @@ tbody {
 }
 
 select {
-  width: 150px;
+  width: 170px;
+}
+
+select.small {
+  width: 100px;
 }
 
 div.chart_div_container{

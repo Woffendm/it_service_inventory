@@ -24,12 +24,6 @@ class ProductsController < ApplicationController
     @products = Product.order(:name).paginate(:page => params[:page], 
                 :per_page => session[:results_per_page])
     @product = Product.new
-    @user_group_products = []
-    Product.order(:name).each do |product|
-      if product.groups.include?(@current_user.groups.first)
-      	@user_group_products << product
-      end
-    end
   end
 
 

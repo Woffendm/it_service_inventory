@@ -11,56 +11,6 @@
             :locals => {:@product => @product, :@groups => @groups} %>
 
 
-<ul class="nav nav-tabs">
-  <li><a href="#user_group_products" data-toggle="tab">Products for my Group</a></li>
-  <li><a href="#all_products" data-toggle="tab">All Products</a></li>
-</ul>
-
-
-<div class="tab-content">
-  <div class="tab-pane active" id="user_group_products">
-    <table class="table table-striped">
-  <caption> Products for my Group </caption>
-  <thead>
-    <th> <%= t(:name) %> </th>
-    <th> <%= t(:description) %> </th>
-    <th>  </th>
-  </thead>
-  <tbody>
-    <% @user_group_products.each do |product| %>
-      <tr class="<%= cycle('odd', 'even') %>">
-        <td>
-          <% if product.url %>
-            <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
-                        :target => '_blank' %>
-          <% else %>
-            <span class="blank-icon"></span>
-          <% end %>
-          <%= link_to  product.name, edit_product_path(product.id) %>
-        </td>
-        <td>
-          <% unless product.description.blank? %>
-            <div class="tooltip_trigger">
-              <%= product.description.truncate(20) %>
-            </div>
-            <div class="tooltip">
-              <p class="tooltip_paragraph"> <%= product.description %> </p>
-            </div>
-          <% end %>
-        </td>
-        <td>
-          <% if can? :delete, Product %>
-            <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
-                        t(:confirm_deletion) %>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-  </div>
-
-
-  <div class="tab-pane" id="all_products">
 <table class="table table-striped">
   <caption> <%= t(:all_products) %> </caption>
   <thead>
@@ -100,8 +50,7 @@
     <% end %>
   </tbody>
 </table>
-  </div>
-</div>
+
 
 <div class="pagination_footer">
   <%= will_paginate @products %>

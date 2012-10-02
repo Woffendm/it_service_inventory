@@ -20,7 +20,7 @@ en:
   all_employees:                "All Employees"
   all_groups:                   "All Groups"
   all_products:                 "All Products"
-  all_services:                 "All Services"
+  all_services:                 "All Business Services"
   all_settings:                 "All Settings"
   allocation:                   "Allocation"
   allocation_precision:         "Allocation precision: "
@@ -64,7 +64,7 @@ en:
   new_product:                  "New Product"
   new_product_state:            "New Product State"
   new_product_type:             "New Product Type"
-  new_service:                  "New Service"
+  new_service:                  "New Business Service"
   new_user_reminder:            "New user reminder: "
   notes:                        "Notes"
   options:                      "Options"
@@ -78,9 +78,9 @@ en:
   products:                     "Products "
   results_per_page:             "Results per page: "
   search_results:               "Search Results"
-  service:                      "Service "
-  services:                     "Services"
-  service_name:                 "Service Name: "
+  service:                      "Business Service "
+  services:                     "Business Services"
+  service_name:                 "Business Service Name: "
   setting:                      "Setting "
   settings:                     "Settings "
   site_admin:                   " Site Admin "
@@ -145,11 +145,11 @@ en:
   
   fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
 
-  group_no_allocations_0:       "The group you are viewing has employees, but none of them have entered their service allocations. You can fix this by following these steps."
+  group_no_allocations_0:       "The group you are viewing has employees, but none of them have entered their business service allocations. You can fix this by following these steps."
 
   group_no_allocations_1:       "1: Click on your name below if you are an employee, or anyone's name if you are a group administrator."
 
-  group_no_allocations_2:       "2: Add a service and corresponding allocation under the 'SERVICES' page section"
+  group_no_allocations_2:       "2: Add a business service and corresponding allocation under the 'SERVICES' page section"
 
   group_no_allocations_3:       "3: The next time you visit the home page, there will be nice graphs waiting for you!"
 
@@ -159,13 +159,13 @@ en:
 
   needs_a_name:                 "needs a name"
 
-  need_selection:               "You must select a group and/or service to view data. "
+  need_selection:               "You must select a group and/or business service to view data. "
 
   new_user_message_0:           "Welcome to IT Service Inventory! Please take a moment to set up your information by clicking "
 
-  new_user_message_1:           ". <br/><br/> This notice will disable automatically once you add a service allocation, or can be disabled manually from "
+  new_user_message_1:           ". <br/><br/> This notice will disable automatically once you add a business service allocation, or can be disabled manually from "
 
-  new_user_reminder_info_0:     "Automatic: reminds you to set up your service allocations. Disables once you set up your service allocations."
+  new_user_reminder_info_0:     "Automatic: reminds you to set up your business service allocations. Disables once you set up your service allocations."
 
   new_user_reminder_info_1:     "Disabled: disables the reminder."
 

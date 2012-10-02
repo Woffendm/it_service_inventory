@@ -20,7 +20,7 @@
           <%= form.label :description %> 
         </span>
         <span class="controls">
-          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+          <%= form.text_area :description, :rows => 4, :cols => 100 %>
         </span>
       </div>
       <div class="control-group">
@@ -48,11 +48,67 @@
           <%= form.label :url, "URL" %>
         </span>
         <span class="controls">
-          <%= form.text_field :url %>
+          <%= form.text_area :url, :rows => 2, :cols => 100  %>
+          <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
+                      :target => '_blank' %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= form.submit  t(:save_changes) %>
         </span>
       </div>
     <% end %>
   </div>
+
+
+
+
+  <!-- Drop-down list of groups that can be added. Only populated with groups that the employee
+    doesn't already belong to. -->
+  <h3><%= t(:groups) %></h3>
+  <% if @product.get_available_groups.any? %>
+    <div class="form-inline" >
+      <fieldset class="light-border">
+        <legend> Add to Group </legend>
+        <%= fields_for "product_groups" do |form|%>
+          <%= form.label :group_id, t(:group)  %>
+          <%= form.select(:group_id, @product.get_available_groups.collect {|p| [p.name, p.id] },  
+                         {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+          <%= form.submit t(:add) %>
+        <% end %>
+      </fieldset>
+    </div>
+  <% end %>
+
+
+  <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
+   to the employee's group membership here --> 
+  <% if @product.product_groups.any? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> <%= t(:group) %> </th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% count = 0 %>
+        <%= product_form.fields_for "product_groups" do |form| %>
+          <% product_group = @product.product_groups.find_by_group_id(@groups[count].id) %>
+          <tr>
+            <td>
+              <%= link_to product_group.group.name, roster_group_path(product_group.group_id) %>
+            </td>
+            <td>
+              <%= form.check_box :_destroy %>
+            </td>
+          </tr>
+          <% count += 1 %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 
 
 
@@ -164,7 +220,7 @@
                 <%= form.hidden_field :id %>
                 <%= form.select(:allocation, @possible_allocations, 
                                {:selected => employee_product.rounded_allocation}, 
-                                :class => "calculator_select allocation_value") %>
+                                :class => "calculator_select allocation_value small") %>
                 <%= render :partial => "/shared/fte_calculator_trigger" %>
               </td>
               <td> 
