@@ -1,5 +1,8 @@
 /**
 * This file sets up modals throughout the application sensation that's sweeping the nation
+* For pages with just one modal (or share the same modal), the tag modal_content id and 
+* modal_trigger class are used. For pages with multiple modals, the modal_content_2 and 
+* modal_trigger_2 classes are used. 
 */
 $(document).ready(function(){
   if( $("#modal_content")[0] != undefined) {
