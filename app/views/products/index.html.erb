@@ -11,12 +11,16 @@
             :locals => {:@product => @product, :@groups => @groups} %>
 
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" id="my-tab">
   <li class="active">
-    <a href="#user_group_products" data-toggle="tab"> Products for my Group </a>
+    <a href="#user_group_products" id="user_group_products_tab" data-toggle="tab"> 
+      Products for my Group
+    </a>
   </li>
   <li>
-    <a href="#all_products" data-toggle="tab"> All Products </a>
+    <a href="#all_products" data-toggle="tab" id="all_products_tab"> 
+      All Products 
+    </a>
   </li>
 </ul>
 
