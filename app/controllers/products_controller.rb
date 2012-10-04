@@ -23,12 +23,12 @@ class ProductsController < ApplicationController
   def index
     @products = Product.order(:name)
     @product = Product.new
-    @user_group_products = []
-    Product.order(:name).each do |product|
-      if product.groups.include?(@current_user.groups.first)
-      	@user_group_products << product
-      end
-    end
+    @user_group_products = Product.where(:id => ProductGroup.where(:group_id =>
+          @current_user.employee_groups.pluck(:group_id)).pluck(:product_id)).order(:name)
+    @products = @products.paginate(:page => params[:products_page], :per_page =>
+          session[:results_per_page])
+    @user_group_products = @user_group_products.paginate(:page => params[:user_group_products_page], 
+          :per_page => session[:results_per_page])
   end
 
 

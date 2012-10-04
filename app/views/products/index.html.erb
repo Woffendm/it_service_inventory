@@ -25,7 +25,7 @@
 <div class="tab-content">
   <div class="tab-pane active" id="user_group_products">
     <table class="table table-striped">
-      <caption> Products for my Group </caption>
+      <caption> Products for my Groups </caption>
       <thead>
         <th> <%= t(:name) %> </th>
         <th> <%= t(:description) %> </th>
@@ -63,7 +63,15 @@
         <% end %>
       </tbody>
     </table>
+    
+    
+    <div class="pagination_footer">
+      <%= will_paginate @user_group_products, :param_name => :user_group_products_page %>
+      <%= render :partial => "/shared/results_per_page", 
+                  :locals => {:@current_tab => "#user_group_products"} %>
+    </div>
   </div>
+
 
 
 
@@ -107,24 +115,14 @@
         <% end %>
       </tbody>
     </table>
+    
+    
+    <div class="pagination_footer">
+      <%= will_paginate @products, :param_name => :products_page %>
+      <%= render :partial => "/shared/results_per_page", 
+                  :locals => {:@current_tab => "#all_products"} %>
+    </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
