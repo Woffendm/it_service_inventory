@@ -1,0 +1,36 @@
+<thead>
+  <th> <%= t(:name) %> </th>
+  <th> <%= t(:description) %> </th>
+  <th>  </th>
+</thead>
+<tbody>
+  <% @products.each do |product| %>
+    <tr>
+      <td>
+        <% if product.url && !product.url.blank? %>
+          <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
+                      :target => '_blank' %>
+        <% else %>
+          <span class="blank-icon"></span>
+        <% end %>
+        <%= link_to  product.name, edit_product_path(product.id) %>
+      </td>
+      <td>
+        <% unless product.description.blank? %>
+          <div class="tooltip_trigger">
+            <%= product.description.truncate(20) %>
+          </div>
+          <div class="tooltip">
+            <p class="tooltip_paragraph"> <%= product.description %> </p>
+          </div>
+        <% end %>
+      </td>
+      <td>
+        <% if can? :delete, Product %>
+          <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
+                      t(:confirm_deletion) %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</tbody>

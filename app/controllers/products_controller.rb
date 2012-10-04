@@ -21,8 +21,7 @@ class ProductsController < ApplicationController
 
   # List of all products
   def index
-    @products = Product.order(:name).paginate(:page => params[:page], 
-                :per_page => session[:results_per_page])
+    @products = Product.order(:name)
     @product = Product.new
     @user_group_products = []
     Product.order(:name).each do |product|
