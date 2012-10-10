@@ -15,6 +15,7 @@
           <%= form.text_field :name %>
         </span>
       </div>
+
       <div class="control-group">
         <span class="control-label">
           <%= form.label :description %> 
@@ -23,36 +24,40 @@
           <%= form.text_area :description, :rows => 4, :cols => 100 %>
         </span>
       </div>
+
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_state %> 
+          <%= form.label :product_state_id %> 
         </span>
         <span class="controls">
-          <%= form.select(:product_state, options_from_collection_for_select( @product_states, 
-                          :value, :value, :selected => @product.product_state),  
+          <%= form.select(:product_state_id, options_from_collection_for_select( @product_states, 
+                          :id, :name, :selected => @product.product_state_id.to_s),  
                          {:include_blank => "-" + t(:select) + t(:product_state) + "-"}) %> 
         </span>
       </div>
+
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_type %> 
+          <%= form.label :product_type_id %> 
         </span>
         <span class="controls">
-          <%= form.select(:product_type, options_from_collection_for_select( @product_types, 
-                          :value, :value, :selected => @product.product_type),  
+          <%= form.select(:product_type_id, options_from_collection_for_select( @product_types, 
+                          :id, :name, :selected => @product.product_type_id.to_s),  
                          {:include_blank => "-" + t(:select) + t(:product_type) + "-"}) %> 
         </span>
       </div>
+
       <div class="control-group">
         <span class="control-label">
           <%= form.label :url, "URL" %>
         </span>
         <span class="controls">
-          <%= form.text_area :url, :rows => 2, :cols => 100  %>
+          <%= form.text_field :url %>
           <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
                       :target => '_blank' %>
         </span>
       </div>
+
       <div class="control-group">
         <span class="control-label">
           <%= form.submit  t(:save_changes) %>

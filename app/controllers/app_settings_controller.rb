@@ -22,19 +22,12 @@ class AppSettingsController < ApplicationController
     @fte_hours_per_week = AppSetting.get_fte_hours_per_week
     @allocation_precision = AppSetting.get_allocation_precision
   end
-
-
-  # View with a list of all current product states, and a form to add additional states
-  def product_states
-    @new_product_state = AppSetting.new(:code => "product_state")
-    @product_states = AppSetting.get_product_states
-  end
   
   
   # View with a list of all current product types, and a form to add additional types
   def product_types
-    @new_product_type = AppSetting.new(:code => "product_type")
-    @product_types = AppSetting.get_product_types
+    @new_product_type = ProductType.new
+    @product_types = ProductType.all.order(:name)
   end
 
 

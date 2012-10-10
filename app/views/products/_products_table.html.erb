@@ -1,10 +1,12 @@
 <thead>
   <th> <%= t(:name) %> </th>
   <th> <%= t(:description) %> </th>
-  <th>  </th>
+  <th> Product State </th>
+  <th> Product Type </th>
+  <th> </th>
 </thead>
 <tbody>
-  <% @products.each do |product| %>
+  <% products.each do |product| %>
     <tr>
       <td>
         <% if product.url && !product.url.blank? %>
@@ -23,6 +25,16 @@
           <div class="tooltip">
             <p class="tooltip_paragraph"> <%= product.description %> </p>
           </div>
+        <% end %>
+      </td>
+      <td>
+        <% if product.product_state %>
+          <%= product.product_state.name %>
+        <% end %>
+      </td>
+      <td>
+        <% if product.product_type %>
+          <%= product.product_type.name %>
         <% end %>
       </td>
       <td>

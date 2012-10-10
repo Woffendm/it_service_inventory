@@ -191,11 +191,11 @@ tbody {
 }
 
 select {
-  width: 170px;
+  width: 200px;
 }
 
 select.small {
-  width: 100px;
+  width: 120px;
 }
 
 div.chart_div_container{
@@ -287,7 +287,7 @@ div.chart_div_container{
 
 
 #group_select_div > label, #service_select_div > label{
-  width: 60px;
+  width: 120px;
 }
 
 #group_select_div > select, #service_select_div > select, #home_header_buttons > input {
@@ -358,13 +358,8 @@ a{
 }
 
 input.small {
-  width: 136px;
+  width: 156px;
 }
-
-.large-select {
-  width: 200px;
-}
-
 
 .blank-icon {
   padding-right: 17px;

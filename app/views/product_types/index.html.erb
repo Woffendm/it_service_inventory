@@ -5,7 +5,7 @@
 </h2>
 
 
-<%= render  :partial => "/app_settings/new_product_type", 
+<%= render  :partial => "/product_types/new_product_type", 
             :locals => {:@new_product_type => @new_product_type} %>
 
 
@@ -21,13 +21,13 @@
         <tr>
           <td> 
             <%= link_to "#{content_tag :em, '', :class => ''}
-                         #{product_type.value}".html_safe, "#", :class => "modal_trigger_2" %>
-            <%= render  :partial => "/app_settings/edit_product_type", 
+                         #{product_type.name}".html_safe, "#", :class => "modal_trigger_2" %>
+            <%= render  :partial => "/product_types/edit_product_type", 
                         :locals => {:@product_type => product_type, :@count => @count} %>
           </td>
           <td> 
-            <%= link_to t(:delete), app_setting_path(product_type.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion) %> 
+            <%= link_to t(:delete), product_type_path(product_type.id), :method => :delete, 
+                        :confirm => t(:confirm_deletion) %>
           </td>
         </tr>  
         <% @count += 1 %>

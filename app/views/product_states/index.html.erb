@@ -5,7 +5,7 @@
 </h2>
 
 
-<%= render  :partial => "/app_settings/new_product_state", 
+<%= render  :partial => "/product_states/new_product_state", 
             :locals => {:@new_product_state => @new_product_state} %>
 
 
@@ -21,13 +21,13 @@
         <tr>
           <td> 
             <%= link_to "#{content_tag :em, '', :class => ''}
-                         #{product_state.value}".html_safe, "#", :class => "modal_trigger_2" %>
-            <%= render  :partial => "/app_settings/edit_product_state", 
+                         #{product_state.name}".html_safe, "#", :class => "modal_trigger_2" %>
+            <%= render  :partial => "/product_states/edit_product_state", 
                         :locals => {:@product_state => product_state, :@count => @count} %>
           </td>
           <td> 
-            <%= link_to t(:delete), app_setting_path(product_state.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion) %> 
+            <%= link_to t(:delete), product_state_path(product_state.id), :method => :delete, 
+                        :confirm => t(:confirm_deletion) %>
           </td>
         </tr>  
         <% @count += 1 %>

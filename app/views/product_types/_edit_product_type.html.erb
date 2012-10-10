@@ -1,8 +1,8 @@
 <div class="form-inline light-border modal_content_2" id="modal_content_<%=@count%>">
   <%= form_for @product_type do |form| %>
-    <%= form.label :value, "Title" %>
-    <%= form.text_field :value %>
-    <%= form.submit  t(:save_changes) %>
+    <%= form.label :name, t(:name) %>
+    <%= form.text_field :name %>
+    <%= form.submit  t(:update) + t(:product_type) %>
   <% end %>
 </div>
 <script type="text/javascript">

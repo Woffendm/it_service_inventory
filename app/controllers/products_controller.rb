@@ -6,9 +6,10 @@
 class ProductsController < ApplicationController
   before_filter :load_product, :only => [:destroy, :edit, :update]
   before_filter :load_permissions
-  before_filter :load_employees_services_groups, :only => [:edit, :update]
-  before_filter :load_application_settings,      :only => [:edit, :update]
-  before_filter :load_possible_allocations,      :only => [:edit, :update]
+  before_filter :load_employees_services_groups,    :only => [:edit, :update]
+  before_filter :load_application_settings,         :only => [:edit, :update]
+  before_filter :load_possible_allocations,         :only => [:edit, :update]
+  before_filter :load_product_states_types_sources, :only => [:index, :edit, :update]
 
 
 
@@ -21,10 +22,23 @@ class ProductsController < ApplicationController
 
   # List of all products
   def index
+    @groups = Group.order(:name)
     @products = Product.order(:name)
     @product = Product.new
     @user_group_products = Product.where(:id => ProductGroup.where(:group_id =>
           @current_user.employee_groups.pluck(:group_id)).pluck(:product_id)).order(:name)
+    if params[:product_state] && !params[:product_state][:id].blank?
+      @product_state = params[:product_state][:id]
+      @products = @products.where(:product_state_id => params[:product_state][:id])
+      @user_group_products = @user_group_products.where(:product_state_id =>
+                             params[:product_state][:id])
+    end
+    if params[:product_type] && !params[:product_type][:id].blank?
+      @product_type = params[:product_type][:id]
+      @products = @products.where(:product_type_id => params[:product_type][:id])
+      @user_group_products = @user_group_products.where(:product_type_id => 
+                             params[:product_type][:id])
+    end
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
     @user_group_products = @user_group_products.paginate(:page => params[:user_group_products_page], 
@@ -39,6 +53,12 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(params[:product])
     if @product.save
+      if params[:product_groups]
+        unless params[:product_groups][:group_id].blank?
+          new_product_group = @product.product_groups.new(params[:product_groups])
+          new_product_group.save
+        end
+      end
       flash[:notice] = t(:product) + t(:created)
       redirect_to edit_product_path(@product.id)
       return
@@ -98,8 +118,6 @@ class ProductsController < ApplicationController
     def load_application_settings
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
       @allocation_precision = AppSetting.get_allocation_precision
-      @product_states = AppSetting.get_product_states
-      @product_types = AppSetting.get_product_types
     end
 
 
@@ -112,6 +130,14 @@ class ProductsController < ApplicationController
     # Loads a product based on the id provided in params
     def load_product
       @product = Product.find(params[:id])
+    end
+
+
+    #
+    def load_product_states_types_sources
+      @product_states = ProductState.all
+      @product_types = ProductType.all
+      @product_source_types = ProductSourceType.all
     end
 
 

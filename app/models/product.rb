@@ -1,13 +1,16 @@
 class Product < ActiveRecord::Base
-  attr_accessible :name, :description, :url, :product_type, :product_state, 
-                  :employee_products_attributes, :product_services_attributes,
-                  :product_groups_attributes
+  attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
+                  :product_state, :employee_products_attributes, :product_services_attributes,
+                  :product_groups_attributes, :product_source_attributes
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
   has_many :product_groups,     :dependent => :delete_all
   has_many :groups,             :through =>   :product_groups
   has_many :product_services,   :dependent => :delete_all
   has_many :services,           :through =>   :product_services
+  has_one  :product_source
+  belongs_to :product_type
+  belongs_to :product_state
   validates_presence_of :name
   accepts_nested_attributes_for :employee_products, :allow_destroy => true
   accepts_nested_attributes_for :product_services,  :allow_destroy => true

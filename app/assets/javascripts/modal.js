@@ -31,7 +31,7 @@ $(document).ready(function(){
       autoOpen  : false,
       width     : 740,
       modal     : true,
-      title     : modalTitle,
+      title     : modalTitle2,
       show      : "drop"
     });
     

@@ -11,10 +11,24 @@
             :locals => {:@product => @product, :@groups => @groups} %>
 
 
+<fieldset class="light-border">
+  <legend> Filter Results </legend>
+  <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
+    <%= collection_select(:product_state, :id, @product_states, :id, :name, 
+                         {:include_blank => "-" + t(:select) + t(:product_state) + "-",
+                          :selected => @product_state}) %>
+    <%= collection_select(:product_type, :id, @product_types, :id, :name, 
+                         {:include_blank => "-" + t(:select) + t(:product_type) + "-",
+                          :selected => @product_type}) %>
+    <%= submit_tag "Search" %>
+  <% end %>
+</fieldset>
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#user_group_products" id="user_group_products_tab" data-toggle="tab"> 
-      Products for my Group
+      Products for my Groups
     </a>
   </li>
   <li>
@@ -30,49 +44,14 @@
   <div class="tab-pane active" id="user_group_products">
     <table class="table table-striped">
       <caption> Products for my Groups </caption>
-      <thead>
-        <th> <%= t(:name) %> </th>
-        <th> <%= t(:description) %> </th>
-        <th>  </th>
-      </thead>
-      <tbody>
-        <% @user_group_products.each do |product| %>
-          <tr class="<%= cycle('odd', 'even') %>">
-            <td>
-              <% if product.url && !product.url.blank? %>
-                <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
-                            :target => '_blank' %>
-              <% else %>
-                <span class="blank-icon"></span>
-              <% end %>
-              <%= link_to  product.name, edit_product_path(product.id) %>
-            </td>
-            <td>
-              <% unless product.description.blank? %>
-                <div class="tooltip_trigger">
-                  <%= product.description.truncate(20) %>
-                </div>
-                <div class="tooltip">
-                  <p class="tooltip_paragraph"> <%= product.description %> </p>
-                </div>
-              <% end %>
-            </td>
-            <td>
-              <% if can? :delete, Product %>
-                <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
-                            t(:confirm_deletion) %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
+       <%= render :partial => "/products/products_table", 
+                  :locals => {:products => @user_group_products} %>
     </table>
     
     
     <div class="pagination_footer">
       <%= will_paginate @user_group_products, :param_name => :user_group_products_page %>
-      <%= render :partial => "/shared/results_per_page", 
-                  :locals => {:@current_tab => "#user_group_products"} %>
+      <%= render :partial => "/shared/results_per_page" %>
     </div>
   </div>
 
@@ -82,49 +61,13 @@
   <div class="tab-pane" id="all_products">
     <table class="table table-striped">
       <caption> <%= t(:all_products) %> </caption>
-      <thead>
-        <th> <%= t(:name) %> </th>
-        <th> <%= t(:description) %> </th>
-        <th>  </th>
-      </thead>
-      <tbody>
-        <% @products.each do |product| %>
-          <tr class="<%= cycle('odd', 'even') %>">
-            <td> 
-              <% if product.url && !product.url.blank? %>
-                <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
-                            :target => '_blank' %>
-              <% else %>
-                <span class="blank-icon"></span>
-              <% end %>
-              <%= link_to  product.name, edit_product_path(product.id) %> 
-            </td>
-            <td>  
-              <% unless product.description.blank? %> 
-                <div class="tooltip_trigger">
-                  <%= product.description.truncate(20) %> 
-                </div>
-                <div class="tooltip">
-                  <p class="tooltip_paragraph"> <%= product.description %> </p>
-                </div>
-              <% end %>
-            </td>
-            <td> 
-              <% if can? :delete, Product %>
-                <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
-                            t(:confirm_deletion) %> 
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
+      <%= render :partial => "/products/products_table", :locals => {:products => @products} %>
     </table>
     
     
     <div class="pagination_footer">
       <%= will_paginate @products, :param_name => :products_page %>
-      <%= render :partial => "/shared/results_per_page", 
-                  :locals => {:@current_tab => "#all_products"} %>
+      <%= render :partial => "/shared/results_per_page" %>
     </div>
   </div>
 </div>

@@ -2,8 +2,8 @@
 
 <ul>
   <li> <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %> </li>
-  <li> <%= link_to t(:manage) + t(:product_states), product_states_app_settings_path %> </li>
-  <li> <%= link_to t(:manage) + t(:product_types), product_types_app_settings_path %> </li>
+  <li> <%= link_to t(:manage) + t(:product_states), product_states_path %> </li>
+  <li> <%= link_to t(:manage) + t(:product_types), product_types_path %> </li>
 </ul>
 
 
@@ -23,6 +23,7 @@
       </p>
     </span>
   </div>
+  
   <div class="control-group">
     <span class="control-label">
       <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
@@ -38,6 +39,7 @@
       </p>
     </span>
   </div>
+  
   <div class="control-group">
     <div class="control-label">
       <%= submit_tag  t(:save_changes) %>

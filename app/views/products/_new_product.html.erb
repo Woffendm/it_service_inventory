@@ -1,33 +1,84 @@
 <% if can? :create, Product %>
   <div class="form-horizontal" id="modal_content">
-    <%= form_for @product do |form| %>
+    <%= form_for @product do |product_form| %>
+      <%= fields_for @product do |form| %>
+        <div class="control-group">
+          <span class="control-label">
+            <%= form.label t(:name) %>
+          </span>
+          <span class="controls">
+            <%= form.text_field :name %>
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= form.label :description %> 
+          </span>
+          <span class="controls">
+            <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= form.label :url, "URL (optional)" %>
+          </span>
+          <span class="controls">
+            <%= form.text_field :url %>
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= form.label :product_state_id %> 
+          </span>
+          <span class="controls">
+            <%= form.select(:product_state_id, options_from_collection_for_select(@product_states, 
+                            :id, :name),  
+                           {:include_blank => "-" + t(:select) + t(:product_state) + "-"}) %> 
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= form.label :product_type_id %> 
+          </span>
+          <span class="controls">
+            <%= form.select(:product_type_id, options_from_collection_for_select(@product_types, 
+                            :id, :name),  
+                           {:include_blank => "-" + t(:select) + t(:product_type) + "-"}) %> 
+          </span>
+        </div>
+      <% end %>
+      
+      <%= fields_for 'product_groups' do |form| %>  
+        <% if can? :manage, :all %>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.label :group_id, t(:group) %>
+            </span>
+            <span class="controls">
+              <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name),  
+                             {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+            </span>
+          </div>
+        <% else %>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.label :group_id, t(:group) %>
+            </span>
+            <span class="controls">
+              <%= @current_user.groups.first.name %>
+              <%= form.hidden_field :group_id => @current_user.groups.first.id  %>
+            </span>
+          </div>
+        <% end %>
+      <% end %>
+        
       <div class="control-group">
         <span class="control-label">
-          <%= form.label t(:name) %>
-        </span>
-        <span class="controls">
-          <%= form.text_field :name %>
-        </span>
-      </div>
-      <div class="control-group">
-        <span class="control-label">
-          <%= form.label :description %> 
-        </span>
-        <span class="controls">
-          <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
-        </span>
-      </div>
-      <div class="control-group">
-        <span class="control-label">
-          <%= form.label :url, "URL (optional)" %>
-        </span>
-        <span class="controls">
-          <%= form.text_area :url, :rows => 2, :cols => 100  %>
-        </span>
-      </div>
-      <div class="control-group">
-        <span class="control-label">
-          <%= form.submit  t(:create) + t(:product) %>
+          <%= product_form.submit  t(:create) + t(:product) %>
         </span>
       </div>
     <% end %>

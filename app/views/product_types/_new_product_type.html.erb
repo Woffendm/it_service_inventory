@@ -1,8 +1,7 @@
 <div class="form-inline light-border" id="modal_content">
   <%= form_for @new_product_type do |form| %>
-    <%= form.label :value, "Title" %>
-    <%= form.text_field :value %>
-    <%= form.hidden_field(:code, :value => @new_product_type.code) %>
+    <%= form.label :name, t(:name) %>
+    <%= form.text_field :name %>
     <%= form.submit  t(:create) + t(:product_type) %>
   <% end %>
 </div>
