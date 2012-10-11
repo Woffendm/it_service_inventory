@@ -1,5 +1,5 @@
-# 
-# 
+# Stores information about product types. Product types represent who the product was made for, such
+#     as Vendor, Custom Developed, Open Source, etc. 
 #
 # Author: Michael Woffendin 
 # Copyright:

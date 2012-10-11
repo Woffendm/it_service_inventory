@@ -155,14 +155,14 @@ class EmployeesController < ApplicationController
   end
 
 
-
-
   # Updates the names and emails of all employees in the application based off the most recent
   # information provided in the OSU online directory
   def update_all_employees
     RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
   end
-  
+
+
+
 # Loading methods
 
   private

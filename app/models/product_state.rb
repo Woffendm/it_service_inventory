@@ -1,5 +1,5 @@
-# 
-# 
+# Stores information about product states. Product states represent what stage of its lifecycle 
+#     a product is in, such as development, production, retired, etc. 
 #
 # Author: Michael Woffendin 
 # Copyright:

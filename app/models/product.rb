@@ -1,3 +1,9 @@
+# This class stores information related to products, such as their names, description, related
+#    employees, etc. 
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
                   :product_state, :employee_products_attributes, :product_services_attributes,

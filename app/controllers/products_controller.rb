@@ -19,7 +19,7 @@ class ProductsController < ApplicationController
   end
 
 
-  # List of all products
+  # Has two tabs, one with all products in the user's groups, another with all products.
   def index
     @groups = Group.order(:name)
     @products = Product.order(:name)

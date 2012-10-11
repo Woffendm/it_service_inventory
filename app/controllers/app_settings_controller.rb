@@ -72,15 +72,6 @@ class AppSettingsController < ApplicationController
   end
 
 
-  #
-  def update
-    app_setting = AppSetting.find(params[:id])
-    app_setting.update_attributes(params[:app_setting])
-    flash[:notice] = t(:setting) + t(:updated)
-    redirect_to request.referrer
-  end
-
-
   # Updates the application's settings based off selections made on "index" view. 
   def update_settings
     AppSetting.all.each do |app_setting|

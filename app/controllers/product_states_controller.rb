@@ -1,5 +1,9 @@
+# This class controls Product States, which are used to determine the status of products.
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class ProductStatesController < ApplicationController
-  
   
   # View with a list of all current product states, and a form to add additional states
   def index
@@ -8,7 +12,7 @@ class ProductStatesController < ApplicationController
   end
   
   
-  #
+  # Updates a product state's name
   def update
     product_state = ProductState.find(params[:id])
     unless product_state.update_attributes(params[:product_state])
@@ -21,7 +25,7 @@ class ProductStatesController < ApplicationController
   end
 
 
-  # 
+  # Creates a new product state
   def create
     if ProductState.create(params[:product_state])
       flash[:notice] = "Product state created"
@@ -33,6 +37,7 @@ class ProductStatesController < ApplicationController
   end
 
 
+  # Destroys a product state
   def destroy
     product_state = ProductState.find(params[:id])
     product_state.destroy

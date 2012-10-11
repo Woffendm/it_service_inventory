@@ -86,7 +86,7 @@ class ApplicationController < ActionController::Base
     end
 
 
-    #
+    # Redirects user to 'invalid credentials' error page
     def invalid_credentials(exception)
       log_error(exception, request.fullpath)
       render "errors/invalid_credentials"

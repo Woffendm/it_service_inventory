@@ -1,5 +1,9 @@
+# This class controls Product Types, which are used to determine the type of products.
+#
+# Author: Michael Woffendin 
+# Copyright:
+
 class ProductTypesController < ApplicationController
-  
   
   # View with a list of all current product types, and a form to add additional types
   def index
@@ -8,7 +12,7 @@ class ProductTypesController < ApplicationController
   end
   
   
-  #
+  # Updates a product type's name
   def update
     product_type = ProductType.find(params[:id])
     unless product_type.update_attributes(params[:product_type])
@@ -21,7 +25,7 @@ class ProductTypesController < ApplicationController
   end
 
 
-  # 
+  # Creates a new product type
   def create
     if ProductType.create(params[:product_type])
       flash[:notice] = "Product type created"
@@ -33,6 +37,7 @@ class ProductTypesController < ApplicationController
   end
 
 
+  # Destroys a product type
   def destroy
     product_type = ProductType.find(params[:id])
     product_type.destroy
