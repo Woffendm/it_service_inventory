@@ -5,7 +5,6 @@
 
 class ServicesController < ApplicationController
   before_filter :load_service, :only => [:destroy, :edit, :update]
-  before_filter :load_permissions, :except => [:groups]
   before_filter :load_group, :only => [:total_allocation_within_group]
 
   
@@ -41,7 +40,7 @@ class ServicesController < ApplicationController
 
   # Hurls selected service into the nearest black hole
   def destroy
-    authorize! :destroy, Service
+    authorize! :destroy, @service
     @service.destroy 
     flash[:notice] = t(:service) + t(:deleted)
     redirect_to services_path 
@@ -79,15 +78,10 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
-    # Loads permissions. Only group admins and site admins can do things to services
-    def load_permissions
-      authorize! :update, Service
-    end
-
-
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
+      authorize! :update, @service
     end
 
 

@@ -5,7 +5,6 @@
 
 class ProductsController < ApplicationController
   before_filter :load_product, :only => [:destroy, :edit, :update]
-  before_filter :load_permissions
   before_filter :load_employees_services_groups,    :only => [:edit, :update]
   before_filter :load_application_settings,         :only => [:edit, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
@@ -51,6 +50,7 @@ class ProductsController < ApplicationController
 
   # Creates a new product using info entered on the "new" page
   def create
+    authorize! :create, Product
     @product = Product.new(params[:product])
     if @product.save
       if params[:product_groups]
@@ -70,7 +70,7 @@ class ProductsController < ApplicationController
 
   # Hurls selected product into the nearest black hole
   def destroy
-    authorize! :destroy, Product
+    authorize! :destroy, @product
     @product.destroy 
     flash[:notice] = t(:product) + t(:deleted)
     redirect_to products_path 
@@ -121,15 +121,10 @@ class ProductsController < ApplicationController
     end
 
 
-    # Loads permissions. Only group admins and site admins can do things to products
-    def load_permissions
-      authorize! :update, Product
-    end
-
-
     # Loads a product based on the id provided in params
     def load_product
       @product = Product.find(params[:id])
+      authorize! :update, @product
     end
 
 

@@ -1,4 +1,4 @@
-<% if can? :update, Service %>
+<% if can? :update, service %>
   <% text = (link_to service.name.truncate(20), edit_service_path(service.id)) %>
 <% else %>
   <% text = service.name.truncate(20) %> 

@@ -15,10 +15,10 @@
   <legend> Filter Results </legend>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
     <%= collection_select(:product_state, :id, @product_states, :id, :name, 
-                         {:include_blank => "-" + t(:select) + t(:product_state) + "-",
+                         {:include_blank => "-" + t(:all_product_states) + "-",
                           :selected => @product_state}) %>
     <%= collection_select(:product_type, :id, @product_types, :id, :name, 
-                         {:include_blank => "-" + t(:select) + t(:product_type) + "-",
+                         {:include_blank => "-" + t(:all_product_types) + "-",
                           :selected => @product_type}) %>
     <%= submit_tag "Search" %>
   <% end %>

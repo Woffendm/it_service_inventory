@@ -70,7 +70,7 @@
             </span>
             <span class="controls">
               <%= @current_user.groups.first.name %>
-              <%= form.hidden_field :group_id => @current_user.groups.first.id  %>
+              <%= form.hidden_field :group_id, :value => @current_user.groups.first.id  %>
             </span>
           </div>
         <% end %>

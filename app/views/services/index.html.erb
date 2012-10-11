@@ -21,7 +21,10 @@
   <tbody>
     <% @services.each do |service| %>
       <tr class="<%= cycle('odd', 'even') %>">
-        <td><%= link_to  service.name, edit_service_path(service.id) %> </td>
+        <td>
+           <%= render  :partial => "/shared/can_update_service", 
+                       :locals => {:service => service} %>
+        </td>
         <td>  
           <% unless service.description.blank? %> 
             <div class="tooltip_trigger">
@@ -33,7 +36,7 @@
           <% end %>
         </td>
         <td> 
-          <% if can? :delete, Service %>
+          <% if can? :destroy, service %>
             <%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
                         t(:confirm_deletion) %> 
           <% end %>

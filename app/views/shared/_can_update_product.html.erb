@@ -1,0 +1,18 @@
+<% if can? :update, product %>
+  <% text = (link_to product.name.truncate(20), edit_product_path(product.id)) %>
+<% else %>
+  <% text = product.name.truncate(20) %> 
+<% end %>
+
+
+
+<% if product.name.length > 20 %>
+  <div class="tooltip_trigger">
+<% end %>
+  <%= text %>
+<% if product.name.length > 20 %>
+  </div>
+  <div class="tooltip">
+    <p class="tooltip_paragraph"> <%= product.name %> </p>
+  </div>
+<% end %>

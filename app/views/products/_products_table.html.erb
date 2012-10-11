@@ -15,7 +15,8 @@
         <% else %>
           <span class="blank-icon"></span>
         <% end %>
-        <%= link_to  product.name, edit_product_path(product.id) %>
+        <%= render  :partial => "/shared/can_update_product", 
+                    :locals => {:product => product} %>
       </td>
       <td>
         <% unless product.description.blank? %>
@@ -38,7 +39,7 @@
         <% end %>
       </td>
       <td>
-        <% if can? :delete, Product %>
+        <% if can? :destroy, product %>
           <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
                       t(:confirm_deletion) %>
         <% end %>

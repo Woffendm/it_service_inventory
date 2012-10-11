@@ -20,6 +20,8 @@ en:
   all_employees:                "All Employees"
   all_groups:                   "All Groups"
   all_products:                 "All Products"
+  all_product_states:           "All Product States"
+  all_product_types:            "All Product Types"
   all_services:                 "All Business Services"
   all_settings:                 "All Settings"
   allocation:                   "Allocation"

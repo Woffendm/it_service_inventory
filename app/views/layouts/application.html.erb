@@ -48,20 +48,16 @@
                            #{t(:groups)}".html_safe, groups_path, 
                            :class => cp(groups_path) %>
             </li>
-            <% if can? :update, Service %>
-              <li>
-                <%= link_to "#{content_tag :em, '', :class => ''}
-                             #{t(:services)}".html_safe, services_path, 
-                             :class => cp(services_path) %>
-              </li>
-            <% end %>
-            <% if can? :create, Product %>
-              <li>
-                <%= link_to "#{content_tag :em, '', :class => ''}
-                             #{t(:products)}".html_safe, products_path, 
-                             :class => cp(products_path) %>
-              </li>
-            <% end %>
+            <li>
+              <%= link_to "#{content_tag :em, '', :class => ''}
+                           #{t(:services)}".html_safe, services_path, 
+                           :class => cp(services_path) %>
+            </li>
+            <li>
+              <%= link_to "#{content_tag :em, '', :class => ''}
+                           #{t(:products)}".html_safe, products_path, 
+                           :class => cp(products_path) %>
+            </li>
             <% if can? :manage, AppSetting %>
               <li> 
                 <%= link_to "#{content_tag :em, '', :class => ''}

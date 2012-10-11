@@ -5,7 +5,7 @@
 
 class EmployeesController < ApplicationController
 
-  before_filter :authorize_creation,   :only => [:create, :ldap_create, :search_ldap_view]
+  before_filter :authorize_creation,   :only => [:ldap_create, :search_ldap_view]
   before_filter :load_employee,        :only => [:destroy, :edit, :update]
   before_filter :load_groups_services, :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :update]
@@ -60,7 +60,7 @@ class EmployeesController < ApplicationController
   # Obliterates selected employee with the mighty hammer of Thor and scatters their data like dust  
   # to a thousand winds
   def destroy
-    authorize! :destroy, Employee
+    authorize! :destroy, @employee
     if @employee != @current_user 
       @employee.destroy 
       flash[:notice] = t(:employee) + t(:deleted)

@@ -198,6 +198,10 @@ select.small {
   width: 120px;
 }
 
+input.small {
+  width: 186px;
+}
+
 div.chart_div_container{
   height: 480px;
   width: 100%;
@@ -355,10 +359,6 @@ a{
 
 .notice h3 {
   color: #006600; 
-}
-
-input.small {
-  width: 156px;
 }
 
 .blank-icon {
