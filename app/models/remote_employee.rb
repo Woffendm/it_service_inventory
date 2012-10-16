@@ -54,10 +54,10 @@ class RemoteEmployee
       else
         updated_info = updated_info.first
       end
-      updated_name = updated_info.cn.first.gsub(/[,]/, '').split(" ")
+      updated_name = updated_info.cn.first.split(",")
       employee.name_last = updated_name[0]
-      employee.name_first = updated_name[1]
-      employee.name_MI = updated_name[2]
+      employee.name_first = updated_name[1].split(" ")[0]
+      employee.name_MI = updated_name[1].split(" ")[1].first
       if updated_info.respond_to?(:mail)
         employee.email = updated_info.mail.first
       else
