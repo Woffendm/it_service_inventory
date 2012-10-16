@@ -243,10 +243,12 @@ div.chart_div_container{
 }
 
 
+
+
 .tooltip{
   display: none;
   position: relative;
-  max-width: 300px;
+  max-width: 25em;
   padding: 3px 8px;
   color: #fff;
   text-align: left;
@@ -273,6 +275,10 @@ div.chart_div_container{
   text-align: left;
 }
 
+.tooltip-table {
+  max-width: none;
+}
+
 .tooltip-table > tbody > tr:nth-child(odd){
   background-color: #333;
 }
@@ -281,13 +287,11 @@ div.chart_div_container{
   border-bottom: 1px solid #eee;
 }
 
-.tooltip_first_column{
-  width: 10em;
-}
-
 .tooltip_last_column{
   width: 1em;
 }
+
+
 
 
 #group_select_div > label, #service_select_div > label{

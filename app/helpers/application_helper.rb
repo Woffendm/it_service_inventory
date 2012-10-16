@@ -16,21 +16,21 @@ module ApplicationHelper
   
   
   # Finds the longest word in the string (with a word being defined as something without spaces)
-  # and returns a string with a max-width attribute assigned to be 10 times (in px) the length of 
-  # the longest word if the longest word is longer than 20 characters
+  # and returns a string with a max-width attribute assigned to be 0.6 times (in em) the length of 
+  # the longest word if the longest word is longer than 42 characters
   def max_width_by_word(string)
-    if split(" ").sort_by(&:length).last.length > 20
-      return "max-width:#{string.split(" ").sort_by(&:length).last.length * 10}px;"
+    if !string.empty? && string.split(" ").sort_by(&:length).last.length > 42
+      return "max-width:#{string.split(" ").sort_by(&:length).last.length * 0.6}em;"
     end
     return ""
   end
   
   
-  # If the string is longer than 20 characters, returns a string with a max-width attribute assigned 
-  # to be 10 times (in px)the length of the string.
+  # If the string is longer than 17 characters, returns a string with a max-width attribute assigned 
+  # to be 0.6 times (in em) the length of the string.
   def max_width_by_string(string)
-    if string.length > 20
-      return "max-width:#{string.length * 10}px;"
+    if string.length > 17
+      return "width:#{string.length * 0.6}em;"
     end
     return ""
   end

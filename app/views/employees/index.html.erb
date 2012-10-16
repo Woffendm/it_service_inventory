@@ -50,7 +50,7 @@
             <div class="tooltip_trigger">
               <%= employee.notes.truncate(20) %> 
             </div>
-            <div class="tooltip">
+            <div class="tooltip" style="<%=max_width_by_word(employee.notes)%>">
               <p class="tooltip_paragraph"> <%= employee.notes %> </p>
             </div>
           <% end %>

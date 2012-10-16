@@ -17,7 +17,7 @@ $(document).ready(function(){
     
     
     
-    // Opens the modal content
+    // Opens the shared modal content
     $(".modal_trigger").click(function(e){ 
       $("#modal_content").dialog("open");
     });
@@ -37,7 +37,7 @@ $(document).ready(function(){
     
     
     
-    // Opens the modal content
+    // Opens the unique modal content for that trigger
     $(".modal_trigger_2").click(function(e){ 
       $("#modal_content_" + $(".modal_trigger_2").index(this)).dialog("open");
     });
