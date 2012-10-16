@@ -54,8 +54,12 @@ class RemoteEmployee
       else
         updated_info = updated_info.first
       end
+      # Splits returned string about the ',', separating the last name from the 
+      # first and middle names
       updated_name = updated_info.cn.first.split(",")
       employee.name_last = updated_name[0]
+      # Splits the first and middle names around the " " between them. Only takes 
+      # the first letter of the middle name
       employee.name_first = updated_name[1].split(" ")[0]
       employee.name_MI = updated_name[1].split(" ")[1].first
       if updated_info.respond_to?(:mail)

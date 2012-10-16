@@ -43,7 +43,7 @@ $(document).ready(function(){
     
     // Hides submit buttons and shows error message if employee is over-allocated. Note that due to 
     // the inprecision of floats, the total allocation is not compared to exactly 1.
-    if( totalAllocation > 1.00001 ) {
+    if( totalAllocation > 1.0001 ) {
       submissionButtons.hide();
       overAllocationMessage.show();
     } 
