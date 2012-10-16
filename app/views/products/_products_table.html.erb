@@ -23,8 +23,9 @@
           <div class="tooltip_trigger">
             <%= product.description.truncate(20) %>
           </div>
-          <div class="tooltip">
-            <p class="tooltip_paragraph"> <%= product.description %> </p>
+          <div class="tooltip tooltip_paragraph"
+               style="<%=max_width_by_word(product.description)%>">
+            <%= simple_format product.description %>
           </div>
         <% end %>
       </td>
