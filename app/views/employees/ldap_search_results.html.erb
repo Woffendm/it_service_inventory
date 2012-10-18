@@ -28,12 +28,15 @@
               <%= form_tag("ldap_create", :method => "post", :class => "prevent_double_submit") do %>
                 <!-- Splits returned string about the ',', separating the last name from the 
                 first and middle names -->
-                <% @temp = entry.cn.first.split(",") %>
-                <%= hidden_field_tag(:name_last, @temp[0]) %>
+                <% temp = entry.cn.first.split(",") %>
+                <%= hidden_field_tag(:name_last, temp[0]) %>
                 <!-- Splits the first and middle names around the " " between them. Only takes 
                 the first letter of the middle name -->
-                <%= hidden_field_tag(:name_first, @temp[1].split(" ")[0]) %>
-                <%= hidden_field_tag(:name_MI, @temp[1].split(" ")[1].first) %>
+                <% first_and_middle_names = temp[1].split(" ") %>
+                <%= hidden_field_tag(:name_first, first_and_middle_names[0]) %>
+                <% if first_and_middle_names[1] %>
+                  <%= hidden_field_tag(:name_MI, first_and_middle_names[1].first) %>
+                <% end %>
                 <%= hidden_field_tag(:osu_username, entry.uid.first) %>
                 <%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
                 <% if entry.respond_to?(:mail) %>

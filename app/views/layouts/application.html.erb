@@ -66,7 +66,7 @@
               </li>
             <% end %>
           </ul>
-          <ul class="nav" id="login">
+          <ul class="nav" id="login-in-list">
             <% if session[:current_user_name] %>
               <li> 
                 <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
@@ -82,6 +82,7 @@
         </div>
       </div>
     </div>
+    
   </div>
   <div class="container">
     <div class="row">
