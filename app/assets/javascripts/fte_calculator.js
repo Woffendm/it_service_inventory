@@ -9,7 +9,7 @@ $(document).ready(function(){
   $("#fte_calculator").dialog({ 
     autoOpen  : false,
     width     : "auto",
-    modal     : false,
+    modal     : true,
     closeText : "",
     show      : "drop",
     title     : "Allocation Calculator",
@@ -40,8 +40,6 @@ $(document).ready(function(){
       hoursPerDay.val("");
       hoursPerWeek.val("");
       popAllocationResult(0)
-      $("#fte_calculator").dialog("option", "position", [this.offsetLeft + 20, this.offsetTop -
-                                  $(window).scrollTop() - 60]);
       $("#fte_calculator").dialog("open");
     }
   });

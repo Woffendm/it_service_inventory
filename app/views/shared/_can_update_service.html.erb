@@ -1,18 +1,5 @@
 <% if can? :update, service %>
-  <% text = (link_to service.name.truncate(20), edit_service_path(service.id)) %>
+  <%= link_to service.name, edit_service_path(service.id) %>
 <% else %>
-  <% text = service.name.truncate(20) %> 
-<% end %>
-
-
-
-<% if service.name.length > 20 %>
-  <div class="tooltip_trigger">
-<% end %>
-  <%= text %>
-<% if service.name.length > 20 %>
-  </div>
-  <div class="tooltip">
-    <p class="tooltip_paragraph"> <%= service.name %> </p>
-  </div>
+  <%= service.name %> 
 <% end %>
