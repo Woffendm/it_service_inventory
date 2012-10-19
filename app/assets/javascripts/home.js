@@ -47,7 +47,7 @@ $(document).ready(function(){
           titlePosition   : 'in',
           title           : xAxisTitle,
           slantedText     : true,
-          slantedTextAngle: 50,
+          slantedTextAngle: 60,
           titleTextStyle  : { 
             fontSize      : 14 
           } 

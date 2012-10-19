@@ -25,17 +25,29 @@
 </head>
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
+    <ul class="" id="login-inline">
+      <% if session[:current_user_name] %>
+        <li> 
+          <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
+                       #{session[:current_user_name]}".html_safe,
+                       user_settings_employee_path(@current_user.id) %>
+        </li>
+        <li> <%= link_to t(:logout), logins_destroy_path %> </li>
+      <% else %>
+        <li> <%= link_to t(:login), logins_new_path %> </li>
+      <% end %>
+    </ul>
     <div class="navbar-inner">
       <div class="container">
+        <span class="brand">
+          <%= link_to t(:IT_service_inventory), pages_home_path %>
+        </span>
         <button data-target=".nav-collapse" data-toggle="collapse" 
           class="btn btn-navbar" type="button">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <span class="brand">
-          <%= link_to t(:IT_service_inventory), pages_home_path, :class => cp(pages_home_path) %>
-        </span>
         <div class="nav-collapse collapse">
           <ul class="nav">
             <li>
@@ -66,25 +78,40 @@
               </li>
             <% end %>
           </ul>
-          <ul class="nav" id="login-in-list">
-            <% if session[:current_user_name] %>
-              <li> 
-                <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
-                             #{session[:current_user_name]}".html_safe,
-                             user_settings_employee_path(@current_user.id),
-                             :class => cp(user_settings_employee_path(@current_user.id)) %>
-              </li>
-              <li> <%= link_to t(:logout), logins_destroy_path, :class => "logout" %> </li>
-            <% else %>
-              <li> <%= link_to t(:login), logins_new_path %> </li>
-            <% end %>
-          </ul>
         </div>
+        <ul class="" id="login-outline">
+          <% if session[:current_user_name] %>
+            <li> 
+              <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
+                           #{session[:current_user_name]}".html_safe,
+                           user_settings_employee_path(@current_user.id) %>
+            </li>
+            <li> <%= link_to t(:logout), logins_destroy_path %> </li>
+          <% else %>
+            <li> <%= link_to t(:login), logins_new_path %> </li>
+          <% end %>
+        </ul>
       </div>
     </div>
     
   </div>
   <div class="container">
+    <!--
+    <div class="row">
+      <ul class="" id="login-in-list">
+        <% if session[:current_user_name] %>
+          <li> 
+            <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-black'}
+                         #{session[:current_user_name]}".html_safe,
+                         user_settings_employee_path(@current_user.id) %>
+          </li>
+          <li> <%= link_to t(:logout), logins_destroy_path %> </li>
+        <% else %>
+          <li> <%= link_to t(:login), logins_new_path %> </li>
+        <% end %>
+      </ul>
+    </div>
+    -->
     <div class="row">
       <% if flash[:notice] %>
         <p class="notice">  <%= flash[:notice] %>       </p>

@@ -27,7 +27,8 @@
 
 
 
-body{
+
+body {
   background-color: #FFF;
   margin-bottom: 50px;
 }
@@ -36,7 +37,7 @@ body{
   margin: 100px;
 }
 
-#content-wrapper{
+#content-wrapper {
   background: white;
   padding: 10px 10px 10px 10px;
 }
@@ -50,9 +51,10 @@ body{
     margin-bottom: 3px;
 }
 
-.navbar-inverse .brand, .navbar-inverse .nav > li > a{  
+.navbar-inverse .brand, 
+.navbar-inverse .nav > li > a {  
   color: white;
-  padding: 10px 20px;
+  padding: 10px 16px;
 }
 
 .navbar-inverse .nav > li > i {
@@ -91,8 +93,11 @@ body{
   background-color: #666;
 }
 
-.form-search label, .form-inline label, .form-search .btn-group, .form-inline .btn-group {
-    width: 130px;
+.form-search label, 
+.form-inline label, 
+.form-search .btn-group, 
+.form-inline .btn-group {
+  width: 130px;
 }
 
 #header{
@@ -104,7 +109,7 @@ body{
 }
 
 textarea {
-    width: 400px;
+  width: 400px;
 }
 
 form {
@@ -376,19 +381,50 @@ h2 > a {
   background: -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent;
 }
 
-#login-in-list{
+#login-inline,
+#login-outline {
   float: right;
   margin-right: 0;
+  position: relative;
+  top: 10px;
+  left: -20px;
 }
 
-@media (min-width: 1201px) {
-  #login-in-list {
-   
-  }
+#login-inline li,
+#login-outline li {
+  display: inline;
 }
-@media (max-width: 1200px) {
-  #login-in-list {
+
+#login-inline > li > a,
+#login-outline > li > a{
+  padding-right: 20px;
+  color: white;
+}
+
+.navbar .btn-navbar {
     float: left;
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .navbar-fixed-top + .container {
+    margin-top: 90px; 
+  }
+  #login-inline {
+    display: none;
   }
 }
 
+@media (max-width: 768px) {
+  .navbar-fixed-top + .container {
+    margin-top: 0; 
+  }
+  #login-outline {
+    display: none;
+  }
+}
+
+@media (min-width: 1100px) {
+  #login-outline {
+    display: none;
+  }
+}
