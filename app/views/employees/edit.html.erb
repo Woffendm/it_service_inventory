@@ -1,6 +1,22 @@
 <h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
 
 
+
+<ul class="nav nav-tabs">
+  <li>
+    <a href=<%=employee_path(@employee.id)%>> 
+      View Employee
+    </a>
+  </li>
+  <li class="active">
+    <a href="#"> 
+      Edit Employee
+    </a>
+  </li>
+</ul>
+
+
+
 <%= form_for @employee do |employee_form| %>
 
 

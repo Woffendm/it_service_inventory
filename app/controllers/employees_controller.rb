@@ -6,9 +6,10 @@
 class EmployeesController < ApplicationController
 
   before_filter :authorize_creation,   :only => [:ldap_create, :search_ldap_view]
-  before_filter :load_employee,        :only => [:destroy, :edit, :update]
-  before_filter :load_groups_services, :only => [:edit, :update]
-  before_filter :load_allocation_precision, :only => [:edit, :update]
+  before_filter :load_employee,        :only => [:destroy, :edit, :show, :update]
+  before_filter :authorize_update,     :only => [:edit, :update]
+  before_filter :load_groups_services, :only => [:edit, :show, :update]
+  before_filter :load_allocation_precision, :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
                                                                 :user_settings]
@@ -45,6 +46,11 @@ class EmployeesController < ApplicationController
   # Page for searching the OSU directory for new employees
   def search_ldap_view
     @data = nil # This is here to prevent an error on the ldap_search_results partial
+  end
+
+
+  # Page for viewing an existing employee
+  def show
   end
 
 
@@ -171,6 +177,12 @@ class EmployeesController < ApplicationController
     def authorize_creation
       authorize! :create, Employee
     end
+    
+    
+    # Ensures that the user is authorized to update the employee
+    def authorize_update
+      authorize! :update, @employee
+    end
 
 
     # Loads the application settings fte_hours_per_week and allocation_precision
@@ -183,7 +195,6 @@ class EmployeesController < ApplicationController
     # Loads an employee based off parameters given and ensures that user is authorized to edit them
     def load_employee
       @employee = Employee.find(params[:id])
-      authorize! :update, @employee
     end
 
 
