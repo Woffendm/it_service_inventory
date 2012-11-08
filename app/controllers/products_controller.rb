@@ -4,9 +4,9 @@
 # Copyright:
 
 class ProductsController < ApplicationController
-  before_filter :load_product, :only => [:destroy, :edit, :update]
-  before_filter :load_employees_services_groups,    :only => [:edit, :update]
-  before_filter :load_application_settings,         :only => [:edit, :update]
+  before_filter :load_product, :only => [:destroy, :edit, :show, :update]
+  before_filter :load_employees_services_groups,    :only => [:edit, :show, :update]
+  before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
   before_filter :load_product_states_types_sources, :only => [:index, :edit, :update]
 

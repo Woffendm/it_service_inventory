@@ -9,6 +9,7 @@ class EmployeesController < ApplicationController
   before_filter :load_employee,        :only => [:destroy, :edit, :show, :update]
   before_filter :authorize_update,     :only => [:edit, :update]
   before_filter :load_groups_services, :only => [:edit, :show, :update]
+  before_filter :load_products,        :only => [:edit, :show, :update]
   before_filter :load_allocation_precision, :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
@@ -202,6 +203,12 @@ class EmployeesController < ApplicationController
     def load_groups_services
       @services = @employee.services.order(:name)
       @groups = @employee.groups.order(:name)
+    end
+    
+    
+    # Loads all products assigned to the current employee
+    def load_products
+      @products = @employee.products.order(:name)
     end
     
     

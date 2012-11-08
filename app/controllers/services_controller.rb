@@ -4,9 +4,9 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-  before_filter :load_service, :only => [:destroy, :edit, :update]
-  before_filter :load_group, :only => [:total_allocation_within_group]
-
+  before_filter :load_service, :only => [:destroy, :edit, :show, :update]
+  before_filter :load_employees, :only => [:show]
+  before_filter :load_products, :only => [:show]
   
 # View-related methods
   
@@ -78,14 +78,21 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
+    # Loads all employees allocated to this service
+    def load_employees
+      @employees = @service.employees
+    end
+    
+    
+    # Loads all products allocated to this service
+    def load_products
+      @products = @service.products
+    end
+    
+    
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
       authorize! :update, @service
-    end
-
-
-    def load_group
-      @group = Group.find(params[:group])
     end
 end

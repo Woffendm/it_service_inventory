@@ -1,125 +1,131 @@
-<h2> Showing Employee: <%= @employee.full_name %> </h2>
+<h2> 
+  Employee: <%= @employee.full_name %> 
+  <% if can? :update, @employee %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe,
+                edit_employee_path(@employee.id) %>
+  <% end %>
+</h2> 
 
 
-
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" id="my-tab">
   <li class="active">
-    <a href="#"> 
-      View Employee
+    <a href="#services" id="services_tab" data-toggle="tab"> 
+      Allocated Services
     </a>
   </li>
   <li>
-    <a href=<%=edit_employee_path(@employee.id)%>> 
-      Edit Employee
+    <a href="#products" id="products_tab" data-toggle="tab" > 
+      Allocated Products
+    </a>
+  </li>
+  <li>
+    <a href="#basic_information" id="basic_information_tab" data-toggle="tab"> 
+      Notes and Groups
     </a>
   </li>
 </ul>
 
 
+<div class="tab-content">
+  <div class="tab-pane" id="basic_information">
+    
+    <div class="form-horizontal">
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :groups %> 
+        </span>
+        <span class="controls">
+          <%= @groups.collect{|g|g.name}.join(", ") %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:email) %> 
+        </span>
+        <span class="controls">
+          <%= @employee.email %>    
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :notes %> 
+        </span>
+        <span class="controls">
+          <%= simple_format(@employee.notes, :style => 'margin-left:280px;') %>
+        </span>
+      </div>
+    </div>
+    
+  </div>
+    
+    
+    
+  <div class="tab-pane active" id="services">
+  
 
-<h3><%= t(:basic_information) %> </h3>
-<div class="form-horizontal">
-  <div class="control-group">
-    <span class="control-label">
-      <%= label_tag t(:last_name) %>
-    </span>
-    <span class="controls">
-      <%= @employee.name_last %>
-    </span>
+    <% if @employee.employee_allocations.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%= t(:service) %></th>
+            <th><%= t(:allocation) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @services.each do |service| %>
+            <% employee_allocation = service.get_employee_allocation(@employee) %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_service", 
+                            :locals => {:service => employee_allocation.service} %>
+              </td>
+              <td class="form-inline"> 
+                <%= employee_allocation.allocation.round(@allocation_precision) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
   </div>
-  <div class="control-group">
-    <span class="control-label">
-      <%= label_tag t(:first_name) %>
-    </span>
-    <span class="controls">
-      <%= @employee.name_first %>
-    </span>
+
+
+
+  <div class="tab-pane" id="products">
+  
+
+    <% if @employee.employee_products.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%= t(:product) %></th>
+            <th><%= t(:allocation) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <% employee_product = product.get_employee_product(@employee) %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_product", 
+                            :locals => {:product => product} %>
+              </td>
+              <td class="form-inline"> 
+                <%= employee_product.allocation.round(@allocation_precision) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
   </div>
-  <div class="control-group">
-    <span class="control-label">
-      <%= label_tag t(:email) %> 
-    </span>
-    <span class="controls">
-      <%= @employee.email %>    
-    </span>
-  </div>
-  <div class="control-group">
-    <span class="control-label">
-      <%= label_tag :notes %> 
-    </span>
-    <span class="controls">
-      <%= simple_format(@employee.notes, :style => 'margin-left:280px;') %>
-    </span>
-  </div>
+
 </div>
 
 
 
-
-<!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
- to the employee's group membership here --> 
-<% if @employee.employee_groups.any? %>
-  <h3> <%= t(:groups) %> </h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th> <%= t(:group) %> </th>
-        <th> <%= t(:admin) %>? </th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @groups.each do |group| %>
-        <% employee_group = @employee.employee_groups.find_by_group_id(group.id) %>
-        <tr>
-          <td>
-            <%= link_to employee_group.group.name, roster_group_path(employee_group.group_id) %>
-          </td>
-          <td>
-            <% if employee_group.group_admin %>
-              Admin
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-
-
-
-<!-- Creates table with the employee's services and allocations. Can be edited by employee or
- admin -->
-<% if @employee.employee_allocations.any? %>
- <h3> <%= t(:services) %> </h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%= t(:service) %></th>
-        <th><%= t(:allocation) %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @services.each do |service| %>
-        <% employee_allocation = service.get_employee_allocation(@employee) %>
-        <tr>
-          <td> 
-            <%= render  :partial => "/shared/can_update_service", 
-                        :locals => {:service => employee_allocation.service} %>
-          </td>
-          <td class="form-inline"> 
-            <%= employee_allocation.allocation.round(@allocation_precision) %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
 <br/>
-
-
-
-
-
-<br/><br/>
 <%= link_to t(:return_to) + t(:all_employees), employees_path %>

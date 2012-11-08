@@ -50,4 +50,12 @@ class Product < ActiveRecord::Base
     end
     return total_allocation
   end
+  
+  
+  # Returns an EmployeeProduct object which has a product_id matching this product's id and an
+  # employee_id matching the given employee's id
+  def get_employee_product(employee)
+   self.employee_products.find_by_employee_id(employee.id) 
+  end
+  
 end

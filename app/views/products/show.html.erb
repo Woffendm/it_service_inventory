@@ -1,0 +1,121 @@
+<h2> 
+  <%= t(:product) %>: <%= @product.name %> 
+  <% if can? :update, @product %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe,
+                edit_product_path(@product.id) %>
+  <% end %>
+</h2> 
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#product_information" id="product_information_tab" data-toggle="tab"> 
+      Product Information
+    </a>
+  </li>
+  <li>
+    <a href="#employees" id="employees_tab" data-toggle="tab" > 
+      Allocated Employees
+    </a>
+  </li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="product_information">
+    <div class="form-horizontal">
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag :description %> 
+          </span>
+          <span class="controls">
+            <%= @product.description %>
+          </span>
+        </div>
+    
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag t(:product_state) %> 
+          </span>
+          <span class="controls">
+            <%= @product.product_state.name %> 
+          </span>
+        </div>
+    
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag t(:product_type) %> 
+          </span>
+          <span class="controls">
+            <%= @product.product_type.name %> 
+          </span>
+        </div>
+    
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag :url, "URL" %>
+          </span>
+          <span class="controls">
+            <%= @product.url %>
+            <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
+                        :target => '_blank' %>
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag :groups %> 
+          </span>
+          <span class="controls">
+            <%= @groups.collect{|g|g.name}.join(", ") %>
+          </span>
+        </div>
+        
+        <div class="control-group">
+          <span class="control-label">
+            <%= label_tag :services %> 
+          </span>
+          <span class="controls">
+            <%= @services.collect{|s|s.name}.join(", ") %>
+          </span>
+        </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="tab-pane" id="employees">
+    <% if @product.employee_products.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:employee) %> </th>
+            <th> <%= t(:allocation) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @employees.each do |employee| %>
+            <% employee_product = employee.employee_products.find_by_product_id(@product.id) %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_employee", 
+                            :locals => {:@employee => employee} %>
+              </td>
+              <td > 
+                <%= employee_product.rounded_allocation %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+<br/>
+<%= link_to t(:return_to) + t(:all_products), products_path %>

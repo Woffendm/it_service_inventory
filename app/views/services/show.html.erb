@@ -1,0 +1,118 @@
+<h2> 
+  <%= t(:service) %>: <%= @service.name %> 
+  <% if can? :update, @service %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe,
+                edit_service_path(@service.id) %>
+  <% end %>
+</h2> 
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#service_information" id="service_information_tab" data-toggle="tab"> 
+      Product Information
+    </a>
+  </li>
+  <li>
+    <a href="#products" id="products_tab" data-toggle="tab" > 
+      Allocated Products
+    </a>
+  </li>
+  <li>
+    <a href="#employees" id="employees_tab" data-toggle="tab" > 
+      Allocated Employees
+    </a>
+  </li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="service_information">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :description %> 
+        </span>
+        <span class="controls">
+          <%= @service.description %>
+        </span>
+      </div>
+      <!--
+      <div class="control-group">
+        <span class="control-label">
+          <%# label_tag :groups %> 
+        </span>
+        <span class="controls">
+          <%# @groups.collect{|g|g.name}.join(", ") %>
+        </span>
+      </div>
+      -->
+    </div>
+  </div>
+
+
+  <div class="tab-pane" id="products">
+    <% unless @products.empty? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:product) %> </th>
+            <th> <%= t(:product_state) %> </th>
+            <th> <%= t(:product_type) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_product", 
+                            :locals => {:product => product} %>
+              </td>
+              <td > 
+                <%= product.product_state.name %>
+              </td>
+              <td > 
+                <%= product.product_type.name %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+
+
+  <div class="tab-pane" id="employees">
+    <% unless @employees.empty? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:employee) %> </th>
+            <th> <%= t(:allocation) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @employees.each do |employee| %>
+            <% employee_allocation = employee.employee_allocations.find_by_service_id(@service.id) %>
+            <tr>
+              <td> 
+                <%= render  :partial => "/shared/can_update_employee", 
+                            :locals => {:@employee => employee} %>
+              </td>
+              <td > 
+                <%= employee_allocation.rounded_allocation %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+
+
+
+<br/>
+<%= link_to t(:return_to) + t(:all_services), services_path %>
