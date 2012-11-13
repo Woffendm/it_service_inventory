@@ -36,7 +36,9 @@
           <%= label_tag :groups %> 
         </span>
         <span class="controls">
-          <%= @groups.collect{|g|g.name}.join(", ") %>
+          <% unless @groups.empty? %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% end %>
         </span>
       </div>
       <div class="control-group">
@@ -77,8 +79,7 @@
             <% employee_allocation = service.get_employee_allocation(@employee) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_service", 
-                            :locals => {:service => employee_allocation.service} %>
+                <%= link_to service.name, service_path(service.id) %>
               </td>
               <td class="form-inline"> 
                 <%= employee_allocation.allocation.round(@allocation_precision) %>
@@ -109,8 +110,7 @@
             <% employee_product = product.get_employee_product(@employee) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_product", 
-                            :locals => {:product => product} %>
+                <%= link_to product.name, product_path(product.id) %>
               </td>
               <td class="form-inline"> 
                 <%= employee_product.allocation.round(@allocation_precision) %>

@@ -7,6 +7,7 @@ class ServicesController < ApplicationController
   before_filter :load_service, :only => [:destroy, :edit, :show, :update]
   before_filter :load_employees, :only => [:show]
   before_filter :load_products, :only => [:show]
+  before_filter :load_groups, :only => [:show]
   
 # View-related methods
   
@@ -94,5 +95,10 @@ class ServicesController < ApplicationController
     def load_service
       @service = Service.find(params[:id])
       authorize! :update, @service
+    end
+    
+    # Loads all groups who have employees allocated to this service
+    def load_groups
+      @groups = @service.groups
     end
 end

@@ -34,4 +34,9 @@ module ApplicationHelper
     end
     return ""
   end
+  
+  
+  def print_list_of_links(array)
+    return array.collect{|g| link_to g.name, group_path(g.id)}.join(", ")
+  end
 end

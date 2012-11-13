@@ -10,11 +10,6 @@
 
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
-    <a href="#service_information" id="service_information_tab" data-toggle="tab"> 
-      Product Information
-    </a>
-  </li>
-  <li>
     <a href="#products" id="products_tab" data-toggle="tab" > 
       Allocated Products
     </a>
@@ -24,35 +19,41 @@
       Allocated Employees
     </a>
   </li>
+  <li>
+    <a href="#service_information" id="service_information_tab" data-toggle="tab"> 
+      Service Information
+    </a>
+  </li>
 </ul>
 
 
 <div class="tab-content">
-  <div class="tab-pane active" id="service_information">
+  <div class="tab-pane" id="service_information">
     <div class="form-horizontal">
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :associated_groups %> 
+        </span>
+        <span class="controls">
+          <% unless @groups.nil? %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", ").html_safe %>
+          <% end %>
+        </span>
+      </div>
       <div class="control-group">
         <span class="control-label">
           <%= label_tag :description %> 
         </span>
         <span class="controls">
-          <%= @service.description %>
+          <%= simple_format(@service.description, :style => 'margin-left:280px;') %>
         </span>
       </div>
-      <!--
-      <div class="control-group">
-        <span class="control-label">
-          <%# label_tag :groups %> 
-        </span>
-        <span class="controls">
-          <%# @groups.collect{|g|g.name}.join(", ") %>
-        </span>
-      </div>
-      -->
     </div>
   </div>
 
 
-  <div class="tab-pane" id="products">
+
+  <div class="tab-pane active" id="products">
     <% unless @products.empty? %>
       <table class="table table-striped">
         <thead>
@@ -66,8 +67,7 @@
           <% @products.each do |product| %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_product", 
-                            :locals => {:product => product} %>
+                <%= link_to product.name, product_path(product.id) %>
               </td>
               <td > 
                 <%= product.product_state.name %>
@@ -97,8 +97,7 @@
             <% employee_allocation = employee.employee_allocations.find_by_service_id(@service.id) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_employee", 
-                            :locals => {:@employee => employee} %>
+                <%= link_to employee.full_name, employee_path(employee.id) %>
               </td>
               <td > 
                 <%= employee_allocation.rounded_allocation %>

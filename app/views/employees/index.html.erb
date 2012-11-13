@@ -41,8 +41,7 @@
             <span class="blank-icon"></span>
           <% end %>
           <span class="before_icon">
-            <%= render  :partial => "/shared/can_update_employee", 
-                        :locals => {:@employee => employee} %>
+            <%= link_to employee.full_name, employee_path(employee.id) %>
           </span>
         </td>
         <td>  

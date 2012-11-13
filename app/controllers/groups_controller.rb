@@ -4,10 +4,13 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_employee,   :only => [:add_employee]
-  before_filter :load_employees,  :only => [:roster]
   before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
-                                            :remove_employee, :update]  
+                                            :remove_employee, :show, :update]  
+  before_filter :load_employee,   :only => [:add_employee]
+  before_filter :load_possible_employees,  :only => [:edit]
+  before_filter :load_existing_employees,  :only => [:show, :edit]
+  before_filter :load_services,            :only => [:show]
+  before_filter :load_products,            :only => [:show]
   
   
 # View-related methods
@@ -31,7 +34,9 @@ class GroupsController < ApplicationController
                           :per_page => session[:results_per_page])
   end
   
-  
+  # Page for viewing an existing group
+  def show
+  end
   
 # Action-related methods
   
@@ -124,16 +129,31 @@ class GroupsController < ApplicationController
       @employee = Employee.find(params[:employee][:id])
     end
 
-
     # Loads all employees
-    def load_employees
-      @employees = Employee.order(:name_last, :name_first)
+    def load_existing_employees
+      @existing_employees = @group.employees.order(:name_last, :name_first).paginate(:page =>   
+            params[:employees_page], :per_page => session[:results_per_page])
     end
 
+    # Loads all employees
+    def load_possible_employees
+      @possible_employees = @group.get_available_employees.order(:name_last, :name_first)
+    end
 
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])
       authorize! :update, @group
+    end
+    
+    def load_products
+      @products = @group.products.order(:name).paginate(:page =>   
+            params[:products_page], :per_page => session[:results_per_page])
+    end
+    
+    # Loads all services allocated to employees of the group
+    def load_services
+      @services = @group.services.paginate(:page =>   
+            params[:services_page], :per_page => session[:results_per_page])
     end
 end

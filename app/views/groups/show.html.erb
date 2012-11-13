@@ -1,0 +1,127 @@
+<h2> 
+  Group: <%= @group.name %> 
+  <% if can? :update, @group %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe,
+                edit_group_path(@group.id) %>
+  <% end %>
+</h2> 
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#products" id="products_tab" data-toggle="tab" > 
+      Related Products
+    </a>
+  </li>
+  <li>
+     <a href="#employees" id="employees_tab" data-toggle="tab" > 
+       Employees
+     </a>
+   </li>
+  <li>
+    <a href="#services" id="services_tab" data-toggle="tab"> 
+      Related Services
+    </a>
+  </li>
+</ul>
+
+
+
+<div class="tab-content">
+    
+    
+  <div class="tab-pane" id="services">
+    <% unless @services.empty? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%= t(:service) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @services.each do |service| %>
+            <tr>
+              <td> 
+                <%= link_to service.name, service_path(service.id) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="pagination_footer">
+        <%= will_paginate @services, :param_name => :services_page %>
+        <%= render :partial => "/shared/results_per_page" %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <div class="tab-pane" id="employees">
+    <% unless @existing_employees.empty? %>
+      <table class="table table-striped"> 
+        <thead>
+          <tr>
+            <th>
+              Employee
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @existing_employees.each do |employee| %>
+            <tr>
+              <td>
+                <%= link_to employee.full_name, employee_path(employee.id) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="pagination_footer">
+        <%= will_paginate @existing_employees, :param_name => :employees_page %>
+        <%= render :partial => "/shared/results_per_page" %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <div class="tab-pane active" id="products">
+    <% unless @products.empty? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:product) %> </th>
+            <th> <%= t(:product_state) %> </th>
+            <th> <%= t(:product_type) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <tr>
+              <td> 
+                <%= link_to product.name, product_path(product.id) %>
+              </td>
+              <td > 
+                <%= product.product_state.name %>
+              </td>
+              <td > 
+                <%= product.product_type.name %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <div class="pagination_footer">
+        <%= will_paginate @products, :param_name => :products_page %>
+        <%= render :partial => "/shared/results_per_page" %>
+      </div>
+    <% end %>
+  </div>
+  
+  
+</div>
+
+
+
+<br/>
+<%= link_to t(:return_to) + t(:all_groups), groups_path %>

@@ -25,61 +25,65 @@
 <div class="tab-content">
   <div class="tab-pane active" id="product_information">
     <div class="form-horizontal">
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag :description %> 
-          </span>
-          <span class="controls">
-            <%= @product.description %>
-          </span>
-        </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :groups %> 
+        </span>
+        <span class="controls">
+          <% unless @groups.empty? %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% end %>
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :services %> 
+        </span>
+        <span class="controls">
+          <% unless @services.empty? %>
+            <%= @services.collect{|g| link_to g.name, service_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% end %>        
+        </span>
+      </div>
     
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag t(:product_state) %> 
-          </span>
-          <span class="controls">
-            <%= @product.product_state.name %> 
-          </span>
-        </div>
-    
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag t(:product_type) %> 
-          </span>
-          <span class="controls">
-            <%= @product.product_type.name %> 
-          </span>
-        </div>
-    
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag :url, "URL" %>
-          </span>
-          <span class="controls">
-            <%= @product.url %>
-            <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
-                        :target => '_blank' %>
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag :groups %> 
-          </span>
-          <span class="controls">
-            <%= @groups.collect{|g|g.name}.join(", ") %>
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= label_tag :services %> 
-          </span>
-          <span class="controls">
-            <%= @services.collect{|s|s.name}.join(", ") %>
-          </span>
-        </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:product_state) %> 
+        </span>
+        <span class="controls">
+          <%= @product.product_state.name %> 
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:product_type) %> 
+        </span>
+        <span class="controls">
+          <%= @product.product_type.name %> 
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :url, "URL" %>
+        </span>
+        <span class="controls">
+          <%= @product.url %>
+          <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
+                      :target => '_blank' %>
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :description %> 
+        </span>
+        <span class="controls">
+          <%= simple_format(@product.description, :style => 'margin-left:280px;') %>
+        </span>
+      </div>
     </div>
   </div>
 
@@ -100,8 +104,7 @@
             <% employee_product = employee.employee_products.find_by_product_id(@product.id) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_employee", 
-                            :locals => {:@employee => employee} %>
+                <%= link_to employee.full_name, employee_path(employee.id) %>
               </td>
               <td > 
                 <%= employee_product.rounded_allocation %>

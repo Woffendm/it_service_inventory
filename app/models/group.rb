@@ -23,7 +23,7 @@ class Group < ActiveRecord::Base
   
   # Returns array of employees not currently in the given group
   def get_available_employees
-    Employee.order(:name_last) - self.employees
+    Employee.where(:id => EmployeeGroup.select(:employee_id).where(:group_id => self.id).uniq).uniq
   end
   
   
@@ -44,12 +44,15 @@ class Group < ActiveRecord::Base
   end
   
   
-  # Returns an array of services that the employees of the group have. The array is sorted by the
+  # Returns a table of services that the employees of the group have. The table is sorted by the
   # services' names, and does not contain duplicates. 
   def services
-    array_of_services = self.employees.collect{ |employee| 
-      employee.services
-    }.flatten.uniq
-    return array_of_services.sort_by &:name
+    Service.where(:id => 
+      EmployeeAllocation.select(:service_id).where(:employee_id =>
+        EmployeeGroup.select(:employee_id).where(:group_id =>
+          self.id
+        )
+      ).uniq
+    ).uniq.order(:name)
   end
 end
