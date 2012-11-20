@@ -26,15 +26,13 @@
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <ul class="" id="login-inline">
-      <% if session[:current_user_name] %>
+      <% if session[:current_user_name] && @current_user %>
         <li> 
           <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
                        #{session[:current_user_name]}".html_safe,
                        user_settings_employee_path(@current_user.id) %>
         </li>
         <li> <%= link_to t(:logout), logins_destroy_path %> </li>
-      <% else %>
-        <li> <%= link_to t(:login), logins_new_path %> </li>
       <% end %>
     </ul>
     <div class="navbar-inner">
@@ -79,9 +77,12 @@
             <% end %>
             
             <li class="login-in-dropdown"> 
-              <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
-                           #{session[:current_user_name]}".html_safe,
-                           user_settings_employee_path(@current_user.id) %>
+              <% if session[:current_user_name] && @current_user %>
+              
+                <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
+                            #{session[:current_user_name]}".html_safe,
+                            user_settings_employee_path(@current_user.id) %>
+              <% end %>
             </li>
             <li class="login-in-dropdown"> 
               <%= link_to t(:logout), logins_destroy_path %> 

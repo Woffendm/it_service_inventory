@@ -22,8 +22,7 @@
     <% @services.each do |service| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td>
-           <%= render  :partial => "/shared/can_update_service", 
-                       :locals => {:service => service} %>
+           <%= link_to service.name, service_path(service.id) %>
         </td>
         <td>  
           <% unless service.description.blank? %> 

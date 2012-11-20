@@ -16,6 +16,7 @@ class ProductsController < ApplicationController
   
   # Page for editing an existing product
   def edit
+    authorize! :update, @product
   end
 
 
@@ -42,6 +43,11 @@ class ProductsController < ApplicationController
           session[:results_per_page])
     @user_group_products = @user_group_products.paginate(:page => params[:user_group_products_page], 
           :per_page => session[:results_per_page])
+  end
+
+
+  # Page for viewing a product in detail
+  def show
   end
 
 
@@ -79,6 +85,7 @@ class ProductsController < ApplicationController
 
   # Updates an existing product using info entered on the "edit" page
   def update
+    authorize! :update, @product
     # If a new service was sent with the params, adds it to the product's list of services
     if params[:product_services]
       unless params[:product_services][:service_id].blank?
@@ -124,7 +131,6 @@ class ProductsController < ApplicationController
     # Loads a product based on the id provided in params
     def load_product
       @product = Product.find(params[:id])
-      authorize! :update, @product
     end
 
 

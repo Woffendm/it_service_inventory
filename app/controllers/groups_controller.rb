@@ -6,6 +6,8 @@
 class GroupsController < ApplicationController
   before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
+  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
+                                            :remove_employee, :update]
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:show, :edit]
@@ -27,13 +29,6 @@ class GroupsController < ApplicationController
   end
   
   
-  # Page containing the list of all employees assigned to a given group
-  def roster
-    @group = Group.find(params[:id])
-    @paginated_employees = @group.employees.order(:name_last).paginate(:page => params[:page],
-                          :per_page => session[:results_per_page])
-  end
-  
   # Page for viewing an existing group
   def show
   end
@@ -44,7 +39,7 @@ class GroupsController < ApplicationController
   def add_employee
     @group.add_employee_to_group(@employee)
     flash[:notice] = t(:employee) + t(:added)
-    redirect_to roster_group_path(@group.id)
+    redirect_to edit_group_path(@group.id)
   end
   
   
@@ -57,7 +52,7 @@ class GroupsController < ApplicationController
     else
       flash[:notice] = t(:admin) + t(:removed)
     end
-    redirect_to roster_group_path(@group.id)
+    redirect_to edit_group_path(@group.id)
   end
   
   
@@ -88,7 +83,7 @@ class GroupsController < ApplicationController
     @employee = Employee.find(params[:employee])
     @group.remove_employee_from_group(@employee)
     flash[:notice] = t(:employee) + t(:removed)
-    redirect_to roster_group_path(@group.id)
+    redirect_to edit_group_path(@group.id)
   end
 
 
@@ -112,11 +107,11 @@ class GroupsController < ApplicationController
   def update
     if @group.update_attributes(params[:group])
       flash[:notice] = t(:group) + t(:updated)
-      redirect_to groups_path 
+      redirect_to edit_group_path(@group.id) 
       return
     end
     flash[:error] = t(:group) + t(:needs_a_name)
-    redirect_to edit_group_path(@group.id) 
+    render :edit
   end
 
 
@@ -124,6 +119,11 @@ class GroupsController < ApplicationController
 # Loading methods
 
   private
+    # Ensures user is authorized to update the group
+    def authorize_update
+      authorize! :update, @group
+    end
+    
     # Loads an employee based on given parameters
     def load_employee
       @employee = Employee.find(params[:employee][:id])
@@ -135,17 +135,17 @@ class GroupsController < ApplicationController
             params[:employees_page], :per_page => session[:results_per_page])
     end
 
-    # Loads all employees
+    # Loads all employees not assigned to the group
     def load_possible_employees
-      @possible_employees = @group.get_available_employees.order(:name_last, :name_first)
+      @possible_employees = @group.get_available_employees
     end
 
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])
-      authorize! :update, @group
     end
     
+    # Loads all products allocated to the group
     def load_products
       @products = @group.products.order(:name).paginate(:page =>   
             params[:products_page], :per_page => session[:results_per_page])

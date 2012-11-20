@@ -8,17 +8,11 @@
     <% @employees.each do |employee| %>
       <tr class="<%= cycle('odd', 'even') %>">
         <td> 
-          <%= render  :partial => "/shared/can_update_employee", 
-                      :locals => {:@employee => employee} %>  
+          <%= link_to employee.full_name, employee_path(employee.id) %>  
         </td>
         <td>  
-          <% employee.groups.order(:name).each do |group| %>
-              <% if group != employee.groups.order(:name).last %>
-                <%= link_to group.name + ", ", roster_group_path(group.id) %>
-              <% else %>
-                <%= link_to group.name, roster_group_path(group.id) %>
-              <% end %>
-          <% end %>
+          <%= employee.groups.collect{|g| link_to g.name, 
+              group_path(g.id)}.join(", &nbsp;").html_safe %>
         </td>
         <td>
           <%= render  :partial => "/shared/employee_services_and_allocations", 

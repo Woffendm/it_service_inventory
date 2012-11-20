@@ -76,6 +76,7 @@ body {
 .brand > a:focus {
   color: #fff;
   background-color: #888;
+  text-decoration: none;
 }
 
 

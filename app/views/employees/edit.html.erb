@@ -1,19 +1,8 @@
-<h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
-
-
-
-<ul class="nav nav-tabs">
-  <li>
-    <a href=<%=employee_path(@employee.id)%>> 
-      View Employee
-    </a>
-  </li>
-  <li class="active">
-    <a href="#"> 
-      Edit Employee
-    </a>
-  </li>
-</ul>
+<h2> 
+  <%= t(:edit) + t(:employee_colon) %> &nbsp; <%= @employee.full_name %>
+  <%= link_to "#{content_tag :em, '', :class => ''}
+              #{t(:show)}".html_safe, employee_path(@employee.id) %>
+</h2>
 
 
 
@@ -195,8 +184,6 @@
 <% end %>
 
 
-<br/><br/>
-<%= link_to t(:return_to) + t(:all_employees), employees_path %>
 
 
 <%= render  :partial => "/shared/fte_calculator_body", 

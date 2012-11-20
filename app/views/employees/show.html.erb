@@ -1,9 +1,8 @@
 <h2> 
-  Employee: <%= @employee.full_name %> 
+  Employee: &nbsp; <%= @employee.full_name %> 
   <% if can? :update, @employee %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe,
-                edit_employee_path(@employee.id) %>
+                #{t(:edit)}".html_safe, edit_employee_path(@employee.id) %>
   <% end %>
 </h2> 
 
@@ -127,5 +126,3 @@
 
 
 
-<br/>
-<%= link_to t(:return_to) + t(:all_employees), employees_path %>

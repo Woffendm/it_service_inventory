@@ -1,9 +1,8 @@
 <h2> 
-  <%= t(:service) %>: <%= @service.name %> 
+  <%= t(:showing) + t(:service_colon) %>  <%= @service.name %> 
   <% if can? :update, @service %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe,
-                edit_service_path(@service.id) %>
+                #{t(:edit)}".html_safe, edit_service_path(@service.id) %>
   <% end %>
 </h2> 
 
@@ -11,7 +10,7 @@
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
-      Allocated Products
+      Associated Products
     </a>
   </li>
   <li>
@@ -36,7 +35,7 @@
         </span>
         <span class="controls">
           <% unless @groups.nil? %>
-            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", ").html_safe %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
       </div>
@@ -111,7 +110,3 @@
 </div>
 
 
-
-
-<br/>
-<%= link_to t(:return_to) + t(:all_services), services_path %>

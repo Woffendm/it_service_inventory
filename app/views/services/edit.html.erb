@@ -1,6 +1,10 @@
-<h2> <%= t(:edit) + t(:service) %>: <%= @service.name %> </h2>
+<h2> 
+  <%= t(:edit) + t(:service_colon) %> <%= @service.name %>
+  <%= link_to "#{content_tag :em, '', :class => ''}
+              #{t(:show)}".html_safe, service_path(@service.id) %> 
+</h2>
 
-  <div class="form-horizontal light-border">
+  <div class="form-horizontal">
     <%= form_for @service do |form| %>
       <div class="control-group">
         <span class="control-label">
@@ -25,38 +29,3 @@
       </div>
     <% end %>
   </div>
-
-<% if @service.employees.any? %>
-  <table class="table table-striped"><caption> <%= t(:employees_with_this_service) %> </caption>
-    <thead>
-      <th> <%= t(:name) %> </th>
-      <th> <%= t(:groups) %> </th>
-      <th> <%= t(:allocation) %> </th>
-    </thead>
-    <tbody>
-      <% @service.employees.order(:name_last, :name_first).each do |employee| %>
-        <tr class="<%= cycle('odd', 'even') %>">
-          <td>
-            <%= render  :partial => "/shared/can_update_employee", 
-                        :locals => {:@employee => employee} %>
-          </td>
-          <td>
-            <% employee.groups.order(:name).each do |group| %>
-              <% if group != employee.groups.order(:name).last %>
-                <%= link_to group.name + ", ", roster_group_path(group.id) %>
-              <% else %>
-                <%= link_to group.name, roster_group_path(group.id) %>
-              <% end %>
-            <% end %>
-          </td>
-          <td>
-            <%= @service.get_employee_allocation(employee).rounded_allocation %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
-
-<br/><br/>
-<%= link_to t(:return_to) + t(:all_services), services_path %>

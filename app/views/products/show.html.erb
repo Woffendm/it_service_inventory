@@ -1,5 +1,5 @@
 <h2> 
-  <%= t(:product) %>: <%= @product.name %> 
+  <%= t(:product_colon) %> <%= @product.name %> 
   <% if can? :update, @product %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
                 #{t(:edit)}".html_safe,
@@ -19,6 +19,11 @@
       Allocated Employees
     </a>
   </li>
+  <li>
+    <a href="#services" id="services_tab" data-toggle="tab" > 
+      Associated Services
+    </a>
+  </li>
 </ul>
 
 
@@ -33,17 +38,6 @@
           <% unless @groups.empty? %>
             <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
           <% end %>
-        </span>
-      </div>
-      
-      <div class="control-group">
-        <span class="control-label">
-          <%= label_tag :services %> 
-        </span>
-        <span class="controls">
-          <% unless @services.empty? %>
-            <%= @services.collect{|g| link_to g.name, service_path(g.id)}.join(", &nbsp;").html_safe %>
-          <% end %>        
         </span>
       </div>
     
@@ -70,9 +64,9 @@
           <%= label_tag :url, "URL" %>
         </span>
         <span class="controls">
-          <%= @product.url %>
           <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
-                      :target => '_blank' %>
+                      :target => '_blank' unless @product.url.blank?%>
+          <%= @product.url %>
         </span>
       </div>
       
@@ -87,6 +81,28 @@
     </div>
   </div>
 
+
+
+  <div class="tab-pane" id="services">
+    <% unless @services.blank? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:service) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @services.each do |service| %>
+            <tr>
+              <td> 
+                <%= link_to service.name, service_path(service.id) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
 
 
 
@@ -119,6 +135,3 @@
 
 
 
-
-<br/>
-<%= link_to t(:return_to) + t(:all_products), products_path %>

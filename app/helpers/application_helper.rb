@@ -11,7 +11,7 @@ module ApplicationHelper
   
   # Returns a 'current' tag if given the current page
   def cp(path)
-    "current_page" if current_page?(path)
+    "current_page" if request.fullpath.index(path)
   end
   
   

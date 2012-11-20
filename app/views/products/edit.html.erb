@@ -1,4 +1,8 @@
-<h2> <%= t(:edit) + t(:product) %>: <%= @product.name %></h2>
+<h2> 
+  <%= t(:edit) + t(:product_colon) %> <%= @product.name %>
+  <%= link_to "#{content_tag :em, '', :class => ''}
+              #{t(:show)}".html_safe, product_path(@product.id) %>
+</h2>
 
 
 <%= form_for @product do |product_form| %>
@@ -103,7 +107,7 @@
           <% product_group = @product.product_groups.find_by_group_id(@groups[count].id) %>
           <tr>
             <td>
-              <%= link_to product_group.group.name, roster_group_path(product_group.group_id) %>
+              <%= link_to product_group.group.name, group_path(product_group.group_id) %>
             </td>
             <td>
               <%= form.check_box :_destroy %>
@@ -156,8 +160,7 @@
             <% service = @services[count] %>
             <tr>
               <td>
-                <%= render  :partial => "/shared/can_update_service", 
-                            :locals => {:service => service} %>                
+                <%= link_to service.name, service_path(service.id) %>                
               </td>
               <td>
                 <% if can? :create, Product %>
@@ -217,8 +220,7 @@
                         @product.employee_products.find_by_employee_id(@employees[count].id) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_employee", 
-                            :locals => {:@employee => employee_product.employee} %>
+                <%= link_to employee_product.employee.full_name, employee_path(employee_product.employee_id) %>
               </td>
               <td class="form-inline"> 
                 <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
@@ -247,8 +249,6 @@
 <% end %>
 
 
-<br/><br/>
-<%= link_to t(:return_to) + t(:all_products), products_path %>
 
 
 <%= render  :partial => "/shared/fte_calculator_body", 

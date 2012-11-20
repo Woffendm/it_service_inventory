@@ -2,8 +2,7 @@
   Group: <%= @group.name %> 
   <% if can? :update, @group %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe,
-                edit_group_path(@group.id) %>
+                #{t(:edit)}".html_safe, edit_group_path(@group.id) %>
   <% end %>
 </h2> 
 
@@ -32,7 +31,7 @@
     
     
   <div class="tab-pane" id="services">
-    <% unless @services.empty? %>
+    <% unless @services.blank? %>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -58,7 +57,7 @@
 
 
   <div class="tab-pane" id="employees">
-    <% unless @existing_employees.empty? %>
+    <% unless @existing_employees.blank? %>
       <table class="table table-striped"> 
         <thead>
           <tr>
@@ -86,7 +85,7 @@
 
 
   <div class="tab-pane active" id="products">
-    <% unless @products.empty? %>
+    <% unless @products.blank? %>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -118,10 +117,4 @@
     <% end %>
   </div>
   
-  
 </div>
-
-
-
-<br/>
-<%= link_to t(:return_to) + t(:all_groups), groups_path %>
