@@ -23,6 +23,21 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :product_groups,    :allow_destroy => true
   
   
+  # Returns the name of the product type if the product type isn't nil
+  def type
+    unless self.product_type.nil?
+      return self.product_type.name
+    end
+  end
+  
+  
+  # Returnst the name of the product state if the product state isn't nil
+  def state
+    unless self.product_state.nil?
+      return self.product_state.name
+    end
+  end
+  
   
   # Returns an array of services that the product does not currently have
   def get_available_services
