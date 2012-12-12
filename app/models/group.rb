@@ -47,12 +47,6 @@ class Group < ActiveRecord::Base
   # Returns a table of services that the employees of the group have. The table is sorted by the
   # services' names, and does not contain duplicates. 
   def services
-    Service.where(:id => 
-      EmployeeAllocation.select(:service_id).where(:employee_id =>
-        EmployeeGroup.select(:employee_id).where(:group_id =>
-          self.id
-        )
-      ).uniq
-    ).uniq.order(:name)
+    Service.joins(:employees => :groups).where(:groups => {:id => self.id}).uniq.order(:name)
   end
 end
