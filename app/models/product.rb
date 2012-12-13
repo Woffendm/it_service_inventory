@@ -17,6 +17,7 @@ class Product < ActiveRecord::Base
   has_one  :product_source
   belongs_to :product_type
   belongs_to :product_state
+  before_validation :smart_add_url_protocol
   validates_presence_of :name
   accepts_nested_attributes_for :employee_products, :allow_destroy => true
   accepts_nested_attributes_for :product_services,  :allow_destroy => true
@@ -72,5 +73,15 @@ class Product < ActiveRecord::Base
   def get_employee_product(employee)
    self.employee_products.find_by_employee_id(employee.id) 
   end
+  
+  
+  
+  private
+    # Checks to see if the url has an http:// or https:// and prepends it if it doesn't
+    def smart_add_url_protocol
+      unless self.url.index("http://") || self.url.index("https://")
+        self.url = "http://" + self.url
+      end
+    end
   
 end
