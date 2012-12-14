@@ -9,9 +9,7 @@ gem 'json'
 
 gem 'dynamic_form'
 
-gem 'libv8', '~> 3.11.8'
-
-gem 'therubyracer'
+gem 'therubyracer', '0.10.2'
 
 gem 'cancan'
 
