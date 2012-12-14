@@ -50,6 +50,8 @@ en:
   existing_employees:           "Existing Employees"
   existing_administrators:      "Existing Administrators"
   first_name:                   "First Name" 
+  fiscal_year:                  "Fiscal Year"
+  fiscal_years:                 " Fiscal Years"
   fte_hours_per_week:           "FTE hours per week: "
   full_time_employees:          "Full-Time Equivalents"
   group:                        "Group "
@@ -64,6 +66,7 @@ en:
   my_edit_page:                 "Edit my Allocations"
   name:                         "Name"
   new_employee:                 "New Employee"
+  new_fiscal_year:              "New Fiscal Year"
   new_group:                    "New Group"
   new_product:                  "New Product"
   new_product_state:            "New Product State"
@@ -94,6 +97,7 @@ en:
   total_employees:              "Total Employees"
   total_allocation:             "Total Allocation"
   user_settings:                "User Settings"
+  year:                         "Year"
 
 
 

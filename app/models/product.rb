@@ -40,15 +40,23 @@ class Product < ActiveRecord::Base
   end
   
   
+  # Returns an array of all an product's employee product objects for a given year
+  def get_allocations_for_year(year)
+    self.employee_products.where(:fiscal_year_id => year.id)
+  end
+  
+  
   # Returns an array of services that the product does not currently have
   def get_available_services
     Service.order(:name) - self.services
   end
 
 
-  # Returns an array of employees that the product does not currently have
-  def get_available_employees
-    Employee.order(:name_last, :name_first) - self.employees
+  # Returns an array of employees that the product does not currently have for the given fiscal year
+  def get_available_employees(year)
+    current_employees = self.get_allocations_for_year(year).pluck(:employee_id)
+    current_employees ||= [0]
+    Employee.where("id NOT IN (?)", current_employees).order(:name_last, :name_first)
   end
 
 
@@ -59,9 +67,9 @@ class Product < ActiveRecord::Base
 
 
   # Returns the total allocation for the given product.
-  def get_total_allocation
+  def get_total_allocation(year)
     total_allocation = 0.0
-    self.employee_products.each do |employee_product|
+    self.employee_products.where(:fiscal_year_id => year.id).each do |employee_product|
       total_allocation += employee_product.rounded_allocation
     end
     return total_allocation
@@ -70,8 +78,8 @@ class Product < ActiveRecord::Base
   
   # Returns an EmployeeProduct object which has a product_id matching this product's id and an
   # employee_id matching the given employee's id
-  def get_employee_product(employee)
-   self.employee_products.find_by_employee_id(employee.id) 
+  def get_employee_product(employee, year)
+   self.employee_products.where(:employee_id => employee.id, :fiscal_year_id => year.id) 
   end
   
   

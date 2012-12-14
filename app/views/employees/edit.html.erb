@@ -52,13 +52,14 @@
    doesn't already belong to. -->
   <h3><%= t(:groups) %></h3>
   <% if can? :manage, :all %>
-    <% if @employee.get_available_groups.any? %>
+    <% unless @available_groups.blank? %>
       <div class="form-inline" >
         <fieldset class="light-border">
           <legend>Add to Group</legend>
-          <%= fields_for "employee_groups" do |form|%>
-            <%= form.label :group_id, t(:group)  %>
-            <%= form.select(:group_id, @employee.get_available_groups.collect {|p| [p.name, p.id] },  
+          <%= fields_for "employee_group" do |form|%>
+            <%= form.label :id, t(:group)  %>
+            <%= form.select(:group_id, options_from_collection_for_select(
+                            @available_groups, :id, :name),  
                            {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
             <%= form.submit t(:add), :class => "submission" %>
           <% end %>
@@ -70,7 +71,7 @@
 
   <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
    to the employee's group membership here --> 
-  <% if @employee.employee_groups.any? %>
+  <% unless @employee_groups.blank? %>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -80,27 +81,26 @@
         </tr>
       </thead>
       <tbody>
-        <% count = 0 %>
-        <%= employee_form.fields_for "employee_groups" do |form| %>
-          <% employee_group = @employee.employee_groups.find_by_group_id(@groups[count].id) %>
-          <tr>
-            <td>
-              <%= link_to employee_group.group.name, roster_group_path(employee_group.group_id) %>
-            </td>
-            <td>
-              <% if can? :update, employee_group.group %>
-                <%= form.hidden_field(:group_id, :value => employee_group.group_id) %>
-                <%= form.hidden_field :id %>
-                <%= form.check_box :group_admin %>
-              <% end %>
-            </td>
-            <td>
-              <% if can? :update, employee_group.group %>
-                <%= form.check_box :_destroy %>
-              <% end %>
-            </td>
-          </tr>
-          <% count += 1 %>
+        <% @employee_groups.each do |employee_group| %>
+          <%= employee_form.fields_for "employee_groups", employee_group do |form| %>
+            <tr>
+              <td>
+                <%= link_to employee_group.name, group_path(employee_group.group_id) %>
+              </td>
+              <td>
+                <% if can? :update, employee_group.group %>
+                  <%= form.hidden_field(:group_id, :value => employee_group.group_id) %>
+                  <%= form.hidden_field(:id, :value => employee_group.id) %>
+                  <%= form.check_box :group_admin, :value => employee_group.group_admin %>
+                <% end %>
+              </td>
+              <td>
+                <% if can? :update, employee_group.group %>
+                  <%= form.check_box :_destroy %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
@@ -117,18 +117,19 @@
 
   <!-- Drop-down list of services that can be added. Only populated with services that the employee
    doesn't already have. -->
-  <% if @employee.get_available_services.any?%>
+  <% unless @available_services.blank? %>
     <div class="form-inline" >
       <fieldset class="light-border">
-        <legend>Add New Allocation</legend>
-        <%= fields_for "employee_allocations" do |form|%>
+        <legend> Add New Service Allocation </legend>
+        <%= fields_for "employee_allocation" do |form|%>
           <%= form.label :service_id, t(:service) %>
-          <%= form.select(:service_id, options_from_collection_for_select(
-                          @employee.get_available_services, :id, :name),  
+          <%= form.select(:service_id, 
+                          options_from_collection_for_select(@available_services, :id, :name),  
                          {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
           <%= form.select(:allocation, @possible_allocations,
                          {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
                           :class => "calculator_select allocation_value") %>
+          <%= form.hidden_field(:fiscal_year_id, :value => @year.id) %>
           <%= render  :partial => "/shared/fte_calculator_trigger" %>
           <%= form.submit t(:add), :class => "submission"%>
         <% end %>
@@ -140,7 +141,7 @@
 
   <!-- Creates table with the employee's services and allocations. Can be edited by employee or
    admin -->
-  <% if @employee.employee_allocations.any? %>
+  <% unless @service_allocations.blank? %>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -150,20 +151,17 @@
         </tr>
       </thead>
       <tbody>
-        <% count = 0 %>
-        <%= employee_form.fields_for "employee_allocations" do |form|%>
-          <% unless @services[count].nil? %>
-            <% employee_allocation = @services[count].get_employee_allocation(@employee) %>
+        <% @service_allocations.each do |service_allocation| %>
+          <%= employee_form.fields_for "employee_allocations", service_allocation do |form|%>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_service", 
-                            :locals => {:service => employee_allocation.service} %>
+                <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
               </td>
               <td class="form-inline"> 
-                <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
-                <%= form.hidden_field :id %>
+                <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
+                <%= form.hidden_field(:id, :value => service_allocation.id) %>
                 <%= form.select(:allocation, @possible_allocations, 
-                               {:selected => employee_allocation.rounded_allocation}, 
+                               {:selected => service_allocation.rounded_allocation}, 
                                 :class => "calculator_select allocation_value") %>
                 <%= render  :partial => "/shared/fte_calculator_trigger" %>
               </td>
@@ -172,7 +170,6 @@
               </td>
             </tr>
           <% end %>
-          <% count += 1 %>
         <% end %>
       </tbody>
     </table>

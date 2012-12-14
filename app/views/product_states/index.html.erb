@@ -4,20 +4,8 @@
                #{t(:new_product_state)}".html_safe, "#", :class => "modal_trigger" %>
 </h2>
 
-<ul class="nav nav-tabs" id="my-tab">
-  <li>
-    <%= link_to t(:app_settings), app_settings_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
-  </li>
-  <li class="active">
-    <%= link_to t(:manage) + t(:product_states), "#" %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_types), product_types_path %>
-  </li>
-</ul>
+
+<%= render :partial => "/shared/app_settings_tabs" %>
 
 
 <%= render  :partial => "/product_states/new_product_state", 

@@ -56,6 +56,8 @@ Project1::Application.routes.draw do
   resources :product_types do
   end
 
+  resources :fiscal_years do
+  end
 
   resources :errors do
     collection do

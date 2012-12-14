@@ -27,12 +27,23 @@ class Group < ActiveRecord::Base
   end
   
   
-  # Returns the total the total allocation for the group. This is defined as the sum of the total
-  # allocations for every employee in the group 
-  def get_total_allocation
+  # Returns the total the total product allocation for the group. This is defined as the sum of the 
+  # total product allocations for every employee in the group 
+  def get_total_product_allocation(year)
     total_allocation = 0.0
     self.employees.each do |employee|
-      total_allocation += employee.get_total_allocation
+      total_allocation += employee.get_total_product_allocation(year)
+    end
+    return total_allocation
+  end
+  
+  
+  # Returns the total the total service allocation for the group. This is defined as the sum of the 
+  # total service allocations for every employee in the group
+  def get_total_service_allocation(year)
+    total_allocation = 0.0
+    self.employees.each do |employee|
+      total_allocation += employee.get_total_service_allocation(year)
     end
     return total_allocation
   end
@@ -46,7 +57,10 @@ class Group < ActiveRecord::Base
   
   # Returns a table of services that the employees of the group have. The table is sorted by the
   # services' names, and does not contain duplicates. 
-  def services
-    Service.joins(:employees => :groups).where(:groups => {:id => self.id}).uniq.order(:name)
+  def services(year)
+    Service.joins(:employees => :groups).where( 
+        :groups => {:id => self.id},
+        :employee_allocations => {:fiscal_year_id => year.id}
+    ).uniq.order(:name)
   end
 end

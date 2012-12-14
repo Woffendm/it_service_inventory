@@ -5,11 +5,12 @@
 
 class EmployeesController < ApplicationController
 
-  before_filter :authorize_creation,   :only => [:ldap_create, :search_ldap_view]
-  before_filter :load_employee,        :only => [:destroy, :edit, :show, :update]
-  before_filter :authorize_update,     :only => [:edit, :update]
-  before_filter :load_groups_services, :only => [:edit, :show, :update]
-  before_filter :load_products,        :only => [:edit, :show, :update]
+  before_filter :authorize_creation,        :only => [:ldap_create, :search_ldap_view]
+  before_filter :load_employee,             :only => [:destroy, :update]
+  before_filter :authorize_update,          :only => [:edit, :update]
+  before_filter :load_year,                 :only => [:edit, :show, :update]
+  before_filter :load_associations,         :only => [:edit, :show, :update]
+  before_filter :load_available_associations, :only => [:edit, :show, :update]
   before_filter :load_allocation_precision, :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
@@ -31,13 +32,18 @@ class EmployeesController < ApplicationController
       conditions = []
       conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
       conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+      conditions << ("employee_allocations.fiscal_year_id = #{@year.id}") 
+      conditions << ("employee_products.fiscal_year_id = #{@year.id}") 
       if array_of_strings_to_search_for.length > 1
         conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
         conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
       end
       @employees = Employee.where(conditions.join(" OR ")).order(:name_last, :name_first)
     else
-      @employees = Employee.order(:name_last, :name_first)
+      @employees = Employee.includes(:groups, :employee_allocations => [:service],
+          :employee_products => [:product]).where("employee_allocations.fiscal_year_id = ? OR
+          employee_products.fiscal_year_id = ?", @current_fiscal_year.id,
+          @current_fiscal_year.id).order(:name_last, :name_first)
     end
     @employees = @employees.paginate(:page => params[:page], 
                                      :per_page => session[:results_per_page])
@@ -109,16 +115,17 @@ class EmployeesController < ApplicationController
   def update
     new_total_allocation = 0.0
     # If a new group was sent with the params, adds it to the employee's list of groups
-    if params[:employee_groups]
-      unless params[:employee_groups][:group_id].blank?
-        Group.find(params[:employee_groups][:group_id]).add_employee_to_group(@employee)
+    if params[:employee_group]
+      unless params[:employee_group][:group_id].blank?
+        Group.find(params[:employee_group][:group_id]).add_employee_to_group(@employee)
       end
     end
     # If a new service and allocation were sent with the params, adds them to the employee
-    if params[:employee_allocations]
-      unless (params[:employee_allocations][:service_id].blank?) ||
-             (params[:employee_allocations][:allocation].blank?)
-        new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
+    if params[:employee_allocation]
+      unless (params[:employee_allocation][:service_id].blank?) ||
+             (params[:employee_allocation][:allocation].blank?) ||
+             (params[:employee_allocation][:fiscal_year_id].blank?)
+        new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
         new_employee_allocation.save
         new_total_allocation += new_employee_allocation.allocation
       end
@@ -193,27 +200,43 @@ class EmployeesController < ApplicationController
     end
 
 
+    #
+    def load_associations
+      @employee = Employee.find(params[:id])
+      @employee_groups = @employee.employee_groups.joins(:group).includes(:group).order("name")
+      @service_allocations = @employee.employee_allocations.joins(:service).where(
+          :fiscal_year_id => @year.id). includes(:service).order("name")
+      @product_allocations = @employee.employee_products.joins(:product).where(
+          :fiscal_year_id => @year.id).includes(:product).order("name")
+    end
+
+
+    #
+    def load_available_associations
+      @available_groups = @employee.get_available_groups
+      @available_services = @employee.get_available_services(@year)
+      @available_products = @employee.get_available_products(@year)
+    end
+
+
     # Loads an employee based off parameters given and ensures that user is authorized to edit them
     def load_employee
       @employee = Employee.find(params[:id])
     end
 
 
-    # Loads all groups and services assigned to the current employee
-    def load_groups_services
-      @services = @employee.services.order(:name)
-      @groups = @employee.groups.order(:name)
-    end
-    
-    
-    # Loads all products assigned to the current employee
-    def load_products
-      @products = @employee.products.order(:name)
-    end
-    
-    
     # Loads possible allocations
     def load_possible_allocations
       @possible_allocations = EmployeeAllocation.possible_allocations
+    end
+
+
+    # Checks to see if the year is set in the cookies. If not, sets it to the current year. 
+    def load_year
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find(cookies[:year])
+      end
     end
 end

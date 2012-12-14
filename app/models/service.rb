@@ -14,19 +14,19 @@ class Service < ActiveRecord::Base
 
   # Returns an array of groups that employees with this service have. The array is sorted by the
   # groups" names, and does not contain duplicates. 
-  def groups
-    array_of_groups = self.employees.collect{ |employee| 
-      employee.groups
-    }.flatten.uniq
-    return array_of_groups.sort_by &:name
+  def groups(year)
+    Group.joins(:employees => :services).where( 
+        :services => {:id => self.id},
+        :employee_allocations => {:fiscal_year_id => year.id}
+    ).uniq.order(:name)
   end
 
 
   # Returns the total allocation for this service. This is defined as the sum of every allocation 
   # within this service's employee_allocations array
-  def get_total_allocation
+  def get_total_allocation(year)
     total_allocation = 0.0
-    self.employee_allocations.each do |employee_allocation|
+    self.employee_allocations.where(:fiscal_year_id => year.id).each do |employee_allocation|
       total_allocation += employee_allocation.rounded_allocation
     end
     return total_allocation
@@ -35,8 +35,8 @@ class Service < ActiveRecord::Base
 
   # Returns an EmployeeAllocation object which has a service_id matching this service's id and an
   # employee_id matching the given employee's id
-  def get_employee_allocation(employee)
-   self.employee_allocations.find_by_employee_id(employee.id) 
+  def get_employee_allocation(employee, year)
+    self.employee_allocations.where(:employee_id => employee.id, :fiscal_year_id => year.id) 
   end
 
 

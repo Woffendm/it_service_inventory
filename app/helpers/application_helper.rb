@@ -15,6 +15,12 @@ module ApplicationHelper
   end
   
   
+  # Returns an 'active' tag if given current page
+  def ct(path)
+    "active" if request.fullpath == path
+  end
+  
+  
   # Finds the longest word in the string (with a word being defined as something without spaces)
   # and returns a string with a max-width attribute assigned to be 0.6 times (in em) the length of 
   # the longest word if the longest word is longer than 42 characters

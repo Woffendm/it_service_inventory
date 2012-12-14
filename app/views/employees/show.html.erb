@@ -35,8 +35,9 @@
           <%= label_tag :groups %> 
         </span>
         <span class="controls">
-          <% unless @groups.empty? %>
-            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% unless @employee_groups.blank? %>
+            <%= @employee_groups.collect{|g| 
+                  link_to g.name, group_path(g.group_id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
       </div>
@@ -74,14 +75,13 @@
           </tr>
         </thead>
         <tbody>
-          <% @services.each do |service| %>
-            <% employee_allocation = service.get_employee_allocation(@employee) %>
+          <% @service_allocations.each do |service_allocation| %>
             <tr>
               <td> 
-                <%= link_to service.name, service_path(service.id) %>
+                <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
               </td>
               <td class="form-inline"> 
-                <%= employee_allocation.allocation.round(@allocation_precision) %>
+                <%= service_allocation.rounded_allocation %>
               </td>
             </tr>
           <% end %>
@@ -105,14 +105,13 @@
           </tr>
         </thead>
         <tbody>
-          <% @products.each do |product| %>
-            <% employee_product = product.get_employee_product(@employee) %>
+          <% @product_allocations.each do |product_allocation| %>
             <tr>
               <td> 
-                <%= link_to product.name, product_path(product.id) %>
+                <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
               </td>
               <td class="form-inline"> 
-                <%= employee_product.allocation.round(@allocation_precision) %>
+                <%= product_allocation.rounded_allocation %>
               </td>
             </tr>
           <% end %>
