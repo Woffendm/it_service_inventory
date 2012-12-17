@@ -73,6 +73,7 @@ Project1::Application.routes.draw do
   resources :logins do
     collection do
       get 'change_results_per_page'
+      get 'change_year'
     end
   end
 

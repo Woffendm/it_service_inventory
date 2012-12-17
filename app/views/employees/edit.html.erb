@@ -115,66 +115,74 @@
 
 
 
-  <!-- Drop-down list of services that can be added. Only populated with services that the employee
-   doesn't already have. -->
-  <% unless @available_services.blank? %>
-    <div class="form-inline" >
-      <fieldset class="light-border">
-        <legend> Add New Service Allocation </legend>
-        <%= fields_for "employee_allocation" do |form|%>
-          <%= form.label :service_id, t(:service) %>
-          <%= form.select(:service_id, 
-                          options_from_collection_for_select(@available_services, :id, :name),  
-                         {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
-          <%= form.select(:allocation, @possible_allocations,
-                         {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
-                          :class => "calculator_select allocation_value") %>
-          <%= form.hidden_field(:fiscal_year_id, :value => @year.id) %>
-          <%= render  :partial => "/shared/fte_calculator_trigger" %>
-          <%= form.submit t(:add), :class => "submission"%>
-        <% end %>
-      </fieldset>
-    </div>
-  <% end %>
+  <div class="tabbable tabs-right">
+    <%= render  :partial => "/shared/active_year_select", 
+                :locals => {:@year => @year, :@active_years => @active_years } %>
+    
+    
+    <div class="tab-content">
+      <!-- Drop-down list of services that can be added. Only populated with services that the
+       employee doesn't already have. -->
+      <% unless @available_services.blank? %>
+        <div class="form-inline" >
+          <fieldset class="light-border">
+            <legend> Add New Service Allocation </legend>
+            <%= fields_for "employee_allocations" do |form|%>
+              <%= form.label :service_id, t(:service) %>
+              <%= form.select(:service_id, 
+                              options_from_collection_for_select(@available_services, :id, :name),  
+                             {:include_blank => "-" + t(:select) + t(:service) + "-"}) %> 
+              <%= form.select(:allocation, @possible_allocations,
+                             {:include_blank => "-" + t(:select) + t(:allocation) + "-"},
+                              :class => "calculator_select allocation_value") %>
+              <%= form.hidden_field(:fiscal_year_id, :value => @year.id) %>
+              <%= render  :partial => "/shared/fte_calculator_trigger" %>
+              <%= form.submit t(:add), :class => "submission"%>
+            <% end %>
+          </fieldset>
+        </div>
+      <% end %>
 
 
-
-  <!-- Creates table with the employee's services and allocations. Can be edited by employee or
-   admin -->
-  <% unless @service_allocations.blank? %>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th><%= t(:service) %></th>
-          <th><%= t(:allocation) %></th>
-          <th> <%= t(:check_to_remove) %> </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @service_allocations.each do |service_allocation| %>
-          <%= employee_form.fields_for "employee_allocations", service_allocation do |form|%>
+      <!-- Creates table with the employee's services and allocations. Can be edited by employee or
+       admin -->
+      <% unless @service_allocations.blank? %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td> 
-                <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
-                <%= form.hidden_field(:id, :value => service_allocation.id) %>
-                <%= form.select(:allocation, @possible_allocations, 
-                               {:selected => service_allocation.rounded_allocation}, 
-                                :class => "calculator_select allocation_value") %>
-                <%= render  :partial => "/shared/fte_calculator_trigger" %>
-              </td>
-              <td> 
-                <%= form.check_box :_destroy, :class => "remove_allocation" %>
-              </td>
+              <th><%= t(:service) %></th>
+              <th><%= t(:allocation) %></th>
+              <th> <%= t(:check_to_remove) %> </th>
             </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+          </thead>
+          <tbody>
+            <% @service_allocations.each do |service_allocation| %>
+              <%= employee_form.fields_for "employee_allocations", service_allocation do |form|%>
+                <tr>
+                  <td> 
+                    <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
+                    <%= form.hidden_field(:id, :value => service_allocation.id) %>
+                    <%= form.select(:allocation, @possible_allocations, 
+                                   {:selected => service_allocation.rounded_allocation}, 
+                                    :class => "calculator_select allocation_value") %>
+                    <%= render  :partial => "/shared/fte_calculator_trigger" %>
+                  </td>
+                  <td> 
+                    <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
   <br/>
+
 
 
   <%= employee_form.submit  t(:save_changes), :class => "submission" %> 

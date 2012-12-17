@@ -1,0 +1,11 @@
+<ul class="nav nav-tabs">
+  <li> Viewing Year: </li>
+  <% unless @all_years.blank? %>
+    <% @all_years.each do |year| %>
+      <li class="<%=equal(year, @year)%>"> 
+        <%= link_to year.year, change_year_logins_path + "?year=#{year.year}",
+                    {:class => "year-tab"} %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>

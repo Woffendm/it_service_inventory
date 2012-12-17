@@ -409,6 +409,25 @@ h2 > a {
 }
 
 
+.tabs-right .active > a {
+  background: #444;
+  color: #fff;
+}
+
+.tabs-right > .nav-tabs > li > a:hover {
+  background: #777;
+  color: #fff;
+}
+
+.tabs-right > .nav-tabs > li {
+  text-align: right;
+}
+
+.tabs-right > .nav-tabs > li:first-child {
+  font-weight: bold;
+  margin: 1px;
+}
+
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {
     margin-top: 0; 
