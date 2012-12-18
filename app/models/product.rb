@@ -32,7 +32,7 @@ class Product < ActiveRecord::Base
   end
   
   
-  # Returnst the name of the product state if the product state isn't nil
+  # Returns the name of the product state if the product state isn't nil
   def state
     unless self.product_state.nil?
       return self.product_state.name
@@ -87,7 +87,7 @@ class Product < ActiveRecord::Base
   private
     # Checks to see if the url has an http:// or https:// and prepends it if it doesn't
     def smart_add_url_protocol
-      unless self.url.index("http://") || self.url.index("https://")
+      unless self.url.index("http://") || self.url.index("https://") || self.url.blank?
         self.url = "http://" + self.url
       end
     end

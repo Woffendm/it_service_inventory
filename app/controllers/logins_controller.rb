@@ -41,6 +41,19 @@ class LoginsController < ApplicationController
   end
 
 
+  # Sets a cookie for the year being viewed / edited by the user. Expires in 15 minutes.
+  def change_year
+    cookies[:year] = { :value => params[:year], :expires => Time.now + 15.minutes }
+    referring_page = request.referer
+    if referring_page
+      flash[:notice] = "Year changed to " + " #{params[:year]}"
+      redirect_to referring_page
+    else
+      redirect_to pages_home_path
+    end
+  end
+
+
   # Sets session value to current user/employee (login)
   def create
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)

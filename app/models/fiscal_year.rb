@@ -14,6 +14,6 @@ class FiscalYear < ActiveRecord::Base
 
  # Returns all active fiscal years.
   def self.active_fiscal_years
-    return FiscalYear.where(:active => true)
+    return FiscalYear.where(:active => true).order(:year)
   end
 end

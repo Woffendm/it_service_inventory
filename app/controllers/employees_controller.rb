@@ -121,11 +121,11 @@ class EmployeesController < ApplicationController
       end
     end
     # If a new service and allocation were sent with the params, adds them to the employee
-    if params[:employee_allocation]
-      unless (params[:employee_allocation][:service_id].blank?) ||
-             (params[:employee_allocation][:allocation].blank?) ||
-             (params[:employee_allocation][:fiscal_year_id].blank?)
-        new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocation])
+    if params[:employee_allocations]
+      unless (params[:employee_allocations][:service_id].blank?) ||
+             (params[:employee_allocations][:allocation].blank?) ||
+             (params[:employee_allocations][:fiscal_year_id].blank?)
+        new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
         new_employee_allocation.save
         new_total_allocation += new_employee_allocation.allocation
       end
@@ -200,7 +200,7 @@ class EmployeesController < ApplicationController
     end
 
 
-    #
+    # Loads all assigned associations for the employee in the given year. 
     def load_associations
       @employee = Employee.find(params[:id])
       @employee_groups = @employee.employee_groups.joins(:group).includes(:group).order("name")
@@ -211,7 +211,7 @@ class EmployeesController < ApplicationController
     end
 
 
-    #
+    # Loads all unassigned associations for the employee in the given year. 
     def load_available_associations
       @available_groups = @employee.get_available_groups
       @available_services = @employee.get_available_services(@year)
@@ -236,7 +236,9 @@ class EmployeesController < ApplicationController
       if cookies[:year].blank?
         @year = @current_fiscal_year
       else
-        @year = FiscalYear.find(cookies[:year])
+        @year = FiscalYear.find_by_year(cookies[:year])
       end
+      @all_years = FiscalYear.order(:year)
+      @active_years = FiscalYear.active_fiscal_years
     end
 end
