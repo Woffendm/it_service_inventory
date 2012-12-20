@@ -4,10 +4,10 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-  before_filter :load_service, :only => [:destroy, :edit, :show, :update]
-  before_filter :load_employees, :only => [:show]
-  before_filter :load_products, :only => [:show]
-  before_filter :load_groups, :only => [:show]
+  before_filter :load_service,      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_all_years,    :only => [:show]
+  before_filter :load_associations, :only => [:show]
+  
   
 # View-related methods
   
@@ -82,25 +82,28 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
-    # Loads all employees allocated to this service
-    def load_employees
-      @employees = @service.employees
+    # Loads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find_by_year(cookies[:year])
+      end
     end
-    
-    
-    # Loads all products allocated to this service
-    def load_products
-      @products = @service.products
+  
+  
+    # Loads all employees allocated to this service
+    def load_associations
+      @employee_allocations = @service.employee_allocations.joins(:employee).where(
+          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
+      @products = @service.products.order(:name)
+      @groups = @service.groups.order(:name)
     end
     
     
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
-    end
-    
-    # Loads all groups who have employees allocated to this service
-    def load_groups
-      @groups = @service.groups
     end
 end

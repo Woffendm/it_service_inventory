@@ -55,7 +55,7 @@ class Product < ActiveRecord::Base
   # Returns an array of employees that the product does not currently have for the given fiscal year
   def get_available_employees(year)
     current_employees = self.get_allocations_for_year(year).pluck(:employee_id)
-    current_employees ||= [0]
+    current_employees = [0] if current_employees.blank?
     Employee.where("id NOT IN (?)", current_employees).order(:name_last, :name_first)
   end
 

@@ -12,22 +12,7 @@ class PagesController < ApplicationController
   # not logged in, will redirect them to login page. If user is logged in, will display information
   # related to their first group (provided they have one). 
   def home
-    if @current_user.groups.first
-      data_array = []
-      @data_title_1 = t(:full_time_employees)
-      @data_title_2 = t(:employee_headcount)
-      @group = @current_user.groups.first
-      @services = @group.services
-      @employees = @group.employees.order(:name_last, :name_first)
-      @graph_title = t(:allocations_for_group) + @group.name
-      @x_axis_title = t(:service)
-      @employee_headcount = @group.employees.length
-      @full_time_employees = @group.get_total_allocation
-      @group.services.each do |service|
-        data_array << service.total_allocation_within_group(@group)
-      end
-      @data_to_graph = data_array.to_json
-    end
+    
   end
 
 

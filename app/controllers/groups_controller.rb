@@ -4,10 +4,12 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
+  before_filter :load_group,       :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
   before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
                                             :remove_employee, :update]
+  before_filter :load_all_years,   :only => [:show]
+                                            
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:show, :edit]
@@ -124,10 +126,23 @@ class GroupsController < ApplicationController
       authorize! :update, @group
     end
     
+    
+    # CLoads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find_by_year(cookies[:year])
+      end
+    end
+    
+    
     # Loads an employee based on given parameters
     def load_employee
       @employee = Employee.find(params[:employee][:id])
     end
+
 
     # Loads all employees
     def load_existing_employees
@@ -135,15 +150,18 @@ class GroupsController < ApplicationController
             params[:employees_page], :per_page => session[:results_per_page])
     end
 
+
     # Loads all employees not assigned to the group
     def load_possible_employees
       @possible_employees = @group.get_available_employees
     end
 
+
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])
     end
+    
     
     # Loads all products allocated to the group
     def load_products
@@ -151,9 +169,10 @@ class GroupsController < ApplicationController
             params[:products_page], :per_page => session[:results_per_page])
     end
     
+    
     # Loads all services allocated to employees of the group
     def load_services
-      @services = @group.services.paginate(:page =>   
+      @services = @group.services(@year).paginate(:page =>   
             params[:services_page], :per_page => session[:results_per_page])
     end
 end

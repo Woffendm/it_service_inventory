@@ -14,11 +14,8 @@ class Service < ActiveRecord::Base
 
   # Returns an array of groups that employees with this service have. The array is sorted by the
   # groups" names, and does not contain duplicates. 
-  def groups(year)
-    Group.joins(:employees => :services).where( 
-        :services => {:id => self.id},
-        :employee_allocations => {:fiscal_year_id => year.id}
-    ).uniq.order(:name)
+  def groups
+    Group.joins(:employees => :services).where(:services => {:id => self.id} ).uniq.order(:name)
   end
 
 
