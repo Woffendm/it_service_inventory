@@ -34,7 +34,7 @@
           <%= label_tag :associated_groups %> 
         </span>
         <span class="controls">
-          <% unless @groups.nil? %>
+          <% unless @groups.blank? %>
             <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
@@ -53,7 +53,7 @@
 
 
   <div class="tab-pane active" id="products">
-    <% unless @products.empty? %>
+    <% unless @products.blank? %>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -82,30 +82,38 @@
   </div>
 
 
+
   <div class="tab-pane" id="employees">
-    <% unless @employees.empty? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th> <%= t(:employee) %> </th>
-            <th> <%= t(:allocation) %> </th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @employees.each do |employee| %>
-            <% employee_allocation = employee.employee_allocations.find_by_service_id(@service.id) %>
-            <tr>
-              <td> 
-                <%= link_to employee.full_name, employee_path(employee.id) %>
-              </td>
-              <td > 
-                <%= employee_allocation.rounded_allocation %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+      
+      <div class="tab-content year-content">
+        <% unless @employee_allocations.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> <%= t(:employee) %> </th>
+                <th> <%= t(:allocation) %> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @employee_allocations.each do |employee_allocation| %>
+                <tr>
+                  <td> 
+                    <%= link_to employee_allocation.employee.full_name,
+                        employee_path(employee_allocation.employee_id) %>
+                  </td>
+                  <td > 
+                    <%= employee_allocation.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 

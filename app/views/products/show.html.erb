@@ -35,8 +35,9 @@
           <%= label_tag :groups %> 
         </span>
         <span class="controls">
-          <% unless @groups.empty? %>
-            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% unless @product_groups.blank? %>
+            <%= @product_groups.collect{|g| link_to g.group.name, 
+                  group_path(g.group_id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
       </div>
@@ -84,7 +85,7 @@
 
 
   <div class="tab-pane" id="services">
-    <% unless @services.blank? %>
+    <% unless @product_services.blank? %>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -92,10 +93,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @services.each do |service| %>
+          <% @product_services.each do |product_service| %>
             <tr>
               <td> 
-                <%= link_to service.name, service_path(service.id) %>
+                <%= link_to product_service.service_name, 
+                    service_path(product_service.service_id) %>
               </td>
             </tr>
           <% end %>
@@ -107,29 +109,37 @@
 
 
   <div class="tab-pane" id="employees">
-    <% if @product.employee_products.any? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th> <%= t(:employee) %> </th>
-            <th> <%= t(:allocation) %> </th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @employees.each do |employee| %>
-            <% employee_product = employee.employee_products.find_by_product_id(@product.id) %>
-            <tr>
-              <td> 
-                <%= link_to employee.full_name, employee_path(employee.id) %>
-              </td>
-              <td > 
-                <%= employee_product.rounded_allocation %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+      
+      
+      <div class="tab-content year-content">
+        <% unless @employee_products.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> <%= t(:employee) %> </th>
+                <th> <%= t(:allocation) %> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @employee_products.each do |employee_product| %>
+                <tr>
+                  <td> 
+                    <%= link_to employee_product.employee.full_name,
+                        employee_path(employee_product.employee_id) %>
+                  </td>
+                  <td > 
+                    <%= employee_product.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>
 

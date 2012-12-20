@@ -16,7 +16,6 @@ Project1::Application.routes.draw do
 
   resources :groups do
     member do
-      get 'roster'
       post 'add_employee'
       post 'toggle_group_admin'
       post 'remove_employee'

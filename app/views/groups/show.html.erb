@@ -31,28 +31,35 @@
     
     
   <div class="tab-pane" id="services">
-    <% unless @services.blank? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:service) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @services.each do |service| %>
-            <tr>
-              <td> 
-                <%= link_to service.name, service_path(service.id) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="pagination_footer">
-        <%= will_paginate @services, :param_name => :services_page %>
-        <%= render :partial => "/shared/results_per_page" %>
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+      
+      <div class="tab-content year-content">
+        <% unless @services.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:service) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @services.each do |service| %>
+                <tr>
+                  <td> 
+                    <%= link_to service.name, service_path(service.id) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="pagination_footer">
+            <%= will_paginate @services, :param_name => :services_page %>
+            <%= render :partial => "/shared/results_per_page" %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 
 
