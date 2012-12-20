@@ -8,11 +8,12 @@ class EmployeesController < ApplicationController
   before_filter :authorize_creation,        :only => [:ldap_create, :search_ldap_view]
   before_filter :load_employee,             :only => [:destroy, :update]
   before_filter :authorize_update,          :only => [:edit, :update]
-  before_filter :load_year,                 :only => [:edit, :show, :update]
-  before_filter :load_associations,         :only => [:edit, :show, :update]
-  before_filter :load_available_associations, :only => [:edit, :show, :update]
-  before_filter :load_allocation_precision, :only => [:edit, :show, :update]
-  before_filter :load_possible_allocations, :only => [:edit, :update]
+  before_filter :load_active_years,         :only => [:edit]
+  before_filter :load_all_years,            :only => [:show]
+  before_filter :load_associations,         :only => [:edit, :show]
+  before_filter :load_available_associations, :only => [:edit]
+  before_filter :load_allocation_precision, :only => [:edit, :show]
+  before_filter :load_possible_allocations, :only => [:edit]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
                                                                 :user_settings]
 
@@ -231,14 +232,22 @@ class EmployeesController < ApplicationController
     end
 
 
-    # Checks to see if the year is set in the cookies. If not, sets it to the current year. 
-    def load_year
+    # Loads all active years. Loads the last selected year if it is active
+    def load_active_years
+      @active_years = FiscalYear.active_fiscal_years
+      if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+        @year = @current_fiscal_year
+      end
+    end
+    
+    
+    # CLoads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
       if cookies[:year].blank?
         @year = @current_fiscal_year
       else
         @year = FiscalYear.find_by_year(cookies[:year])
       end
-      @all_years = FiscalYear.order(:year)
-      @active_years = FiscalYear.active_fiscal_years
     end
 end

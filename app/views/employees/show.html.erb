@@ -64,61 +64,70 @@
     
     
   <div class="tab-pane active" id="services">
-  
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
 
-    <% if @employee.employee_allocations.any? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:service) %></th>
-            <th><%= t(:allocation) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @service_allocations.each do |service_allocation| %>
-            <tr>
-              <td> 
-                <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= service_allocation.rounded_allocation %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+      <div class="tab-content year-content">
+        <% unless @service_allocations.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:service) %></th>
+                <th><%= t(:allocation) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @service_allocations.each do |service_allocation| %>
+                <tr>
+                  <td> 
+                    <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= service_allocation.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
 
   </div>
 
 
 
   <div class="tab-pane" id="products">
-  
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
 
-    <% if @employee.employee_products.any? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:product) %></th>
-            <th><%= t(:allocation) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @product_allocations.each do |product_allocation| %>
-            <tr>
-              <td> 
-                <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= product_allocation.rounded_allocation %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-
+      <div class="tab-content year-content">
+        <% unless @product_allocations.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:product) %></th>
+                <th><%= t(:allocation) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @product_allocations.each do |product_allocation| %>
+                <tr>
+                  <td> 
+                    <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= product_allocation.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
   </div>
 
 </div>

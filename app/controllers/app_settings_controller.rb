@@ -22,7 +22,7 @@ class AppSettingsController < ApplicationController
     @fte_hours_per_week = AppSetting.get_fte_hours_per_week
     @allocation_precision = AppSetting.get_allocation_precision
     @current_fiscal_year = AppSetting.get_current_fiscal_year
-    @fiscal_years = FiscalYear.order(:year)
+    @fiscal_years = FiscalYear.active_fiscal_years
   end
   
 

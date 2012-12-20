@@ -409,6 +409,16 @@ h2 > a {
 }
 
 
+.tabs-right > .nav-tabs{
+  border: none;
+  margin-left: 0px;
+}
+
+.year-content{
+  border-right: 1px solid #DDDDDD;
+  padding-right: 15px;
+}
+
 .tabs-right .active > a {
   background: #444;
   color: #fff;
@@ -420,12 +430,18 @@ h2 > a {
 }
 
 .tabs-right > .nav-tabs > li {
-  text-align: right;
+  text-align: left;
+}
+
+.tabs-right > .nav-tabs > li a{
+  font-size: 1.4em;
+  padding-left: 30px;
 }
 
 .tabs-right > .nav-tabs > li:first-child {
   font-weight: bold;
   margin: 1px;
+  padding-left: 15px;
 }
 
 @media (max-width: 1120px) {
