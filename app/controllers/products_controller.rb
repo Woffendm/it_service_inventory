@@ -90,25 +90,19 @@ class ProductsController < ApplicationController
   def update
     authorize! :update, @product
     # If a new service was sent with the params, adds it to the product's list of services
-    if params[:product_service]
-      unless params[:product_service][:service_id].blank?
-        new_product_service = @product.product_services.new(params[:product_service])
-        new_product_service.save
-      end
+    unless params[:product_service].blank? || params[:product_service][:service_id].blank?
+      new_product_service = @product.product_services.new(params[:product_service])
+      new_product_service.save
     end
     # If a new group was sent with the params, adds it to the product's list of group
-    if params[:product_group]
-      unless params[:product_group][:group_id].blank?
-        new_product_group = @product.product_groups.new(params[:product_group])
-        new_product_group.save
-      end
+    unless params[:product_group].blank? || params[:product_group][:group_id].blank?
+      new_product_group = @product.product_groups.new(params[:product_group])
+      new_product_group.save
     end
     # If a new employee was sent with the params, adds them to the product
-    if params[:employee_product]
-      unless params[:employee_product][:employee_id].blank?
-        new_employee_product = @product.employee_products.new(params[:employee_product])
-        new_employee_product.save
-      end
+    unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank?
+      new_employee_product = @product.employee_products.new(params[:employee_product])
+      new_employee_product.save
     end
     if @product.update_attributes(params[:product])
       flash[:notice] = t(:product) + t(:updated)      
