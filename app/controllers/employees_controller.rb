@@ -27,24 +27,22 @@ class EmployeesController < ApplicationController
 
   # Starts out as a list of all employees, but can be restricted by a search
   def index
-    if params[:name_to_search_for]
+    if !params[:name_to_search_for].blank?
       array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
       conditions = []
       conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
       conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
-      conditions << ("employee_allocations.fiscal_year_id = #{@year.id}") 
-      conditions << ("employee_products.fiscal_year_id = #{@year.id}") 
       if array_of_strings_to_search_for.length > 1
         conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
         conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
       end
       @employees = Employee.where(conditions.join(" OR ")).order(:name_last, :name_first)
     else
-      @employees = Employee.includes(:groups, :employee_allocations => [:service],
-          :employee_products => [:product]).where("employee_allocations.fiscal_year_id = ? OR
-          employee_products.fiscal_year_id = ?", @current_fiscal_year.id,
-          @current_fiscal_year.id).order(:name_last, :name_first)
+      @employees = Employee.order(:name_last, :name_first)
     end
+    @employees = @employees.includes(
+        :employee_allocations => [:service]).where(
+        "employee_allocations.fiscal_year_id = ?", @current_fiscal_year.id)
     @employees = @employees.paginate(:page => params[:page], 
                                      :per_page => session[:results_per_page])
   end

@@ -1,4 +1,4 @@
-<% unless employee.employee_allocations.empty? %> 
+<% unless employee.employee_allocations.blank? %> 
   <div class="tooltip_trigger">
     <%= employee.get_total_service_allocation(@current_fiscal_year) %> FTE
   </div>

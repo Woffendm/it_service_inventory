@@ -22,7 +22,7 @@ module ApplicationHelper
   
   
   # Returns an 'active' tag if the two arguments are equal
-  def equal(arg1, arg2)
+  def active_if_equal(arg1, arg2)
     "active" if arg1 == arg2
   end
   
