@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009162505) do
+ActiveRecord::Schema.define(:version => 20121221201615) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -23,8 +23,9 @@ ActiveRecord::Schema.define(:version => 20121009162505) do
     t.integer  "employee_id"
     t.integer  "service_id"
     t.float    "allocation"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "fiscal_year_id"
   end
 
   create_table "employee_groups", :force => true do |t|
@@ -39,8 +40,9 @@ ActiveRecord::Schema.define(:version => 20121009162505) do
     t.integer  "product_id"
     t.integer  "employee_id"
     t.float    "allocation"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "fiscal_year_id"
   end
 
   create_table "employees", :force => true do |t|
@@ -57,6 +59,14 @@ ActiveRecord::Schema.define(:version => 20121009162505) do
     t.string   "preferred_language"
     t.string   "preferred_theme"
     t.boolean  "new_user_reminder",  :default => true
+  end
+
+  create_table "fiscal_years", :force => true do |t|
+    t.integer  "year"
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "seed_id"
   end
 
   create_table "groups", :force => true do |t|
@@ -98,12 +108,14 @@ ActiveRecord::Schema.define(:version => 20121009162505) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "seed_id"
   end
 
   create_table "product_types", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "seed_id"
   end
 
   create_table "products", :force => true do |t|
