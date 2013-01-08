@@ -159,7 +159,6 @@ legend {
   margin: 1em;
   padding: .5em .5em .5em 1em;
   clear: both;
-  padding-bottom: 15px;
 }
 
 tr > td
@@ -442,6 +441,62 @@ h2 > a {
   font-weight: bold;
   margin: 1px;
   padding-left: 15px;
+}
+
+.floaty {
+  float: left;
+  width: 325px;
+}
+
+.overview-header {
+  width: 80%;
+  font-size: .80em;
+  color: #666;
+  font-style: italic;
+  text-align: center;
+}
+
+.tiny-select {
+  font-size: 1em;
+  height: 18px;
+  margin: 1px;
+  padding: 0px;
+  width: 49px; 
+}
+
+.tiny-submit {
+  background: none;
+  border: none;
+  color: #0088CC;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-shadow: none;
+}
+
+.alternating-ul > li:nth-child(even) {
+  float: left;
+}
+
+.alternating-ul li {
+  width: 50%;
+  display: inline-block;
+  
+}
+
+.overview li {
+  list-style: none;
+}
+
+.overview caption{
+  margin-top: 5px;
+}
+
+.overview th:last-child {
+  colspan: 2;
+  text-align: center;
 }
 
 @media (max-width: 1120px) {

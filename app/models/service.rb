@@ -37,6 +37,17 @@ class Service < ActiveRecord::Base
   end
 
 
+  # Returns the sum of all the allocations for this service by employees in the given group for the 
+  # given year. 
+  def get_allocation_for_group(group, year)
+    allocation_sum = 0.0
+    EmployeeAllocation.joins(:employee => :groups).where(:service_id => self.id, :fiscal_year_id => year.id, :groups => {:id => group.id}).each do |employee_allocation|
+      allocation_sum += employee_allocation.allocation
+    end
+    return allocation_sum
+  end
+  
+  
   # Returns multiple nested arrays. The innermost nested array contains the full names of all
   # the employees who both posess this service and belong to the given group, and the corresponding
   # allocations that those employees have for this service. The allocation values are rounded to 
