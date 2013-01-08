@@ -33,7 +33,7 @@ class ProductStatesController < ApplicationController
       return
     end
     flash[:error] = "Product state needs a unique name"
-    render :index
+    redirect_to product_states_path
   end
 
 

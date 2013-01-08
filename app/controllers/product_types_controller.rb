@@ -33,7 +33,7 @@ class ProductTypesController < ApplicationController
       return
     end
     flash[:error] = "Product type needs a unique name"
-    render :index
+    redirect_to product_types_path
   end
 
 
