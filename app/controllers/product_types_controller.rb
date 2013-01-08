@@ -27,12 +27,12 @@ class ProductTypesController < ApplicationController
 
   # Creates a new product type
   def create
-    if ProductType.create(params[:product_type])
+    if ProductType.new(params[:product_type]).save
       flash[:notice] = "Product type created"
       redirect_to product_types_path
       return
     end
-    flash[:error] = "Product type needs a name"
+    flash[:error] = "Product type needs a unique name"
     render :index
   end
 

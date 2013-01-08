@@ -27,12 +27,12 @@ class ProductStatesController < ApplicationController
 
   # Creates a new product state
   def create
-    if ProductState.create(params[:product_state])
+    if ProductState.new(params[:product_state]).save
       flash[:notice] = "Product state created"
       redirect_to product_states_path
       return
     end
-    flash[:error] = "Product state needs a name"
+    flash[:error] = "Product state needs a unique name"
     render :index
   end
 
