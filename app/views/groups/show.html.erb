@@ -14,12 +14,13 @@
       <th>
         
       </th>
-      <th colspan="2">
+      <th>
         <%= form_tag change_year_logins_path, :method => "get" do %>
-          Fiscal Year <%= select_tag(:year, 
+          <%= label_tag :year, "Fiscal Year" %> 
+          <%= select_tag(:year, 
               options_from_collection_for_select(@all_years, :year, :year,
               {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag "(change)", :class => "tiny-submit" %>
+          <%= submit_tag "Change" %>
         <% end %>
       </th>
     </tr>
@@ -32,9 +33,6 @@
       <td>
         Total Product Allocation: <%= @group.get_total_product_allocation(@year) %>
       </td>
-      <td>
-        Full-Time Equivalents: <%= @group.get_total_service_allocation(@year) %> 
-      </td>
     </tr>
     <tr>
       <td>
@@ -43,80 +41,18 @@
       <td>
         Total Services: <%= @services.length if @services %> 
       </td>
+    </tr>
+    <tr>
       <td>
         
+      </td>
+      <td>
+        Full-Time Equivalents: <%= @group.get_total_service_allocation(@year) %> 
       </td>
     </tr>
   </tbody>
 </table>
 
-
-<div class="overview hidden">
-  <h3> Overview for <%= @group.name %> </h3>
-  <div style="float: left; width: 30%;">
-    <p class="overview-header"> 
-      &nbsp;
-    </p>
-    <ul>
-      <li> 
-        Total Products: <%= @products.length if @products %> 
-      </li>
-      <li> 
-        Employee Headcount: <%= @existing_employees.length  if @existing_employees %> 
-      </li>
-    </ul>
-  </div>
-  
-  <div style="float: left; width: 66%;">
-    <%= form_tag change_year_logins_path, :method => "get" do %>
-      <p class="overview-header"> 
-        Numbers for Fiscal Year <%= select_tag(:year, 
-          options_from_collection_for_select(@all_years, :year, :year,
-         {:selected => @year.year}), :class => "tiny-select") %> 
-         <%= submit_tag "(change)", :class => "tiny-submit" %>
-       </p>
-    <% end %>
-    
-    <ul class="alternating-ul">
-      <li> 
-        Total Services: <%= @services.length if @services %> 
-      </li>
-      <li> 
-        Total Product Allocation: <%= @group.get_total_product_allocation(@year) %>
-      </li>
-      <li> 
-        Full-Time Equivalents: <%= @group.get_total_service_allocation(@year) %> 
-      </li>
-    </ul>
-  </div>
-</div>
-
-<fieldset class="light-border hidden">
-  <legend> Overview for <%= @group.name %> </legend>
-  <p class="floaty"> 
-    Total Products: <%= @products.length if @products %> 
-  </p>
-  <p class="floaty"> 
-    Employee Headcount: <%= @existing_employees.length  if @existing_employees %> 
-  </p>
-  <p class="floaty"> 
-    * Total Services: <%= @services.length if @services %> 
-  </p>
-  <p class="floaty"> 
-    * Total Product Allocation: <%= @group.get_total_product_allocation(@year) %>
-  </p>
-  <p class="floaty"> 
-    * Full-Time Equivalents: <%= @group.get_total_service_allocation(@year) %> 
-  </p>
-  <%= form_tag change_year_logins_path, :method => "get" do %>
-    <p class="floaty footer-note"> 
-      * Numbers for Fiscal Year <%= select_tag(:year, 
-        options_from_collection_for_select(@all_years, :year, :year,
-       {:selected => @year.year}), :class => "tiny-select") %> 
-       <%= submit_tag "(change)", :class => "tiny-submit" %>
-    </p>
-  <% end %>
-</fieldset>
 
 
 

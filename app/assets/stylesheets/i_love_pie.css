@@ -173,11 +173,7 @@ tr > td
 }
 
 
-thead
-{
-  border: 10px solid transparent;
-  font-size: 13.3px;
-}
+
 
 div.field_with_errors {
   display: inline;
@@ -443,25 +439,11 @@ h2 > a {
   padding-left: 15px;
 }
 
-.floaty {
-  float: left;
-  width: 325px;
-}
-
-.overview-header {
-  width: 80%;
-  font-size: .80em;
-  color: #666;
-  font-style: italic;
-  text-align: center;
-}
-
 .tiny-select {
-  font-size: 1em;
-  height: 18px;
+  height: 22px;
   margin: 1px;
   padding: 0px;
-  width: 49px; 
+  width: 65px; 
 }
 
 .tiny-submit {
@@ -469,35 +451,21 @@ h2 > a {
   border: none;
   color: #0088CC;
   cursor: pointer;
-  font-size: 0.9em;
   font-style: italic;
   margin: 0;
   padding: 0;
   text-shadow: none;
 }
 
-.alternating-ul > li:nth-child(even) {
-  float: left;
-}
-
-.alternating-ul li {
-  width: 50%;
-  display: inline-block;
-  
-}
-
-.overview li {
-  list-style: none;
-}
-
 .overview caption{
   margin-top: 5px;
 }
 
-.overview th:last-child {
-  colspan: 2;
-  text-align: center;
+.overview label {
+  display: inline;
+  font-weight: bold;
 }
+
 
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {

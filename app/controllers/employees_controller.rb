@@ -40,9 +40,6 @@ class EmployeesController < ApplicationController
     else
       @employees = Employee.order(:name_last, :name_first)
     end
-    @employees = @employees.includes(
-        :employee_allocations => [:service]).where(
-        "employee_allocations.fiscal_year_id = ?", @current_fiscal_year.id)
     @employees = @employees.paginate(:page => params[:page], 
                                      :per_page => session[:results_per_page])
   end
