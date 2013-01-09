@@ -16,7 +16,7 @@ class LoginsController < ApplicationController
 
   # Development tool for logging in without a password
   def new_backdoor
-    redirect_to pages_home_path unless Rails.env.development?
+    redirect_to :new unless Rails.env.development?
   end
 
 

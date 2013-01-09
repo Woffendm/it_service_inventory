@@ -19,24 +19,14 @@
     <th> </th>
   </thead>
   <tbody>
-    <% if Group.first != nil %>
+    <% unless @groups.blank? %>
       <% @groups.each do |group| %>
         <tr class="<%= cycle('odd', 'even') %>">
           <td> 
-            <% if can? :update, group %>
-              <%= link_to group.name , edit_group_path(group.id) %>
-            <% else %>
-              <%= group.name %>
-            <% end %>
+            <%= link_to group.name, group_path(group.id) %>
           </td>
           <td> 
-            <% if can? :update, group %>
-              <%= link_to group.employees.length.to_s + ", " + t(:click_to_manage),
-                          roster_group_path(group.id) %>
-            <% else %>
-              <%= link_to group.employees.length.to_s + ", " + t(:click_to_view),
-                          roster_group_path(group.id) %>
-            <% end %>
+            <%= group.employees.length.to_s %>
           </td>
           <td> 
             <% if can? :destroy, Group %>

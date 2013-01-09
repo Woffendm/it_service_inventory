@@ -76,6 +76,7 @@ body {
 .brand > a:focus {
   color: #fff;
   background-color: #888;
+  text-decoration: none;
 }
 
 
@@ -377,9 +378,7 @@ h2 > a {
   font-weight: bold;
 }
 
-.groovy{
-  background: -moz-linear-gradient(45deg, #22F2F2 0%, purple 100%) repeat scroll 0 0 transparent;
-}
+
 
 #login-inline,
 #login-outline {
@@ -404,6 +403,11 @@ h2 > a {
 .navbar .btn-navbar {
     float: left;
 }
+
+.tab-content > .active, .pill-content > .active {
+    min-height: 400px;
+}
+
 
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {

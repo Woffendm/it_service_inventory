@@ -11,7 +11,7 @@ module ApplicationHelper
   
   # Returns a 'current' tag if given the current page
   def cp(path)
-    "current_page" if current_page?(path)
+    "current_page" if request.fullpath.index(path)
   end
   
   
@@ -33,5 +33,10 @@ module ApplicationHelper
       return "width:#{string.length * 0.6}em;"
     end
     return ""
+  end
+  
+  
+  def print_list_of_links(array)
+    return array.collect{|g| link_to g.name, group_path(g.id)}.join(", ")
   end
 end

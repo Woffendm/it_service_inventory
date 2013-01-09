@@ -1,0 +1,137 @@
+<h2> 
+  <%= t(:product_colon) %> <%= @product.name %> 
+  <% if can? :update, @product %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe,
+                edit_product_path(@product.id) %>
+  <% end %>
+</h2> 
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#product_information" id="product_information_tab" data-toggle="tab"> 
+      Product Information
+    </a>
+  </li>
+  <li>
+    <a href="#employees" id="employees_tab" data-toggle="tab" > 
+      Allocated Employees
+    </a>
+  </li>
+  <li>
+    <a href="#services" id="services_tab" data-toggle="tab" > 
+      Associated Services
+    </a>
+  </li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane active" id="product_information">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :groups %> 
+        </span>
+        <span class="controls">
+          <% unless @groups.empty? %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% end %>
+        </span>
+      </div>
+    
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:product_state) %> 
+        </span>
+        <span class="controls">
+          <%= @product.state %> 
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:product_type) %> 
+        </span>
+        <span class="controls">
+          <%= @product.type %> 
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :url, "URL" %>
+        </span>
+        <span class="controls">
+          <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, @product.url,
+                      :target => '_blank' unless @product.url.blank?%>
+          <%= @product.url %>
+        </span>
+      </div>
+      
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :description %> 
+        </span>
+        <span class="controls">
+          <%= simple_format(@product.description, :style => 'margin-left:280px;') %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="tab-pane" id="services">
+    <% unless @services.blank? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:service) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @services.each do |service| %>
+            <tr>
+              <td> 
+                <%= link_to service.name, service_path(service.id) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+
+
+
+  <div class="tab-pane" id="employees">
+    <% if @product.employee_products.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th> <%= t(:employee) %> </th>
+            <th> <%= t(:allocation) %> </th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @employees.each do |employee| %>
+            <% employee_product = employee.employee_products.find_by_product_id(@product.id) %>
+            <tr>
+              <td> 
+                <%= link_to employee.full_name, employee_path(employee.id) %>
+              </td>
+              <td > 
+                <%= employee_product.rounded_allocation %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>
+
+
+

@@ -1,9 +1,20 @@
 <h2> <%= t(:application_settings) %> </h2>
 
-<ul>
-  <li> <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %> </li>
-  <li> <%= link_to t(:manage) + t(:product_states), product_states_path %> </li>
-  <li> <%= link_to t(:manage) + t(:product_types), product_types_path %> </li>
+<ul class="nav nav-tabs different-view-tabs" id="my-tab">
+  <li class="active">
+    <a href="#"  data-toggle="tab"> 
+      Application Settings
+    </a>
+  </li>
+  <li>
+    <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
+  </li>
+  <li>
+    <%= link_to t(:manage) + t(:product_states), product_states_path %>
+  </li>
+  <li>
+    <%= link_to t(:manage) + t(:product_types), product_types_path %>
+  </li>
 </ul>
 
 

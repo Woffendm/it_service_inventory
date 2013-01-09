@@ -15,8 +15,7 @@
         <% else %>
           <span class="blank-icon"></span>
         <% end %>
-        <%= render  :partial => "/shared/can_update_product", 
-                    :locals => {:product => product} %>
+        <%= link_to product.name, product_path(product.id) %>
       </td>
       <td>
         <% unless product.description.blank? %>

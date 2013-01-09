@@ -1,0 +1,128 @@
+<h2> 
+  Employee: &nbsp; <%= @employee.full_name %> 
+  <% if can? :update, @employee %>
+    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
+                #{t(:edit)}".html_safe, edit_employee_path(@employee.id) %>
+  <% end %>
+</h2> 
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#services" id="services_tab" data-toggle="tab"> 
+      Allocated Services
+    </a>
+  </li>
+  <li>
+    <a href="#products" id="products_tab" data-toggle="tab" > 
+      Allocated Products
+    </a>
+  </li>
+  <li>
+    <a href="#basic_information" id="basic_information_tab" data-toggle="tab"> 
+      Notes and Groups
+    </a>
+  </li>
+</ul>
+
+
+<div class="tab-content">
+  <div class="tab-pane" id="basic_information">
+    
+    <div class="form-horizontal">
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :groups %> 
+        </span>
+        <span class="controls">
+          <% unless @groups.empty? %>
+            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% end %>
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:email) %> 
+        </span>
+        <span class="controls">
+          <%= @employee.email %>    
+        </span>
+      </div>
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag :notes %> 
+        </span>
+        <span class="controls">
+          <%= simple_format(@employee.notes, :style => 'margin-left:280px;') %>
+        </span>
+      </div>
+    </div>
+    
+  </div>
+    
+    
+    
+  <div class="tab-pane active" id="services">
+  
+
+    <% if @employee.employee_allocations.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%= t(:service) %></th>
+            <th><%= t(:allocation) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @services.each do |service| %>
+            <% employee_allocation = service.get_employee_allocation(@employee) %>
+            <tr>
+              <td> 
+                <%= link_to service.name, service_path(service.id) %>
+              </td>
+              <td class="form-inline"> 
+                <%= employee_allocation.allocation.round(@allocation_precision) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+  </div>
+
+
+
+  <div class="tab-pane" id="products">
+  
+
+    <% if @employee.employee_products.any? %>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%= t(:product) %></th>
+            <th><%= t(:allocation) %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @products.each do |product| %>
+            <% employee_product = product.get_employee_product(@employee) %>
+            <tr>
+              <td> 
+                <%= link_to product.name, product_path(product.id) %>
+              </td>
+              <td class="form-inline"> 
+                <%= employee_product.allocation.round(@allocation_precision) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+
+  </div>
+
+</div>
+
+
+

@@ -9,7 +9,7 @@ gem 'json'
 
 gem 'dynamic_form'
 
-gem 'therubyracer'
+gem 'therubyracer', '0.10.2'
 
 gem 'cancan'
 
@@ -17,7 +17,7 @@ gem 'omniauth-ldap'#, :git => 'http://github.com/angelkbrown/omniauth-ldap.git'
 
 gem 'will_paginate'
 
-gem 'mysql'
+gem 'mysql', '~> 2.8.1'
 
 gem 'seed-fu', '~> 2.2.0'
 
@@ -25,6 +25,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'rspec'
   gem 'rspec-rails'
+  gem 'rack-mini-profiler'
 end
 
 # Gems used only for assets and not required

@@ -1,4 +1,9 @@
-<h2> <%= t(:edit) + t(:employee) %>: <%= @employee.full_name %></h2>
+<h2> 
+  <%= t(:edit) + t(:employee_colon) %> &nbsp; <%= @employee.full_name %>
+  <%= link_to "#{content_tag :em, '', :class => ''}
+              #{t(:show)}".html_safe, employee_path(@employee.id) %>
+</h2>
+
 
 
 <%= form_for @employee do |employee_form| %>
@@ -80,7 +85,7 @@
           <% employee_group = @employee.employee_groups.find_by_group_id(@groups[count].id) %>
           <tr>
             <td>
-              <%= link_to employee_group.group.name, roster_group_path(employee_group.group_id) %>
+              <%= link_to employee_group.group.name, group_path(employee_group.group_id) %>
             </td>
             <td>
               <% if can? :update, employee_group.group %>
@@ -151,8 +156,8 @@
             <% employee_allocation = @services[count].get_employee_allocation(@employee) %>
             <tr>
               <td> 
-                <%= render  :partial => "/shared/can_update_service", 
-                            :locals => {:service => employee_allocation.service} %>
+                <%= link_to employee_allocation.service.name,
+                            service_path(employee_allocation.service_id) %>
               </td>
               <td class="form-inline"> 
                 <%= form.hidden_field(:service_id, :value => employee_allocation.service_id) %>
@@ -179,8 +184,6 @@
 <% end %>
 
 
-<br/><br/>
-<%= link_to t(:return_to) + t(:all_employees), employees_path %>
 
 
 <%= render  :partial => "/shared/fte_calculator_body", 

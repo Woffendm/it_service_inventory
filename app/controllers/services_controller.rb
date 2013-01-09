@@ -4,14 +4,16 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-  before_filter :load_service, :only => [:destroy, :edit, :update]
-  before_filter :load_group, :only => [:total_allocation_within_group]
-
+  before_filter :load_service, :only => [:destroy, :edit, :show, :update]
+  before_filter :load_employees, :only => [:show]
+  before_filter :load_products, :only => [:show]
+  before_filter :load_groups, :only => [:show]
   
 # View-related methods
   
   # Page for editing an existing service
   def edit
+    authorize! :update, @service
   end
   
   
@@ -28,6 +30,7 @@ class ServicesController < ApplicationController
 
   # Creates a new service using info entered on the "new" page
   def create
+    authorize! :create, Service
     @service = Service.new(params[:service])
     if @service.save
       flash[:notice] = t(:service) + t(:created)
@@ -65,12 +68,13 @@ class ServicesController < ApplicationController
 
   # Updates an existing service using info entered on the "edit" page
   def update
+    authorize! :update, @service
     if @service.update_attributes(params[:service])
       flash[:notice] = t(:service) + t(:updated)
     else
       flash[:error] = t(:service) + t(:needs_a_name)
     end
-    redirect_to services_path 
+    redirect_to edit_service_path(@service.id) 
   end
 
 
@@ -78,14 +82,25 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
+    # Loads all employees allocated to this service
+    def load_employees
+      @employees = @service.employees.order(:name_last, :name_first)
+    end
+    
+    
+    # Loads all products allocated to this service
+    def load_products
+      @products = @service.products.order(:name)
+    end
+    
+    
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
-      authorize! :update, @service
     end
-
-
-    def load_group
-      @group = Group.find(params[:group])
+    
+    # Loads all groups who have employees allocated to this service
+    def load_groups
+      @groups = @service.groups
     end
 end
