@@ -84,13 +84,13 @@ class ServicesController < ApplicationController
   private
     # Loads all employees allocated to this service
     def load_employees
-      @employees = @service.employees
+      @employees = @service.employees.order(:name_last, :name_first)
     end
     
     
     # Loads all products allocated to this service
     def load_products
-      @products = @service.products
+      @products = @service.products.order(:name)
     end
     
     
