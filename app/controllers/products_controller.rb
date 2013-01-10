@@ -140,8 +140,8 @@ class ProductsController < ApplicationController
   
     # Loads all product states, product types, and product sources
     def load_all_product_associations
-      @product_states = ProductState.all
-      @product_types = ProductType.all
+      @product_states = ProductState.order(:name)
+      @product_types = ProductType.order(:name)
       @product_source_types = ProductSourceType.all
     end
 

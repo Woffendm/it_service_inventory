@@ -7,6 +7,45 @@
 </h2> 
 
 
+<table class="table table-striped overview">
+  <caption> Overview for <%= @employee.full_name %> </caption>
+  <thead>
+    <tr>
+      <th>
+        <%= form_tag change_year_logins_path, :method => "get" do %>
+          <%= label_tag :year, "Fiscal Year" %> 
+          <%= select_tag(:year, 
+              options_from_collection_for_select(@all_years, :year, :year,
+              {:selected => @year.year}), :class => "tiny-select") %> 
+          <%= submit_tag "Change" %>
+        <% end %>
+      </th>
+      <th>
+        
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Allocated Business Services: <%= @service_allocations.length if @service_allocations %> 
+      </td>
+      <td>
+        Allocated Products: <%= @product_allocations.length if @product_allocations %> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Business Service Allocation: <%= @employee.get_total_service_allocation(@year) %>
+      </td>
+      <td>
+        Product Allocation: <%= @employee.get_total_product_allocation(@year) %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#services" id="services_tab" data-toggle="tab"> 
@@ -54,7 +93,7 @@
           <%= label_tag :notes %> 
         </span>
         <span class="controls">
-          <%= simple_format(@employee.notes, :style => 'margin-left:280px;') %>
+          <%= simple_format(@employee.notes) %>
         </span>
       </div>
     </div>

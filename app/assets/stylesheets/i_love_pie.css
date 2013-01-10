@@ -45,6 +45,7 @@ body {
 .controls {
   position: relative;
   top: 5px;
+  display: inline-block;
 }
 
 .form-horizontal .control-group {

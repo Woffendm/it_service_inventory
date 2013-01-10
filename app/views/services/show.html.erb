@@ -7,6 +7,45 @@
 </h2> 
 
 
+<table class="table table-striped overview">
+  <caption> Overview for <%= @service.name %> </caption>
+  <thead>
+    <tr>
+      <th>
+        
+      </th>
+      <th>
+        <%= form_tag change_year_logins_path, :method => "get" do %>
+          <%= label_tag :year, "Fiscal Year" %> 
+          <%= select_tag(:year, 
+              options_from_collection_for_select(@all_years, :year, :year,
+              {:selected => @year.year}), :class => "tiny-select") %> 
+          <%= submit_tag "Change" %>
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        Associated Groups: <%= @groups.length if @groups %> 
+      </td>
+      <td>
+        Allocated Employees: <%= @employee_allocations.length if @employee_allocations %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Associated Products: <%= @products.length  if @products %> 
+      </td>
+      <td>
+        Total Employee Allocation: <%= @service.get_total_allocation(@year) %> 
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
@@ -44,7 +83,7 @@
           <%= label_tag :description %> 
         </span>
         <span class="controls">
-          <%= simple_format(@service.description, :style => 'margin-left:280px;') %>
+          <%= simple_format(@service.description) %>
         </span>
       </div>
     </div>
