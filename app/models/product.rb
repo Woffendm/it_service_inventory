@@ -56,7 +56,7 @@ class Product < ActiveRecord::Base
   def get_available_employees(year)
     current_employees = self.get_allocations_for_year(year).pluck(:employee_id)
     current_employees = [0] if current_employees.blank?
-    Employee.where("id NOT IN (?)", current_employees).order(:name_last, :name_first)
+    Employee.active_employees.where("id NOT IN (?)", current_employees)
   end
 
 

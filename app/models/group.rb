@@ -23,7 +23,7 @@ class Group < ActiveRecord::Base
   
   # Returns array of employees not currently in the given group
   def get_available_employees
-    return Employee.order(:name_last) - self.employees
+    return Employee.active_employees - self.employees
   end
   
   

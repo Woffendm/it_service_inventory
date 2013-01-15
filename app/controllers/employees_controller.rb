@@ -5,7 +5,7 @@
 
 class EmployeesController < ApplicationController
   before_filter :authorize_creation,        :only => [:ldap_create, :search_ldap_view]
-  before_filter :load_employee,             :only => [:destroy, :update]
+  before_filter :load_employee,             :only => [:destroy, :toggle_active, :update]
   before_filter :authorize_update,          :only => [:edit, :update]
   before_filter :load_active_years,         :only => [:edit, :update]
   before_filter :load_all_years,            :only => [:show]
@@ -67,7 +67,7 @@ class EmployeesController < ApplicationController
 
 
   # Obliterates selected employee with the mighty hammer of Thor and scatters their data like dust  
-  # to a thousand winds
+  # to a thousand winds. (Removes employee and all associations)
   def destroy
     authorize! :destroy, @employee
     if @employee != @current_user 
@@ -77,6 +77,22 @@ class EmployeesController < ApplicationController
       flash[:error] = t(:cannot_delete_self)
     end
     redirect_to employees_path 
+  end
+  
+  
+  # Sets the specified employee's 'active' field to false. Inactive no longer appear in lists for
+  # creating new associations, but all their existing associations are preserved.
+  def toggle_active
+    authorize! :destroy, @employee
+    if @employee.active
+      @employee.active = false
+      flash[:notice] = t(:employee) + "Deactivated"
+    else
+      @employee.active = true
+      flash[:notice] = t(:employee) + "Activated"
+    end
+    @employee.save
+    redirect_to employees_path
   end
 
 

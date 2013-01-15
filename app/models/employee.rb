@@ -22,6 +22,12 @@ class Employee < ActiveRecord::Base
 
 
 
+  # Returns all active employees, sorted by both names.
+  def self.active_employees
+    Employee.where(:active => true).order(:name_last, :name_first)
+  end
+
+
   # Returns an array of all an employee's employee allocation objects for a given year
   def get_service_allocations(year)
     self.employee_allocations.joins(:service).where(
