@@ -41,7 +41,10 @@ class Service < ActiveRecord::Base
   # given year. 
   def get_allocation_for_group(group, year)
     allocation_sum = 0.0
-    EmployeeAllocation.joins(:employee => :groups).where(:service_id => self.id, :fiscal_year_id => year.id, :groups => {:id => group.id}).each do |employee_allocation|
+    EmployeeAllocation.joins(:employee => :groups
+                     ).where(:service_id => self.id, :fiscal_year_id => year.id, 
+                             :groups => {:id => group.id}
+                     ).each do |employee_allocation|
       allocation_sum += employee_allocation.allocation
     end
     return allocation_sum
