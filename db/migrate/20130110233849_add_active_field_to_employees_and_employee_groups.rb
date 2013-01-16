@@ -1,7 +1,7 @@
 class AddActiveFieldToEmployeesAndEmployeeGroups < ActiveRecord::Migration
   def up
-    add_column :employee_groups, :active, :boolean
-    add_column :employees, :active, :boolean
+    add_column :employee_groups, :active, :boolean, :default => true
+    add_column :employees, :active, :boolean, :default => true
     
     Employee.all.each do |employee|
       employee.active = true
