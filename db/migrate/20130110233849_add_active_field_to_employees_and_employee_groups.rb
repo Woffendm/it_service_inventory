@@ -14,7 +14,7 @@ class AddActiveFieldToEmployeesAndEmployeeGroups < ActiveRecord::Migration
   end
   
   def down
-    add_column :employee_groups, :active
-    add_column :employees, :active
+    remove_column :employee_groups, :active
+    remove_column :employees, :active
   end
 end
