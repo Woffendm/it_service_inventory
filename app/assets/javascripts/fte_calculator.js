@@ -23,7 +23,7 @@ $(document).ready(function(){
   // Establishes a number of variables to be used later on. Variables in all caps are constants.
   var correspondingSelectBox;
   var fteResult;
-  var hoursPerDay = $('#hours_per_day');
+  var hoursPerMonth = $('#hours_per_month');
   var hoursPerWeek = $('#hours_per_week');
   var useThisNumber = $('#use_this_number');
   var TABKEY = 9;
@@ -37,7 +37,7 @@ $(document).ready(function(){
     if(correspondingSelectBox != $(".calculator_select")[$(".fte_calculator_trigger").index(this)]){
       $("#fte_calculator").dialog("close");
       correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
-      hoursPerDay.val("");
+      hoursPerMonth.val("");
       hoursPerWeek.val("");
       popAllocationResult(0)
       $("#fte_calculator").dialog("open");
@@ -46,11 +46,11 @@ $(document).ready(function(){
 
 
 
-  // Watches for a keypress in the hours-per-day box. If one is detected and it is not a tab, then
+  // Watches for a keypress in the hours-per-month box. If one is detected and it is not a tab, then
   // it calculates the FTE value of the entry, clears the other box, and calls popAllocationResult 
-  hoursPerDay.keyup(function(e) {
+  hoursPerMonth.keyup(function(e) {
     if (e.keyCode != TABKEY) {
-      fteResult = (e.target.value / (fteHoursPerWeek / 5));
+      fteResult = (e.target.value / (365 / 7 * fteHoursPerWeek / 12));
       hoursPerWeek.val("");
       popAllocationResult(fteResult);
     }
@@ -62,7 +62,7 @@ $(document).ready(function(){
   // it calculates the FTE value of the entry, clears the other box, and calls popAllocationResult
   hoursPerWeek.keyup(function(e) {
     if (e.keyCode != TABKEY) {
-      hoursPerDay.val("");
+      hoursPerMonth.val("");
       fteResult = (e.target.value / fteHoursPerWeek);
       popAllocationResult(fteResult);
     }
