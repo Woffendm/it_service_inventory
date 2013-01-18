@@ -1,5 +1,5 @@
 <h2> 
-  Group: <%= @group.name %> 
+  <%= t(:group_colon) + @group.name %> 
   <% if can? :update, @group %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
                 #{t(:edit)}".html_safe, edit_group_path(@group.id) %>
@@ -8,7 +8,7 @@
 
 
 <table class="table table-striped overview">
-  <caption> Overview for <%= @group.name %> </caption>
+  <caption> <%= t(:overview) %> </caption>
   <thead>
     <tr>
       <th>
@@ -16,11 +16,10 @@
       </th>
       <th>
         <%= form_tag change_year_logins_path, :method => "get" do %>
-          <%= label_tag :year, "Fiscal Year" %> 
-          <%= select_tag(:year, 
-              options_from_collection_for_select(@all_years, :year, :year,
+          <%= label_tag :year, t(:fiscal_year) %> 
+          <%= select_tag(:year, options_from_collection_for_select(@all_years, :year, :year,
               {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag "Change" %>
+          <%= submit_tag t(:show) %>
         <% end %>
       </th>
     </tr>
@@ -28,18 +27,30 @@
   <tbody>
     <tr>
       <td>
-        Associated Products: <%= @products.length if @products %> 
+        <div class="overview-label">
+          <%= t(:products) %>
+        </div>
+        <%= @products.length if @products %> 
       </td>
       <td>
-        Total Product Allocation: <%= @group.get_total_product_allocation(@year) %>
+        <div class="overview-label">
+          <%= t(:product) + t(:allocation) %>
+        </div>
+        <%= @group.get_total_product_allocation(@year) %>
       </td>
     </tr>
     <tr>
       <td>
-        Employee Headcount: <%= @existing_employees.length  if @existing_employees %> 
+        <div class="overview-label">
+          <%= t(:employee_headcount) %>
+        </div>
+        <%= @existing_employees.length  if @existing_employees %> 
       </td>
       <td>
-        Total Services: <%= @services.length if @services %> 
+        <div class="overview-label">
+          <%= t(:services) %>
+        </div>
+        <%= @services.length if @services %> 
       </td>
     </tr>
     <tr>
@@ -47,7 +58,10 @@
         
       </td>
       <td>
-        Full-Time Equivalents: <%= @group.get_total_service_allocation(@year) %> 
+        <div class="overview-label">
+          <%= t(:full_time_employees) %>
+        </div>
+        <%= @group.get_total_service_allocation(@year) %> 
       </td>
     </tr>
   </tbody>
@@ -59,17 +73,17 @@
 <ul class="nav nav-tabs" id="my-tab" style="clear:both;">
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
-      Related Products
+      <%= t(:products) %>
     </a>
   </li>
   <li>
      <a href="#employees" id="employees_tab" data-toggle="tab" > 
-       Employees
+       <%= t(:employees) %>
      </a>
    </li>
   <li>
     <a href="#services" id="services_tab" data-toggle="tab"> 
-      Related Services
+      <%= t(:services) %>
     </a>
   </li>
 </ul>
@@ -118,7 +132,7 @@
         <thead>
           <tr>
             <th>
-              Employee
+              <%= t(:employee) %>
             </th>
           </tr>
         </thead>

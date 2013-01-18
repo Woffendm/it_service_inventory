@@ -61,12 +61,11 @@
         <td> 
           <% if can? :destroy, employee %>
             <% if employee.active %>
-              <%= link_to "Deactivate", toggle_active_employee_path(employee.id), 
-                          :confirm => "Deactivated employees remain in the application, but their
-                          information is frozen. Confirm deactivation." %>
+              <%= link_to t(:deactivate), toggle_active_employee_path(employee.id), 
+                          :confirm => t(:confirm_deactivation) %>
             <% else %>
-              <%= link_to "Activate", toggle_active_employee_path(employee.id), 
-                          :confirm => "Activating this employee will restore them to normal condition. Confirm activation." %>
+              <%= link_to t(:activate), toggle_active_employee_path(employee.id), 
+                          :confirm => t(:confirm_activation) %>
             <% end %>
             <br/>
             <%= link_to t(:delete), employee_path(employee.id), :method => :delete, 

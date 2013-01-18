@@ -79,7 +79,7 @@
   <% unless @available_groups.blank? %>
     <div class="form-inline" >
       <fieldset class="light-border">
-        <legend> Add to Group </legend>
+        <legend> <%= t(:add_to) + t(:group) %> </legend>
         <%= fields_for "product_group" do |form|%>
           <%= form.label :group_id, t(:group)  %>
           <%= form.select(:group_id, 
@@ -127,7 +127,7 @@
   <% unless @available_services.blank? %>
     <div class="form-inline" >
       <fieldset class="light-border">
-        <legend> Add to Service </legend>
+        <legend> <%= t(:add_to) + t(:service) %>  </legend>
         <%= fields_for "product_service" do |form|%>
           <%= form.label :service_id, t(:service)  %>
           <%= form.select(:service_id, options_from_collection_for_select(
@@ -181,7 +181,7 @@
       <% unless @available_employees.blank? %>
         <div class="form-inline" >
           <fieldset class="light-border">
-            <legend> Add Employee </legend>
+            <legend> <%= t(:add) + t(:employee) %> </legend>
             <%= fields_for "employee_product" do |form|%>
               <%= form.label :employee_id, t(:employee) %>
               <%= form.select(:employee_id, options_from_collection_for_select(

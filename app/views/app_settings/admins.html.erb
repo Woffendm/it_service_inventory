@@ -12,7 +12,7 @@
         <%= label_tag :employee_id, t(:name) %>
         <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
                              {:include_blank => true}, {:class => "autocomplete large-select", 
-                             "data-placeholder" => "Choose an employee"}) %>
+                             "data-placeholder" => t(:select) + t(:employee)}) %>
         <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
       <% end %>
     </fieldset>

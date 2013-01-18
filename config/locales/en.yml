@@ -62,6 +62,7 @@ en:
   here:                         "HERE"
   home:                         "Home"
   IT_service_inventory:         "IT Service Inventory"
+  information:                  "Information"
   last_name:                    "Last Name"
   my_edit_page:                 "Edit my Allocations"
   name:                         "Name"
@@ -75,6 +76,7 @@ en:
   new_user_reminder:            "New user reminder: "
   notes:                        "Notes"
   options:                      "Options"
+  overview:                     "Overview"
   preferred_language:           "Preferred language: "
   preferred_theme:              "Preferred theme: "
   product:                      "Product "
@@ -102,7 +104,10 @@ en:
 
 
   # Actions
+  activate:                     "Activate "
+  activated:                    "activated"
   add:                          "Add "
+  add_to:                       "Add to "
   added:                        "added"
   add_to_application:           "Add to System"
   add_employee_to_application:  "Add Employee"
@@ -114,10 +119,13 @@ en:
   click_to_view:                " Click to View"
   create:                       "Create "
   created:                      "Created"
+  deactivate:                   "Deactivate "
+  deactivated:                  "deactivated"
   delete:                       "Delete"
   deleted:                      "deleted"
   edit:                         "Edit "
   editing:                      "Editing "
+  filter_results:               "Filter Results"
   logged_in_as:                 "Logged in as: "
   login:                        "Login"
   logout:                       "Logout"
@@ -131,6 +139,7 @@ en:
   return_to:                    "Return to "
   save:                         "Save"
   save_changes:                 "Save changes"
+  search:                       "Search "
   search_OSU_directory:         "Search OSU directory"
   search_for_employee:          "Search for employee"
   select:                       "Select "
@@ -140,6 +149,22 @@ en:
   updated:                      "updated"
   view:                         "View"
 
+
+  # Error page things
+  internal_server_error:        "Internal Server Error"
+  invalid_credentials:          "Invalid Credentials"
+  page_not_found:               "Page Not Found"
+  permission_denied:            "Permission Denied"
+  record_not_found:             "Record Not Found"
+  internal_server_error_message: "Something went terribly wrong!"                  
+  invalid_credentials_message:  "Your username and password did now match."
+  page_not_found_message:       "The page you are looking for does not exist or has been moved."           
+  permission_denied_message:    "You do not have permission to view this page."
+  record_not_found_message:     "The record you searched for has either been deleted or incorrectly entered."
+  
+  
+  
+  
 
 
   # Notifications and Stuff
@@ -151,9 +176,13 @@ en:
 
   confirm_admin:                "Are you sure you want this person to be an admin? Only choose people you trust."
 
+  confirm_activation:           "Restore employee to active status?"
+  
+  confirm_deactivation:         "Deactivate this employee? They will remain in the application."
+
   confirm_deletion:             "Are you sure about this deletion? (Cannot be reversed!!)"
 
-  confirm_removal:              "Confirm removal. (Reversible action)"
+  confirm_removal:              "Confirm removal."
 
   first_name_optional:          "First name is optional"
   
