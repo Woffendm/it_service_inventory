@@ -8,7 +8,7 @@
 
 
 <table class="table table-striped overview">
-  <caption> Overview for <%= @service.name %> </caption>
+  <caption> <%= t(:overview) %> </caption>
   <thead>
     <tr>
       <th>
@@ -16,11 +16,10 @@
       </th>
       <th>
         <%= form_tag change_year_logins_path, :method => "get" do %>
-          <%= label_tag :year, "Fiscal Year" %> 
-          <%= select_tag(:year, 
-              options_from_collection_for_select(@all_years, :year, :year,
+          <%= label_tag :year, t(:fiscal_year) %> 
+          <%= select_tag(:year, options_from_collection_for_select(@all_years, :year, :year,
               {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag "Change" %>
+          <%= submit_tag t(:show) %>
         <% end %>
       </th>
     </tr>
@@ -28,18 +27,30 @@
   <tbody>
     <tr>
       <td>
-        Associated Groups: <%= @groups.length if @groups %> 
+        <div class="overview-label">
+          <%= t(:groups) %>
+        </div>
+        <%= @groups.length if @groups %> 
       </td>
       <td>
-        Allocated Employees: <%= @employee_allocations.length if @employee_allocations %>
+        <div class="overview-label">
+          <%= t(:employees) %>
+        </div>
+        <%= @employee_allocations.length if @employee_allocations %>
       </td>
     </tr>
     <tr>
       <td>
-        Associated Products: <%= @products.length  if @products %> 
+        <div class="overview-label">
+          <%= t(:products) %>
+        </div>
+        <%= @products.length  if @products %> 
       </td>
       <td>
-        Total Employee Allocation: <%= @service.get_total_allocation(@year) %> 
+        <div class="overview-label">
+          <%= t(:total_allocation) %>
+        </div>
+        <%= @service.get_total_allocation(@year) %> 
       </td>
     </tr>
   </tbody>
@@ -49,17 +60,17 @@
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
-      Associated Products
+      <%= t(:products) %>
     </a>
   </li>
   <li>
     <a href="#employees" id="employees_tab" data-toggle="tab" > 
-      Allocated Employees
+      <%= t(:employees) %>
     </a>
   </li>
   <li>
     <a href="#service_information" id="service_information_tab" data-toggle="tab"> 
-      Service Information
+      <%= t(:service) + t(:information) %>
     </a>
   </li>
 </ul>
