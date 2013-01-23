@@ -5,11 +5,12 @@
 # Copyright:
 
 class EmployeeAllocation < ActiveRecord::Base
-  attr_accessible :allocation, :employee, :employee_id, :service_id
+  attr_accessible :allocation, :employee, :employee_id, :service_id, :fiscal_year_id
   belongs_to :employee
   belongs_to :service
-  validates_presence_of :allocation, :employee_id, :service_id
-
+  belongs_to :fiscal_year
+  validates_presence_of :allocation, :employee_id, :service_id, :fiscal_year_id
+  delegate :name, :to => :service
 
 
   # Generates an array of floats between 0.0 and 1.00 inclusive. Incrementation determined by app

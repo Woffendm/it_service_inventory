@@ -16,7 +16,7 @@ class ProductStatesController < ApplicationController
   def update
     product_state = ProductState.find(params[:id])
     unless product_state.update_attributes(params[:product_state])
-      flash[:error] = "Product state needs a name"
+      flash[:error] = "Product state needs a unique name"
       render :index
       return
     end

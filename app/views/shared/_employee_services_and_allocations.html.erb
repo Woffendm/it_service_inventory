@@ -1,6 +1,8 @@
-<% if employee.get_total_allocation > 0 %> 
+<% @allocations = employee.employee_allocations.where(:fiscal_year_id =>
+    @current_fiscal_year.id).joins(:service).order("services.name").includes(:service) %>
+<% unless @allocations.blank? %> 
   <div class="tooltip_trigger">
-    <%= employee.get_total_allocation %> FTE
+    <%= employee.get_total_service_allocation(@current_fiscal_year) %> FTE
   </div>
   <div class="tooltip">
     <table class="tooltip-table">
@@ -11,13 +13,14 @@
         </tr>
       </thead>
       <tbody>
-        <% employee.services.order(:name).each do |service| %>
+        <% @allocations.each do |service_allocation| %>
           <tr>
-            <td style="<%=max_width_by_string(service.name)%>" class="tooltip_first_column"> 
-              <%= service.name %> 
+            <td style="<%=max_width_by_string(service_allocation.name)%>"
+              class="tooltip_first_column"> 
+              <%= service_allocation.name %> 
             </td>
             <td class="tooltip_last_column">
-               <%=service.get_employee_allocation(employee).rounded_allocation %> 
+              <%= service_allocation.rounded_allocation %> 
             </td>
           </tr>
         <% end %>

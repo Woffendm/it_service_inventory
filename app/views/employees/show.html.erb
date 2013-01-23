@@ -1,5 +1,5 @@
 <h2> 
-  Employee: &nbsp; <%= @employee.full_name %> 
+  <%= t(:employee_colon) + @employee.full_name %> 
   <% if can? :update, @employee %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
                 #{t(:edit)}".html_safe, edit_employee_path(@employee.id) %>
@@ -7,20 +7,71 @@
 </h2> 
 
 
+<table class="table table-striped overview">
+  <caption> <%= t(:overview) %> </caption>
+  <thead>
+    <tr>
+      <th>
+        <%= form_tag change_year_logins_path, :method => "get" do %>
+          <%= label_tag :year, t(:fiscal_year) %> 
+          <%= select_tag(:year, 
+              options_from_collection_for_select(@all_years, :year, :year,
+              {:selected => @year.year}), :class => "tiny-select") %> 
+          <%= submit_tag t(:show) %>
+        <% end %>
+      </th>
+      <th>
+        
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:services) %>
+        </div>
+        <%= @total_services %> 
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:products) %>
+        </div>
+        <%= @total_products %> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:service) + t(:allocation) %>
+        </div>
+        <%= @total_service_allocation %>
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:product) + t(:allocation) %>
+        </div>
+        <%= @total_product_allocation %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#services" id="services_tab" data-toggle="tab"> 
-      Allocated Services
+      <%= t(:services) %>
     </a>
   </li>
   <li>
     <a href="#products" id="products_tab" data-toggle="tab" > 
-      Allocated Products
+      <%= t(:products) %>
     </a>
   </li>
   <li>
     <a href="#basic_information" id="basic_information_tab" data-toggle="tab"> 
-      Notes and Groups
+      <%= t(:notes) + t(:and) + t(:groups) %>
     </a>
   </li>
 </ul>
@@ -35,8 +86,9 @@
           <%= label_tag :groups %> 
         </span>
         <span class="controls">
-          <% unless @groups.empty? %>
-            <%= @groups.collect{|g| link_to g.name, group_path(g.id)}.join(", &nbsp;").html_safe %>
+          <% unless @employee_groups.blank? %>
+            <%= @employee_groups.collect{|g| 
+                  link_to g.name, group_path(g.group_id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
       </div>
@@ -53,7 +105,7 @@
           <%= label_tag :notes %> 
         </span>
         <span class="controls">
-          <%= simple_format(@employee.notes, :style => 'margin-left:280px;') %>
+          <%= simple_format(@employee.notes) %>
         </span>
       </div>
     </div>
@@ -63,63 +115,70 @@
     
     
   <div class="tab-pane active" id="services">
-  
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
 
-    <% if @employee.employee_allocations.any? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:service) %></th>
-            <th><%= t(:allocation) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @services.each do |service| %>
-            <% employee_allocation = service.get_employee_allocation(@employee) %>
-            <tr>
-              <td> 
-                <%= link_to service.name, service_path(service.id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= employee_allocation.allocation.round(@allocation_precision) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+      <div class="tab-content year-content">
+        <% unless @service_allocations.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:service) %></th>
+                <th><%= t(:allocation) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @service_allocations.each do |service_allocation| %>
+                <tr>
+                  <td> 
+                    <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= service_allocation.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
 
   </div>
 
 
 
   <div class="tab-pane" id="products">
-  
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
 
-    <% if @employee.employee_products.any? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:product) %></th>
-            <th><%= t(:allocation) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @products.each do |product| %>
-            <% employee_product = product.get_employee_product(@employee) %>
-            <tr>
-              <td> 
-                <%= link_to product.name, product_path(product.id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= employee_product.allocation.round(@allocation_precision) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-
+      <div class="tab-content year-content">
+        <% unless @product_allocations.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:product) %></th>
+                <th><%= t(:allocation) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @product_allocations.each do |product_allocation| %>
+                <tr>
+                  <td> 
+                    <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= product_allocation.rounded_allocation %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+    </div>
   </div>
 
 </div>

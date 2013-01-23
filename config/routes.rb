@@ -16,7 +16,6 @@ Project1::Application.routes.draw do
 
   resources :groups do
     member do
-      get 'roster'
       post 'add_employee'
       post 'toggle_group_admin'
       post 'remove_employee'
@@ -31,6 +30,7 @@ Project1::Application.routes.draw do
     member do
       get 'user_settings'
       post 'update_settings'
+      get 'toggle_active'
     end
     collection do
       get 'ldap_search_results'
@@ -56,6 +56,8 @@ Project1::Application.routes.draw do
   resources :product_types do
   end
 
+  resources :fiscal_years do
+  end
 
   resources :errors do
     collection do
@@ -71,6 +73,7 @@ Project1::Application.routes.draw do
   resources :logins do
     collection do
       get 'change_results_per_page'
+      get 'change_year'
     end
   end
 

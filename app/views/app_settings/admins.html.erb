@@ -1,19 +1,7 @@
 <h2> <%= t(:site_admins) %> </h2>
 
-<ul class="nav nav-tabs" id="my-tab">
-  <li>
-    <%= link_to "Application Settings", app_settings_path %>
-  </li>
-  <li class="active">
-    <%= link_to t(:manage) + t(:site_admins), "#" %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_states), product_states_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_types), product_types_path %>
-  </li>
-</ul>
+
+<%= render :partial => "/shared/app_settings_tabs" %>
 
 
 <% unless @not_admins.empty? %>
@@ -24,7 +12,7 @@
         <%= label_tag :employee_id, t(:name) %>
         <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
                              {:include_blank => true}, {:class => "autocomplete large-select", 
-                             "data-placeholder" => "Choose an employee"}) %>
+                             "data-placeholder" => t(:select) + t(:employee)}) %>
         <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
       <% end %>
     </fieldset>

@@ -39,4 +39,10 @@ class AppSetting < ActiveRecord::Base
   def self.get_allocation_precision
     return AppSetting.find_by_code("allocation_precision").value.to_f.to_int
   end
+  
+  
+  # Returns the fiscal year object that corresponds to the currently set fiscal year
+  def self.get_current_fiscal_year
+    return FiscalYear.find_by_year(AppSetting.find_by_code("current_fiscal_year").value)
+  end
 end

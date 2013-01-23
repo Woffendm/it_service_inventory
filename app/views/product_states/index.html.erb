@@ -4,6 +4,7 @@
                #{t(:new_product_state)}".html_safe, "#", :class => "modal_trigger" %>
 </h2>
 
+<<<<<<< HEAD
 <ul class="nav nav-tabs" id="my-tab">
   <li>
     <%= link_to "Application Settings", app_settings_path %>
@@ -18,6 +19,10 @@
     <%= link_to t(:manage) + t(:product_types), product_types_path %>
   </li>
 </ul>
+=======
+
+<%= render :partial => "/shared/app_settings_tabs" %>
+>>>>>>> fiscal_year
 
 
 <%= render  :partial => "/product_states/new_product_state", 

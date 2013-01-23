@@ -4,11 +4,14 @@
 # Copyright:
 
 class ProductsController < ApplicationController
-  before_filter :load_product, :only => [:destroy, :edit, :show, :update]
-  before_filter :load_employees_services_groups,    :only => [:edit, :show, :update]
+  before_filter :load_product,                      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_active_years,                 :only => [:edit, :update]
+  before_filter :load_all_years,                    :only => [:show]
+  before_filter :load_associations,                 :only => [:edit, :show, :update]
+  before_filter :load_available_associations,       :only => [:edit, :update]
+  before_filter :load_all_product_associations,     :only => [:index, :edit, :update]
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
-  before_filter :load_product_states_types_sources, :only => [:index, :edit, :update]
 
 
 
@@ -48,6 +51,10 @@ class ProductsController < ApplicationController
 
   # Page for viewing a product in detail
   def show
+    @total_groups = @product.groups.length
+    @total_services = @product.services.length
+    @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
+    @total_allocation = @product.get_total_allocation(@year)
   end
 
 
@@ -87,32 +94,26 @@ class ProductsController < ApplicationController
   def update
     authorize! :update, @product
     # If a new service was sent with the params, adds it to the product's list of services
-    if params[:product_services]
-      unless params[:product_services][:service_id].blank?
-        new_product_service = @product.product_services.new(params[:product_services])
-        new_product_service.save
-      end
+    unless params[:product_service].blank? || params[:product_service][:service_id].blank?
+      new_product_service = @product.product_services.new(params[:product_service])
+      new_product_service.save
     end
     # If a new group was sent with the params, adds it to the product's list of group
-    if params[:product_groups]
-      unless params[:product_groups][:group_id].blank?
-        new_product_group = @product.product_groups.new(params[:product_groups])
-        new_product_group.save
-      end
+    unless params[:product_group].blank? || params[:product_group][:group_id].blank?
+      new_product_group = @product.product_groups.new(params[:product_group])
+      new_product_group.save
     end
     # If a new employee was sent with the params, adds them to the product
-    if params[:employee_products]
-      unless params[:employee_products][:employee_id].blank?
-        new_employee_product = @product.employee_products.new(params[:employee_products])
-        new_employee_product.save
-      end
+    unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank?
+      new_employee_product = @product.employee_products.new(params[:employee_product])
+      new_employee_product.save
     end
     if @product.update_attributes(params[:product])
       flash[:notice] = t(:product) + t(:updated)      
       redirect_to edit_product_path(@product.id)
       return
     end
-    flash[:error] = ":'("
+    flash[:error] = "Product needs a name."
     render :edit
   end
 
@@ -121,6 +122,34 @@ class ProductsController < ApplicationController
 # Loading methods
 
   private
+    # Loads all active years. Loads the last selected year if it is active
+    def load_active_years
+      @active_years = FiscalYear.active_fiscal_years
+      if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+        @year = @current_fiscal_year
+      end
+    end
+    
+    
+    # Loads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find_by_year(cookies[:year])
+      end
+    end
+  
+  
+    # Loads all product states, product types, and product sources
+    def load_all_product_associations
+      @product_states = ProductState.order(:name)
+      @product_types = ProductType.order(:name)
+      @product_source_types = ProductSourceType.all
+    end
+
+
     # Loads the application settings fte_hours_per_week and allocation_precision
     def load_application_settings
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
@@ -128,25 +157,28 @@ class ProductsController < ApplicationController
     end
 
 
+    # Loads all employees, groups, and services belonging to the product
+    def load_associations
+      @product_groups = @product.product_groups.joins(:group).includes(:group).order("groups.name")
+      @product_services =
+          @product.product_services.joins(:service).includes(:service).order("services.name")
+      @employee_products = @product.employee_products.joins(:employee).where(
+          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
+    end
+
+
+    # Loads all groups and services not assigned to the product, and all employees not assigned to 
+    # the product for the given year
+    def load_available_associations
+      @available_groups = @product.get_available_groups
+      @available_services = @product.get_available_services
+      @available_employees = @product.get_available_employees(@year)
+    end
+
+
     # Loads a product based on the id provided in params
     def load_product
-      @product = Product.find(params[:id])
-    end
-
-
-    #
-    def load_product_states_types_sources
-      @product_states = ProductState.order(:name)
-      @product_types = ProductType.order(:name)
-      @product_source_types = ProductSourceType.all
-    end
-
-
-    # Loads all employees, groups, and services belonging to the product
-    def load_employees_services_groups
-      @groups = @product.groups.order(:name)
-      @services = @product.services.order(:name)
-      @employees = @product.employees.order(:name_last, :name_first)
+      @product = Product.includes(:product_state, :product_type).find(params[:id])
     end
 
 

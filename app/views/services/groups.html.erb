@@ -1,3 +1,4 @@
 <%= label_tag :group_id, t(:group), :class => "inline" %>
 <%= collection_select(:group, :id, @groups, :id, :name, 
-                     {:include_blank => t(:all_groups), :selected => @selected_group }) %>
+                     {:include_blank => '-' + t(:all_groups) + '-',
+                      :selected => @selected_group }) %>

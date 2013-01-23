@@ -11,10 +11,13 @@ describe EmployeeAllocation do
 
       # Ensures that employee allocation cannot save if it has blank fields
       it "should not be valid if it has blank fields" do
-        # service_id and allocation are both blank
+        # service_id, allocation, and fiscal_year_id are blank
         @allocation_1.should_not be_valid
         @allocation_1.service_id = 1
-        # allocation is still blank
+        # allocation and fiscal_year_id are still blank
+        @allocation_1.should_not be_valid
+        @allocation_1.allocation = 0.1
+        # fiscal_year_id is still blank
         @allocation_1.should_not be_valid
       end
 
@@ -23,6 +26,7 @@ describe EmployeeAllocation do
       it "should be valid if all fields have entries" do
         @allocation_1.service_id = 1
         @allocation_1.allocation = 0.1
+        @allocation_1.fiscal_year_id = 1
         @allocation_1.should be_valid
       end
     end

@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   # themes, but will be used later)
   # before_filter :load_theme
   before_filter :current_user
+  before_filter :load_current_fiscal_year
   before_filter :set_user_language
   before_filter :require_login
   before_filter :remind_user_to_set_allocations
@@ -49,6 +50,18 @@ class ApplicationController < ActionController::Base
     end
 
 
+    # Loads the current fiscal year. If the current fiscal year does not exist (meaning it has been 
+    # deleted on accident) then the application creates a new one based off of the currently set
+    # fiscal year value.
+    def load_current_fiscal_year
+      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      if @current_fiscal_year.nil?
+        FiscalYear.create(:year => AppSetting.find_by_code("current_fiscal_year").value)
+        @current_fiscal_year = AppSetting.get_current_fiscal_year
+      end
+    end
+
+
     # If there is a current user, and if they have a preferred language, then it will set the
     # language to the current user's preferred language. 
     def set_user_language
@@ -65,7 +78,8 @@ class ApplicationController < ActionController::Base
     # If the current user has no allocations AND they have not disabled this preference, then a 
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
-      if @current_user.new_user_reminder && @current_user.get_total_allocation.zero?
+      if @current_user.new_user_reminder &&
+         @current_user.get_total_service_allocation(@current_fiscal_year).zero?
         edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + 
                              "\">" + t(:here) + "</a>"
         user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + 

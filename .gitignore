@@ -20,9 +20,4 @@
 /config/database.yml
 /config/initializers/omniauth.rb
 /config/config.yml
-/app/assets/.DS_STORE
-/.DS_STORE
-/app/assets/.DS_Store
-/config/.DS_Store
-/lib/.DS_Store
-/app/.DS_Store
+*.DS_STORE

@@ -60,6 +60,14 @@
         </td>
         <td> 
           <% if can? :destroy, employee %>
+            <% if employee.active %>
+              <%= link_to t(:deactivate), toggle_active_employee_path(employee.id), 
+                          :confirm => t(:confirm_deactivation) %>
+            <% else %>
+              <%= link_to t(:activate), toggle_active_employee_path(employee.id), 
+                          :confirm => t(:confirm_activation) %>
+            <% end %>
+            <br/>
             <%= link_to t(:delete), employee_path(employee.id), :method => :delete, 
                         :confirm => t(:confirm_deletion) %> 
           <% end %>

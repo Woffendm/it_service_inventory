@@ -1,0 +1,30 @@
+<div class="form-inline light-border" id="modal_content">
+  <%= form_for @new_fiscal_year do |form| %>
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.label t(:year) %>
+      </span>
+      <span class="controls">
+        <%= form.text_field :year %>
+      </span>
+    </div>
+  
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.label :active, t(:active) %> 
+      </span>
+      <span class="controls">
+        <%= form.select(:active, ['true', 'false']) %>
+      </span>
+    </div>
+    
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.submit  t(:create) + t(:fiscal_year) %>
+      </span>
+    </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+  var modalTitle = "<%= t(:new_fiscal_year) %>";
+</script>
