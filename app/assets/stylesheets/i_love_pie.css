@@ -293,9 +293,6 @@ div.chart_div_container{
 
 
 
-#group_select_div > label, #service_select_div > label{
-  width: 120px;
-}
 
 #group_select_div > select, #service_select_div > select, #home_header_buttons > input {
   margin-right: 2em;
