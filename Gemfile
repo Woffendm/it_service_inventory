@@ -13,7 +13,7 @@ gem 'therubyracer', '0.10.2'
 
 gem 'cancan'
 
-gem 'omniauth-ldap'#, :git => 'http://github.com/angelkbrown/omniauth-ldap.git'
+gem 'omniauth-ldap', '1.0.2' #, :git => 'http://github.com/angelkbrown/omniauth-ldap.git'
 
 gem 'will_paginate'
 
@@ -40,7 +40,7 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '2.1.4'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
