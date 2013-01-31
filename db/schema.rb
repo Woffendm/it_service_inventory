@@ -10,11 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(:version => 20121221201615) do
-=======
-ActiveRecord::Schema.define(:version => 20130110233849) do
->>>>>>> fiscal_year
+ActiveRecord::Schema.define(:version => 20130131205739) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -65,14 +61,6 @@ ActiveRecord::Schema.define(:version => 20130110233849) do
     t.string   "preferred_theme"
     t.boolean  "new_user_reminder",  :default => true
     t.boolean  "active",             :default => true
-  end
-
-  create_table "fiscal_years", :force => true do |t|
-    t.integer  "year"
-    t.boolean  "active"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "seed_id"
   end
 
   create_table "fiscal_years", :force => true do |t|
