@@ -77,7 +77,7 @@ class ProductsController < ApplicationController
       return
     end
     flash[:error] = t(:product) + t(:needs_a_name)
-    render :index
+    redirect_to products_path
   end
 
 

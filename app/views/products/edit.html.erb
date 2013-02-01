@@ -13,7 +13,7 @@
     <%= fields_for @product do |form| %>
       <div class="control-group">
         <span class="control-label">
-          <%= form.label t(:name) %>
+          <%= form.label :name, t(:name) %>
         </span>
         <span class="controls">
           <%= form.text_field :name %>
@@ -22,7 +22,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :description %> 
+          <%= form.label :description, t(:description) %> 
         </span>
         <span class="controls">
           <%= form.text_area :description, :rows => 4, :cols => 100 %>
@@ -31,7 +31,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_state_id %> 
+          <%= form.label :product_state_id, t(:product_state) %> 
         </span>
         <span class="controls">
           <%= form.select(:product_state_id, options_from_collection_for_select( @product_states, 
@@ -42,7 +42,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_type_id %> 
+          <%= form.label :product_type_id, t(:product_type) %> 
         </span>
         <span class="controls">
           <%= form.select(:product_type_id, options_from_collection_for_select( @product_types, 

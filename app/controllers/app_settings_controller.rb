@@ -54,7 +54,7 @@ class AppSettingsController < ApplicationController
     AppSetting.all.each do |app_setting|
       unless AppSetting.save_setting(app_setting, params[:app_setting][app_setting.code])
         flash[:error] = "One or more of your fields is invalid!"
-        render :index
+        redirect_to app_settings_path 
         return
       end
     end

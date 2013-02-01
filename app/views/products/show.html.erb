@@ -82,7 +82,7 @@
     <div class="form-horizontal">
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag :groups %> 
+          <%= label_tag t(:groups) %> 
         </span>
         <span class="controls">
           <% unless @product_groups.blank? %>
@@ -123,7 +123,7 @@
       
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag :description %> 
+          <%= label_tag t(:description) %> 
         </span>
         <span class="controls">
           <%= simple_format(@product.description) %>

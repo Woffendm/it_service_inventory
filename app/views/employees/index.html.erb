@@ -12,7 +12,7 @@
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
     <%= label_tag :name_to_search_for, t(:name) %>
     <%= text_field_tag :name_to_search_for, params[:name_to_search_for] %>
-    <%= submit_tag "Search" %>
+    <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
 

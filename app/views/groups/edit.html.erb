@@ -25,7 +25,7 @@
     
     <div class="form-inline light-border">
       <%= form_for @group do |form| %>
-        <%= form.label :name %>
+        <%= form.label :name, t(:name) %>
         <%= form.text_field :name %>
         <%= form.submit  t(:save_changes) %>
       <% end %>

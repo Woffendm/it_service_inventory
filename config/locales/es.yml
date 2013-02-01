@@ -14,17 +14,23 @@ es:
       service:
         name:   "Nombre"
 
+  will_paginate:
+    next_label:       "Página Siguiente"
+    previous_label:   "Página Anterior"
+
 
   # Nouns
   admin:                        "Gerente "
+  active:                       "Activo"
   all_employees:                "Todos los Trabajadores"
   all_groups:                   "Todos los Grupos"
   all_products:                 "Todos los Proyectos"
-  all_product_states:           "Todos los Estados de Productos"
-  all_product_types:            "Todos los Tipos de Productos"
+  all_product_states:           "Todos los Estados de Producto"
+  all_product_types:            "Todos los Tipos de Producto"
   all_services:                 "Todos los Servicios"
   all_settings:                 "Todos los Configuraciones "
   allocation:                   "Asignación"
+  allocation_calculator:        "Calculadora de Asignaciones"
   allocation_precision:         "Precisión de Asignaciones: "
   allocations:                  "Asignaciones"
   allocations_for_group:        "Asignaciones para Grupo: "
@@ -35,8 +41,10 @@ es:
   application_settings:         "Ajustes del Sistema"
   automatic:                    "Automático"
   basic_information:            "Información Fundamental"
+  current_fiscal_year:          "Año Fiscal en Curso"
   current_setting:              "Configuración Actual"
   department:                   "Departamento"
+  description:                  "Descripción"
   disabled:                     "Apagado"
   email:                        "Correo"
   employee:                     "Trabajador "
@@ -52,6 +60,7 @@ es:
   first_name:                   "Nombre" 
   fiscal_year:                  "Año Fiscal"
   fiscal_years:                 " Años Fiscales"
+  fte:                          "ETC"
   fte_hours_per_week:           "ETC horas de semana: "
   full_time_employees:          "Equivalente a Tiempo Completo"
   group:                        "Grupo "
@@ -61,34 +70,61 @@ es:
   group_name:                   "Grupo: "
   here:                         "AQUI"
   home:                         "Página Principal"
+  hours_per_month:              "Horas de Mes"
+  hours_per_week:               "Horas de Semana"
   IT_service_inventory:         "Inventario de Servicios Técnicos"
+  information:                  "Información"
   last_name:                    "Apellido"
-  my_edit_page:                 "Corregir mi Asignaciones"
+  maximum_is:                   "Máximo es "
+  my_edit_page:                 "Corregir Mis Asignaciones"
   name:                         "Nombre"
   new_employee:                 "Trabajador Nuevo"
+  new_fiscal_year:              "Nuevo Año Fiscal"
   new_group:                    "Grupo Nuevo"
+  new_product:                  "Producto Nuevo"
+  new_product_allocation:       "Nuevo Asignacion de Producto"
+  new_product_state:            "Nuevo Estado de Producto"
+  new_product_type:             "Nuevo Tido de Producto"
   new_service:                  "Servicio Nuevo"
+  new_service_allocation:       "Nuevo Asignacion de Servicio"
   new_user_reminder:            "Mensaje para usuarios nuevos: "
   notes:                        "Notas"
   options:                      "Opciones"
+  or:                           " o "
+  overview:                     "Sumario "
   preferred_language:           "Lengua principal: "
   preferred_theme:              "Tema principal: "
+  product:                      "Producto "
+  product_colon:                "Producto: "
+  product_state:                "Estado de Producto"
+  product_states:               " Estados de Producto"
+  product_type:                 "Tipo de Producto"
+  product_types:                " Tipos de Producto"
+  products:                     "Productos "
   results_per_page:             "Resultados por pagina: "
   search_results:               "Resultados de Búsqueda"
   service:                      "Servicio "
+  service_colon:                "Servicio: "
   services:                     "Servicios "
   service_name:                 "Servicio: "
   setting:                      "Configuración "
   settings:                     "Configuraciones "
   site_admin:                   " Gerente del Sitio "
   site_admins:                  " Gerentes del Sitio"
+  title:                        "Titulo"
   total_employees:              "Trabajadores Totales"
   total_allocation:             "Asignación Total"
   user_settings:                "Configuraciones del Usario"
+  year:                         "Año"
+  your_allocation_is:           "Su asignación es "
+
 
 
   # Actions
+  activate:                     "Activar "
+  activated:                    "activado"
   add:                          "Añadir "
+  add_to:                       "Añadir a "
   added:                        "añadido"
   add_to_application:           "Añadir en el Sistema"
   add_employee_to_application:  "Añadir Trabajador"
@@ -100,39 +136,59 @@ es:
   click_to_view:                " Hacer clic para Ver"
   create:                       "Crear "
   created:                      "creado"
+  deactivate:                   "Desactivar"
+  deactivated:                  "desactivado"
   delete:                       "Eliminar"
-  deleted:                      "eliminado"
-  edit:                         "Corregir "
+  deleted:                      "eliminado "
+  edit:                         "Editar "
+  editing:                      "Editando "
+  filter_results:               "Filtrar Resultados"
   logged_in_as:                 "Conectado como: "
   login:                        "Iniciar Sesión"
   logout:                       "Terminar Sesión"
   logged_out:                   "Sesión terminado"
   manage:                       "Administrar"
   make:                         "Hacer "
+  optional:                     "Opcional"
   remove:                       "Remover "
   removed:                      "removido"
   reset:                        "Reajustar"
   return_to:                    "Devolver a "
   save:                         "Guardar"
   save_changes:                 "Guardar Cambios"
+  search:                       "Buscar "
   search_OSU_directory:         "Buscar en el Directorio de OSU"
+  search_for_employee:          "Buscar a Trabajador"
   select:                       "Seleccionar "
+  show:                         "Ver "
+  showing:                      "Viendo "
+  update:                       "Actualizar "
   updated:                      "actualizado"
   view:                         "Ver"
 
 
   # Notifications and Stuff
+  allocation_precision_info:    "Establece la precisión de asignaciones. El valor predeterminado es 0.1"
+  
   cannot_delete_self:           "No puedes eliminar tú mismo. Pregunta un amigo hacerlo para tú."
 
   compatability_message:        "Si estás utilizando Internet Explorer 8, los gráficos no funcionan. Actualiza a Internet Explorer 9 o cambia a otro navegador"
 
   confirm_admin:                "¿Estás seguro de confiar en esta persona?"
 
+  confirm_activation:           "Activar este trabajador?"
+
+  confirm_deactivation:         "Desactivar este trabajador? (Acción reversible)"
+
   confirm_deletion:             "Seguro que quiere Eliminar? (!!Acción permanente!!)"
 
   confirm_removal:              "Remover de este lista? (Acción reversible)"
 
   first_name_optional:          "Nombre es opcional"
+  
+  fiscal_year_info:             "Establece qué año fiscal es."
+  
+  fte_hours_per_week_info:      "Establece el número de horas un equivalente a tiempo completo trajaba en una semana. El valor predeterminado es 40"
 
   group_no_allocations_0:       "El grupo que estás viendo tiene trabajadores, pero ninguno de ellos tiene asignaciones. Haz esto para corregir el problema:"
 
@@ -142,6 +198,8 @@ es:
 
   group_no_allocations_3:       "3: Cuando regresas aquí, puedes ver el información!"
 
+  incorrect_time:               "Tiempo introducido es incorrecto!"
+  
   long_time:                    "This may take a while. Are you ready?"
 
   must_enter_last_name:         "Debe entrar el apellido"
@@ -159,6 +217,8 @@ es:
   new_user_reminder_info_1:     "Apagado: ocultar el mensaje"
 
   over_allocated:               "Su asignación total es demasiada alta!"
+  
+  over_allocated_calc:          "Su asignación es demasiada alta!"
 
   preferred_language_info:      "Cambiar la lengua de la aplicación"
 

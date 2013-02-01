@@ -7,7 +7,7 @@
 <%= form_tag( update_settings_app_settings_path, :method => "POST", :class => "light-border form-horizontal") do %>
   <div class="control-group">
     <span class="control-label">
-      <%= label_tag t(:allocation_precision) %>
+      <%= label_tag :app_setting_allocation_precision, t(:allocation_precision) %>
     </span>
     <span class="controls">
       <%= select(:app_setting, :allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
@@ -23,7 +23,7 @@
   
   <div class="control-group">
     <span class="control-label">
-      <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
+      <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
     </span>
     <span class="controls">
       <%= number_field_tag "app_setting[fte_hours_per_week]", @fte_hours_per_week, 
@@ -39,7 +39,7 @@
   
   <div class="control-group">
     <span class="control-label">
-      <%= label_tag :current_fiscal_year, t(:current_fiscal_year) %>
+      <%= label_tag :app_setting_current_fiscal_year, t(:current_fiscal_year) %>
     </span>
     <span class="controls">
       <%= collection_select(:app_setting, :current_fiscal_year, @fiscal_years, :year, :year,  
@@ -48,7 +48,7 @@
     </span>
     <span class="tooltip">
       <p class="tooltip_paragraph"> 
-        <%= t(:current_fiscal_year_info) %> 
+        <%= t(:fiscal_year_info) %> 
       </p>
     </span>
   </div>

@@ -3,7 +3,7 @@
     <%= form_for @service do |form| %>
       <div class="control-group">
         <span class="control-label">
-          <%= form.label t(:name) %>
+          <%= form.label :name, t(:name) %>
         </span>
         <span class="controls">
           <%= form.text_field :name %>
@@ -11,7 +11,7 @@
       </div>
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :description %> 
+          <%= form.label :description, t(:description) %> 
         </span>
         <span class="controls">
           <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>

@@ -1,5 +1,7 @@
 <ul class="nav nav-tabs">
-  <li> Fiscal Year </li>
+  <li> 
+    <%= t(:fiscal_year) %> 
+  </li>
   <% unless @all_years.blank? %>
     <% @all_years.each do |year| %>
       <li class="<%=active_if_equal(year, @year)%>"> 

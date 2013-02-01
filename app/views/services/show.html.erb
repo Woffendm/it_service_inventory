@@ -1,5 +1,5 @@
 <h2> 
-  <%= t(:showing) + t(:service_colon) %>  <%= @service.name %> 
+  <%= t(:service_colon) %>  <%= @service.name %> 
   <% if can? :update, @service %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
                 #{t(:edit)}".html_safe, edit_service_path(@service.id) %>
@@ -81,7 +81,7 @@
     <div class="form-horizontal">
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag :associated_groups %> 
+          <%= label_tag t(:groups) %> 
         </span>
         <span class="controls">
           <% unless @groups.blank? %>
@@ -91,7 +91,7 @@
       </div>
       <div class="control-group">
         <span class="control-label">
-          <%= label_tag :description %> 
+          <%= label_tag t(:description) %> 
         </span>
         <span class="controls">
           <%= simple_format(@service.description) %>

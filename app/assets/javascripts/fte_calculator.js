@@ -4,6 +4,8 @@
 * because most people don't know their allocations off the top of their heads.
 */
 $(document).ready(function(){
+  // check to see if there are any modal triggers
+  if($("#fte_calculator")[0] != undefined) {
   
   // Sets the specified content to be a dialog window, and also sets some options for it. 
   $("#fte_calculator").dialog({ 
@@ -12,7 +14,7 @@ $(document).ready(function(){
     modal     : true,
     closeText : "",
     show      : "drop",
-    title     : "Allocation Calculator",
+    title     : modal_title,
     close     : function(event){
       correspondingSelectBox = null;
     } 
@@ -81,6 +83,7 @@ $(document).ready(function(){
     $(".calculator_select").trigger("change");
     $("#fte_calculator").dialog("close");
   });
+  } // ends check to see if there is a modal trigger
 });
 
 
@@ -93,19 +96,19 @@ $(document).ready(function(){
 function popAllocationResult(fteResult){
   $("#use_this_number").html("");
   if(fteResult > 1) {
-    $("#allocation_result_container").html("You are over allocated!");
+    $("#allocation_result_container").html(over_allocated);
   } 
   else if(isNaN(fteResult) || (fteResult < 0)) {
-    $("#allocation_result_container").html("Time incorrectly entered!");
+    $("#allocation_result_container").html(incorrect_time);
   } 
   else {
     $("#allocation_result_container").html("");
     if(fteResult > 0) {
-      $("#use_this_number").html("Your allocation is <a>" + 
-                                 fteResult.toFixed(allocationPrecision) + " FTE </a>");
+      $("#use_this_number").html(your_allocation_is + "<a>" + 
+                                 fteResult.toFixed(allocationPrecision) + " " + fte + " </a>");
     }
     else {
-      $("#use_this_number").html("Your allocation is 0 FTE");
+      $("#use_this_number").html(your_allocation_is + " 0 " + fte);
     }
   }
   return false;
