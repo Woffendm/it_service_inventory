@@ -2,7 +2,7 @@
     @current_fiscal_year.id).joins(:service).order("services.name").includes(:service) %>
 <% unless @allocations.blank? %> 
   <div class="tooltip_trigger">
-    <%= employee.get_total_service_allocation(@current_fiscal_year) %> FTE
+    <%= employee.get_total_service_allocation(@current_fiscal_year).to_s + " " + t(:fte) %>
   </div>
   <div class="tooltip">
     <table class="tooltip-table">
