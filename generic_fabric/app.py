@@ -34,8 +34,9 @@ def app_setup():
 def app_set_required_environment_vars():
     env.app_name = "itsi"
     env.repo_name = "it_service_inventory.git"
-    env.web_user = "www-data"                                                                                                                                                             env.web_server_name = "apache2"                                                                                                                                                       env.web_config_directory = "/etc/apache2/sites-enabled" 
-
+    env.web_user = "www-data"
+    env.web_server_name = "apache2"
+    env.web_config_directory = "/etc/apache2/sites-enabled"
 ## Dev
 # env.dev_hosts = ['host_name']
 # env.dev_path = "/path/to/app/"

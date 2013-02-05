@@ -13,7 +13,7 @@ gem 'therubyracer', '0.10.2'
 
 gem 'cancan', '1.6.9'
 
-gem 'omniauth-ldap', '1.0.2' #, :git => 'http://github.com/angelkbrown/omniauth-ldap.git'
+gem 'omniauth-ldap', '1.0.2'
 
 gem 'will_paginate', '3.0.4'
 
