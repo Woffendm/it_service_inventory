@@ -1,0 +1,19 @@
+== Generic Fabric
+
+This script is meant to be used to deploy Rails and CakePHP web apps.
+It contains the common logic used by most web applications deployments
+and upgrades. It also provides a module: app.py to include functions 
+specific to an application.
+
+== Usage
+
+You must define an environment to run the fabric script.
+
+fab to:[dev,staging,production] <command>
+
+If you are installing an application for the first time use:
+* initialize - it will create the needed directories
+
+For future deployments just use: deploy.
+
+

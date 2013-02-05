@@ -5,9 +5,9 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'json'
+gem 'json', '1.7.6'
 
-gem 'dynamic_form'
+gem 'dynamic_form', '1.1.4'
 
 gem 'therubyracer', '0.10.2'
 
