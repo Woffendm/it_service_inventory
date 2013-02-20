@@ -43,6 +43,7 @@ class AppSetting < ActiveRecord::Base
   
   # Returns the fiscal year object that corresponds to the currently set fiscal year
   def self.get_current_fiscal_year
+    return nil if FiscalYear.all.blank?
     return FiscalYear.find_by_year(AppSetting.find_by_code("current_fiscal_year").value)
   end
 end

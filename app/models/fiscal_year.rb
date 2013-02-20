@@ -16,4 +16,21 @@ class FiscalYear < ActiveRecord::Base
   def self.active_fiscal_years
     return FiscalYear.where(:active => true).order(:year)
   end
+  
+  def self.rescue_allocations
+    if FiscalYear.first.blank?
+      @year = FiscalYear.create(:year => "RESCUE")
+    else
+      @year = FiscalYear.first
+    end
+    #AppSetting.find_by_code("current_fiscal_year").update_attributes(:value => @year.year)
+    EmployeeAllocation.where(:fiscal_year_id => nil).each do |allocation|
+      allocation.fiscal_year_id = @year.id
+      allocation.save
+    end
+    EmployeeProduct.where(:fiscal_year_id => nil).each do |allocation|
+      allocation.fiscal_year_id = @year.id
+      allocation.save
+    end
+  end
 end

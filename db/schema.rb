@@ -65,9 +65,9 @@ ActiveRecord::Schema.define(:version => 20130131205739) do
 
   create_table "fiscal_years", :force => true do |t|
     t.integer  "year"
-    t.boolean  "active"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "active",     :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.integer  "seed_id"
   end
 
