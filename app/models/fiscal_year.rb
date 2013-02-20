@@ -19,7 +19,7 @@ class FiscalYear < ActiveRecord::Base
   
   def self.rescue_allocations
     if FiscalYear.first.blank?
-      @year = FiscalYear.create(:year => "RESCUE")
+      @year = FiscalYear.create(:year => 9999)
     else
       @year = FiscalYear.first
     end

@@ -45,8 +45,8 @@ def app_set_required_environment_vars():
 
 
 ## Staging
-    env.staging_hosts = ['itsi-vd01.cws.oregonstate.edu']
-    env.staging_path = "/var/www/%s/" % env.app_name
+    env.staging_hosts = ['itsi-vs01.cws.oregonstate.edu']
+    env.staging_path = "/var/www/%s_code/" % env.app_name
 
 ## Production
 # env.production_hosts = ['host_name']
