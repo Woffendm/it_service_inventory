@@ -17,7 +17,7 @@ class FiscalYearsController < ApplicationController
     fiscal_year = FiscalYear.find(params[:id])
     unless fiscal_year.update_attributes(params[:fiscal_year])
       flash[:error] = "Fiscal year already exists"
-      render :index
+      redirect_to fiscal_years_path
       return
     end
     flash[:notice] = t(:settings) + t(:updated)
@@ -27,21 +27,13 @@ class FiscalYearsController < ApplicationController
 
   # Creates a new fiscal year
   def create
-    if FiscalYear.create(params[:fiscal_year])
+    @new_year = FiscalYear.new(params[:fiscal_year])
+    if @new_year.save
       flash[:notice] = "Fiscal year created"
       redirect_to fiscal_years_path
       return
     end
-    flash[:error] = "Fiscal year already exists"
-    render :index
-  end
-
-
-  # Destroys a fiscal year
-  def destroy
-    fiscal_year = FiscalYear.find(params[:id])
-    fiscal_year.destroy
-    flash[:notice] = "Fiscal year deleted"
+    flash[:error] = "Fiscal year already exists or improperly formatted."
     redirect_to fiscal_years_path
   end
 end

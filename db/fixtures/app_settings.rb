@@ -10,5 +10,5 @@ end
 
 AppSetting.seed_once(:code) do |t|
   t.code = "current_fiscal_year"
-  t.value = 2013
+  t.value = Date.today.year
 end

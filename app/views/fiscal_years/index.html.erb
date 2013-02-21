@@ -17,7 +17,6 @@
     <thead>
       <th> <%= t(:year) %> </th>
       <th> <%= t(:active) %> </th>
-      <th> </th>
     </thead>
     <tbody>
       <% @count = 0 %>
@@ -31,10 +30,6 @@
           </td>
           <td>
             <%= fiscal_year.active %>
-          </td>
-          <td> 
-            <%= link_to t(:delete), fiscal_year_path(fiscal_year.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion) %>
           </td>
         </tr>  
         <% @count += 1 %>

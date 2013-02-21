@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     # This should be accomplished by a redirect to the destroy action of the logins controller, but
     # unfortunately Chrome gets upset when there are more than two redirects at once.
     def current_user
-      unless Employee.where(:osu_username => session[:current_user_osu_username]).empty? 
+      unless Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
         @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
       else
         session[:current_user_name] = nil
