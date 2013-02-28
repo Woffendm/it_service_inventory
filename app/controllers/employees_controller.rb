@@ -6,13 +6,13 @@
 class EmployeesController < ApplicationController
   before_filter :authorize_creation,        :only => [:ldap_create, :search_ldap_view]
   before_filter :load_employee,             :only => [:destroy, :toggle_active, :update]
-  before_filter :authorize_update,          :only => [:edit, :update]
   before_filter :load_active_years,         :only => [:edit, :update]
   before_filter :load_all_years,            :only => [:show]
   before_filter :load_associations,         :only => [:edit, :show, :update]
   before_filter :load_available_associations, :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
+  before_filter :authorize_update,          :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
                                                                 :user_settings]
 
