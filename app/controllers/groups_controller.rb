@@ -6,8 +6,6 @@
 class GroupsController < ApplicationController
   before_filter :load_group,       :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
-  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
-                                            :remove_employee, :update]
   before_filter :load_all_years,   :only => [:show, :services]
                                             
   before_filter :load_employee,   :only => [:add_employee]
@@ -15,7 +13,9 @@ class GroupsController < ApplicationController
   before_filter :load_existing_employees,  :only => [:show, :edit]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
-  
+  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
+                                            :remove_employee, :update]
+                                            
   
 # View-related methods
 
