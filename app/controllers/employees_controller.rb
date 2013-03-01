@@ -220,7 +220,7 @@ class EmployeesController < ApplicationController
       @employee = Employee.find(params[:id])
       @employee_groups = @employee.employee_groups.joins(:group).includes(:group).order("name")
       @service_allocations = @employee.employee_allocations.joins(:service).where(
-          :fiscal_year_id => @year.id). includes(:service).order("name")
+          :fiscal_year_id => @year.id).includes(:service).order("name")
       @product_allocations = @employee.employee_products.joins(:product).where(
           :fiscal_year_id => @year.id).includes(:product).order("name")
     end

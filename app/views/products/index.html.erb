@@ -14,10 +14,14 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
-    <%= collection_select(:product_state, :id, @product_states, :id, :name, 
+    <%= text_field_tag "search[product_name]", @product_name, :placeholder => "All Product Names" %>
+    <%= collection_select(:search, :group, @groups, :id, :name, 
+                         {:include_blank => "-" + t(:all_groups) + "-",
+                          :selected => @group}) %>
+    <%= collection_select(:search, :product_state, @product_states, :id, :name, 
                          {:include_blank => "-" + t(:all_product_states) + "-",
                           :selected => @product_state}) %>
-    <%= collection_select(:product_type, :id, @product_types, :id, :name, 
+    <%= collection_select(:search, :product_type, @product_types, :id, :name, 
                          {:include_blank => "-" + t(:all_product_types) + "-",
                           :selected => @product_type}) %>
     <%= submit_tag t(:search) %>
@@ -25,52 +29,19 @@
 </fieldset>
 
 
-<ul class="nav nav-tabs" id="my-tab">
-  <li class="active">
-    <a href="#user_group_products" id="user_group_products_tab" data-toggle="tab"> 
-      Products for my Groups
-    </a>
-  </li>
-  <li>
-    <a href="#all_products" data-toggle="tab" id="all_products_tab"> 
-      <%= t(:all_products) %>
-    </a>
-  </li>
-</ul>
+
+<table class="table table-striped">
+  <caption> <%= t(:all_products) %> </caption>
+  <%= render :partial => "/products/products_table", :locals => {:products => @products} %>
+</table>
 
 
 
-<div class="tab-content">
-  <div class="tab-pane active" id="user_group_products">
-    <table class="table table-striped">
-      <caption> Products for my Groups </caption>
-       <%= render :partial => "/products/products_table", 
-                  :locals => {:products => @user_group_products} %>
-    </table>
-    
-    
-    <div class="pagination_footer">
-      <%= will_paginate @user_group_products, :param_name => :user_group_products_page %>
-      <%= render :partial => "/shared/results_per_page" %>
-    </div>
-  </div>
-
-
-
-
-  <div class="tab-pane" id="all_products">
-    <table class="table table-striped">
-      <caption> <%= t(:all_products) %> </caption>
-      <%= render :partial => "/products/products_table", :locals => {:products => @products} %>
-    </table>
-    
-    
-    <div class="pagination_footer">
-      <%= will_paginate @products, :param_name => :products_page %>
-      <%= render :partial => "/shared/results_per_page" %>
-    </div>
-  </div>
+<div class="pagination_footer">
+  <%= will_paginate @products, :param_name => :products_page %>
+  <%= render :partial => "/shared/results_per_page" %>
 </div>
+
 
 
 <script type="text/javascript">

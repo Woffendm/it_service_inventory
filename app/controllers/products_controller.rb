@@ -26,26 +26,10 @@ class ProductsController < ApplicationController
   # Has two tabs, one with all products in the user's groups, another with all products.
   def index
     @groups = Group.order(:name)
-    @products = Product.order(:name)
     @product = Product.new
-    @user_group_products = Product.where(:id => ProductGroup.where(:group_id =>
-          @current_user.employee_groups.pluck(:group_id)).pluck(:product_id)).order(:name)
-    if params[:product_state] && !params[:product_state][:id].blank?
-      @product_state = params[:product_state][:id]
-      @products = @products.where(:product_state_id => params[:product_state][:id])
-      @user_group_products = @user_group_products.where(:product_state_id =>
-                             params[:product_state][:id])
-    end
-    if params[:product_type] && !params[:product_type][:id].blank?
-      @product_type = params[:product_type][:id]
-      @products = @products.where(:product_type_id => params[:product_type][:id])
-      @user_group_products = @user_group_products.where(:product_type_id => 
-                             params[:product_type][:id])
-    end
+    @products = filter_products(params[:search])
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
-    @user_group_products = @user_group_products.paginate(:page => params[:user_group_products_page], 
-          :per_page => session[:results_per_page])
   end
 
 
@@ -122,6 +106,25 @@ class ProductsController < ApplicationController
 # Loading methods
 
   private
+    # Filters the products displayed on the index page based on paramaters provided
+    def filter_products(search)
+      return Product.order(:name) if search.blank?
+      @group = search[:group]
+      @product_state = search[:product_state]
+      @product_type = search[:product_type]
+      @product_name = search[:product_name]
+      @search_string = ""
+      @search_array = ["true"]
+      @search_array << "products.name LIKE '%#{@product_name}%'" unless @product_name.blank? 
+      @search_array << "product_state_id = #{@product_state}" unless @product_state.blank?
+      @search_array << "product_type_id = #{@product_type}" unless @product_type.blank? 
+      @search_string = @search_array.join(" AND ")
+      @products = Product.where(@search_string)
+      @products = @products.joins(:groups).where("product_groups.group_id" => @group) unless @group.blank?
+      return @products
+    end
+    
+    
     # Loads all active years. Loads the last selected year if it is active
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
