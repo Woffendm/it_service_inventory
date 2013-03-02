@@ -28,6 +28,19 @@ class ProductsController < ApplicationController
     @groups = Group.order(:name)
     @product = Product.new
     @products = filter_products(params[:search])
+    @order = params[:order]
+    @current_order = params[:current_order]
+    @ascending = params[:ascending]
+    @ascending = 'true' if @ascending.blank?
+    unless @order.blank?
+      if @ascending == 'true' && (@current_order == @order || @current_order.blank?)
+        @products = @products.order(@order).reverse_order
+        @ascending = 'false'
+      else
+        @products = @products.order(@order)
+        @ascending = 'true'
+      end
+    end
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
   end

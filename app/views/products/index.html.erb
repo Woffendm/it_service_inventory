@@ -14,7 +14,7 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[product_name]", @product_name, :placeholder => "All Product Names" %>
+    <%= text_field_tag "search[product_name]", @product_name, :placeholder => "-All Product Names-" %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
                           :selected => @group}) %>
@@ -32,7 +32,56 @@
 
 <table class="table table-striped">
   <caption> <%= t(:all_products) %> </caption>
-  <%= render :partial => "/products/products_table", :locals => {:products => @products} %>
+  <thead>
+    <th>  <%= sort_column(t(:name), products_path, 'name', @order, @ascending) %> </th>
+    <th> <%= t(:description) %> </th>
+    <th> <%= t(:product_state) %> </th>
+    <th> <%= sort_column(t(:product_type), products_path, 'product_type_id', @order, @ascending) %>
+    <th> </th>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td>
+          <% if product.url && !product.url.blank? %>
+            <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
+                        :target => '_blank' %>
+          <% else %>
+            <span class="blank-icon"></span>
+          <% end %>
+          <%= link_to product.name, product_path(product.id) %>
+        </td>
+        <td>
+          <% unless product.description.blank? %>
+            <div class="tooltip_trigger">
+              <%= product.description.truncate(20) %>
+            </div>
+            <div class="tooltip tooltip_paragraph"
+                 style="<%=max_width_by_word(product.description)%>">
+              <%= simple_format product.description %>
+            </div>
+          <% end %>
+        </td>
+        <td>
+          <% if product.product_state %>
+            <%= product.product_state.name %>
+          <% end %>
+        </td>
+        <td>
+          <% if product.product_type %>
+            <%= product.product_type.name %>
+          <% end %>
+        </td>
+        <td>
+          <% if can? :destroy, product %>
+            <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
+                        t(:confirm_deletion) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+
 </table>
 
 
