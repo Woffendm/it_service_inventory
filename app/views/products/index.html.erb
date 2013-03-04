@@ -33,10 +33,10 @@
 <table class="table table-striped">
   <caption> <%= t(:all_products) %> </caption>
   <thead>
-    <th>  <%= sort_column(t(:name), products_path, 'name', @order, @ascending) %> </th>
-    <th> <%= t(:description) %> </th>
-    <th> <%= t(:product_state) %> </th>
-    <th> <%= sort_column(t(:product_type), products_path, 'product_type_id', @order, @ascending) %>
+    <th> <%= sort_column(t(:name), products_path, nil, 'name', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:description), products_path, nil, 'description', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:product_state), products_path, 'product_state', 'product_states.name', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:product_type), products_path, 'product_type', 'product_types.name', @order, @ascending) %> </th>
     <th> </th>
   </thead>
   <tbody>

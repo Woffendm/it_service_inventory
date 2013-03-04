@@ -28,8 +28,8 @@ module ApplicationHelper
   
   
   #
-  def sort_column(title, path, field, order, ascending)
-    link_to title, path + "?order=#{field}&current_order=#{order}&ascending=#{ascending}"
+  def sort_column(title, path, table, field, order, ascending)
+    link_to title, path + "?table=#{table}&order=#{field}&current_order=#{order}&ascending=#{ascending}"
   end
   
   

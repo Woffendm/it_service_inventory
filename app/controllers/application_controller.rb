@@ -75,6 +75,34 @@ class ApplicationController < ActionController::Base
     end
 
 
+    # Sorts given active record objects thing by the given paramaters. 
+    def sort_results(params, objects)
+      return objects if objects.blank?
+      @order = params[:order]
+      @current_order = params[:current_order]
+      @ascending = params[:ascending]
+      @table = params[:table]
+      @ascending = 'true' if @ascending.blank?
+      unless @order.blank?
+        objects = objects.eager_load(@table) unless @table.blank?
+        if @ascending == 'true' && (@current_order == @order || @current_order.blank?)
+          objects = objects.order(@order).reverse_order
+          @ascending = 'false'
+        else
+          objects = objects.order(@order)
+          @ascending = 'true'
+        end
+      else
+        if objects.first.respond_to?(:name)
+          objects = objects.order(:name)
+         else
+          objects = objects.order(:name_last)
+        end
+      end 
+      return objects
+    end
+
+
     # If the current user has no allocations AND they have not disabled this preference, then a 
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
