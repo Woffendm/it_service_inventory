@@ -1,0 +1,10 @@
+<div class="form-inline light-border" id="modal_content">
+  <%= form_for @new_product_priority do |form| %>
+    <%= form.label :name, t(:name) %>
+    <%= form.text_field :name %>
+    <%= form.submit  t(:create) + t(:product_priority) %>
+  <% end %>
+</div>
+<script priority="text/javascript">
+  var modalTitle = "<%= t(:new_product_priority) %>";
+</script>

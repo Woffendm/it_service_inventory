@@ -18,6 +18,9 @@
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
                           :selected => @group}) %>
+    <%= collection_select(:search, :product_priority, @product_priorities, :id, :name, 
+                         {:include_blank => "-" + t(:all_product_priorities) + "-",
+                          :selected => @product_priority}) %>
     <%= collection_select(:search, :product_state, @product_states, :id, :name, 
                          {:include_blank => "-" + t(:all_product_states) + "-",
                           :selected => @product_state}) %>
@@ -35,6 +38,7 @@
   <thead>
     <th> <%= sort_column(t(:name), products_path, nil, 'name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:description), products_path, nil, 'description', @order, @ascending) %> </th>
+    <th class='variable-size'> <%= sort_column(t(:priority), products_path, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:product_state), products_path, 'product_state', 'product_states.name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:product_type), products_path, 'product_type', 'product_types.name', @order, @ascending) %> </th>
     <th> </th>
@@ -62,15 +66,14 @@
             </div>
           <% end %>
         </td>
-        <td>
-          <% if product.product_state %>
-            <%= product.product_state.name %>
-          <% end %>
+        <td class='variable-size'>
+          <%= product.priority %>
         </td>
         <td>
-          <% if product.product_type %>
-            <%= product.product_type.name %>
-          <% end %>
+          <%= product.state %>
+        </td>
+        <td>
+            <%= product.type %>
         </td>
         <td>
           <% if can? :destroy, product %>

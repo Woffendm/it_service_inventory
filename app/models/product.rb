@@ -7,7 +7,8 @@
 class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
                   :product_state, :employee_products_attributes, :product_services_attributes,
-                  :product_groups_attributes, :product_source_attributes
+                  :product_groups_attributes, :product_source_attributes, :product_priority_id, 
+                  :product_priority
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
   has_many :product_groups,     :dependent => :delete_all
@@ -17,6 +18,7 @@ class Product < ActiveRecord::Base
   has_one  :product_source
   belongs_to :product_type
   belongs_to :product_state
+  belongs_to :product_priority
   before_validation :smart_add_url_protocol
   validates_presence_of :name
   accepts_nested_attributes_for :employee_products, :allow_destroy => true
@@ -39,6 +41,12 @@ class Product < ActiveRecord::Base
     end
   end
   
+  # Returns the name of the product state if the product state isn't nil
+  def priority
+    unless self.product_priority.nil?
+      return self.product_priority.name
+    end
+  end
   
   # Returns an array of all an product's employee product objects for a given year
   def get_allocations_for_year(year)

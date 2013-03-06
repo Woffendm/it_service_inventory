@@ -114,11 +114,13 @@ class ProductsController < ApplicationController
       @product_state = search[:product_state]
       @product_type = search[:product_type]
       @product_name = search[:product_name]
+      @product_priority = search[:product_priority]
       @search_string = ""
       @search_array = ["true"]
       @search_array << "products.name LIKE '%#{@product_name}%'" unless @product_name.blank? 
       @search_array << "product_state_id = #{@product_state}" unless @product_state.blank?
       @search_array << "product_type_id = #{@product_type}" unless @product_type.blank? 
+      @search_array << "product_priority_id = #{@product_priority}" unless @product_priority.blank? 
       @search_string = @search_array.join(" AND ")
       @products = Product.where(@search_string)
       @products = @products.joins(:groups).where("product_groups.group_id" => @group) unless @group.blank?
@@ -150,6 +152,7 @@ class ProductsController < ApplicationController
     def load_all_product_associations
       @product_states = ProductState.order(:name)
       @product_types = ProductType.order(:name)
+      @product_priorities = ProductPriority.order(:name)
       @product_source_types = ProductSourceType.all
     end
 
@@ -182,7 +185,8 @@ class ProductsController < ApplicationController
 
     # Loads a product based on the id provided in params
     def load_product
-      @product = Product.includes(:product_state, :product_type).find(params[:id])
+      @product = Product.includes(:product_state, :product_type,
+                :product_priority).find(params[:id])
     end
 
 
