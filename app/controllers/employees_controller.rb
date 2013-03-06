@@ -27,19 +27,10 @@ class EmployeesController < ApplicationController
 
   # Starts out as a list of all employees, but can be restricted by a search
   def index
-    if !params[:name_to_search_for].blank?
-      array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
-      conditions = []
-      conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
-      conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
-      if array_of_strings_to_search_for.length > 1
-        conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
-        conditions << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
-      end
-      @employees = Employee.where(conditions.join(" OR ")).order(:name_last, :name_first)
-    else
-      @employees = Employee.order(:name_last, :name_first)
-    end
+    @groups = Group.order(:name)
+    @services = Service.order(:name)
+    @employees = filter_employees(params[:search])
+    @employees = sort_results(params, @employees)
     @employees = @employees.paginate(:page => params[:page], 
                                      :per_page => session[:results_per_page])
   end
@@ -207,6 +198,34 @@ class EmployeesController < ApplicationController
       authorize! :update, @employee
     end
 
+
+    # Filters the employees displayed on the index page based on paramaters provided
+    def filter_employees(search)
+      return Employee.where(true) if search.blank?
+      @group = search[:group]
+      @service = search[:service]
+      @name = search[:name]
+      @active = search[:active]
+      search_array = []
+      if @name.blank?
+        search_string = "true"
+      else
+        array_of_strings_to_search_for = @name.split(" ")
+        search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        if array_of_strings_to_search_for.length > 1
+          search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
+          search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
+        end
+        search_string = search_array.join(" OR ")
+      end
+      @employees = Employee.where(search_string)
+      @employees = @employees.where("employees.active = " + @active) unless @active.blank?
+      @employees = @employees.joins(:groups).where("groups.id" => @group) unless @group.blank?
+      @employees = @employees.joins(:services).where("services.id" => @service) unless @service.blank?
+      return @employees
+    end
+    
 
     # Loads the application settings fte_hours_per_week and allocation_precision
     def load_allocation_precision

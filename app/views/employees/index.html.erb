@@ -8,10 +8,18 @@
 
 
 <fieldset class="light-border">
-  <legend><%= t(:search_for_employee) %></legend>
+  <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
-    <%= label_tag :name_to_search_for, t(:name) %>
-    <%= text_field_tag :name_to_search_for, params[:name_to_search_for] %>
+    <%= text_field_tag "search[name]", @name, :placeholder => "-All Employee Names-" %>
+    <%= collection_select(:search, :group, @groups, :id, :name, 
+                         {:include_blank => "-" + t(:all_groups) + "-",
+                          :selected => @group}) %>
+    <%= collection_select(:search, :service, @services, :id, :name, 
+                         {:include_blank => "-" + t(:all_services) + "-",
+                          :selected => @service}) %>
+    <%= select(:search, :active, [[t(:active), true], [t(:inactive), false]],
+                         {:include_blank => "-#{t(:active)}/#{t(:inactive)}-",
+                          :selected => @active}) if can? :destroy, Employee %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
@@ -21,10 +29,10 @@
 <table class="table table-striped">
   <caption> <%= t(:all_employees) %></caption>
   <thead>
-    <th> <%= t(:name) %> </th>
+    <th> <%= sort_column(t(:name), employees_path, nil, 'name_last', @order, @ascending) %> </th>
     <th> <%= t(:notes) %> </th>
     <th> <%= t(:total_allocation) %> </th>
-    <th>  </th>
+    <th> <%= sort_column(t(:active), employees_path, nil, 'active', @order, @ascending)  if can? :destroy, Employee %> </th>
   </thead>
   <tbody>
     <% @employees.each do |employee| %>

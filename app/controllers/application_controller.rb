@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
         if objects.first.respond_to?(:name)
           objects = objects.order(:name)
          else
-          objects = objects.order(:name_last)
+          objects = objects.order(:name_last, :name_first)
         end
       end 
       return objects

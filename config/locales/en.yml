@@ -73,6 +73,7 @@ en:
   hours_per_week:               "Hours per week: "
   hous_per_month:               "Hours per month: "
   IT_service_inventory:         "IT Service Inventory"
+  inactive:                     "Inactive"
   information:                  "Information"
   last_name:                    "Last Name"
   maximum_is:                   "Maximum is "
