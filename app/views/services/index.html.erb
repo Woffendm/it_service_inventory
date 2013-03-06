@@ -11,10 +11,22 @@
             :locals => {:@service => @service} %>
 
 
+<fieldset class="light-border">
+  <legend> <%= t(:filter_results) %> </legend>
+  <%= form_tag(services_path, :method => "get", :class => "form-inline") do %>
+    <%= text_field_tag "search[name]", @name, :placeholder => "-All Service Names-" %>
+    <%= collection_select(:search, :group, @groups, :id, :name, 
+                         {:include_blank => "-" + t(:all_groups) + "-",
+                          :selected => @group}) %>
+    <%= submit_tag t(:search) %>
+  <% end %>
+</fieldset>
+
+
 <table class="table table-striped">
   <caption> <%= t(:all_services) %> </caption>
   <thead>
-    <th> <%= t(:name) %> </th>
+    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
     <th> <%= t(:description) %> </th>
     <th>  </th>
   </thead>

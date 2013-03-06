@@ -221,8 +221,8 @@ class EmployeesController < ApplicationController
       end
       @employees = Employee.where(search_string)
       @employees = @employees.where("employees.active = " + @active) unless @active.blank?
-      @employees = @employees.joins(:groups).where("groups.id" => @group) unless @group.blank?
-      @employees = @employees.joins(:services).where("services.id" => @service) unless @service.blank?
+      @employees = @employees.joins(:groups).where("groups.id" => @group).uniq unless @group.blank?
+      @employees = @employees.joins(:services).where("services.id" => @service).uniq unless @service.blank?
       return @employees
     end
     

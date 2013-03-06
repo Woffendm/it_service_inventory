@@ -29,10 +29,10 @@
 <table class="table table-striped">
   <caption> <%= t(:all_employees) %></caption>
   <thead>
-    <th> <%= sort_column(t(:name), employees_path, nil, 'name_last', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name_last', @order, @ascending) %> </th>
     <th> <%= t(:notes) %> </th>
     <th> <%= t(:total_allocation) %> </th>
-    <th> <%= sort_column(t(:active), employees_path, nil, 'active', @order, @ascending)  if can? :destroy, Employee %> </th>
+    <th> <%= sort_column(t(:active), request.fullpath, nil, 'active', @order, @ascending)  if can? :destroy, Employee %> </th>
   </thead>
   <tbody>
     <% @employees.each do |employee| %>

@@ -19,7 +19,10 @@ class ServicesController < ApplicationController
   
   # List of all services
   def index
-    @services = Service.order(:name).paginate(:page => params[:page], 
+    @groups = Group.order(:name)
+    @services = filter_services(params[:search])
+    @services = sort_results(params, @services)
+    @services = @services.paginate(:page => params[:page], 
                 :per_page => session[:results_per_page])
     @service = Service.new
   end
@@ -86,6 +89,21 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
+  # Filters the services displayed on the index page based on paramaters provided
+  def filter_services(search)
+    return Service.where(true) if search.blank?
+    @group = search[:group]
+    @name = search[:name]
+    @search_string = ""
+    @search_array = ["true"]
+    @search_array << "services.name LIKE '%#{@name}%'" unless @name.blank? 
+    @search_string = @search_array.join(" AND ")
+    @services = Service.where(@search_string)
+    @services = @services.joins(:employees => :groups).where("groups.id" => @group).uniq unless @group.blank?
+    return @services
+  end
+  
+  
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)

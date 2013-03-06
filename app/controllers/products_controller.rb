@@ -123,7 +123,7 @@ class ProductsController < ApplicationController
       @search_array << "product_priority_id = #{@product_priority}" unless @product_priority.blank? 
       @search_string = @search_array.join(" AND ")
       @products = Product.where(@search_string)
-      @products = @products.joins(:groups).where("product_groups.group_id" => @group) unless @group.blank?
+      @products = @products.joins(:groups).where("product_groups.group_id" => @group).uniq unless @group.blank?
       return @products
     end
     
