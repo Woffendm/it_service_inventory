@@ -77,6 +77,8 @@ class ApplicationController < ActionController::Base
 
     # Sorts given active record objects thing by the given paramaters. 
     def sort_results(params, objects)
+      # Because whatever is returned will be paginated, it has to still be an activerecord relation.
+      # That is why we return blank objects instead of nil or [] if objects is blank. 
       return objects if objects.blank?
       @order = params[:order]
       @current_order = params[:current_order]
@@ -84,6 +86,8 @@ class ApplicationController < ActionController::Base
       @table = params[:table]
       @ascending = 'true' if @ascending.blank?
       unless @order.blank?
+        # Eager load performs a left outer join between the 'objects' and '@table' tables, so that 
+        # entries where a relation is not established are included. 
         objects = objects.eager_load(@table) unless @table.blank?
         if @ascending == 'true' && (@current_order == @order || @current_order.blank?)
           objects = objects.order(@order).reverse_order
@@ -93,6 +97,8 @@ class ApplicationController < ActionController::Base
           @ascending = 'true'
         end
       else
+        # If no sorting is given, defaults to sort by name (if the object has a name), or by the 
+        # last and first names (for employees)
         if objects.first.respond_to?(:name)
           objects = objects.order(:name)
          else

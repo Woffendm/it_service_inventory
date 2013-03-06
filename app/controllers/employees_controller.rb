@@ -210,9 +210,14 @@ class EmployeesController < ApplicationController
       if @name.blank?
         search_string = "true"
       else
+        # Seperates '@name' into the first and last names, in array form. It does not assume that
+        # the first name is entered first; therefore, each string is treated as potentially being 
+        # either the first or last name.
         array_of_strings_to_search_for = @name.split(" ")
+        # Searches for the first name (the first index)
         search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
         search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        # Searches for the last name if present (the second index)
         if array_of_strings_to_search_for.length > 1
           search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
           search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
