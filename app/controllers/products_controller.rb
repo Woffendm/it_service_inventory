@@ -35,11 +35,18 @@ class ProductsController < ApplicationController
 
 
   # Page for viewing a product in detail
+  # Contains rest services for viewing product in json
   def show
     @total_groups = @product.groups.length
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
     @total_allocation = @product.get_total_allocation(@year)
+    respond_to do |format|
+      format.html
+      format.js  { render :json => @product.rest_show, :callback => params[:callback] }
+      format.json { render :json => @product.rest_show }
+      format.xml { render :xml => @product }
+    end
   end
 
 

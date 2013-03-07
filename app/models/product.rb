@@ -92,6 +92,43 @@ class Product < ActiveRecord::Base
   
   
   
+  # All the following (before private) involve rest services
+    # Creates string representation of product's employees for REST services in json
+    def rest_employees
+      employee_array = []
+      self.employees.uniq.each do |employee|
+        employee_array << "{'id':#{employee.id},'name_first':'#{employee.name_first}','name_last':'#{employee.name_last}'}"
+      end
+      return "{" + employee_array.join(",") + "}"
+    end
+    
+    
+    # Creates string representation of product's groups for REST services in json
+    def rest_groups
+      group_array = []
+      self.groups.uniq.each do |group|
+        group_array << "{'id':#{group.id},'name':'#{group.name}'}"
+      end
+      return "{" + group_array.join(",") + "}"
+    end
+    
+    
+    # Creates string representation of product's services for REST services in json
+    def rest_services
+      service_array = []
+      self.services.uniq.each do |service|
+        service_array << "{'id':#{service.id},'name':'#{service.name}'}"
+      end
+      return "{" + service_array.join(",") + "}"
+    end
+    
+    
+    # Creates string representation of product in json for REST services
+    def rest_show 
+"{'id':#{self.id},'name':'#{self.name}','description':'#{self.description}','product_priority':{'id':#{self.product_priority_id},'name':'#{self.product_priority.name}'},'product_state':{'id':#{self.product_state_id},'name':'#{self.product_state.name}'},'product_type':{'id':#{self.product_type_id},'name':'#{self.product_type.name}'},'groups':#{self.rest_groups},'services':#{self.rest_services},'employees':#{self.rest_employees}}"
+    end
+  
+  
   private
     # Checks to see if the url has an http:// or https:// and prepends it if it doesn't
     def smart_add_url_protocol
@@ -99,5 +136,4 @@ class Product < ActiveRecord::Base
         self.url = "http://" + self.url
       end
     end
-  
 end
