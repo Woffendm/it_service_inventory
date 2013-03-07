@@ -1,15 +1,14 @@
 /**
 *  This creates a delicious cookie which remembers which tab the user was on. If there is a tab id 
-*     saved on the cookie, then it opens that tab. This is used for when the user uses pagination. 
-*  The second chunk of code sets up warnings for tabbed navigation that goes to different views that  *     warn the user to save their changes before switching pages.
+*     saved on the cookie, then it opens that tab. Cookie is valid across the entire site
 */
 $(document).ready(function(){
   $("#my-tab a").click(function(){
-    $.cookie("current_tab", this.id, { path: '/'});
+    $.cookie("awesome_tab", this.id, { path: '/', expires: 2 });
   });
   
-  if($.cookie('current_tab') != null) {
-    $("#" + $.cookie('current_tab')).tab('show');
+  if($.cookie("awesome_tab") != null) {
+    $("#" + $.cookie('awesome_tab')).tab('show');
   }
 
 });

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121221201615) do
+ActiveRecord::Schema.define(:version => 20130110233849) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -32,8 +32,9 @@ ActiveRecord::Schema.define(:version => 20121221201615) do
     t.integer  "employee_id"
     t.integer  "group_id"
     t.boolean  "group_admin"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "active",      :default => true
   end
 
   create_table "employee_products", :force => true do |t|
@@ -59,13 +60,14 @@ ActiveRecord::Schema.define(:version => 20121221201615) do
     t.string   "preferred_language"
     t.string   "preferred_theme"
     t.boolean  "new_user_reminder",  :default => true
+    t.boolean  "active",             :default => true
   end
 
   create_table "fiscal_years", :force => true do |t|
     t.integer  "year"
-    t.boolean  "active"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "active",     :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
     t.integer  "seed_id"
   end
 

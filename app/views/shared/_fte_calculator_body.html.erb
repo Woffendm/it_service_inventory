@@ -1,22 +1,29 @@
 <div id="fte_calculator">
   <div class="form-inline">
-    <%= label_tag :hours_per_day, "Hours per day:" %>
-    <%= number_field_tag 'hours_per_day', nil, 
-      :placeholder => "Maximum is #{(@fte_hours_per_week / 5)}" %>
-  </div>
-  <div id="or_div"> or </div>
-  <div class="form-inline">
-    <%= label_tag :hours_per_week, "Hours per week:" %>
+    <%= label_tag :hours_per_week, t(:hours_per_week) %>
     <%= number_field_tag 'hours_per_week', nil, 
-        :placeholder => "Maximum is #{@fte_hours_per_week}" %>
+        :placeholder => t(:maximum_is) + "#{@fte_hours_per_week.round(3)}" %>
+  </div>
+  <div id="or_div"> 
+    <%= t(:or) %> 
+  </div>
+  <div class="form-inline">
+    <%= label_tag :hours_per_month, t(:hours_per_week) %>
+    <%= number_field_tag 'hours_per_month', nil, 
+      :placeholder => t(:maximum_is) + "#{(365 / 7 * @fte_hours_per_week / 12).round(3)}" %>
   </div>
   <div id="allocation_result_container">
-    Your allocation is 0 FTE
+    <%= t(:your_allocation_is) + "0" + t(:fte) %>
   </div>
   <div id="use_this_number"> </div>
 </div>
 
 <script type="text/javascript">
-  var fteHoursPerWeek = <%= @fte_hours_per_week %>;
+  var fteHoursPerWeek =     <%= @fte_hours_per_week %>;
   var allocationPrecision = <%= @allocation_precision %>;
+  var your_allocation_is = "<%= t(:your_allocation_is) %>";
+  var fte =                "<%= t(:fte) %>";
+  var over_allocated =     "<%= t(:over_allocated_calc) %>";
+  var modal_title =        "<%= t(:allocation_calculator) %>";
+  var incorrect_time =     "<%= t(:incorrect_time) %>";
 </script>

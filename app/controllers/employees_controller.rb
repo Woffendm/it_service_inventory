@@ -4,14 +4,15 @@
 # Copyright: 
 
 class EmployeesController < ApplicationController
-
-  before_filter :authorize_creation,   :only => [:ldap_create, :search_ldap_view]
-  before_filter :load_employee,        :only => [:destroy, :edit, :show, :update]
-  before_filter :authorize_update,     :only => [:edit, :update]
-  before_filter :load_groups_services, :only => [:edit, :show, :update]
-  before_filter :load_products,        :only => [:edit, :show, :update]
+  before_filter :authorize_creation,        :only => [:ldap_create, :search_ldap_view]
+  before_filter :load_employee,             :only => [:destroy, :toggle_active, :update]
+  before_filter :load_active_years,         :only => [:edit, :update]
+  before_filter :load_all_years,            :only => [:show]
+  before_filter :load_associations,         :only => [:edit, :show, :update]
+  before_filter :load_available_associations, :only => [:edit, :update]
   before_filter :load_allocation_precision, :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
+  before_filter :authorize_update,          :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
                                                                 :user_settings]
 
@@ -26,7 +27,7 @@ class EmployeesController < ApplicationController
 
   # Starts out as a list of all employees, but can be restricted by a search
   def index
-    if params[:name_to_search_for]
+    if !params[:name_to_search_for].blank?
       array_of_strings_to_search_for = params[:name_to_search_for].split(" ")
       conditions = []
       conditions << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
@@ -52,6 +53,10 @@ class EmployeesController < ApplicationController
 
   # Page for viewing an existing employee
   def show
+    @total_services = @employee.employee_allocations.where(:fiscal_year_id => @year.id).length
+    @total_products = @employee.employee_products.where(:fiscal_year_id => @year.id).length
+    @total_service_allocation = @employee.get_total_service_allocation(@year)
+    @total_product_allocation = @employee.get_total_product_allocation(@year)
   end
 
 
@@ -66,7 +71,7 @@ class EmployeesController < ApplicationController
 
 
   # Obliterates selected employee with the mighty hammer of Thor and scatters their data like dust  
-  # to a thousand winds
+  # to a thousand winds. (Removes employee and all associations)
   def destroy
     authorize! :destroy, @employee
     if @employee != @current_user 
@@ -76,6 +81,22 @@ class EmployeesController < ApplicationController
       flash[:error] = t(:cannot_delete_self)
     end
     redirect_to employees_path 
+  end
+  
+  
+  # Sets the specified employee's 'active' field to false. Inactive no longer appear in lists for
+  # creating new associations, but all their existing associations are preserved.
+  def toggle_active
+    authorize! :destroy, @employee
+    if @employee.active
+      @employee.active = false
+      flash[:notice] = t(:employee) + "Deactivated"
+    else
+      @employee.active = true
+      flash[:notice] = t(:employee) + "Activated"
+    end
+    @employee.save
+    redirect_to employees_path
   end
 
 
@@ -109,15 +130,16 @@ class EmployeesController < ApplicationController
   def update
     new_total_allocation = 0.0
     # If a new group was sent with the params, adds it to the employee's list of groups
-    if params[:employee_groups]
-      unless params[:employee_groups][:group_id].blank?
-        Group.find(params[:employee_groups][:group_id]).add_employee_to_group(@employee)
+    if params[:employee_group]
+      unless params[:employee_group][:group_id].blank?
+        Group.find(params[:employee_group][:group_id]).add_employee_to_group(@employee)
       end
     end
     # If a new service and allocation were sent with the params, adds them to the employee
     if params[:employee_allocations]
       unless (params[:employee_allocations][:service_id].blank?) ||
-             (params[:employee_allocations][:allocation].blank?)
+             (params[:employee_allocations][:allocation].blank?) ||
+             (params[:employee_allocations][:fiscal_year_id].blank?)
         new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
         new_employee_allocation.save
         new_total_allocation += new_employee_allocation.allocation
@@ -193,27 +215,53 @@ class EmployeesController < ApplicationController
     end
 
 
+    # Loads all assigned associations for the employee in the given year. 
+    def load_associations
+      @employee = Employee.find(params[:id])
+      @employee_groups = @employee.employee_groups.joins(:group).includes(:group).order("name")
+      @service_allocations = @employee.employee_allocations.joins(:service).where(
+          :fiscal_year_id => @year.id). includes(:service).order("name")
+      @product_allocations = @employee.employee_products.joins(:product).where(
+          :fiscal_year_id => @year.id).includes(:product).order("name")
+    end
+
+
+    # Loads all unassigned associations for the employee in the given year. 
+    def load_available_associations
+      @available_groups = @employee.get_available_groups
+      @available_services = @employee.get_available_services(@year)
+      @available_products = @employee.get_available_products(@year)
+    end
+
+
     # Loads an employee based off parameters given and ensures that user is authorized to edit them
     def load_employee
       @employee = Employee.find(params[:id])
     end
 
 
-    # Loads all groups and services assigned to the current employee
-    def load_groups_services
-      @services = @employee.services.order(:name)
-      @groups = @employee.groups.order(:name)
-    end
-    
-    
-    # Loads all products assigned to the current employee
-    def load_products
-      @products = @employee.products.order(:name)
-    end
-    
-    
     # Loads possible allocations
     def load_possible_allocations
       @possible_allocations = EmployeeAllocation.possible_allocations
+    end
+
+
+    # Loads all active years. Loads the last selected year if it is active
+    def load_active_years
+      @active_years = FiscalYear.active_fiscal_years
+      if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+        @year = @current_fiscal_year
+      end
+    end
+    
+    
+    # CLoads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find_by_year(cookies[:year])
+      end
     end
 end

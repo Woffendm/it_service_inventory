@@ -4,10 +4,10 @@
 # Copyright:
 
 class ServicesController < ApplicationController
-  before_filter :load_service, :only => [:destroy, :edit, :show, :update]
-  before_filter :load_employees, :only => [:show]
-  before_filter :load_products, :only => [:show]
-  before_filter :load_groups, :only => [:show]
+  before_filter :load_service,      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_all_years,    :only => [:show, :groups]
+  before_filter :load_associations, :only => [:show]
+  
   
 # View-related methods
   
@@ -24,6 +24,13 @@ class ServicesController < ApplicationController
     @service = Service.new
   end
   
+  
+  def show
+    @total_employees = @service.employee_allocations.where(:employee_allocations => {:fiscal_year_id => @year.id}).length
+    @total_groups = @service.groups.length
+    @total_products = @service.product_services.length
+    @total_allocation = @service.get_total_allocation(@year)
+  end
 
 
 # Action-related methods 
@@ -54,13 +61,10 @@ class ServicesController < ApplicationController
   def groups
     @selected_group = params[:selected_group]
     if params[:service][:id] == "0"
-      @groups = []
-      Group.order(:name).each do |group|
-        @groups << group if group.employees.any?
-      end
+      @groups = Group.joins(:employees).uniq.order(:name)
     else 
       @service = Service.find(params[:service][:id])
-      @groups = @service.groups
+      @groups = @service.groups(@year)
     end
     render :layout => false
   end
@@ -82,25 +86,28 @@ class ServicesController < ApplicationController
 # Loading methods
 
   private
-    # Loads all employees allocated to this service
-    def load_employees
-      @employees = @service.employees.order(:name_last, :name_first)
+    # Loads all years. Loads the last selected year
+    def load_all_years
+      @all_years = FiscalYear.order(:year)
+      if cookies[:year].blank?
+        @year = @current_fiscal_year
+      else
+        @year = FiscalYear.find_by_year(cookies[:year])
+      end
     end
-    
-    
-    # Loads all products allocated to this service
-    def load_products
+  
+  
+    # Loads all employees allocated to this service
+    def load_associations
+      @employee_allocations = @service.employee_allocations.joins(:employee).where(
+          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
       @products = @service.products.order(:name)
+      @groups = @service.groups.order(:name)
     end
     
     
     # Loads a service based on the id provided in params
     def load_service
       @service = Service.find(params[:id])
-    end
-    
-    # Loads all groups who have employees allocated to this service
-    def load_groups
-      @groups = @service.groups
     end
 end

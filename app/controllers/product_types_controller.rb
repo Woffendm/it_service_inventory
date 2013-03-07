@@ -16,7 +16,7 @@ class ProductTypesController < ApplicationController
   def update
     product_type = ProductType.find(params[:id])
     unless product_type.update_attributes(params[:product_type])
-      flash[:error] = "Product type needs a name"
+      flash[:error] = "Product type needs a unique name"
       render :index
       return
     end
@@ -33,7 +33,7 @@ class ProductTypesController < ApplicationController
       return
     end
     flash[:error] = "Product type needs a unique name"
-    redirect_to product_types_path
+    render :index
   end
 
 

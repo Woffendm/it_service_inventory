@@ -1,27 +1,13 @@
 <h2> <%= t(:application_settings) %> </h2>
 
-<ul class="nav nav-tabs different-view-tabs" id="my-tab">
-  <li class="active">
-    <a href="#"  data-toggle="tab"> 
-      Application Settings
-    </a>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_states), product_states_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_types), product_types_path %>
-  </li>
-</ul>
+
+<%= render :partial => "/shared/app_settings_tabs" %>
 
 
 <%= form_tag( update_settings_app_settings_path, :method => "POST", :class => "light-border form-horizontal") do %>
   <div class="control-group">
     <span class="control-label">
-      <%= label_tag t(:allocation_precision) %>
+      <%= label_tag :app_setting_allocation_precision, t(:allocation_precision) %>
     </span>
     <span class="controls">
       <%= select(:app_setting, :allocation_precision, [[0.1, 1], [0.01, 2], [0.001, 3]],
@@ -37,7 +23,7 @@
   
   <div class="control-group">
     <span class="control-label">
-      <%= label_tag :fte_hours_per_week, t(:fte_hours_per_week) %>
+      <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
     </span>
     <span class="controls">
       <%= number_field_tag "app_setting[fte_hours_per_week]", @fte_hours_per_week, 
@@ -47,6 +33,22 @@
     <span class="tooltip">
       <p class="tooltip_paragraph"> 
         <%= t(:fte_hours_per_week_info) %> 
+      </p>
+    </span>
+  </div>
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :app_setting_current_fiscal_year, t(:current_fiscal_year) %>
+    </span>
+    <span class="controls">
+      <%= collection_select(:app_setting, :current_fiscal_year, @fiscal_years, :year, :year,  
+                           {:selected => @current_fiscal_year.year}) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <p class="tooltip_paragraph"> 
+        <%= t(:fiscal_year_info) %> 
       </p>
     </span>
   </div>

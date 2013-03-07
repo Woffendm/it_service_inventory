@@ -8,12 +8,12 @@
 <ul class="nav nav-tabs" id="my-tab">
   <li class="active">
     <a href="#employees" id="employees_tab" data-toggle="tab" > 
-      Employees
+      <%= t(:employees) %>
     </a>
   </li>
   <li>
     <a href="#group" id="group_tab" data-toggle="tab"> 
-      Group Information
+      <%= t(:group) + t(:information) %> 
     </a>
   </li>
 </ul>
@@ -25,7 +25,7 @@
     
     <div class="form-inline light-border">
       <%= form_for @group do |form| %>
-        <%= form.label :name %>
+        <%= form.label :name, t(:name) %>
         <%= form.text_field :name %>
         <%= form.submit  t(:save_changes) %>
       <% end %>

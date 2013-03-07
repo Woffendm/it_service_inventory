@@ -1,0 +1,40 @@
+<h2> 
+  <%= t(:fiscal_years) %> 
+  <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
+               #{t(:new_fiscal_year)}".html_safe, "#", :class => "modal_trigger" %>
+</h2>
+
+
+<%= render :partial => "/shared/app_settings_tabs" %>
+
+
+<%= render  :partial => "/fiscal_years/new_fiscal_year", 
+            :locals => {:@new_fiscal_year => @new_fiscal_year} %>
+
+
+<% if !@fiscal_years.empty? %>
+  <table class="table table-striped">
+    <thead>
+      <th> <%= t(:year) %> </th>
+      <th> <%= t(:active) %> </th>
+    </thead>
+    <tbody>
+      <% @count = 0 %>
+      <% @fiscal_years.each do |fiscal_year| %>
+        <tr>
+          <td> 
+            <%= link_to "#{content_tag :em, '', :class => ''}
+                         #{fiscal_year.year}".html_safe, "#", :class => "modal_trigger_2" %>
+            <%= render  :partial => "/fiscal_years/edit_fiscal_year", 
+                        :locals => {:@fiscal_year => fiscal_year, :@count => @count} %>
+          </td>
+          <td>
+            <%= fiscal_year.active %>
+          </td>
+        </tr>  
+        <% @count += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+

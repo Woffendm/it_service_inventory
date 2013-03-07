@@ -55,29 +55,30 @@ describe Employee do
 
   describe "available services" do
     before do
+      @fiscal_year = FiscalYear.create(:year => 9001)
       @service = Service.create(:name => "first service")
       @service_2 = Service.create(:name => "last service")
       @employee = Employee.create(:name_first => "some", :name_last => "employee")
-      @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1)
+      @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1, :fiscal_year_id => @fiscal_year.id)
     end
 
 
     # get_available_services cannot return more services than actually exist
     it "should be at most Service.all" do
-      @employee.get_available_services.length.should <= Service.all.length
+      @employee.get_available_services(@fiscal_year).length.should <= Service.all.length
     end
 
 
     # get_available_services returns only services not currently assigned to the employee
     it "should return only available services" do
-      @employee.get_available_services.first.id.should eq(@service_2.id)
+      @employee.get_available_services(@fiscal_year).first.id.should eq(@service_2.id)
     end
 
 
     # get_available_services returns an empty array if no services are available
     it "should return an empty array if there are no available services" do
-      @employee.employee_allocations.create(:service_id => @service_2.id, :allocation => 0.1)
-      @employee.get_available_services.should be_empty
+      @employee.employee_allocations.create(:service_id => @service_2.id, :allocation => 0.1, :fiscal_year_id => @fiscal_year.id)
+      @employee.get_available_services(@fiscal_year).should be_empty
     end
   end
 end

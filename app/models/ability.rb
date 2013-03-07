@@ -71,9 +71,13 @@ class Ability
             end
           end
         end
-        # Everyone else can only edit themself and products they're assigned to
+        # Regular employees can only edit themselves if they are active.
+        if user.active
+          can :update, Employee, :id => user.id
+        end
+        
+        # Anyone logged into the application can read everything.
         can :read, :all
-        can :update, Employee, :id => user.id
       end
     end
     

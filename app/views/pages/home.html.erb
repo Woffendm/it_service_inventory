@@ -80,7 +80,7 @@
           <%= label_tag t(:full_time_employees) + ":" %>
         </span>
         <span class="controls">
-          <%= @full_time_employees %>
+          <%= @full_time_employees.to_s + " " + t(:fte) %>
         </span>
       </div>
       <div class="control-group">

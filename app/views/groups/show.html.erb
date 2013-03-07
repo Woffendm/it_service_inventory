@@ -1,5 +1,5 @@
 <h2> 
-  Group: <%= @group.name %> 
+  <%= t(:group_colon) + @group.name %> 
   <% if can? :update, @group %>
     <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
                 #{t(:edit)}".html_safe, edit_group_path(@group.id) %>
@@ -7,20 +7,83 @@
 </h2> 
 
 
-<ul class="nav nav-tabs" id="my-tab">
+<table class="table table-striped overview">
+  <caption> <%= t(:overview) %> </caption>
+  <thead>
+    <tr>
+      <th>
+        
+      </th>
+      <th>
+        <%= form_tag change_year_logins_path, :method => "get" do %>
+          <%= label_tag :year, t(:fiscal_year) %> 
+          <%= select_tag(:year, options_from_collection_for_select(@all_years, :year, :year,
+              {:selected => @year.year}), :class => "tiny-select") %> 
+          <%= submit_tag t(:show) %>
+        <% end %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:products) %>
+        </div>
+        <%= @total_products %> 
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:product) + t(:allocation) %>
+        </div>
+        <%= @total_product_allocation %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:employee_headcount) %>
+        </div>
+        <%= @total_employees %> 
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:services) %>
+        </div>
+        <%= @total_services %> 
+      </td>
+    </tr>
+    <tr>
+      <td>
+        
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:full_time_employees) %>
+        </div>
+        <%= @total_service_allocation %> 
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+<ul class="nav nav-tabs" id="my-tab" style="clear:both;">
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
-      Related Products
+      <%= t(:products) %>
     </a>
   </li>
   <li>
      <a href="#employees" id="employees_tab" data-toggle="tab" > 
-       Employees
+       <%= t(:employees) %>
      </a>
    </li>
   <li>
     <a href="#services" id="services_tab" data-toggle="tab"> 
-      Related Services
+      <%= t(:services) %>
     </a>
   </li>
 </ul>
@@ -31,28 +94,35 @@
     
     
   <div class="tab-pane" id="services">
-    <% unless @services.blank? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th><%= t(:service) %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @services.each do |service| %>
-            <tr>
-              <td> 
-                <%= link_to service.name, service_path(service.id) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="pagination_footer">
-        <%= will_paginate @services, :param_name => :services_page %>
-        <%= render :partial => "/shared/results_per_page" %>
+    <div class="tabbable tabs-right">
+      <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+      
+      <div class="tab-content year-content">
+        <% unless @services.blank? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= t(:service) %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @services.each do |service| %>
+                <tr>
+                  <td> 
+                    <%= link_to service.name, service_path(service.id) %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="pagination_footer">
+            <%= will_paginate @services, :param_name => :services_page %>
+            <%= render :partial => "/shared/results_per_page" %>
+          </div>
+        <% end %>
       </div>
-    <% end %>
+    </div>
   </div>
 
 
@@ -62,7 +132,7 @@
         <thead>
           <tr>
             <th>
-              Employee
+              <%= t(:employee) %>
             </th>
           </tr>
         </thead>
@@ -118,3 +188,8 @@
   </div>
   
 </div>
+
+
+<script type="text/javascript">
+  var do_not_check_for_changes = true;
+</script>

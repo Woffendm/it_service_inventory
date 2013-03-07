@@ -5,17 +5,17 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'json'
+gem 'json', '1.7.6'
 
-gem 'dynamic_form'
+gem 'dynamic_form', '1.1.4'
 
 gem 'therubyracer', '0.10.2'
 
-gem 'cancan'
+gem 'cancan', '1.6.9'
 
-gem 'omniauth-ldap', '1.0.2' #, :git => 'http://github.com/angelkbrown/omniauth-ldap.git'
+gem 'omniauth-ldap', '1.0.2'
 
-gem 'will_paginate'
+gem 'will_paginate', '3.0.4'
 
 gem 'mysql', '~> 2.8.1'
 

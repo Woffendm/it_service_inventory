@@ -13,7 +13,7 @@
     <%= fields_for @product do |form| %>
       <div class="control-group">
         <span class="control-label">
-          <%= form.label t(:name) %>
+          <%= form.label :name, t(:name) %>
         </span>
         <span class="controls">
           <%= form.text_field :name %>
@@ -22,7 +22,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :description %> 
+          <%= form.label :description, t(:description) %> 
         </span>
         <span class="controls">
           <%= form.text_area :description, :rows => 4, :cols => 100 %>
@@ -31,7 +31,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_state_id %> 
+          <%= form.label :product_state_id, t(:product_state) %> 
         </span>
         <span class="controls">
           <%= form.select(:product_state_id, options_from_collection_for_select( @product_states, 
@@ -42,7 +42,7 @@
 
       <div class="control-group">
         <span class="control-label">
-          <%= form.label :product_type_id %> 
+          <%= form.label :product_type_id, t(:product_type) %> 
         </span>
         <span class="controls">
           <%= form.select(:product_type_id, options_from_collection_for_select( @product_types, 
@@ -73,17 +73,18 @@
 
 
 
-  <!-- Drop-down list of groups that can be added. Only populated with groups that the employee
+  <!-- Drop-down list of groups that can be added. Only populated with groups that the product
     doesn't already belong to. -->
   <h3><%= t(:groups) %></h3>
-  <% if @product.get_available_groups.any? %>
+  <% unless @available_groups.blank? %>
     <div class="form-inline" >
       <fieldset class="light-border">
-        <legend> Add to Group </legend>
-        <%= fields_for "product_groups" do |form|%>
+        <legend> <%= t(:add_to) + t(:group) %> </legend>
+        <%= fields_for "product_group" do |form|%>
           <%= form.label :group_id, t(:group)  %>
-          <%= form.select(:group_id, @product.get_available_groups.collect {|p| [p.name, p.id] },  
-                         {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+          <%= form.select(:group_id, 
+                  options_from_collection_for_select(@available_groups, :id, :name),  
+                  {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
           <%= form.submit t(:add) %>
         <% end %>
       </fieldset>
@@ -91,9 +92,8 @@
   <% end %>
 
 
-  <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
-   to the employee's group membership here --> 
-  <% if @product.product_groups.any? %>
+  <!-- Table of all groups that the product currently belongs to. --> 
+  <% unless @product_groups.blank? %>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -102,18 +102,17 @@
         </tr>
       </thead>
       <tbody>
-        <% count = 0 %>
-        <%= product_form.fields_for "product_groups" do |form| %>
-          <% product_group = @product.product_groups.find_by_group_id(@groups[count].id) %>
-          <tr>
-            <td>
-              <%= link_to product_group.group.name, group_path(product_group.group_id) %>
-            </td>
-            <td>
-              <%= form.check_box :_destroy %>
-            </td>
-          </tr>
-          <% count += 1 %>
+        <% @product_groups.each do |product_group| %>
+          <%= product_form.fields_for "product_groups", product_group do |form|%>
+            <tr>
+              <td>
+                <%= link_to product_group.group.name, group_path(product_group.group_id) %>
+              </td>
+              <td>
+                <%= form.check_box :_destroy %>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
@@ -125,27 +124,25 @@
   <!-- Drop-down list of services that can be added. Only populated with services that the product
    doesn't already belong to. -->
   <h3> <%= t(:services) %> </h3>
-  <% if can? :create, Product %>
-    <% if @product.get_available_services.any? %>
-      <div class="form-inline" >
-        <fieldset class="light-border">
-          <legend> Add to Service </legend>
-          <%= fields_for "product_services" do |form|%>
-            <%= form.label :service_id, t(:service)  %>
-            <%= form.select(:service_id, options_from_collection_for_select(
-                            @product.get_available_services, :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:service) + "-"}) %>
-            <%= form.submit t(:add) %>
-          <% end %>
-        </fieldset>
-      </div>
-    <% end %>
+  <% unless @available_services.blank? %>
+    <div class="form-inline" >
+      <fieldset class="light-border">
+        <legend> <%= t(:add_to) + t(:service) %>  </legend>
+        <%= fields_for "product_service" do |form|%>
+          <%= form.label :service_id, t(:service)  %>
+          <%= form.select(:service_id, options_from_collection_for_select(
+                          @available_services, :id, :name),  
+                         {:include_blank => "-" + t(:select) + t(:service) + "-"}) %>
+          <%= form.submit t(:add) %>
+        <% end %>
+      </fieldset>
+    </div>
   <% end %>
 
 
   <!-- Table of all services that the product currently belongs to. Admins are able to make changes
    to the product's services here --> 
-  <% if @product.services.any? %>
+  <% unless @product_services.blank? %>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -154,22 +151,18 @@
         </tr>
       </thead>
       <tbody>
-        <% count = 0 %>
-        <%= product_form.fields_for "product_services" do |form| %>
-          <% unless @services[count].nil? %>
-            <% service = @services[count] %>
+        <% @product_services.each do |product_service| %>
+          <%= product_form.fields_for "product_services", product_service do |form|%>
             <tr>
               <td>
-                <%= link_to service.name, service_path(service.id) %>                
+                <%= link_to product_service.service_name, 
+                    service_path(product_service.service_id) %>                
               </td>
               <td>
-                <% if can? :create, Product %>
-                  <%= form.check_box :_destroy %>
-                <% end %>
+                <%= form.check_box :_destroy %>
               </td>
             </tr>
           <% end %>
-          <% count += 1 %>
         <% end %>
       </tbody>
     </table>
@@ -179,72 +172,71 @@
 
 
   <h3> <%= t(:employees) %> </h3>
-  <!-- Drop-down list of employees that can be added. Only populated with employees that the product
-   doesn't already have. -->
-  <% if @product.get_available_employees.any?%>
-    <div class="form-inline" >
-      <fieldset class="light-border">
-        <legend> Add Employee </legend>
-        <%= fields_for "employee_products" do |form|%>
-          <%= form.label :employee_id, t(:employee) %>
-          <%= form.select(:employee_id, options_from_collection_for_select(
-                          @product.get_available_employees, :id, :full_name),  
-                         {:include_blank => "-" + t(:select) + t(:employee) + "-"}) %> 
-          <%= form.select(:allocation, @possible_allocations,
-                         {:include_blank => "-" + t(:optional) + t(:allocation) + "-"},
-                          :class => "calculator_select allocation_value") %>
-          <%= render  :partial => "/shared/fte_calculator_trigger" %>
-          <%= form.submit t(:add) %>
-        <% end %>
-      </fieldset>
-    </div>
-  <% end %>
-
-
-  <!-- Creates table with the product's services and allocations. Can be edited by product or
-   admin -->
-  <% if @product.employee_products.any? %>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th> <%= t(:employee) %> </th>
-          <th> <%= t(:allocation) %> </th>
-          <th> <%= t(:check_to_remove) %> </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% count = 0 %>
-        <%= product_form.fields_for "employee_products" do |form|%>
-          <% unless @employees[count].nil? %>
-            <% employee_product =
-                        @product.employee_products.find_by_employee_id(@employees[count].id) %>
+  <div class="tabbable tabs-right">
+    <%= render  :partial => "/shared/active_year_select", 
+                :locals => {:@year => @year, :@active_years => @active_years } %>
+    
+    
+    <div class="tab-content year-content">
+      <% unless @available_employees.blank? %>
+        <div class="form-inline" >
+          <fieldset class="light-border">
+            <legend> <%= t(:add) + t(:employee) %> </legend>
+            <%= fields_for "employee_product" do |form|%>
+              <%= form.label :employee_id, t(:employee) %>
+              <%= form.select(:employee_id, options_from_collection_for_select(
+                              @available_employees, :id, :full_name),  
+                             {:include_blank => "-" + t(:select) + t(:employee) + "-"}) %> 
+              <%= form.select(:allocation, @possible_allocations,
+                             {:include_blank => "-" + t(:optional) + t(:allocation) + "-"},
+                              :class => "calculator_select allocation_value") %>
+              <%= form.hidden_field(:fiscal_year_id, :value => @year.id) %>
+              <%= render  :partial => "/shared/fte_calculator_trigger" %>
+              <%= form.submit t(:add) %>
+            <% end %>
+          </fieldset>
+        </div>
+      <% end %>
+      
+      
+      <% unless @employee_products.blank? %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td> 
-                <%= link_to employee_product.employee.full_name, employee_path(employee_product.employee_id) %>
-              </td>
-              <td class="form-inline"> 
-                <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
-                <%= form.hidden_field :id %>
-                <%= form.select(:allocation, @possible_allocations, 
-                               {:selected => employee_product.rounded_allocation}, 
-                                :class => "calculator_select allocation_value small") %>
-                <%= render :partial => "/shared/fte_calculator_trigger" %>
-              </td>
-              <td> 
-                <%= form.check_box :_destroy, :class => "remove_allocation" %>
-              </td>
+              <th> <%= t(:employee) %> </th>
+              <th> <%= t(:allocation) %> </th>
+              <th> <%= t(:check_to_remove) %> </th>
             </tr>
-          <% end %>
-          <% count += 1 %>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
-  <br/>
-
-
-
-
+          </thead>
+          <tbody>
+            <% @employee_products.each do |employee_product| %>
+              <%= product_form.fields_for "employee_products", employee_product do |form|%>
+                <tr>
+                  <td> 
+                    <%= link_to employee_product.employee.full_name,
+                        employee_path(employee_product.employee_id) %>
+                  </td>
+                  <td class="form-inline"> 
+                    <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
+                    <%= form.hidden_field :id %>
+                    <%= form.select(:allocation, @possible_allocations, 
+                                   {:selected => employee_product.rounded_allocation}, 
+                                    :class => "calculator_select allocation_value") %>
+                    <%= render :partial => "/shared/fte_calculator_trigger" %>
+                  </td>
+                  <td> 
+                    <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>    
+    </div>
+  </div>
+    
+    
   <%= product_form.submit  t(:save_changes) %> 
 <% end %>
 

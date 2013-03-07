@@ -5,20 +5,7 @@
 </h2>
 
 
-<ul class="nav nav-tabs" id="my-tab">
-  <li>
-    <%= link_to "Application Settings", app_settings_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
-  </li>
-  <li>
-    <%= link_to t(:manage) + t(:product_states), product_states_path %>
-  </li>
-  <li class="active">
-    <%= link_to t(:manage) + t(:product_types), "#" %>
-  </li>
-</ul>
+<%= render :partial => "/shared/app_settings_tabs" %>
 
 
 <%= render  :partial => "/product_types/new_product_type", 

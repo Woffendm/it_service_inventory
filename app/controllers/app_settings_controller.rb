@@ -21,15 +21,10 @@ class AppSettingsController < ApplicationController
   def index
     @fte_hours_per_week = AppSetting.get_fte_hours_per_week
     @allocation_precision = AppSetting.get_allocation_precision
+    @current_fiscal_year = AppSetting.get_current_fiscal_year
+    @fiscal_years = FiscalYear.active_fiscal_years
   end
   
-  
-  # View with a list of all current product types, and a form to add additional types
-  def product_types
-    @new_product_type = ProductType.new
-    @product_types = ProductType.all.order(:name)
-  end
-
 
 
   # Action-related methods
@@ -41,24 +36,6 @@ class AppSettingsController < ApplicationController
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:added)
     redirect_to app_settings_admins_path 
-  end
-
-
-  # Creates a new application setting
-  def create
-    new_product_state = AppSetting.new(params[:app_setting])
-    new_product_state.save
-    flash[:notice] = t(:setting) + t(:created)
-    redirect_to request.referrer
-  end
-  
-
-  # Deletes selected application setting
-  def destroy
-    app_setting = AppSetting.find(params[:id])
-    app_setting.destroy 
-    flash[:notice] = t(:setting) + t(:deleted)
-    redirect_to request.referrer
   end
 
 
@@ -77,7 +54,7 @@ class AppSettingsController < ApplicationController
     AppSetting.all.each do |app_setting|
       unless AppSetting.save_setting(app_setting, params[:app_setting][app_setting.code])
         flash[:error] = "One or more of your fields is invalid!"
-        render :index
+        redirect_to app_settings_path 
         return
       end
     end
