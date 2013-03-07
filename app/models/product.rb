@@ -83,6 +83,9 @@ class Product < ActiveRecord::Base
   end
   
   
+  def rest_show   
+     "{'id'#{self.id},'name'#{self.name},'description'#{self.description},'product_priority':{'id'#{self.product_priority_id},'name'#{self.product_priority.name}},'product_state':{'id'#{self.product_state_id},'name'#{self.product_state.name}},'product_type':{'id'#{self.product_type_id},'name'#{self.product_type.name}}"
+  end
   
   private
     # Checks to see if the url has an http:// or https:// and prepends it if it doesn't

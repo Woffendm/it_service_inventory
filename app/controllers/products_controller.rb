@@ -55,9 +55,13 @@ class ProductsController < ApplicationController
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
     @total_allocation = @product.get_total_allocation(@year)
+    respond_to do |format|
+      format.html
+      format.js  { render :json => @product.rest_show, :callback => params[:callback] }
+      format.json { render :json => @product }
+      format.xml { render :xml => @product }
+    end
   end
-
-
 
 # Action-related methods 
 
