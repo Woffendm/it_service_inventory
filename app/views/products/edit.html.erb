@@ -31,6 +31,18 @@
 
       <div class="control-group">
         <span class="control-label">
+          <%= form.label :product_priority_id, t(:product_priority) %> 
+        </span>
+        <span class="controls">
+          <%= form.select(:product_priority_id, 
+                          options_from_collection_for_select( @product_priorities, 
+                          :id, :name, :selected => @product.product_priority_id.to_s),  
+                          {:include_blank => "-" + t(:select) + t(:product_priority) + "-"}) %> 
+        </span>
+      </div>
+
+      <div class="control-group">
+        <span class="control-label">
           <%= form.label :product_state_id, t(:product_state) %> 
         </span>
         <span class="controls">

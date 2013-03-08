@@ -6,8 +6,6 @@
 class GroupsController < ApplicationController
   before_filter :load_group,       :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
-  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
-                                            :remove_employee, :update]
   before_filter :load_all_years,   :only => [:show, :services]
                                             
   before_filter :load_employee,   :only => [:add_employee]
@@ -15,7 +13,9 @@ class GroupsController < ApplicationController
   before_filter :load_existing_employees,  :only => [:show, :edit]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
-  
+  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
+                                            :remove_employee, :update]
+                                            
   
 # View-related methods
 
@@ -27,7 +27,9 @@ class GroupsController < ApplicationController
   # List of all groups
   def index
     @group = Group.new
-    @groups = Group.order(:name)
+    @groups = filter_groups(params[:search])
+    @groups = sort_results(params, @groups)
+    @groups = @groups.paginate(:page => params[:page], :per_page => session[:results_per_page])
   end
   
   
@@ -127,6 +129,19 @@ class GroupsController < ApplicationController
     # Ensures user is authorized to update the group
     def authorize_update
       authorize! :update, @group
+    end
+    
+    
+    # Filters the services displayed on the index page based on paramaters provided
+    def filter_groups(search)
+      return Group.where(true) if search.blank?
+      @name = search[:name]
+      @search_string = ""
+      @search_array = ["true"]
+      @search_array << "groups.name LIKE '%#{@name}%'" unless @name.blank? 
+      @search_string = @search_array.join(" AND ")
+      @groups = Group.where(@search_string)
+      return @groups
     end
     
     

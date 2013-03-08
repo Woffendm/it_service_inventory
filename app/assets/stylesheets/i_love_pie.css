@@ -473,7 +473,11 @@ h2 > a {
   width: 200px;
 }
 
-
+th.variable-size, td.variable-size {
+  max-width: 150px;
+  min-width: 30px;
+  width: 0px;
+}
 
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {
