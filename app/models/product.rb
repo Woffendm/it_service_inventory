@@ -128,7 +128,16 @@ class Product < ActiveRecord::Base
     
     # Creates string representation of product in json for REST services
     def rest_show 
-"{'id':#{self.id},'name':'#{self.name}','description':'#{self.description}','product_priority':{'id':#{self.product_priority_id},'name':'#{self.product_priority.name}'},'product_state':{'id':#{self.product_state_id},'name':'#{self.product_state.name}'},'product_type':{'id':#{self.product_type_id},'name':'#{self.product_type.name}'},'groups':#{self.rest_groups},'services':#{self.rest_services},'employees':#{self.rest_employees}}"
+"{'id':#{self.id},'name':'#{self.name}','description':'#{self.description}','product_priority':{'id':#{self.product_priority_id},'name':'#{self.priority}'},'product_state':{'id':#{self.product_state_id},'name':'#{self.state}'},'product_type':{'id':#{self.product_type_id},'name':'#{self.type}'},'groups':#{self.rest_groups},'services':#{self.rest_services},'employees':#{self.rest_employees}}"
+    end
+  
+  
+    def self.rest_show_all
+      array = []
+      Product.all.each do |t|
+        array << t.rest_show
+      end
+      return "{" + array.join(",") + "}"
     end
   
   

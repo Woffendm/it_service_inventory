@@ -12,7 +12,10 @@ class ProductsController < ApplicationController
   before_filter :load_all_product_associations,     :only => [:index, :edit, :update]
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
-
+  #skip_before_filter :current_user,                   :only => [:index, :show]
+  #skip_before_filter :set_user_language,              :only => [:index, :show]
+  #skip_before_filter :require_login,                  :only => [:index, :show]
+  #skip_before_filter :remind_user_to_set_allocations, :only => [:index, :show]
 
 
 # View-related methods
@@ -31,6 +34,12 @@ class ProductsController < ApplicationController
     @products = sort_results(params, @products)
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
+    respond_to do |format|
+      format.html
+      format.js  { render :json => Product.rest_show_all, :callback => params[:callback] }
+      format.json { render :json => Product.rest_show_all }
+      format.xml { render :xml => @products }
+    end
   end
 
 
