@@ -1,0 +1,2 @@
+module ProductPrioritiesHelper
+end

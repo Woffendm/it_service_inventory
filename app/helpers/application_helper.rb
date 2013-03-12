@@ -27,6 +27,23 @@ module ApplicationHelper
   end
   
   
+  # Returns a link to the desired controller with paramaters for the table name, field to sort on, 
+  # the current field being sorted on, and whether the list is ascending. Appends a ? or & to the 
+  # given path depending on whether or not there were already paramaters, thus allowing filtering
+  # and sorting to stack. To prevent the url from growing too large, prexisting sorting information 
+  # is removed from the provided path.
+  def sort_column(title, path, table, field, order, ascending)
+    path = path[0..(path.index("table=")-2)] if path.index("table=")
+    if path.index("?").nil?
+      path = path + "?"
+    else
+      path = path + "&"
+    end
+    return link_to title, path + 
+            "table=#{table}&order=#{field}&current_order=#{order}&ascending=#{ascending}"
+  end
+  
+  
   # Finds the longest word in the string (with a word being defined as something without spaces)
   # and returns a string with a max-width attribute assigned to be 0.6 times (in em) the length of 
   # the longest word if the longest word is longer than 42 characters

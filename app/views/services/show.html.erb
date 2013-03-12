@@ -108,6 +108,7 @@
         <thead>
           <tr>
             <th> <%= t(:product) %> </th>
+            <th class='variable-size'> <%= t(:priority) %> </th>
             <th> <%= t(:product_state) %> </th>
             <th> <%= t(:product_type) %> </th>
           </tr>
@@ -118,7 +119,10 @@
               <td> 
                 <%= link_to product.name, product_path(product.id) %>
               </td>
-              <td > 
+              <td class='variable-size'> 
+                <%= product.priority %>
+              </td>
+              <td> 
                 <%= product.state %>
               </td>
               <td > 

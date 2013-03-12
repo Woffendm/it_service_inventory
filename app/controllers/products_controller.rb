@@ -26,30 +26,16 @@ class ProductsController < ApplicationController
   # Has two tabs, one with all products in the user's groups, another with all products.
   def index
     @groups = Group.order(:name)
-    @products = Product.order(:name)
     @product = Product.new
-    @user_group_products = Product.where(:id => ProductGroup.where(:group_id =>
-          @current_user.employee_groups.pluck(:group_id)).pluck(:product_id)).order(:name)
-    if params[:product_state] && !params[:product_state][:id].blank?
-      @product_state = params[:product_state][:id]
-      @products = @products.where(:product_state_id => params[:product_state][:id])
-      @user_group_products = @user_group_products.where(:product_state_id =>
-                             params[:product_state][:id])
-    end
-    if params[:product_type] && !params[:product_type][:id].blank?
-      @product_type = params[:product_type][:id]
-      @products = @products.where(:product_type_id => params[:product_type][:id])
-      @user_group_products = @user_group_products.where(:product_type_id => 
-                             params[:product_type][:id])
-    end
+    @products = filter_products(params[:search])
+    @products = sort_results(params, @products)
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
-    @user_group_products = @user_group_products.paginate(:page => params[:user_group_products_page], 
-          :per_page => session[:results_per_page])
   end
 
 
   # Page for viewing a product in detail
+  # Contains rest services for viewing product in json
   def show
     @total_groups = @product.groups.length
     @total_services = @product.services.length
@@ -58,7 +44,7 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html
       format.js  { render :json => @product.rest_show, :callback => params[:callback] }
-      format.json { render :json => @product }
+      format.json { render :json => @product.rest_show }
       format.xml { render :xml => @product }
     end
   end
@@ -126,6 +112,27 @@ class ProductsController < ApplicationController
 # Loading methods
 
   private
+    # Filters the products displayed on the index page based on paramaters provided
+    def filter_products(search)
+      return Product.where(true) if search.blank?
+      @group = search[:group]
+      @product_state = search[:product_state]
+      @product_type = search[:product_type]
+      @product_name = search[:product_name]
+      @product_priority = search[:product_priority]
+      @search_string = ""
+      @search_array = ["true"]
+      @search_array << "products.name LIKE '%#{@product_name}%'" unless @product_name.blank? 
+      @search_array << "product_state_id = #{@product_state}" unless @product_state.blank?
+      @search_array << "product_type_id = #{@product_type}" unless @product_type.blank? 
+      @search_array << "product_priority_id = #{@product_priority}" unless @product_priority.blank? 
+      @search_string = @search_array.join(" AND ")
+      @products = Product.where(@search_string)
+      @products = @products.joins(:groups).where("product_groups.group_id" => @group).uniq unless @group.blank?
+      return @products
+    end
+    
+    
     # Loads all active years. Loads the last selected year if it is active
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
@@ -150,6 +157,7 @@ class ProductsController < ApplicationController
     def load_all_product_associations
       @product_states = ProductState.order(:name)
       @product_types = ProductType.order(:name)
+      @product_priorities = ProductPriority.order(:name)
       @product_source_types = ProductSourceType.all
     end
 
@@ -182,7 +190,8 @@ class ProductsController < ApplicationController
 
     # Loads a product based on the id provided in params
     def load_product
-      @product = Product.includes(:product_state, :product_type).find(params[:id])
+      @product = Product.includes(:product_state, :product_type,
+                :product_priority).find(params[:id])
     end
 
 

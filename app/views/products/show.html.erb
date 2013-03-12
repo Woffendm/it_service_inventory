@@ -54,6 +54,16 @@
         <%= @total_allocation %> 
       </td>
     </tr>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:priority) %>
+        </div> 
+        <%= @product.priority %> 
+      </td>
+      <td>
+      </td>
+    </tr>
   </tbody>
 </table>
 
@@ -89,6 +99,15 @@
             <%= @product_groups.collect{|g| link_to g.group.name, 
                   group_path(g.group_id)}.join(", &nbsp;").html_safe %>
           <% end %>
+        </span>
+      </div>
+    
+      <div class="control-group">
+        <span class="control-label">
+          <%= label_tag t(:product_priority) %> 
+        </span>
+        <span class="controls">
+          <%= @product.priority %> 
         </span>
       </div>
     
