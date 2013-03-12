@@ -476,7 +476,7 @@ h2 > a {
 th.variable-size, td.variable-size {
   max-width: 150px;
   min-width: 30px;
-  width: 0px;
+  width: 1px;
 }
 
 @media (max-width: 1120px) {
