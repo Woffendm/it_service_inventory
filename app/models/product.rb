@@ -84,7 +84,7 @@ class Product < ActiveRecord::Base
   
   
   def rest_show   
-     "{'id'#{self.id},'name'#{self.name},'description'#{self.description},'product_priority':{'id'#{self.product_priority_id},'name'#{self.product_priority.name}},'product_state':{'id'#{self.product_state_id},'name'#{self.product_state.name}},'product_type':{'id'#{self.product_type_id},'name'#{self.product_type.name}}"
+ "{'id'#{self.id},'name'#{self.name},'description'#{self.description},'product_priority':{'id'#{self.product_priority_id},'name'#{self.product_priority.name}},'product_state':{'id'#{self.product_state_id},'name'#{self.product_state.name}},'product_type':{'id'#{self.product_type_id},'name'#{self.product_type.name}}"
   end
   
   private
