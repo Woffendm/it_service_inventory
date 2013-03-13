@@ -4,18 +4,18 @@
 # Copyright:
 
 class ProductsController < ApplicationController
+  skip_before_filter :current_user,                   :only => [:index, :show]
+  skip_before_filter :set_user_language,              :only => [:index, :show]
+  skip_before_filter :require_login,                  :only => [:index, :show]
+  skip_before_filter :remind_user_to_set_allocations, :only => [:index, :show]
   before_filter :load_product,                      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
   before_filter :load_all_years,                    :only => [:show]
   before_filter :load_associations,                 :only => [:edit, :show, :update]
   before_filter :load_available_associations,       :only => [:edit, :update]
   before_filter :load_all_product_associations,     :only => [:index, :edit, :update]
-  before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
-  #skip_before_filter :current_user,                   :only => [:index, :show]
-  #skip_before_filter :set_user_language,              :only => [:index, :show]
-  #skip_before_filter :require_login,                  :only => [:index, :show]
-  #skip_before_filter :remind_user_to_set_allocations, :only => [:index, :show]
 
 
 # View-related methods
@@ -36,7 +36,7 @@ class ProductsController < ApplicationController
           session[:results_per_page])
     respond_to do |format|
       format.html
-      format.js  { render :json => Product.rest_show_all, :callback => params[:callback] }
+      format.js  { render :json => Product.rest_show_all.to_json, :callback => params[:callback] }
       format.json { render :json => Product.rest_show_all }
       format.xml { render :xml => @products }
     end
@@ -46,14 +46,15 @@ class ProductsController < ApplicationController
   # Page for viewing a product in detail
   # Contains rest services for viewing product in json
   def show
+    @product = Product.find(params[:id])
     @total_groups = @product.groups.length
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
     @total_allocation = @product.get_total_allocation(@year)
     respond_to do |format|
       format.html
-      format.js  { render :json => @product.rest_show, :callback => params[:callback] }
-      format.json { render :json => @product.rest_show }
+      format.js  { render :json => @product.rest_show.to_json, :callback => params[:callback] }
+      format.json { render :json => @product.rest_show.to_json }
       format.xml { render :xml => @product }
     end
   end
