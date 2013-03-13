@@ -36,7 +36,7 @@ class ProductsController < ApplicationController
           session[:results_per_page])
     respond_to do |format|
       format.html
-      format.js  { render :json => Product.rest_show_all.to_json, :callback => params[:callback] }
+      format.js  { render :json => Product.rest_show_all, :callback => params[:callback] }
       format.json { render :json => Product.rest_show_all }
       format.xml { render :xml => @products }
     end
@@ -53,11 +53,12 @@ class ProductsController < ApplicationController
     @total_allocation = @product.get_total_allocation(@year)
     respond_to do |format|
       format.html
-      format.js  { render :json => @product.rest_show.to_json, :callback => params[:callback] }
-      format.json { render :json => @product.rest_show.to_json }
+      format.js  { render :json => @product.rest_show, :callback => params[:callback] }
+      format.json { render :json => @product.rest_show }
       format.xml { render :xml => @product }
     end
   end
+
 
 # Action-related methods 
 
