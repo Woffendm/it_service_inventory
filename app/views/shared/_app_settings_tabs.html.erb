@@ -3,15 +3,18 @@
     <%= link_to t(:application_settings), app_settings_path %>
   </li>
   <li class="<%=ct(app_settings_admins_path)%>">
-    <%= link_to t(:manage) + t(:site_admins), app_settings_admins_path %>
+    <%= link_to t(:site_admins), app_settings_admins_path %>
+  </li>
+  <li class="<%=ct(product_priorities_path)%>">
+    <%= link_to t(:product_priorities), product_priorities_path %>
   </li>
   <li class="<%=ct(product_states_path)%>">
-    <%= link_to t(:manage) + t(:product_states), product_states_path %>
+    <%= link_to t(:product_states), product_states_path %>
   </li>
   <li class="<%=ct(product_types_path)%>">
-    <%= link_to t(:manage) + t(:product_types), product_types_path %>
+    <%= link_to t(:product_types), product_types_path %>
   </li>
   <li class="<%=ct(fiscal_years_path)%>">
-    <%= link_to t(:manage) + t(:fiscal_years), fiscal_years_path %>
+    <%= link_to t(:fiscal_years), fiscal_years_path %>
   </li>
 </ul>

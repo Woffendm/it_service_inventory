@@ -1,5 +1,8 @@
 Project1::Application.routes.draw do
 
+  resources :product_priorities
+
+
   resources :products
 
   match 'app_settings/admins' => 'app_settings#admins'

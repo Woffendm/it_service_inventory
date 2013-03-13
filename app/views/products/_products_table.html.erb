@@ -1,8 +1,8 @@
 <thead>
-  <th> <%= t(:name) %> </th>
+  <th>  <%= sort_column(t(:name), products_path, 'name', @order, @ascending) %> </th>
   <th> <%= t(:description) %> </th>
   <th> <%= t(:product_state) %> </th>
-  <th> <%= t(:product_type) %> </th>
+  <th> <%= sort_column(t(:product_type), products_path, 'product_type_id', @order, @ascending) %> </th>
   <th> </th>
 </thead>
 <tbody>
