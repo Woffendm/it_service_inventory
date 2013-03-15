@@ -10,9 +10,9 @@ class ApplicationController < ActionController::Base
   # themes, but will be used later)
   # before_filter :load_theme
   before_filter :current_user
+  before_filter :require_login
   before_filter :load_current_fiscal_year
   before_filter :set_user_language
-  before_filter :require_login
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
   rescue_from OmniAuth::Error, :with => :invalid_credentials
@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   private
     # Redirects user to login page unless they are logged in
     def require_login
-        redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user
+      redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user || @key_passed
     end
     
     
@@ -34,8 +34,10 @@ class ApplicationController < ActionController::Base
     # This should be accomplished by a redirect to the destroy action of the logins controller, but
     # unfortunately Chrome gets upset when there are more than two redirects at once.
     def current_user
-      unless Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
+      if !Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
         @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
+      elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
+        @key_passed = true if request.headers['app_key'] == 'test'
       else
         session[:current_user_name] = nil
         session[:results_per_page] = nil
@@ -112,7 +114,7 @@ class ApplicationController < ActionController::Base
     # If the current user has no allocations AND they have not disabled this preference, then a 
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
-      if @current_user.new_user_reminder &&
+      if !@current_user.blank? && @current_user.new_user_reminder &&
          @current_user.get_total_service_allocation(@current_fiscal_year).zero?
         edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + 
                              "\">" + t(:here) + "</a>"

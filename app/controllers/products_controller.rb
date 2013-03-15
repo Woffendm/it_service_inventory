@@ -4,10 +4,6 @@
 # Copyright:
 
 class ProductsController < ApplicationController
-  skip_before_filter :current_user,                   :only => [:index, :show]
-  skip_before_filter :set_user_language,              :only => [:index, :show]
-  skip_before_filter :require_login,                  :only => [:index, :show]
-  skip_before_filter :remind_user_to_set_allocations, :only => [:index, :show]
   before_filter :load_product,                      :only => [:destroy, :edit, :show, :update]
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
