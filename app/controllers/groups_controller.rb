@@ -10,9 +10,10 @@ class GroupsController < ApplicationController
                                             
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_possible_employees,  :only => [:edit]
-  before_filter :load_existing_employees,  :only => [:show, :edit]
+  before_filter :load_existing_employees,  :only => [:edit]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
+  before_filter :load_employees_for_year,  :only => [:show]
   before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
                                             :remove_employee, :update]
                                             
@@ -162,6 +163,15 @@ class GroupsController < ApplicationController
     end
 
 
+    # Loads all employees for the given year
+    def load_employees_for_year
+      @employees = @group.employees.joins(:employee_allocations).where(
+          "employee_allocations.fiscal_year_id = ?",  @year.id).uniq.includes(
+          :employee_allocations).order(:name_last, :name_first).paginate(:page =>   
+          params[:employees_page], :per_page => session[:results_per_page])
+    end
+
+
     # Loads all employees
     def load_existing_employees
       @existing_employees = @group.employees.order(:name_last, :name_first).paginate(:page =>   
@@ -183,7 +193,8 @@ class GroupsController < ApplicationController
     
     # Loads all products allocated to the group
     def load_products
-      @products = @group.products.order(:name).paginate(:page =>   
+      @products = @group.products.joins(:employee_products).where(
+            "employee_products.fiscal_year_id = ?", @year.id).uniq.order(:name).paginate(:page =>   
             params[:products_page], :per_page => session[:results_per_page])
     end
     

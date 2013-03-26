@@ -410,6 +410,7 @@ h2 > a {
 .year-content{
   border-right: 1px solid #DDDDDD;
   padding-right: 15px;
+  overflow: auto;
 }
 
 .tabs-right .active > a {
