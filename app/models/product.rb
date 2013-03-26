@@ -148,7 +148,7 @@ class Product < ActiveRecord::Base
   
     def self.rest_show_all
       array = []
-      Product.order(:name) do |product|
+      Product.order(:name).each do |product|
         array << product.rest_show
       end
       return array
