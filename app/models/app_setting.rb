@@ -46,4 +46,10 @@ class AppSetting < ActiveRecord::Base
     return nil if FiscalYear.first.blank?
     return FiscalYear.find_by_year(AppSetting.find_by_code("current_fiscal_year").value)
   end
+  
+  
+  # Returns the application's REST api key
+  def self.get_rest_api_key
+    return AppSetting.find_by_code("rest_api_key").value
+  end
 end

@@ -22,7 +22,8 @@ class ProductsController < ApplicationController
   end
 
 
-  # Has two tabs, one with all products in the user's groups, another with all products.
+  # Page for viewing all products at a glance. 
+  # Contains rest services for viewing products in json
   def index
     @groups = Group.order(:name)
     @product = Product.new

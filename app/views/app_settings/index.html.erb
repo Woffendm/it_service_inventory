@@ -21,6 +21,7 @@
     </span>
   </div>
   
+  
   <div class="control-group">
     <span class="control-label">
       <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
@@ -37,6 +38,7 @@
     </span>
   </div>
   
+  
   <div class="control-group">
     <span class="control-label">
       <%= label_tag :app_setting_current_fiscal_year, t(:current_fiscal_year) %>
@@ -49,6 +51,22 @@
     <span class="tooltip">
       <p class="tooltip_paragraph"> 
         <%= t(:fiscal_year_info) %> 
+      </p>
+    </span>
+  </div>
+  
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :app_setting_rest_api_key, t(:rest_api_key) %>
+    </span>
+    <span class="controls">
+      <%= text_field_tag "app_setting[rest_api_key]", @rest_api_key, {:class => "small"} %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <p class="tooltip_paragraph"> 
+        <%= t(:rest_api_key_info) %> 
       </p>
     </span>
   </div>

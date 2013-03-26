@@ -146,6 +146,7 @@ class Product < ActiveRecord::Base
     end
   
   
+    # Creates array of all products in hash form for REST services
     def self.rest_show_all
       array = []
       Product.order(:name).each do |product|

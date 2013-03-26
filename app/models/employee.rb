@@ -14,7 +14,7 @@ class Employee < ActiveRecord::Base
   has_many :groups,   :through => :employee_groups
   has_many :products, :through => :employee_products
   has_many :services, :through => :employee_allocations
-  validates_presence_of   :name_first,    :name_last
+  validates_presence_of   :name_first,    :name_last,   :osu_id
   validates_uniqueness_of :osu_username,  :scope => :osu_id
   accepts_nested_attributes_for :employee_allocations,  :allow_destroy => true
   accepts_nested_attributes_for :employee_groups,       :allow_destroy => true
