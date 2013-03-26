@@ -126,6 +126,7 @@ class Product < ActiveRecord::Base
     def rest_show 
       {
         "id" => self.id, 
+        "name" => self.name,
         "description" => self.description, 
         "product_priority" => {
           "id" => self.product_priority_id, 
