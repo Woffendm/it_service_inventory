@@ -5,7 +5,7 @@
 
 class Employee < ActiveRecord::Base
   attr_accessible :email, :employee_allocations_attributes, :employee_allocations, 
-                  :employee_groups_attributes,
+                  :employee_groups_attributes, :osu_username,
                   :name_first, :name_last, :notes, :preferred_language, :preferred_theme,
                   :new_user_reminder, :employee_products_attributes
   has_many :employee_allocations, :dependent => :delete_all

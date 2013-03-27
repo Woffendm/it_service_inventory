@@ -8,6 +8,7 @@ describe Employee do
     employee.should_not be_valid
     employee.should have_at_least(1).error_on(:name_first)
     employee.should have_at_least(1).error_on(:name_last)
+    employee.should have_at_least(1).error_on(:osu_username)
   end
 
 
@@ -16,6 +17,7 @@ describe Employee do
     employee = Employee.new
     employee.name_first = "some"
     employee.name_last = "employee"
+    employee.osu_username = "yoloswag4ever"
     employee.should be_valid
   end
 
@@ -58,7 +60,7 @@ describe Employee do
       @fiscal_year = FiscalYear.create(:year => 9001)
       @service = Service.create(:name => "first service")
       @service_2 = Service.create(:name => "last service")
-      @employee = Employee.create(:name_first => "some", :name_last => "employee")
+      @employee = Employee.create(:name_first => "some", :name_last => "employee", :osu_username => "yoloswag4ever")
       @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1, :fiscal_year_id => @fiscal_year.id)
     end
 
