@@ -54,6 +54,20 @@ class Product < ActiveRecord::Base
   end
   
   
+  # Returns the sum of all the allocations for this service by employees in the given group for the 
+  # given year. 
+  def get_allocation_for_group(group, year)
+    allocation_sum = 0.0
+    EmployeeProduct.joins(:employee => :groups
+                     ).where(:product_id => self.id, :fiscal_year_id => year.id, 
+                             :groups => {:id => group.id}
+                     ).each do |employee_allocation|
+      allocation_sum += employee_allocation.allocation
+    end
+    return allocation_sum
+  end
+  
+  
   # Returns an array of services that the product does not currently have
   def get_available_services
     Service.order(:name) - self.services

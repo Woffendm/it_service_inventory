@@ -1,0 +1,32 @@
+<% @allocations = product.employee_products.joins(:employee => :groups).where(
+      :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
+      "employees.name_last").includes(:employee) %>
+    
+<% unless @allocations.blank? %> 
+  <div class="tooltip_trigger">
+    <%= product.get_allocation_for_group(@group, @year).to_s + " " + t(:fte) %>
+  </div>
+  <div class="tooltip">
+    <table class="tooltip-table">
+      <thead>
+        <tr>
+          <th class="tooltip_first_column"> <%= t(:employee) %> </th>
+          <th class="tooltip_last_column"> <%= t(:allocation) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @allocations.each do |product_allocation| %>
+          <tr>
+            <td style="<%=max_width_by_string(product_allocation.employee.full_name)%>"
+              class="tooltip_first_column"> 
+              <%= product_allocation.employee.full_name %> 
+            </td>
+            <td class="tooltip_last_column">
+              <%= product_allocation.rounded_allocation %> 
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

@@ -81,7 +81,11 @@
       <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
       <div class="year-content">
-        <% unless @services.blank? %>
+        <% if @services.blank? %>
+          <p>
+            <%= t(:nothing_to_display) %>
+          </p>
+        <% else %>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -118,7 +122,11 @@
     <%= render  :partial => "/shared/all_year_select", 
                 :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
-      <% unless @employees.blank? %>
+      <% if @employees.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
         <table class="table table-striped"> 
           <thead>
             <tr>
@@ -157,7 +165,11 @@
     <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
-      <% unless @products.blank? %>
+      <% if @products.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -165,6 +177,7 @@
               <th class='variable-size'> <%= t(:priority) %> </th>
               <th> <%= t(:product_state) %> </th>
               <th> <%= t(:product_type) %> </th>
+              <th> <%= t(:allocation) %> </th>
             </tr>
           </thead>
           <tbody>
@@ -179,8 +192,12 @@
                 <td > 
                   <%= product.state %>
                 </td>
-                <td > 
+                <td> 
                   <%= product.type %>
+                </td>
+                <td>
+                  <%= render  :partial => "/shared/product_employees_and_allocations", 
+                              :locals => {:product => product} %>
                 </td>
               </tr>
             <% end %>
