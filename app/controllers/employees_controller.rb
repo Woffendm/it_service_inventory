@@ -45,8 +45,8 @@ class EmployeesController < ApplicationController
 
   # Page for viewing an existing employee
   def show
-    @total_services = @employee.employee_allocations.where(:fiscal_year_id => @year.id).length
-    @total_products = @employee.employee_products.where(:fiscal_year_id => @year.id).length
+    @total_services = @service_allocations.length
+    @total_products = @product_allocations.length
     @total_service_allocation = @employee.get_total_service_allocation(@year, @allocation_precision)
     @total_product_allocation = @employee.get_total_product_allocation(@year, @allocation_precision)
   end
@@ -266,7 +266,7 @@ class EmployeesController < ApplicationController
 
     # Loads possible allocations
     def load_possible_allocations
-      @possible_allocations = EmployeeAllocation.possible_allocations
+      @possible_allocations = EmployeeAllocation.possible_allocations(@allocation_precision)
     end
 
 

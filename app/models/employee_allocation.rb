@@ -10,6 +10,10 @@ class EmployeeAllocation < ActiveRecord::Base
   belongs_to :service
   belongs_to :fiscal_year
   validates_presence_of :allocation, :employee_id, :service_id, :fiscal_year_id
+  validates_uniqueness_of :employee_id, :scope => [:fiscal_year_id, :service_id]
+  validates_uniqueness_of :service_id, :scope => [:fiscal_year_id, :employee_id]
+  validates_uniqueness_of :fiscal_year_id, :scope => [:employee_id, :service_id]
+  
   delegate :name, :to => :service
 
 

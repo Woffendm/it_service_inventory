@@ -47,7 +47,7 @@ class ProductsController < ApplicationController
     @total_groups = @product.groups.length
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
-    @total_allocation = @product.get_total_allocation(@year)
+    @total_allocation = @product.get_total_allocation(@year, @allocation_precision)
     respond_to do |format|
       format.html
       format.js  { render :json => @product.rest_show, :callback => params[:callback] }
@@ -170,10 +170,9 @@ class ProductsController < ApplicationController
     end
 
 
-    # Loads the application settings fte_hours_per_week and allocation_precision
+    # Loads the application setting fte_hours_per_week 
     def load_application_settings
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -205,6 +204,6 @@ class ProductsController < ApplicationController
 
     # Loads possible allocations
     def load_possible_allocations
-      @possible_allocations = EmployeeProduct.possible_allocations
+      @possible_allocations = EmployeeProduct.possible_allocations(@allocation_precision)
     end
 end

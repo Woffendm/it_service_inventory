@@ -35,8 +35,7 @@ class EmployeeProduct < ActiveRecord::Base
   # Because mysql is bad at storing floats which aren't a power of 2, before the allocation value 
   # can be used in a display or calculation it must first be rounded to two decimal places. 
   def rounded_allocation(allocation_precision)
-    if allocation
-      return allocation.round(allocation_precision)
-    end
+    return allocation.round(allocation_precision) if allocation
+    return 0.0
   end
 end

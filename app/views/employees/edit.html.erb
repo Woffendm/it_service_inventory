@@ -170,7 +170,8 @@
                     <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
                     <%= form.hidden_field(:id, :value => service_allocation.id) %>
                     <%= form.select(:allocation, @possible_allocations, 
-                                   {:selected => service_allocation.rounded_allocation}, 
+                                   {:selected =>
+                                    service_allocation.rounded_allocation(@allocation_precision)}, 
                                     :class => "calculator_select allocation_value") %>
                     <%= render  :partial => "/shared/fte_calculator_trigger" %>
                   </td>

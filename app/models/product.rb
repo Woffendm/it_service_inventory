@@ -62,7 +62,7 @@ class Product < ActiveRecord::Base
                      ).where(:product_id => self.id, :fiscal_year_id => year.id, 
                              :groups => {:id => group.id}
                      ).each do |employee_allocation|
-      allocation_sum += employee_allocation.allocation
+      allocation_sum += employee_allocation.allocation if employee_allocation.allocation
     end
     return allocation_sum.round(allocation_precision)
   end
@@ -92,9 +92,9 @@ class Product < ActiveRecord::Base
   def get_total_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id => year.id).each do |employee_product|
-      total_allocation += employee_product.rounded_allocation(allocation_precision)
+      total_allocation += employee_product.allocation if employee_product.allocation
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   
