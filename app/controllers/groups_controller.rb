@@ -36,11 +36,11 @@ class GroupsController < ApplicationController
   
   # Page for viewing an existing group
   def show
-    @total_employees = @group.employees.length
-    @total_products = @group.products.length
-    @total_services = @group.services(@year).length
-    @total_product_allocation = @group.get_total_product_allocation(@year)
-    @total_service_allocation = @group.get_total_service_allocation(@year)
+    @total_employees = @employees.length
+    @total_products = @products.length
+    @total_services = @services.length
+    @total_product_allocation = @group.get_total_product_allocation(@year, @allocation_precision)
+    @total_service_allocation = @group.get_total_service_allocation(@year, @allocation_precision)
   end
   
   
@@ -191,10 +191,11 @@ class GroupsController < ApplicationController
     end
     
     
-    # Loads all products allocated to the group
+    # Loads all products allocated to the group for the given fiscal year.
     def load_products
-      @products = @group.products.joins(:employee_products).where(
-            "employee_products.fiscal_year_id = ?", @year.id).uniq.order(:name).paginate(:page =>   
+      @products = @group.products.joins(:employee_products, :employees => :groups).where(
+            "employee_products.fiscal_year_id = ?", @year.id).where(
+            :groups => {:id => @group.id}).uniq.order(:name).paginate(:page =>   
             params[:products_page], :per_page => session[:results_per_page])
     end
     

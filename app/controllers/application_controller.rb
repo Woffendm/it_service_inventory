@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   before_filter :current_user
   before_filter :require_login
   before_filter :load_current_fiscal_year
+  before_filter :load_allocation_precision
   before_filter :set_user_language
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
@@ -61,6 +62,12 @@ class ApplicationController < ActionController::Base
         FiscalYear.create(:year => AppSetting.find_by_code("current_fiscal_year").value)
         @current_fiscal_year = AppSetting.get_current_fiscal_year
       end
+    end
+    
+    
+    # Loads the application's allocation precision as specified in the app settings.
+    def load_allocation_precision
+      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -115,7 +122,8 @@ class ApplicationController < ActionController::Base
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
       if !@current_user.blank? && @current_user.new_user_reminder &&
-         @current_user.get_total_service_allocation(@current_fiscal_year).zero?
+            @current_user.get_total_service_allocation(@current_fiscal_year,
+            @allocation_precision).zero?
         edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + 
                              "\">" + t(:here) + "</a>"
         user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + 

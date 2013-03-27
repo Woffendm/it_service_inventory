@@ -65,19 +65,19 @@ class Employee < ActiveRecord::Base
 
 
   # Returns the employee's total service allocation for the given fiscal year.
-  def get_total_service_allocation(year)
+  def get_total_service_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_allocations.where(:fiscal_year_id =>year.id).each do |employee_allocation|
-      total_allocation += employee_allocation.rounded_allocation
+      total_allocation += employee_allocation.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end
   
   # Returns the employee's total product allocation for the given fiscal year.
-  def get_total_product_allocation(year)
+  def get_total_product_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id =>year.id).each do |employee_product|
-      total_allocation += employee_product.rounded_allocation
+      total_allocation += employee_product.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end

@@ -4,7 +4,7 @@
     
 <% unless @allocations.blank? %> 
   <div class="tooltip_trigger">
-    <%= service.get_allocation_for_group(@group, @year).to_s + " " + t(:fte) %>
+    <%= service.get_allocation_for_group(@group, @year, @allocation_precision).to_s + " " + t(:fte) %>
   </div>
   <div class="tooltip">
     <table class="tooltip-table">
@@ -22,7 +22,7 @@
               <%= service_allocation.employee.full_name %> 
             </td>
             <td class="tooltip_last_column">
-              <%= service_allocation.rounded_allocation %> 
+              <%= service_allocation.rounded_allocation(@allocation_precision) %> 
             </td>
           </tr>
         <% end %>

@@ -56,7 +56,7 @@ class Product < ActiveRecord::Base
   
   # Returns the sum of all the allocations for this service by employees in the given group for the 
   # given year. 
-  def get_allocation_for_group(group, year)
+  def get_allocation_for_group(group, year, allocation_precision)
     allocation_sum = 0.0
     EmployeeProduct.joins(:employee => :groups
                      ).where(:product_id => self.id, :fiscal_year_id => year.id, 
@@ -64,7 +64,7 @@ class Product < ActiveRecord::Base
                      ).each do |employee_allocation|
       allocation_sum += employee_allocation.allocation
     end
-    return allocation_sum
+    return allocation_sum.round(allocation_precision)
   end
   
   
@@ -89,10 +89,10 @@ class Product < ActiveRecord::Base
 
 
   # Returns the total allocation for the given product.
-  def get_total_allocation(year)
+  def get_total_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id => year.id).each do |employee_product|
-      total_allocation += employee_product.rounded_allocation
+      total_allocation += employee_product.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end
