@@ -33,7 +33,7 @@
       </td>
       <td>
         <div class="overview-label">
-          <%= t(:full_time_employees) %>
+          <%= t(:employee) + t(:allocation) %>
         </div>
         <%= "#{@total_service_allocation} " + t(:fte) %>
       </td>
@@ -98,7 +98,8 @@
                     <%= link_to service.name, service_path(service.id) %>
                   </td>
                   <td>
-                    <%= service.get_allocation_for_group(@group, @year).to_s + " " + t(:fte) %>
+                    <%= render  :partial => "/shared/service_employees_and_allocations", 
+                                :locals => {:service => service} %>
                   </td>
                 </tr>
               <% end %>
