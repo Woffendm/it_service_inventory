@@ -145,7 +145,10 @@ class ProductsController < ApplicationController
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
       if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+         flash[:notice] = "Selected year #{@year.year} inactive. Year changed to #{@current_fiscal_year.year}."
         @year = @current_fiscal_year
+      else 
+        @year = FiscalYear.find_by_year(cookies[:year])
       end
     end
     

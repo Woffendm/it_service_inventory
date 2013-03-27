@@ -181,6 +181,15 @@
                 </tr>
               <% end %>
             <% end %>
+            <tr> 
+              <td>
+                <%= t(:total) + " " + t(:allocation) %>
+              </td>
+              <td id="total-allocation">
+                <%= "#{@employee.get_total_service_allocation(@year, @allocation_precision)} " + t(:fte) %>
+              </td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       <% end %>
