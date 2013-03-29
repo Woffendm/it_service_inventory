@@ -95,14 +95,14 @@
               </tr>
             </thead>
             <tbody>
-              <% @services.each do |service| %>
+              <% @services.each_with_index do |service, index| %>
                 <tr>
                   <td> 
                     <%= link_to service.name, service_path(service.id) %>
                   </td>
                   <td>
-                    <%= render  :partial => "/shared/service_employees_and_allocations", 
-                                :locals => {:service => service} %>
+                    <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
+                                :locals => {:array => @service_allocations[index]} %>
                   </td>
                 </tr>
               <% end %>
@@ -180,7 +180,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @products.each do |product| %>
+            <% @products.each_with_index do |product, index| %>
               <tr>
                 <td> 
                   <%= link_to product.name, product_path(product.id) %>
@@ -195,8 +195,8 @@
                   <%= product.type %>
                 </td>
                 <td>
-                  <%= render  :partial => "/shared/product_employees_and_allocations", 
-                              :locals => {:product => product} %>
+                  <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
+                              :locals => {:array => @product_allocations[index]} %>
                 </td>
               </tr>
             <% end %>

@@ -197,6 +197,14 @@ class GroupsController < ApplicationController
             "employee_products.fiscal_year_id = ?", @year.id).where(
             :groups => {:id => @group.id}).uniq.order(:name).paginate(:page =>   
             params[:products_page], :per_page => session[:results_per_page])
+      @product_allocations = []
+      @products.each do |product|
+        @product_allocations << [product.get_allocation_for_group(@group, @year, 
+                                @allocation_precision).to_s + " " + t(:fte),
+                                product.employee_products.joins(:employee => :groups).where(
+                                :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
+                                "employees.name_last").includes(:employee)]
+      end
     end
     
     
@@ -204,5 +212,13 @@ class GroupsController < ApplicationController
     def load_services
       @services = @group.services(@year).paginate(:page =>   
             params[:services_page], :per_page => session[:results_per_page])
+      @service_allocations = []
+      @services.each do |service|
+        @service_allocations << [service.get_allocation_for_group(@group, @year, 
+                                @allocation_precision).to_s + " " + t(:fte), 
+                                service.employee_allocations.joins(:employee => :groups).where(
+                                :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
+                                "employees.name_last").includes(:employee)]
+      end
     end
 end
