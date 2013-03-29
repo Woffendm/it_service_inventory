@@ -4,11 +4,11 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_group,       :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
+  before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
-  before_filter :load_all_years,   :only => [:show, :services]
-                                            
+  before_filter :load_all_years,  :only => [:show, :services]                                
   before_filter :load_employee,   :only => [:add_employee]
+  before_filter :load_portfolios, :only => [:show, :edit]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:show, :edit]
   before_filter :load_services,            :only => [:show]
@@ -178,6 +178,12 @@ class GroupsController < ApplicationController
     # Loads a group based on given parameters
     def load_group
       @group = Group.find(params[:id])
+    end
+    
+    
+    # Loads all portfolios associated with the given group
+    def load_portfolios
+      @portfolios = @group.portfolios.includes(@products)
     end
     
     

@@ -5,11 +5,12 @@
 # Copyright:
 
 class Group < ActiveRecord::Base
-  attr_accessible :employees, :name
+  attr_accessible :employees, :name, :portfolios
   has_many :employee_groups, :dependent => :delete_all
   has_many :employees, :through => :employee_groups
   has_many :product_groups, :dependent => :delete_all
   has_many :products, :through => :product_groups
+  has_many :portfolios
   validates_presence_of :name
   
   

@@ -15,6 +15,7 @@ class Product < ActiveRecord::Base
   has_many :groups,             :through =>   :product_groups
   has_many :product_services,   :dependent => :delete_all
   has_many :services,           :through =>   :product_services
+  has_and_belongs_to_many :portfolios
   has_one  :product_source
   belongs_to :product_type
   belongs_to :product_state
