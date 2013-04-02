@@ -9,22 +9,6 @@
 
 <table class="table table-striped overview">
   <caption> <%= t(:overview) %> </caption>
-  <thead>
-    <tr>
-      <th>
-        <%= form_tag change_year_logins_path, :method => "get" do %>
-          <%= label_tag :year, t(:fiscal_year) %> 
-          <%= select_tag(:year, 
-              options_from_collection_for_select(@all_years, :year, :year,
-              {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag t(:show) %>
-        <% end %>
-      </th>
-      <th>
-        
-      </th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
       <td>
@@ -35,23 +19,23 @@
       </td>
       <td>
         <div class="overview-label">
-          <%= t(:products) %>
+          <%= t(:service) + t(:allocation) %>
         </div>
-        <%= @total_products %> 
+        <%= "#{@total_service_allocation} " + t(:fte) %>
       </td>
     </tr>
     <tr>
       <td>
         <div class="overview-label">
-          <%= t(:service) + t(:allocation) %>
+          <%= t(:products) %>
         </div>
-        <%= @total_service_allocation %>
+        <%= @total_products %>
       </td>
       <td>
         <div class="overview-label">
           <%= t(:product) + t(:allocation) %>
         </div>
-        <%= @total_product_allocation %>
+        <%= "#{@total_product_allocation} " + t(:fte) %>
       </td>
     </tr>
   </tbody>
@@ -78,9 +62,10 @@
 
 
 <div class="tab-content">
-  <div class="tab-pane" id="basic_information">
-    
-    <div class="form-horizontal">
+  <div class="tab-pane tabs-right" id="basic_information">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="form-horizontal year-content">
       <div class="control-group">
         <span class="control-label">
           <%= label_tag t(:groups) %> 
@@ -109,75 +94,71 @@
         </span>
       </div>
     </div>
-    
   </div>
     
     
     
-  <div class="tab-pane active" id="services">
-    <div class="tabbable tabs-right">
-      <%= render  :partial => "/shared/all_year_select", 
-                  :locals => {:@year => @year, :@all_years => @all_years } %>
-
-      <div class="tab-content year-content">
-        <% unless @service_allocations.blank? %>
-          <table class="table table-striped">
-            <thead>
+  <div class="tab-pane tabs-right active" id="services">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @service_allocations.blank? %>
+        <p> <%= t(:nothing_to_display) %> </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%= t(:service) %></th>
+              <th><%= t(:allocation) %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @service_allocations.each do |service_allocation| %>
               <tr>
-                <th><%= t(:service) %></th>
-                <th><%= t(:allocation) %></th>
+                <td> 
+                  <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
+                </td>
+                <td class="form-inline"> 
+                  <%= "#{service_allocation.rounded_allocation(@allocation_precision)} " + t(:fte) %>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <% @service_allocations.each do |service_allocation| %>
-                <tr>
-                  <td> 
-                    <%= link_to service_allocation.name, service_path(service_allocation.service_id) %>
-                  </td>
-                  <td class="form-inline"> 
-                    <%= service_allocation.rounded_allocation %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-      </div>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
-
   </div>
 
 
 
-  <div class="tab-pane" id="products">
-    <div class="tabbable tabs-right">
-      <%= render  :partial => "/shared/all_year_select", 
-                  :locals => {:@year => @year, :@all_years => @all_years } %>
-
-      <div class="tab-content year-content">
-        <% unless @product_allocations.blank? %>
-          <table class="table table-striped">
-            <thead>
+  <div class="tab-pane tabs-right" id="products">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @product_allocations.blank? %>
+        <p> <%= t(:nothing_to_display) %> </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%= t(:product) %></th>
+              <th><%= t(:allocation) %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @product_allocations.each do |product_allocation| %>
               <tr>
-                <th><%= t(:product) %></th>
-                <th><%= t(:allocation) %></th>
+                <td> 
+                  <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
+                </td>
+                <td class="form-inline"> 
+                  <%= "#{product_allocation.rounded_allocation(@allocation_precision)} " + t(:fte) %>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <% @product_allocations.each do |product_allocation| %>
-                <tr>
-                  <td> 
-                    <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
-                  </td>
-                  <td class="form-inline"> 
-                    <%= product_allocation.rounded_allocation %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-      </div>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 

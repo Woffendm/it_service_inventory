@@ -12,6 +12,7 @@ $(document).ready(function(){
   var allocationValues = $('.allocation_value');
   var removeAllocations = $('.remove_allocation');
   var newAllocationValue = $("#employee_allocations_allocation")
+  var newProductAllocation = $("#employee_product_allocation")
   
   
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
@@ -39,6 +40,13 @@ $(document).ready(function(){
     if((newAllocationValue.val() != "") && (newAllocationValue.val() != undefined)) {
       totalAllocation += parseFloat(newAllocationValue.val());
     }
+    if((newProductAllocation.val() != "") && (newProductAllocation.val() != undefined)) {
+      totalAllocation += parseFloat(newProductAllocation.val());
+    }
+    
+    
+    // Populates the 'total allocation' row at the bottom of the page with the new total
+    $("#total-allocation").html(totalAllocation.toFixed(allocationPrecision) + " " + fte);
     
     
     // Hides submit buttons and shows error message if employee is over-allocated. Note that due to 

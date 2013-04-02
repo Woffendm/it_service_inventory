@@ -29,10 +29,10 @@ class ServicesController < ApplicationController
   
   
   def show
-    @total_employees = @service.employee_allocations.where(:employee_allocations => {:fiscal_year_id => @year.id}).length
-    @total_groups = @service.groups.length
+    @total_employees = @employee_allocations.length
+    @total_groups = @groups.length
     @total_products = @service.product_services.length
-    @total_allocation = @service.get_total_allocation(@year)
+    @total_allocation = @service.get_total_allocation(@year, @allocation_precision)
   end
 
 
@@ -120,7 +120,7 @@ class ServicesController < ApplicationController
       @employee_allocations = @service.employee_allocations.joins(:employee).where(
           :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
       @products = @service.products.order(:name)
-      @groups = @service.groups.order(:name)
+      @groups = @service.groups(@year).order(:name)
     end
     
     

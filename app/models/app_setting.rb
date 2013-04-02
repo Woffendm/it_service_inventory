@@ -46,4 +46,19 @@ class AppSetting < ActiveRecord::Base
     return nil if FiscalYear.first.blank?
     return FiscalYear.find_by_year(AppSetting.find_by_code("current_fiscal_year").value)
   end
+  
+  
+  # Returns the application's REST API key
+  # Let's say that this app is running on www.cheese.com and you want to get products from this app.
+  # 
+  # class Product < ActiveResource::Base
+  #   self.site = 'http://www.cheese.com/'
+  #   self.format = :json  
+  #   headers['app_key'] = 'testo'
+  # end
+  #
+  # Of course 'testo' would have to match the API key specified in this application's settings. 
+  def self.get_rest_api_key
+    return AppSetting.find_by_code("rest_api_key").value
+  end
 end

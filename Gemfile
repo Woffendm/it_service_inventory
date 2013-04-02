@@ -17,7 +17,7 @@ gem 'omniauth-ldap', '1.0.2'
 
 gem 'will_paginate', '3.0.4'
 
-gem 'mysql', '~> 2.8.1'
+gem 'mysql2'
 
 gem 'seed-fu', '~> 2.2.0'
 

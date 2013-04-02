@@ -32,7 +32,7 @@ def app_setup():
 # Sets unique environmental variables. This can be done with:
 # env.my_variable_name = value
 def app_set_required_environment_vars():
-    env.app_name = "it-service-inventory"
+    env.app_name = "itsi"
     env.repo_name = "it_service_inventory.git"
 #    env.web_user = "www-data"
 #    env.web_server_name = "apache2"
