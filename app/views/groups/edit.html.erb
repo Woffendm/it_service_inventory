@@ -48,7 +48,7 @@
       <div class="form-inline">
         <fieldset class="light-border">
           <legend><%= t(:add) + t(:portfolio) %></legend>
-          <%= fields_for "group_portfolio" do |form|%>
+          <%= fields_for "portfolio" do |form|%>
             <%= form.label :portfolio, t(:name) %>
             <%= form.text_field :name %>
             <%= form.submit t(:add) %>
@@ -60,7 +60,7 @@
       <% unless @portfolios.blank? %>
         <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
           <% @portfolios.each do |portfolio| %>
-            <%= group_form.fields_for "group_portfolios" do |form|%>
+            <%= group_form.fields_for "portfolios" do |form|%>
               <tr>
                 <td>
                   <%= portfolio.name %>                
@@ -100,30 +100,23 @@
       <% unless @existing_employees.blank? %>
         <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
           <tbody>
-            <% @existing_employees.each do |employee| %>
-              <tr>
-                <td>
-                  <%= link_to employee.full_name, employee_path(employee.id) %>
-                </td>
-                <td>
-                  <%= form_tag("toggle_group_admin", :method => "post", 
-                              :class => "prevent_double_submit") do %>
-                    <%= hidden_field_tag(:employee, employee.id) %>
-                    <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin &&
-                          ((employee != @current_user) || @current_user.site_admin )%>
-                      <%= submit_tag  t(:remove) + t(:group_admin), :confirm => t(:confirm_removal) %>
-                    <% else %>
-                      <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
-                    <% end %>
-                  <% end %>
-                </td>
-                <td>
-                  <%= form_tag("remove_employee", :method => "post") do %>
-                    <%= hidden_field_tag(:employee, employee.id) %>
-                    <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
-                  <% end %>
-                </td>
-              </tr>
+            <% @existing_employees.each do |employee_group| %>
+              <%= group_form.fields_for "employee_groups", employee_group do |form|%>
+                <tr>
+                  <td>
+                    <%= link_to employee_group.employee.full_name,
+                        employee_path(employee_group.employee_id) %>
+                  </td>
+                  <td>
+                    <%= form.hidden_field(:employee_id, :value => employee_group.employee_id) %>
+                    <%= form.hidden_field(:id, :value => employee_group.id) %>
+                    <%= form.check_box :group_admin, :value => employee_group.group_admin %>
+                  </td>
+                  <td>
+                    <%= form.check_box :_destroy %>
+                  </td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>
@@ -134,6 +127,7 @@
       <% end %>
     </div>
   </div>
+  <%= group_form.submit  t(:save_changes) %> 
   
   
   

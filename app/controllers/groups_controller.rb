@@ -31,8 +31,8 @@ class GroupsController < ApplicationController
     @groups = sort_results(params, @groups)
     @groups = @groups.paginate(:page => params[:page], :per_page => session[:results_per_page])
   end
-  
-  
+
+
   # Page for viewing an existing group
   def show
     @total_employees = @group.employees.length
@@ -164,7 +164,9 @@ class GroupsController < ApplicationController
 
     # Loads all employees
     def load_existing_employees
-      @existing_employees = @group.employees.order(:name_last, :name_first).paginate(:page =>   
+      @existing_employees = EmployeeGroup.joins(:employee).where(
+            :group_id => @group.id).includes(:employee).order(
+            :name_last, :name_first).paginate(:page =>   
             params[:employees_page], :per_page => session[:results_per_page])
     end
 
