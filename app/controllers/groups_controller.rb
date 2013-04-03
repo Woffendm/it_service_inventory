@@ -112,6 +112,16 @@ class GroupsController < ApplicationController
 
   # Updates a group based on the information endered on the "edit" page
   def update
+    unless params[:employee_group].blank?
+      if @group.employee_groups.new(params[:employee_group]).save
+        flash[:notice] = t(:employee) + t(:added)
+      end
+    end
+    unless params[:portfolio].blank? || params[:portfolio][:name].blank?
+      if @group.portfolios.new(params[:portfolio]).save
+        flash[:notice] = t(:portfolio) + t(:added)
+      end
+    end
     if @group.update_attributes(params[:group])
       flash[:notice] = t(:group) + t(:updated)
       redirect_to edit_group_path(@group.id) 
@@ -185,7 +195,7 @@ class GroupsController < ApplicationController
     
     # Loads all portfolios associated with the given group
     def load_portfolios
-      @portfolios = @group.portfolios.includes(@products)
+      @portfolios = @group.portfolios.order(:name).includes(@products)
     end
     
     

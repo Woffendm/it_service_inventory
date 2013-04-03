@@ -140,7 +140,7 @@
           <% @existing_employees.each do |employee| %>
             <tr>
               <td>
-                <%= link_to employee.full_name, employee_path(employee.id) %>
+                <%= link_to employee.employee.full_name, employee_path(employee.employee_id) %>
               </td>
             </tr>
           <% end %>

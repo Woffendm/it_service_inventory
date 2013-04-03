@@ -44,7 +44,7 @@
   
   
   
-    <div class="tab-pane active" id="portfolios">
+    <div class="tab-pane" id="portfolios">
       <div class="form-inline">
         <fieldset class="light-border">
           <legend><%= t(:add) + t(:portfolio) %></legend>
@@ -60,7 +60,7 @@
       <% unless @portfolios.blank? %>
         <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
           <% @portfolios.each do |portfolio| %>
-            <%= group_form.fields_for "portfolios" do |form|%>
+            <%= group_form.fields_for "portfolios", portfolio do |form|%>
               <tr>
                 <td>
                   <%= portfolio.name %>                
@@ -85,12 +85,13 @@
         <div class="form-inline">
           <fieldset class="light-border">
             <legend><%= t(:add) + t(:employee) %></legend>
-            <%= form_tag( "add_employee", :method => "post") do %>
-              <%= label_tag :employee_id, t(:name) %>
-              <%= collection_select(:employee, :id, @possible_employees, :id, :full_name,
-                                   {:include_blank => true}, {:class => "autocomplete large-select", 
-                                   "data-placeholder" => "Choose an employee"}) %>
-              <%= submit_tag  t(:add) %>
+            <%= fields_for "employee_group" do |form|%>
+              <%= form.label :employee_id, t(:name) %>
+              <%= form.select(:employee_id, options_from_collection_for_select(
+                              @possible_employees, :id, :full_name,
+                              {:include_blank => true, :class => "autocomplete large-select", 
+                              "data-placeholder" => "Choose an employee"})) %>
+              <%= form.submit  t(:add) %>
             <% end %>
           </fieldset>
         </div>
@@ -99,6 +100,19 @@
       
       <% unless @existing_employees.blank? %>
         <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
+          <thead>
+            <tr>
+              <th> 
+                <%= t(:name) %>
+              </th>
+              <th> 
+                <%= t(:group_admin) %>
+              </th>
+              <th> 
+                <%= t(:check_to_remove) %>
+              </th>
+            </tr>
+          </thead>
           <tbody>
             <% @existing_employees.each do |employee_group| %>
               <%= group_form.fields_for "employee_groups", employee_group do |form|%>
