@@ -122,6 +122,7 @@
   </div>
 
 
+
   <div class="tab-pane tabs-right" id="employees">
     <%= render  :partial => "/shared/all_year_select", 
                 :locals => {:@year => @year, :@all_years => @all_years } %>
@@ -163,6 +164,7 @@
       <% end %>
     </div>
   </div>
+
 
 
   <div class="tab-pane tabs-right active" id="products">
@@ -221,47 +223,65 @@
     <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
-      <% if @products.blank? %>
+      <% if @portfolios.blank? %>
         <p>
           <%= t(:nothing_to_display) %>
         </p>
       <% else %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th> <%= t(:product) %> </th>
-              <th class='variable-size'> <%= t(:priority) %> </th>
-              <th> <%= t(:product_state) %> </th>
-              <th> <%= t(:product_type) %> </th>
-              <th> <%= t(:allocation) %> </th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each_with_index do |product, index| %>
-              <tr>
-                <td> 
-                  <%= link_to product.name, product_path(product.id) %>
-                </td>
-                <td class='variable-size'> 
-                  <%= product.priority %>
-                </td>
-                <td > 
-                  <%= product.state %>
-                </td>
-                <td> 
-                  <%= product.type %>
-                </td>
-                <td>
-                  <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
-                              :locals => {:array => @product_allocations[index]} %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <div class="pagination_footer">
-          <%= will_paginate @products, :param_name => :products_page %>
-          <%= render :partial => "/shared/results_per_page" %>
+        <div class="accordion" id="accordion">
+          <% @portfolios.each_with_index do |portfolio, index| %>
+            <% next if portfolio.products.blank? %>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"  href="#collapse-<%=index%>">
+                  <span class="accordion-title">
+                    <%= portfolio.name %>
+                  </span>
+                  <span class="accordion-detail"> 
+                    <%= "#{portfolio.products.length} " + t(:products) %> 
+                  </span>
+                </a>
+              </div>
+              <div id="collapse-<%=index%>" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  <% unless portfolio.products.blank? %>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> <%= t(:product) %> </th>
+                          <th class='variable-size'> <%= t(:priority) %> </th>
+                          <th> <%= t(:product_state) %> </th>
+                          <th> <%= t(:product_type) %> </th>
+                          <th> <%= t(:allocation) %> </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% portfolio.products.each_with_index do |product, index| %>
+                          <tr>
+                            <td> 
+                              <%= link_to product.name, product_path(product.id) %>
+                            </td>
+                            <td class='variable-size'> 
+                              <%= product.priority %>
+                            </td>
+                            <td > 
+                              <%= product.state %>
+                            </td>
+                            <td> 
+                              <%= product.type %>
+                            </td>
+                            <td>
+                    
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                    </table>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          <% end %>      
         </div>
       <% end %>
     </div>

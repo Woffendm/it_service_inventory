@@ -487,6 +487,35 @@ th.variable-size, td.variable-size {
   width: 1px;
 }
 
+dd, dt{
+  display: inline-block;
+}
+
+dt{
+width: 150px;
+}
+
+.expansion_trigger{
+  
+}
+
+.expansion_content{
+  display: none;
+}
+
+.accordion-title{
+  display: inline-block;
+  width: 150px;
+}
+
+.accordion-detail{
+  display: inline-block;
+}
+
+.accordion-heading a:hover{
+ text-decoration: none; 
+}
+
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {
     margin-top: 0; 
