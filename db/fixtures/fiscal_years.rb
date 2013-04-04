@@ -1,7 +1,6 @@
-FiscalYear.seed_once(:seed_id) do |t|
+FiscalYear.seed_once(:year) do |t|
   t.year = Date.today.year
   t.active = true
-  t.seed_id = 1
 end
 
 

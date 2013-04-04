@@ -170,7 +170,8 @@
                     <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
                     <%= form.hidden_field(:id, :value => service_allocation.id) %>
                     <%= form.select(:allocation, @possible_allocations, 
-                                   {:selected => service_allocation.rounded_allocation}, 
+                                   {:selected =>
+                                    service_allocation.rounded_allocation(@allocation_precision)}, 
                                     :class => "calculator_select allocation_value") %>
                     <%= render  :partial => "/shared/fte_calculator_trigger" %>
                   </td>
@@ -180,6 +181,15 @@
                 </tr>
               <% end %>
             <% end %>
+            <tr> 
+              <td>
+                <%= t(:total) + " " + t(:allocation) %>
+              </td>
+              <td id="total-allocation">
+                <%= "#{@employee.get_total_service_allocation(@year, @allocation_precision)} " + t(:fte) %>
+              </td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       <% end %>

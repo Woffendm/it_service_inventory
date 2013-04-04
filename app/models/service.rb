@@ -26,10 +26,10 @@ class Service < ActiveRecord::Base
 
   # Returns the total allocation for this service. This is defined as the sum of every allocation 
   # within this service's employee_allocations array
-  def get_total_allocation(year)
+  def get_total_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_allocations.where(:fiscal_year_id => year.id).each do |employee_allocation|
-      total_allocation += employee_allocation.rounded_allocation
+      total_allocation += employee_allocation.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end
@@ -44,13 +44,13 @@ class Service < ActiveRecord::Base
 
   # Returns the sum of all the allocations for this service by employees in the given group for the 
   # given year. 
-  def get_allocation_for_group(group, year)
+  def get_allocation_for_group(group, year, allocation_precision)
     allocation_sum = 0.0
     EmployeeAllocation.joins(:employee => :groups
                      ).where(:service_id => self.id, :fiscal_year_id => year.id, 
                              :groups => {:id => group.id}
                      ).each do |employee_allocation|
-      allocation_sum += employee_allocation.allocation
+      allocation_sum += employee_allocation.rounded_allocation(allocation_precision)
     end
     return allocation_sum
   end
@@ -60,15 +60,14 @@ class Service < ActiveRecord::Base
   # the employees who both posess this service and belong to the given group, and the corresponding
   # allocations that those employees have for this service. The allocation values are rounded to 
   # one decimal.
-  def employee_allocations_within_group(group, year)
-    allocation_precision = AppSetting.get_allocation_precision   
+  def employee_allocations_within_group(group, year, allocation_precision)
     array_of_employees_and_allocations = []
     EmployeeAllocation.joins(:employee => :groups
                      ).where(:service_id => self.id, :fiscal_year_id => year.id, 
                              :groups => {:id => group.id}
                      ).each do |employee_allocation|
       array_of_employees_and_allocations << ["#{employee_allocation.employee.full_name}",   
-      employee_allocation.allocation.round(allocation_precision), nil]
+      employee_allocation.rounded_allocation(allocation_precision), nil]
     end
     return array_of_employees_and_allocations    
   end
@@ -76,8 +75,7 @@ class Service < ActiveRecord::Base
 
   # Returns an array which contains the name of the given group, and the total allocation for this
   # service within the given group. The total allocation is rounded to one decimal.
-  def total_allocation_for_group(group, year)
-    allocation_precision = AppSetting.get_allocation_precision
+  def total_allocation_for_group(group, year, allocation_precision)
     total_allocation = 0.0
     total_headcount = 0.0
     EmployeeAllocation.joins(:employee => :groups
@@ -93,8 +91,7 @@ class Service < ActiveRecord::Base
 
   # Returns an array which contains the name of this service, and the total allocation for this
   # service within the given group. The total allocation is rounded to one decimal.
-  def total_allocation_within_group(group, year)
-    allocation_precision = AppSetting.get_allocation_precision
+  def total_allocation_within_group(group, year, allocation_precision)
     total_allocation = 0.0
     total_headcount = 0.0
     EmployeeAllocation.joins(:employee => :groups

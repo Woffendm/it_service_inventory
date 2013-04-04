@@ -23,8 +23,8 @@ class AppSettingsController < ApplicationController
     @allocation_precision = AppSetting.get_allocation_precision
     @current_fiscal_year = AppSetting.get_current_fiscal_year
     @fiscal_years = FiscalYear.active_fiscal_years
+    @rest_api_key = AppSetting.get_rest_api_key
   end
-  
 
 
   # Action-related methods

@@ -416,6 +416,8 @@ h2 > a {
 .year-content{
   border-right: 1px solid #DDDDDD;
   padding-right: 15px;
+  min-height: 200px;
+  overflow: auto;
 }
 
 .tabs-right .active > a {
@@ -480,7 +482,7 @@ h2 > a {
 }
 
 th.variable-size, td.variable-size {
-  max-width: 150px;
+  max-width: 50px;
   min-width: 30px;
   width: 1px;
 }

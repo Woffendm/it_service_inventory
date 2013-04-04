@@ -8,22 +8,7 @@
 
 
 <table class="table table-striped overview">
-  <caption> <%= t(:overview) %> </caption>
-  <thead>
-    <tr>
-      <th>
-        
-      </th>
-      <th>
-        <%= form_tag change_year_logins_path, :method => "get" do %>
-          <%= label_tag :year, t(:fiscal_year) %> 
-          <%= select_tag(:year, options_from_collection_for_select(@all_years, :year, :year,
-              {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag t(:show) %>
-        <% end %>
-      </th>
-    </tr>
-  </thead>
+  <caption> <%= t(:overview) + " for #{@year.year}"%> </caption>
   <tbody>
     <tr>
       <td>
@@ -36,7 +21,7 @@
         <div class="overview-label">
           <%= t(:product) + t(:allocation) %>
         </div>
-        <%= @total_product_allocation %>
+        <%= "#{@total_product_allocation} " + t(:fte) %>
       </td>
     </tr>
     <tr>
@@ -48,20 +33,20 @@
       </td>
       <td>
         <div class="overview-label">
-          <%= t(:services) %>
+          <%= t(:employee) + t(:allocation) %>
         </div>
-        <%= @total_services %> 
+        <%= "#{@total_service_allocation} " + t(:fte) %>
       </td>
     </tr>
     <tr>
       <td>
-        
+        <div class="overview-label">
+          <%= t(:services) %>
+        </div>
+        <%= @total_services %>
       </td>
       <td>
-        <div class="overview-label">
-          <%= t(:full_time_employees) %>
-        </div>
-        <%= @total_service_allocation %> 
+
       </td>
     </tr>
   </tbody>
@@ -74,6 +59,11 @@
   <li class="active">
     <a href="#products" id="products_tab" data-toggle="tab" > 
       <%= t(:products) %>
+    </a>
+  </li>
+  <li>
+    <a href="#portfolios" id="portfolios_tab" data-toggle="tab" > 
+      <%= t(:portfolios) %>
     </a>
   </li>
   <li>
@@ -91,26 +81,33 @@
 
 
 <div class="tab-content">
-    
-    
-  <div class="tab-pane" id="services">
-    <div class="tabbable tabs-right">
+  <div class="tab-pane tabs-right" id="services">
       <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
-      
-      <div class="tab-content year-content">
-        <% unless @services.blank? %>
+      <div class="year-content">
+        <% if @services.blank? %>
+          <p>
+            <%= t(:nothing_to_display) %>
+          </p>
+        <% else %>
           <table class="table table-striped">
             <thead>
               <tr>
                 <th><%= t(:service) %></th>
+                <th>
+                  <%= t(:allocation) %>
+                </th>
               </tr>
             </thead>
             <tbody>
-              <% @services.each do |service| %>
+              <% @services.each_with_index do |service, index| %>
                 <tr>
                   <td> 
                     <%= link_to service.name, service_path(service.id) %>
+                  </td>
+                  <td>
+                    <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
+                                :locals => {:array => @service_allocations[index]} %>
                   </td>
                 </tr>
               <% end %>
@@ -122,75 +119,153 @@
           </div>
         <% end %>
       </div>
+  </div>
+
+
+  <div class="tab-pane tabs-right" id="employees">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @employees.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped"> 
+          <thead>
+            <tr>
+              <th>
+                <%= t(:employee) %>
+              </th>
+              <th>
+                <%= t(:allocation) %>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @employees.each do |employee| %>
+              <tr>
+                <td>
+                  <%= link_to employee.full_name, employee_path(employee.id) %>
+                </td>
+                <td>
+                  <%= render  :partial => "/shared/employee_services_and_allocations", 
+                              :locals => {:employee => employee} %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="pagination_footer">
+          <%= will_paginate @employees, :param_name => :employees_page %>
+          <%= render :partial => "/shared/results_per_page" %>
+        </div>
+      <% end %>
     </div>
   </div>
 
 
-  <div class="tab-pane" id="employees">
-    <% unless @existing_employees.blank? %>
-      <table class="table table-striped"> 
-        <thead>
-          <tr>
-            <th>
-              <%= t(:employee) %>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @existing_employees.each do |employee| %>
+  <div class="tab-pane tabs-right active" id="products">
+    <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @products.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td>
-                <%= link_to employee.employee.full_name, employee_path(employee.employee_id) %>
-              </td>
+              <th> <%= t(:product) %> </th>
+              <th class='variable-size'> <%= t(:priority) %> </th>
+              <th> <%= t(:product_state) %> </th>
+              <th> <%= t(:product_type) %> </th>
+              <th> <%= t(:allocation) %> </th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="pagination_footer">
-        <%= will_paginate @existing_employees, :param_name => :employees_page %>
-        <%= render :partial => "/shared/results_per_page" %>
-      </div>
-    <% end %>
-  </div>
-
-
-  <div class="tab-pane active" id="products">
-    <% unless @products.blank? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th> <%= t(:product) %> </th>
-            <th class='variable-size'> <%= t(:priority) %> </th>
-            <th> <%= t(:product_state) %> </th>
-            <th> <%= t(:product_type) %> </th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @products.each do |product| %>
-            <tr>
-              <td> 
-                <%= link_to product.name, product_path(product.id) %>
-              </td>
-              <td class='variable-size'> 
-                <%= product.priority %>
-              </td>
-              <td > 
-                <%= product.state %>
-              </td>
-              <td > 
-                <%= product.type %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="pagination_footer">
-        <%= will_paginate @products, :param_name => :products_page %>
-        <%= render :partial => "/shared/results_per_page" %>
-      </div>
-    <% end %>
+          </thead>
+          <tbody>
+            <% @products.each_with_index do |product, index| %>
+              <tr>
+                <td> 
+                  <%= link_to product.name, product_path(product.id) %>
+                </td>
+                <td class='variable-size'> 
+                  <%= product.priority %>
+                </td>
+                <td > 
+                  <%= product.state %>
+                </td>
+                <td> 
+                  <%= product.type %>
+                </td>
+                <td>
+                  <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
+                              :locals => {:array => @product_allocations[index]} %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="pagination_footer">
+          <%= will_paginate @products, :param_name => :products_page %>
+          <%= render :partial => "/shared/results_per_page" %>
+        </div>
+      <% end %>
+    </div>
   </div>
   
+  
+  
+  <div class="tab-pane tabs-right active" id="portfolios">
+    <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @products.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> <%= t(:product) %> </th>
+              <th class='variable-size'> <%= t(:priority) %> </th>
+              <th> <%= t(:product_state) %> </th>
+              <th> <%= t(:product_type) %> </th>
+              <th> <%= t(:allocation) %> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each_with_index do |product, index| %>
+              <tr>
+                <td> 
+                  <%= link_to product.name, product_path(product.id) %>
+                </td>
+                <td class='variable-size'> 
+                  <%= product.priority %>
+                </td>
+                <td > 
+                  <%= product.state %>
+                </td>
+                <td> 
+                  <%= product.type %>
+                </td>
+                <td>
+                  <%= render  :partial => "/shared/service_or_product_employees_and_allocations", 
+                              :locals => {:array => @product_allocations[index]} %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="pagination_footer">
+          <%= will_paginate @products, :param_name => :products_page %>
+          <%= render :partial => "/shared/results_per_page" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
 
 

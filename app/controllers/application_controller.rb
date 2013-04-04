@@ -10,9 +10,10 @@ class ApplicationController < ActionController::Base
   # themes, but will be used later)
   # before_filter :load_theme
   before_filter :current_user
-  before_filter :load_current_fiscal_year
-  before_filter :set_user_language
   before_filter :require_login
+  before_filter :load_current_fiscal_year
+  before_filter :load_allocation_precision
+  before_filter :set_user_language
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
   rescue_from OmniAuth::Error, :with => :invalid_credentials
@@ -24,18 +25,20 @@ class ApplicationController < ActionController::Base
   private
     # Redirects user to login page unless they are logged in
     def require_login
-        redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user
+      redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user || @key_passed
     end
     
     
     # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
     # the persion described by the session still exists in the database. If they do, then it stores 
-    # the corresponding Employee/User in @current_user. If they don't, then it clears the session. 
-    # This should be accomplished by a redirect to the destroy action of the logins controller, but
-    # unfortunately Chrome gets upset when there are more than two redirects at once.
+    # the corresponding Employee/User in @current_user. Then checks to see if the request was in
+    # a supported format. If it is, then checks to see if the request sent the correct REST api key
+    # in its headers. If not, clears the session. 
     def current_user
-      unless Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
+      if !Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
         @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
+      elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
+        @key_passed = true if request.headers['app_key'] == AppSetting.get_rest_api_key
       else
         session[:current_user_name] = nil
         session[:results_per_page] = nil
@@ -59,6 +62,12 @@ class ApplicationController < ActionController::Base
         FiscalYear.create(:year => AppSetting.find_by_code("current_fiscal_year").value)
         @current_fiscal_year = AppSetting.get_current_fiscal_year
       end
+    end
+    
+    
+    # Loads the application's allocation precision as specified in the app settings.
+    def load_allocation_precision
+      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -112,8 +121,9 @@ class ApplicationController < ActionController::Base
     # If the current user has no allocations AND they have not disabled this preference, then a 
     # flash message will display on every page load instructing them to set up their allocations.
     def remind_user_to_set_allocations
-      if @current_user.new_user_reminder &&
-         @current_user.get_total_service_allocation(@current_fiscal_year).zero?
+      if !@current_user.blank? && @current_user.new_user_reminder &&
+            @current_user.get_total_service_allocation(@current_fiscal_year,
+            @allocation_precision).zero?
         edit_employee_link = "<a href = \"" + edit_employee_path(@current_user.id) + 
                              "\">" + t(:here) + "</a>"
         user_settings_link = "<a href = \"" + user_settings_employee_path(@current_user.id) + 

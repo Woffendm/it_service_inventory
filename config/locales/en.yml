@@ -109,6 +109,7 @@ en:
   product_type:                 "Product Type"
   product_types:                " Product Types"
   products:                     "Products "
+  rest_api_key:                 "Rest API Key"
   results_per_page:             "Results per page: "
   search_results:               "Search Results"
   service:                      "Business Service "
@@ -247,5 +248,7 @@ en:
   over_allocated_calc:          "You are over allocated!"
 
   preferred_language_info:      "Translates the application into the language of your choice"
+  
+  rest_api_key_info:            "Use this password to access this application's data from other apps. Simply add this key to the request header in the model of the calling application."
 
   update_all:                   "Update Names and Contact Information for all Employees"

@@ -23,9 +23,9 @@ class PagesController < ApplicationController
       @graph_title = t(:allocations_for_group) + @group.name
       @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
-      @full_time_employees = @group.get_total_service_allocation(@year)
+      @full_time_employees = @group.get_total_service_allocation(@year, @allocation_precision)
       @group.services(@year).each do |service|
-        data_array << service.total_allocation_within_group(@group, @year)
+        data_array << service.total_allocation_within_group(@group, @year, @allocation_precision)
       end
       @data_to_graph = data_array.to_json
     end
@@ -46,9 +46,9 @@ class PagesController < ApplicationController
       @graph_title = t(:allocations_for_group) + @group.name
       @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
-      @full_time_employees = @group.get_total_service_allocation(@year)
+      @full_time_employees = @group.get_total_service_allocation(@year, @allocation_precision)
       @services.each do |service|
-        data_array << service.total_allocation_within_group(@group, @year)
+        data_array << service.total_allocation_within_group(@group, @year, @allocation_precision)
       end
     end
     if @group.nil? && @service
@@ -57,9 +57,9 @@ class PagesController < ApplicationController
       @graph_title = t(:allocations_for_service) + @service.name 
       @x_axis_title = t(:group)
       @employee_headcount = @service.employees.length
-      @full_time_employees = @service.get_total_allocation(@year)
+      @full_time_employees = @service.get_total_allocation(@year, @allocation_precision)
       @groups.each do |group|
-        data_array << @service.total_allocation_for_group(group, @year)
+        data_array << @service.total_allocation_for_group(group, @year, @allocation_precision)
       end
     end
     if @group && @service
@@ -70,9 +70,10 @@ class PagesController < ApplicationController
                   :services => {:id => 1}).order(:name_last, :name_first)
       @graph_title = t(:allocations_for_group) + @group.name + t(:and_service) + @service.name
       @x_axis_title = t(:employee)
-      data_array = @service.employee_allocations_within_group(@group, @year)
+      data_array = @service.employee_allocations_within_group(@group, @year, @allocation_precision)
       @employee_headcount = data_array.length
-      @full_time_employees = @service.total_allocation_for_group(@group, @year)[1]
+      @full_time_employees = @service.total_allocation_for_group(@group, @year,
+            @allocation_precision)[1]
     end
     @data_to_graph = data_array.to_json if @group || @service
     render :home

@@ -35,7 +35,7 @@
         </span>
         <span class="controls">
           <%= form.select(:product_priority_id, 
-                          options_from_collection_for_select( @product_priorities, 
+                          options_from_collection_for_select(@product_priorities, 
                           :id, :name, :selected => @product.product_priority_id.to_s),  
                           {:include_blank => "-" + t(:select) + t(:product_priority) + "-"}) %> 
         </span>
@@ -232,7 +232,8 @@
                     <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
                     <%= form.hidden_field :id %>
                     <%= form.select(:allocation, @possible_allocations, 
-                                   {:selected => employee_product.rounded_allocation}, 
+                                   {:selected =>
+                                    employee_product.rounded_allocation(@allocation_precision)}, 
                                     :class => "calculator_select allocation_value") %>
                     <%= render :partial => "/shared/fte_calculator_trigger" %>
                   </td>
@@ -242,6 +243,15 @@
                 </tr>
               <% end %>
             <% end %>
+            <tr> 
+              <td>
+                <%= t(:total) + " " + t(:allocation) %>
+              </td>
+              <td id="total-allocation">
+                <%= "#{@product.get_total_allocation(@year, @allocation_precision)} " + t(:fte) %>
+              </td>
+              <td></td>
+            </tr>
           </tbody>
         </table>
       <% end %>    

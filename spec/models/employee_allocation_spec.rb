@@ -24,6 +24,7 @@ describe EmployeeAllocation do
 
       # Ensures that employee allocation is valid if all its fields have entries
       it "should be valid if all fields have entries" do
+        @allocation_1.employee_id = 1
         @allocation_1.service_id = 1
         @allocation_1.allocation = 0.1
         @allocation_1.fiscal_year_id = 1

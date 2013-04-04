@@ -10,7 +10,7 @@ class EmployeesController < ApplicationController
   before_filter :load_all_years,            :only => [:show]
   before_filter :load_associations,         :only => [:edit, :show, :update]
   before_filter :load_available_associations, :only => [:edit, :update]
-  before_filter :load_allocation_precision, :only => [:edit, :show, :update]
+  before_filter :load_fte_hours_per_week,   :only => [:edit, :show, :update]
   before_filter :load_possible_allocations, :only => [:edit, :update]
   before_filter :authorize_update,          :only => [:edit, :update]
   skip_before_filter :remind_user_to_set_allocations, :only => [:edit, :update, :update_settings,
@@ -27,6 +27,7 @@ class EmployeesController < ApplicationController
 
   # Starts out as a list of all employees, but can be restricted by a search
   def index
+    @year = @current_fiscal_year
     @groups = Group.order(:name)
     @services = Service.order(:name)
     @employees = filter_employees(params[:search])
@@ -44,10 +45,10 @@ class EmployeesController < ApplicationController
 
   # Page for viewing an existing employee
   def show
-    @total_services = @employee.employee_allocations.where(:fiscal_year_id => @year.id).length
-    @total_products = @employee.employee_products.where(:fiscal_year_id => @year.id).length
-    @total_service_allocation = @employee.get_total_service_allocation(@year)
-    @total_product_allocation = @employee.get_total_product_allocation(@year)
+    @total_services = @service_allocations.length
+    @total_products = @product_allocations.length
+    @total_service_allocation = @employee.get_total_service_allocation(@year, @allocation_precision)
+    @total_product_allocation = @employee.get_total_product_allocation(@year, @allocation_precision)
   end
 
 
@@ -232,10 +233,9 @@ class EmployeesController < ApplicationController
     end
     
 
-    # Loads the application settings fte_hours_per_week and allocation_precision
-    def load_allocation_precision
+    # Loads the application setting fte_hours_per_week
+    def load_fte_hours_per_week
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -266,7 +266,7 @@ class EmployeesController < ApplicationController
 
     # Loads possible allocations
     def load_possible_allocations
-      @possible_allocations = EmployeeAllocation.possible_allocations
+      @possible_allocations = EmployeeAllocation.possible_allocations(@allocation_precision)
     end
 
 
@@ -274,7 +274,10 @@ class EmployeesController < ApplicationController
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
       if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+         flash[:message] = "Selected year #{@year.year} inactive. Year changed to #{@current_fiscal_year.year}." if @year
         @year = @current_fiscal_year
+      else 
+        @year = FiscalYear.find_by_year(cookies[:year])
       end
     end
     

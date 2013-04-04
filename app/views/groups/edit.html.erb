@@ -57,7 +57,7 @@
       
       
       <% unless @portfolios.blank? %>
-        <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
+        <table class="table table-striped"><caption> <%= t(:existing_portfolios) %> </caption>
           <% @portfolios.each do |portfolio| %>
             <%= group_form.fields_for "portfolios", portfolio do |form|%>
               <tr>

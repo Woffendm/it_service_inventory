@@ -55,6 +55,20 @@ class Product < ActiveRecord::Base
   end
   
   
+  # Returns the sum of all the allocations for this service by employees in the given group for the 
+  # given year. 
+  def get_allocation_for_group(group, year, allocation_precision)
+    allocation_sum = 0.0
+    EmployeeProduct.joins(:employee => :groups
+                     ).where(:product_id => self.id, :fiscal_year_id => year.id, 
+                             :groups => {:id => group.id}
+                     ).each do |employee_allocation|
+      allocation_sum += employee_allocation.allocation if employee_allocation.allocation
+    end
+    return allocation_sum.round(allocation_precision)
+  end
+  
+  
   # Returns an array of services that the product does not currently have
   def get_available_services
     Service.order(:name) - self.services
@@ -76,12 +90,12 @@ class Product < ActiveRecord::Base
 
 
   # Returns the total allocation for the given product.
-  def get_total_allocation(year)
+  def get_total_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id => year.id).each do |employee_product|
-      total_allocation += employee_product.rounded_allocation
+      total_allocation += employee_product.allocation if employee_product.allocation
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   
@@ -92,41 +106,69 @@ class Product < ActiveRecord::Base
   end
   
   
-  
   # All the following (before private) involve rest services
-    # Creates string representation of product's employees for REST services in json
+    # Creates hash representation of product's employees for REST services
     def rest_employees
       employee_array = []
       self.employees.uniq.each do |employee|
-        employee_array << "{'id':#{employee.id},'name_first':'#{employee.name_first}','name_last':'#{employee.name_last}'}"
+        employee_array << {"id" => employee.id, "name_first" => employee.name_first, "name_last" => employee.name_last}
       end
-      return "{" + employee_array.join(",") + "}"
+      return employee_array
     end
     
     
-    # Creates string representation of product's groups for REST services in json
+    # Creates hash representation of product's groups for REST services
     def rest_groups
       group_array = []
       self.groups.uniq.each do |group|
-        group_array << "{'id':#{group.id},'name':'#{group.name}'}"
+        group_array << {"id" => group.id, "name" => group.name}
       end
-      return "{" + group_array.join(",") + "}"
+      return group_array
     end
     
     
-    # Creates string representation of product's services for REST services in json
+    # Creates hash representation of product's services for REST services
     def rest_services
       service_array = []
       self.services.uniq.each do |service|
-        service_array << "{'id':#{service.id},'name':'#{service.name}'}"
+        service_array << {"id" => service.id, "name" => service.name}
       end
-      return "{" + service_array.join(",") + "}"
+      return service_array
     end
     
     
-    # Creates string representation of product in json for REST services
+    # Creates hash representation of product for REST services
     def rest_show 
-"{'id':#{self.id},'name':'#{self.name}','description':'#{self.description}','product_priority':{'id':#{self.product_priority_id},'name':'#{self.product_priority.name}'},'product_state':{'id':#{self.product_state_id},'name':'#{self.product_state.name}'},'product_type':{'id':#{self.product_type_id},'name':'#{self.product_type.name}'},'groups':#{self.rest_groups},'services':#{self.rest_services},'employees':#{self.rest_employees}}"
+      {
+        "id" => self.id, 
+        "name" => self.name,
+        "description" => self.description, 
+        "product_priority" => {
+          "id" => self.product_priority_id, 
+          "name" => self.priority
+        }, 
+        "product_type" => {
+          "id" => self.product_type_id, 
+          "name" => self.type
+        },
+        "product_state" => {
+          "id" => self.product_state_id, 
+          "name" => self.state
+        }, 
+        "groups" => self.rest_groups, 
+        "services" => self.rest_services,
+        "employees" => self.rest_employees
+      }
+    end
+  
+  
+    # Creates array of all products in hash form for REST services
+    def self.rest_show_all
+      array = []
+      Product.order(:name).each do |product|
+        array << product.rest_show
+      end
+      return array
     end
   
   
