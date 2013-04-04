@@ -57,6 +57,7 @@ en:
   employee_roster_for_group:    "Employee Roster for Group: "
   existing_employees:           "Existing Employees"
   existing_administrators:      "Existing Administrators"
+  fail:                         "Fail "
   first_name:                   "First Name" 
   fiscal_year:                  "Fiscal Year"
   fiscal_years:                 " Fiscal Years"

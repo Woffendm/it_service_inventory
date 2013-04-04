@@ -112,14 +112,22 @@ class GroupsController < ApplicationController
 
   # Updates a group based on the information endered on the "edit" page
   def update
-    unless params[:employee_group].blank?
+    unless params[:employee_group].blank? || params[:employee_group][:employee_id].blank?
       if @group.employee_groups.new(params[:employee_group]).save
         flash[:notice] = t(:employee) + t(:added)
+      else
+        flash[:error] = t(:employee) + t(:add) + t(:fail)
+        render :edit
+        return
       end
     end
     unless params[:portfolio].blank? || params[:portfolio][:name].blank?
       if @group.portfolios.new(params[:portfolio]).save
         flash[:notice] = t(:portfolio) + t(:added)
+      else
+        flash[:error] = t(:portfolio) + t(:add) + t(:fail)
+        render :edit
+        return
       end
     end
     if @group.update_attributes(params[:group])

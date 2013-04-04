@@ -34,7 +34,6 @@
         <%= fields_for @group do |form| %>
           <%= form.label :name, t(:name) %>
           <%= form.text_field :name %>
-          <%= form.submit  t(:save_changes) %>
         <% end %>
       </div>
     </div>
@@ -88,9 +87,9 @@
             <%= fields_for "employee_group" do |form|%>
               <%= form.label :employee_id, t(:name) %>
               <%= form.select(:employee_id, options_from_collection_for_select(
-                              @possible_employees, :id, :full_name,
-                              {:include_blank => true, :class => "autocomplete large-select", 
-                              "data-placeholder" => "Choose an employee"})) %>
+                              @possible_employees, :id, :full_name),
+                              {:include_blank => "-" + t(:select) + t(:employee) + "-", 
+                              :class => "autocomplete large-select"}) %>
               <%= form.submit  t(:add) %>
             <% end %>
           </fieldset>
@@ -99,7 +98,10 @@
       
       
       <% unless @existing_employees.blank? %>
-        <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
+        <table class="table table-striped">
+          <caption> 
+            <%= t(:existing_employees) %> 
+          </caption> 
           <thead>
             <tr>
               <th> 

@@ -301,13 +301,19 @@ div.chart_div_container{
 a{
   cursor: pointer; 
 }
+.pagination{
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
 .pagination, #results_per_page{
  font-size: 100%; 
  padding: .5em;
 }
 .pagination_footer{
   border-top: 1px dotted gray;
-  padding-top: .5em
+  padding-top: .5em;
+  padding-left: 20px;
 }
 .pagination_option, .pagination >a{
   font-weight: bold;
@@ -398,7 +404,7 @@ h2 > a {
 }
 
 .tab-content > .active, .pill-content > .active {
-    min-height: 400px;
+  padding-bottom: 10px;
 }
 
 
