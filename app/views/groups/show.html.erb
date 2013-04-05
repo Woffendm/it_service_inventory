@@ -46,7 +46,10 @@
         <%= @total_services %>
       </td>
       <td>
-
+        <div class="overview-label">
+          <%= t(:portfolios) %>
+        </div>
+        <%= @portfolios.length %>
       </td>
     </tr>
   </tbody>
@@ -219,7 +222,7 @@
   
   
   
-  <div class="tab-pane tabs-right active" id="portfolios">
+  <div class="tab-pane tabs-right" id="portfolios">
     <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
@@ -228,12 +231,22 @@
           <%= t(:nothing_to_display) %>
         </p>
       <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>
+                <%= t(:portfolio) %>
+              </th>
+            </tr>
+          </thead>
+        </table>
         <div class="accordion" id="accordion">
           <% @portfolios.each_with_index do |portfolio, index| %>
             <% next if portfolio.products.blank? %>
             <div class="accordion-group">
               <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"  href="#collapse-<%=index%>">
+                <a class="accordion-toggle" data-toggle="collapse"
+                    data-target="#collapse-<%=index%>"  href="#">
                   <span class="accordion-title">
                     <%= portfolio.name %>
                   </span>

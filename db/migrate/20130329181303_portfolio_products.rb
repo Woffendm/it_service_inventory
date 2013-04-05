@@ -1,6 +1,6 @@
-class PortfoliosProducts < ActiveRecord::Migration
+class PortfolioProducts < ActiveRecord::Migration
   def change
-    create_table :portfolios_products do |t|
+    create_table :portfolio_products do |t|
       t.integer :portfolio_id
       t.integer :product_id
   

@@ -65,9 +65,9 @@ ActiveRecord::Schema.define(:version => 20130329181303) do
 
   create_table "fiscal_years", :force => true do |t|
     t.integer  "year"
-    t.boolean  "active",     :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "seed_id"
   end
 
@@ -77,18 +77,18 @@ ActiveRecord::Schema.define(:version => 20130329181303) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "portfolio_products", :force => true do |t|
+    t.integer  "portfolio_id"
+    t.integer  "product_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "portfolios", :force => true do |t|
     t.string   "name"
     t.integer  "group_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-  end
-
-  create_table "portfolios_products", :force => true do |t|
-    t.integer  "portfolio_id"
-    t.integer  "product_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
   end
 
   create_table "product_groups", :force => true do |t|

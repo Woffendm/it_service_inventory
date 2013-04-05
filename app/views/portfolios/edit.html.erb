@@ -1,0 +1,66 @@
+<h2> 
+  <%= t(:edit) + t(:portfolio) %> <%= @portfolio.name %> 
+  <%= link_to "#{content_tag :em, '', :class => ''}
+            #{t(:show)}".html_safe, group_path(@portfolio.group_id) %>
+</h2>
+
+
+<%= form_for @portfolio do |portfolio_form| %>
+
+
+  <% unless @possible_products.blank? %>
+    <div class="form-inline">
+      <fieldset class="light-border">
+        <legend><%= t(:add) + t(:product) %></legend>
+        <%= fields_for "product" do |form|%>
+          <%= form.label :product_id, t(:name) %>
+          <%= form.select(:product_id, options_from_collection_for_select(
+                          @possible_products, :id, :name),
+                          {:include_blank => "-" + t(:select) + t(:product) + "-", 
+                          :class => "autocomplete large-select"}) %>
+          <%= form.submit  t(:add) %>
+        <% end %>
+      </fieldset>
+    </div>
+  <% end %>
+      
+      
+
+  <% unless @portfolio_products.blank? %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> <%= t(:product) %> </th>
+          <th class='variable-size'> <%= t(:priority) %> </th>
+          <th> <%= t(:product_state) %> </th>
+          <th> <%= t(:product_type) %> </th>
+          <th> <%= t(:check_to_remove) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @portfolio_products.each_with_index do |product, index| %>
+          <%= portfolio_form.fields_for "portfolio_products", product do |form|%>
+            <tr>
+              <td> 
+                <%= link_to portfolio_product.product.name, product_path(portfolio_product.product_id) %>
+              </td>
+              <td class='variable-size'> 
+                <%= portfolio_product.product.priority %>
+              </td>
+              <td > 
+                <%= portfolio_product.product.state %>
+              </td>
+              <td> 
+                <%= portfolio_product.product.type %>
+              </td>
+              <td>
+                <%= form.check_box :_destroy %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  <%= portfolio_form.submit  t(:add) %>
+<% end %>

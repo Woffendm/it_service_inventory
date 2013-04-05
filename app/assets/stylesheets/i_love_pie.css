@@ -463,6 +463,14 @@ h2 > a {
   text-shadow: none;
 }
 
+.table {
+  margin-bottom: 0;
+}
+
+.overview {
+  margin-bottom: 20px;
+}
+
 .overview caption{
   margin-top: 5px;
 }
@@ -472,9 +480,6 @@ h2 > a {
   font-weight: bold;
 }
 
-.table {
-  margin-bottom: 0px;
-}
 
 .overview-label {
   display: inline-block;
