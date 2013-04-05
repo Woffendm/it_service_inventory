@@ -97,7 +97,6 @@ GEM
     rake (10.0.4)
     rdoc (3.12.2)
       json (~> 1.4)
-    ref (1.0.4)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -150,6 +149,7 @@ DEPENDENCIES
   dynamic_form (= 1.1.4)
   jquery-rails (= 2.1.4)
   json (= 1.7.6)
+  libv8 (~> 3.11.8)
   mysql2
   omniauth-ldap (= 1.0.2)
   rack-mini-profiler
