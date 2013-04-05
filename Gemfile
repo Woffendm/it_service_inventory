@@ -9,7 +9,6 @@ gem 'json', '1.7.6'
 
 gem 'dynamic_form', '1.1.4'
 
-gem 'libv8', '~> 3.11.8'                                                                            
 gem 'therubyracer'
 
 gem 'cancan', '1.6.9'
