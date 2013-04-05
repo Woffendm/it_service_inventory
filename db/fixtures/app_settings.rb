@@ -12,3 +12,8 @@ AppSetting.seed_once(:code) do |t|
   t.code = "current_fiscal_year"
   t.value = Date.today.year
 end
+
+AppSetting.seed_once(:code) do |t|
+  t.code = "rest_api_key"
+  t.value = "default"
+end

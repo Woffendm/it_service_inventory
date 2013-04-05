@@ -5,14 +5,13 @@
 
 class ProductsController < ApplicationController
   before_filter :load_product,                      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
   before_filter :load_all_years,                    :only => [:show]
   before_filter :load_associations,                 :only => [:edit, :show, :update]
   before_filter :load_available_associations,       :only => [:edit, :update]
   before_filter :load_all_product_associations,     :only => [:index, :edit, :update]
-  before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_possible_allocations,         :only => [:edit, :update]
-
 
 
 # View-related methods
@@ -23,7 +22,8 @@ class ProductsController < ApplicationController
   end
 
 
-  # Has two tabs, one with all products in the user's groups, another with all products.
+  # Page for viewing all products at a glance. 
+  # Contains rest services for viewing products in json
   def index
     @groups = Group.order(:name)
     @product = Product.new
@@ -31,16 +31,23 @@ class ProductsController < ApplicationController
     @products = sort_results(params, @products)
     @products = @products.paginate(:page => params[:products_page], :per_page =>
           session[:results_per_page])
+    respond_to do |format|
+      format.html
+      format.js  { render :json => Product.rest_show_all, :callback => params[:callback] }
+      format.json { render :json => Product.rest_show_all }
+      format.xml { render :xml => @products }
+    end
   end
 
 
   # Page for viewing a product in detail
   # Contains rest services for viewing product in json
   def show
+    @product = Product.find(params[:id])
     @total_groups = @product.groups.length
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
-    @total_allocation = @product.get_total_allocation(@year)
+    @total_allocation = @product.get_total_allocation(@year, @allocation_precision)
     respond_to do |format|
       format.html
       format.js  { render :json => @product.rest_show, :callback => params[:callback] }
@@ -48,7 +55,6 @@ class ProductsController < ApplicationController
       format.xml { render :xml => @product }
     end
   end
-
 
 
 # Action-related methods 
@@ -139,7 +145,10 @@ class ProductsController < ApplicationController
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
       if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+         flash[:message] = "Selected year #{@year.year} inactive. Year changed to #{@current_fiscal_year.year}." if @year
         @year = @current_fiscal_year
+      else 
+        @year = FiscalYear.find_by_year(cookies[:year])
       end
     end
     
@@ -164,10 +173,9 @@ class ProductsController < ApplicationController
     end
 
 
-    # Loads the application settings fte_hours_per_week and allocation_precision
+    # Loads the application setting fte_hours_per_week 
     def load_application_settings
       @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -199,6 +207,6 @@ class ProductsController < ApplicationController
 
     # Loads possible allocations
     def load_possible_allocations
-      @possible_allocations = EmployeeProduct.possible_allocations
+      @possible_allocations = EmployeeProduct.possible_allocations(@allocation_precision)
     end
 end

@@ -19,5 +19,6 @@
 
 /config/database.yml
 /config/initializers/omniauth.rb
+/config/initializers/secret_token.rb
 /config/config.yml
 *.DS_STORE

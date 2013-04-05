@@ -5,7 +5,7 @@
 
 class Employee < ActiveRecord::Base
   attr_accessible :email, :employee_allocations_attributes, :employee_allocations, 
-                  :employee_groups_attributes,
+                  :employee_groups_attributes, :osu_username,
                   :name_first, :name_last, :notes, :preferred_language, :preferred_theme,
                   :new_user_reminder, :employee_products_attributes
   has_many :employee_allocations, :dependent => :delete_all
@@ -14,7 +14,7 @@ class Employee < ActiveRecord::Base
   has_many :groups,   :through => :employee_groups
   has_many :products, :through => :employee_products
   has_many :services, :through => :employee_allocations
-  validates_presence_of   :name_first,    :name_last
+  validates_presence_of   :name_first,    :name_last,   :osu_username
   validates_uniqueness_of :osu_username,  :scope => :osu_id
   accepts_nested_attributes_for :employee_allocations,  :allow_destroy => true
   accepts_nested_attributes_for :employee_groups,       :allow_destroy => true
@@ -65,19 +65,19 @@ class Employee < ActiveRecord::Base
 
 
   # Returns the employee's total service allocation for the given fiscal year.
-  def get_total_service_allocation(year)
+  def get_total_service_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_allocations.where(:fiscal_year_id =>year.id).each do |employee_allocation|
-      total_allocation += employee_allocation.rounded_allocation
+      total_allocation += employee_allocation.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end
   
   # Returns the employee's total product allocation for the given fiscal year.
-  def get_total_product_allocation(year)
+  def get_total_product_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id =>year.id).each do |employee_product|
-      total_allocation += employee_product.rounded_allocation
+      total_allocation += employee_product.rounded_allocation(allocation_precision)
     end
     return total_allocation
   end

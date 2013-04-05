@@ -9,21 +9,6 @@
 
 <table class="table table-striped overview">
   <caption> <%= t(:overview) %> </caption>
-  <thead>
-    <tr>
-      <th>
-        
-      </th>
-      <th>
-        <%= form_tag change_year_logins_path, :method => "get" do %>
-          <%= label_tag :year, t(:fiscal_year) %> 
-          <%= select_tag(:year, options_from_collection_for_select(@all_years, :year, :year,
-              {:selected => @year.year}), :class => "tiny-select") %> 
-          <%= submit_tag t(:show) %>
-        <% end %>
-      </th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
       <td>
@@ -50,7 +35,7 @@
         <div class="overview-label">
           <%= t(:total_allocation) %>
         </div>
-        <%= @total_allocation %> 
+        <%= "#{@total_allocation} " + t(:fte) %> 
       </td>
     </tr>
   </tbody>
@@ -77,8 +62,10 @@
 
 
 <div class="tab-content">
-  <div class="tab-pane" id="service_information">
-    <div class="form-horizontal">
+  <div class="tab-pane tabs-right" id="service_information">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="form-horizontal year-content">
       <div class="control-group">
         <span class="control-label">
           <%= label_tag t(:groups) %> 
@@ -102,71 +89,76 @@
 
 
 
-  <div class="tab-pane active" id="products">
-    <% unless @products.blank? %>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th> <%= t(:product) %> </th>
-            <th class='variable-size'> <%= t(:priority) %> </th>
-            <th> <%= t(:product_state) %> </th>
-            <th> <%= t(:product_type) %> </th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @products.each do |product| %>
+  <div class="tab-pane tabs-right active" id="products">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @products.blank? %>
+        <%= t(:nothing_to_display) %>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td> 
-                <%= link_to product.name, product_path(product.id) %>
-              </td>
-              <td class='variable-size'> 
-                <%= product.priority %>
-              </td>
-              <td> 
-                <%= product.state %>
-              </td>
-              <td > 
-                <%= product.type %>
-              </td>
+              <th> <%= t(:product) %> </th>
+              <th class='variable-size'> <%= t(:priority) %> </th>
+              <th> <%= t(:product_state) %> </th>
+              <th> <%= t(:product_type) %> </th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
+          </thead>
+          <tbody>
+            <% @products.each do |product| %>
+              <tr>
+                <td> 
+                  <%= link_to product.name, product_path(product.id) %>
+                </td>
+                <td class='variable-size'> 
+                  <%= product.priority %>
+                </td>
+                <td> 
+                  <%= product.state %>
+                </td>
+                <td > 
+                  <%= product.type %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
   </div>
 
 
 
-  <div class="tab-pane" id="employees">
-    <div class="tabbable tabs-right">
-      <%= render  :partial => "/shared/all_year_select", 
-                  :locals => {:@year => @year, :@all_years => @all_years } %>
-      
-      <div class="tab-content year-content">
-        <% unless @employee_allocations.blank? %>
-          <table class="table table-striped">
-            <thead>
+  <div class="tab-pane tabs-right" id="employees">
+    <%= render  :partial => "/shared/all_year_select", 
+                :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="tab-content year-content">
+      <% if @employee_allocations.blank? %>
+        <%= t(:nothing_to_display) %>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> <%= t(:employee) %> </th>
+              <th> <%= t(:allocation) %> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @employee_allocations.each do |employee_allocation| %>
               <tr>
-                <th> <%= t(:employee) %> </th>
-                <th> <%= t(:allocation) %> </th>
+                <td> 
+                  <%= link_to employee_allocation.employee.full_name,
+                      employee_path(employee_allocation.employee_id) %>
+                </td>
+                <td> 
+                  <%= "#{employee_allocation.rounded_allocation(@allocation_precision)} " + t(:fte) %>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <% @employee_allocations.each do |employee_allocation| %>
-                <tr>
-                  <td> 
-                    <%= link_to employee_allocation.employee.full_name,
-                        employee_path(employee_allocation.employee_id) %>
-                  </td>
-                  <td > 
-                    <%= employee_allocation.rounded_allocation %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-      </div>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
     </div>
   </div>
 </div>

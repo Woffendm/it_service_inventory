@@ -1,0 +1,28 @@
+<% unless array.blank? %> 
+  <div class="tooltip_trigger">
+    <%= array[0] %>
+  </div>
+  <div class="tooltip">
+    <table class="tooltip-table">
+      <thead>
+        <tr>
+          <th class="tooltip_first_column"> <%= t(:employee) %> </th>
+          <th class="tooltip_last_column"> <%= t(:allocation) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% array[1].each do |allocation| %>
+          <tr>
+            <td style="<%=max_width_by_string(allocation.employee.full_name)%>"
+              class="tooltip_first_column"> 
+              <%= allocation.employee.full_name %> 
+            </td>
+            <td class="tooltip_last_column">
+              <%= allocation.rounded_allocation(@allocation_precision) %> 
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

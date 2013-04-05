@@ -29,10 +29,13 @@ class Group < ActiveRecord::Base
   
   # Returns the total the total product allocation for the group. This is defined as the sum of the 
   # total product allocations for every employee in the group 
-  def get_total_product_allocation(year)
+  def get_total_product_allocation(year, allocation_precision)
     total_allocation = 0.0
-    self.employees.each do |employee|
-      total_allocation += employee.get_total_product_allocation(year)
+    self.products.each do |product| 
+      product.employee_products.joins(:employee => :groups).where(
+            :fiscal_year_id => year.id, :groups => {:id => self.id}).each do |product_allocation|  
+        total_allocation += product_allocation.rounded_allocation(allocation_precision)
+      end 
     end
     return total_allocation
   end
@@ -40,10 +43,10 @@ class Group < ActiveRecord::Base
   
   # Returns the total the total service allocation for the group. This is defined as the sum of the 
   # total service allocations for every employee in the group
-  def get_total_service_allocation(year)
+  def get_total_service_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employees.each do |employee|
-      total_allocation += employee.get_total_service_allocation(year)
+      total_allocation += employee.get_total_service_allocation(year, allocation_precision)
     end
     return total_allocation
   end
