@@ -1,7 +1,11 @@
 <h2> 
-  <%= t(:edit) + t(:portfolio) %> <%= @portfolio.name %> 
+  <%= t(:edit) + t(:portfolio_colon) %> <%= @portfolio.name %> 
   <%= link_to "#{content_tag :em, '', :class => ''}
-            #{t(:show)}".html_safe, group_path(@portfolio.group_id) %>
+            #{t(:return_to)} #{t(:group)}".html_safe, group_path(@portfolio.group_id) %>
+  <span class="delete-button">  
+    <%= link_to t(:delete), portfolio_path(@portfolio), :method => :delete, 
+                :confirm => t(:confirm_deletion) %>
+  </span>
 </h2>
 
 
@@ -13,11 +17,11 @@
       <fieldset class="light-border">
         <legend><%= t(:add) + t(:product) %></legend>
         <%= fields_for "product" do |form|%>
-          <%= form.label :product_id, t(:name) %>
-          <%= form.select(:product_id, options_from_collection_for_select(
+          <%= form.label :id, t(:name) %>
+          <%= form.select(:id, options_from_collection_for_select(
                           @possible_products, :id, :name),
-                          {:include_blank => "-" + t(:select) + t(:product) + "-", 
-                          :class => "autocomplete large-select"}) %>
+                          {:include_blank => "-" + t(:select) + t(:product) + "-"}, 
+                          {:class => "autocomplete large-select"}) %>
           <%= form.submit  t(:add) %>
         <% end %>
       </fieldset>
@@ -28,6 +32,9 @@
 
   <% unless @portfolio_products.blank? %>
     <table class="table table-striped">
+      <caption> 
+        Products in this portfolio
+      </caption>
       <thead>
         <tr>
           <th> <%= t(:product) %> </th>
@@ -38,8 +45,8 @@
         </tr>
       </thead>
       <tbody>
-        <% @portfolio_products.each_with_index do |product, index| %>
-          <%= portfolio_form.fields_for "portfolio_products", product do |form|%>
+        <% @portfolio_products.each_with_index do |portfolio_product, index| %>
+          <%= portfolio_form.fields_for "portfolio_products", portfolio_product do |form|%>
             <tr>
               <td> 
                 <%= link_to portfolio_product.product.name, product_path(portfolio_product.product_id) %>
@@ -62,5 +69,5 @@
       </tbody>
     </table>
   <% end %>
-  <%= portfolio_form.submit  t(:add) %>
+  <%= portfolio_form.submit  t(:save_changes) %>
 <% end %>

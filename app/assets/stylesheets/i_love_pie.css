@@ -492,22 +492,6 @@ th.variable-size, td.variable-size {
   width: 1px;
 }
 
-dd, dt{
-  display: inline-block;
-}
-
-dt{
-width: 150px;
-}
-
-.expansion_trigger{
-  
-}
-
-.expansion_content{
-  display: none;
-}
-
 .accordion-title{
   display: inline-block;
   width: 150px;
@@ -519,6 +503,33 @@ width: 150px;
 
 .accordion-heading a:hover{
  text-decoration: none; 
+}
+
+.accordion-heading{
+  display: block;
+  padding: 8px 15px;
+  cursor: default;
+}
+
+.accordion-heading .accordion-toggle{
+  padding: 0px; 
+}
+
+.accordion-heading-block {
+  display: inline-block;
+  width: 400px;
+}
+
+.delete-button{
+  float: right;
+  display: inline;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.cake{
+  width: 49%;
+  display: inline-block;
 }
 
 @media (max-width: 1120px) {

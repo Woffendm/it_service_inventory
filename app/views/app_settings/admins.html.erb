@@ -11,8 +11,8 @@
       <%= form_tag( "add_admin", :method => "post") do %>
         <%= label_tag :employee_id, t(:name) %>
         <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
-                             {:include_blank => true}, {:class => "autocomplete large-select", 
-                             "data-placeholder" => t(:select) + t(:employee)}) %>
+                             {:include_blank => "-" + t(:select) + t(:employee) + "-"},
+                             {:class => "autocomplete large-select"}) %>
         <%= submit_tag  t(:add), :confirm => t(:confirm_admin) %>
       <% end %>
     </fieldset>

@@ -64,58 +64,76 @@
       <% else %>
         <div class="accordion" id="accordion">
           <% @portfolios.each_with_index do |portfolio, index| %>
-            <% next if portfolio.products.blank? %>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse"
-                    data-target="#collapse-<%=index%>"  href="#">
-                  <span class="accordion-title">
-                    <%= portfolio.name %>
-                  </span>
-                  <span class="accordion-detail"> 
-                    <%= "#{portfolio.products.length} " + t(:products) %> 
-                  </span>
-                </a>
-              </div>
-              <div id="collapse-<%=index%>" class="accordion-body collapse">
-                <div class="accordion-inner">
-                  <% unless portfolio.products.blank? %>
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th> <%= t(:product) %> </th>
-                          <th class='variable-size'> <%= t(:priority) %> </th>
-                          <th> <%= t(:product_state) %> </th>
-                          <th> <%= t(:product_type) %> </th>
-                          <th> <%= t(:allocation) %> </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% portfolio.products.each_with_index do |product, index| %>
+            <% unless portfolio.products.blank? %>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <div class="accordion-heading-block">
+                    <a class="accordion-toggle" data-toggle="collapse"
+                        data-target="#collapse-<%=index%>"  href="#">
+                      <span class="accordion-title">
+                        <%= portfolio.name %>
+                      </span>
+                      <span class="accordion-detail"> 
+                        <%= "#{portfolio.products.length} " + t(:products) %> 
+                      </span>
+                    </a>
+                  </div>
+                  <%= link_to t(:edit), edit_portfolio_path(portfolio) %>
+                </div>
+                <div id="collapse-<%=index%>" class="accordion-body collapse">
+                  <div class="accordion-inner">
+                    <% unless portfolio.products.blank? %>
+                      <table class="table table-striped">
+                        <thead>
                           <tr>
-                            <td> 
-                              <%= link_to product.name, product_path(product.id) %>
-                            </td>
-                            <td class='variable-size'> 
-                              <%= product.priority %>
-                            </td>
-                            <td > 
-                              <%= product.state %>
-                            </td>
-                            <td> 
-                              <%= product.type %>
-                            </td>
-                            <td>
-                    
-                            </td>
+                            <th> <%= t(:product) %> </th>
+                            <th class='variable-size'> <%= t(:priority) %> </th>
+                            <th> <%= t(:product_state) %> </th>
+                            <th> <%= t(:product_type) %> </th>
+                            <th> <%= t(:allocation) %> </th>
                           </tr>
-                        <% end %>
-                      </tbody>
-                    </table>
-                  <% end %>
+                        </thead>
+                        <tbody>
+                          <% portfolio.products.each_with_index do |product, index| %>
+                            <tr>
+                              <td> 
+                                <%= link_to product.name, product_path(product.id) %>
+                              </td>
+                              <td class='variable-size'> 
+                                <%= product.priority %>
+                              </td>
+                              <td > 
+                                <%= product.state %>
+                              </td>
+                              <td> 
+                                <%= product.type %>
+                              </td>
+                              <td>
+                      
+                              </td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    <% end %>
+                  </div>
                 </div>
               </div>
-            </div>
+            <% else %>
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <div class="accordion-heading-block">
+                    <span class="accordion-title">
+                      <%= portfolio.name %>
+                    </span>
+                    <span class="accordion-detail"> 
+                      <%= t(:none) %> 
+                    </span>
+                  </div>
+                  <%= link_to t(:edit), edit_portfolio_path(portfolio) %>
+                </div>
+              </div>
+            <% end %>
           <% end %>      
         </div>
       <% end %>
