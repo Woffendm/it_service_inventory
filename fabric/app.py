@@ -66,22 +66,6 @@ def app_set_required_environment_vars():
 
     env.project_type = 'rails'
 
-# Variables for rvm installation
-#
-# Note that the versions for passenger and ruby version and patch level must match what is in the 
-# httpd config file.
-
-# Ruby version
-#     env.ruby_version = "1.9.3"
-
-# RVM path
-#     env.rvm = "/home/%s/.rvm/scripts/rvm" % env.user
-
-# Passenger version
-#     env.passenger_version = "3.0.18"
-
-# Ruby patch level
-#     env.ruby_patch_level = "362"
-
+    env.run_seed_fu_task = True
 
     return
