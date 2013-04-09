@@ -17,7 +17,7 @@
     <%= text_field_tag "search[name]", @name, :placeholder => "-All Service Names-" %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
-                          :selected => @group}) %>
+                          :selected => @group}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
@@ -63,4 +63,10 @@
   <%= will_paginate @services %>
   <%= render :partial => "/shared/results_per_page" %>
 </div>
+
+
+<script type="text/javascript">
+  var do_not_check_for_changes = true;
+</script>
+
 

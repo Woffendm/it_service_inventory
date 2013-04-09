@@ -36,7 +36,8 @@
           <span class="controls">
             <%= form.select(:product_priority_id,
                             options_from_collection_for_select(@product_priorities, :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:priority) + "-"}) %> 
+                           {:include_blank => "-" + t(:select) + t(:priority) + "-"}, 
+                           {:class => "autocomplete large-select"}) %> 
           </span>
         </div>
         
@@ -47,7 +48,8 @@
           <span class="controls">
             <%= form.select(:product_state_id, options_from_collection_for_select(@product_states, 
                             :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:product_state) + "-"}) %> 
+                           {:include_blank => "-" + t(:select) + t(:product_state) + "-"}, 
+                           {:class => "autocomplete large-select"}) %> 
           </span>
         </div>
         
@@ -58,7 +60,8 @@
           <span class="controls">
             <%= form.select(:product_type_id, options_from_collection_for_select(@product_types, 
                             :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:product_type) + "-"}) %> 
+                           {:include_blank => "-" + t(:select) + t(:product_type) + "-"}, 
+                           {:class => "autocomplete large-select"}) %> 
           </span>
         </div>
       <% end %>
@@ -71,7 +74,8 @@
             </span>
             <span class="controls">
               <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name),  
-                             {:include_blank => "-" + t(:select) + t(:group) + "-"}) %> 
+                             {:include_blank => "-" + t(:select) + t(:group) + "-"}, 
+                             {:class => "autocomplete large-select"}) %> 
             </span>
           </div>
         <% else %>

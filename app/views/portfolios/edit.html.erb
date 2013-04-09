@@ -1,7 +1,7 @@
 <h2> 
   <%= t(:edit) + t(:portfolio_colon) %> <%= @portfolio.name %> 
   <%= link_to "#{content_tag :em, '', :class => ''}
-            #{t(:return_to)} #{t(:group)}".html_safe, group_path(@portfolio.group_id) %>
+            #{t(:return_to)} #{t(:group)}".html_safe, edit_group_path(@portfolio.group_id) %>
   <span class="delete-button">  
     <%= link_to t(:delete), portfolio_path(@portfolio), :method => :delete, 
                 :confirm => t(:confirm_deletion) %>
@@ -30,44 +30,57 @@
       
       
 
-  <% unless @portfolio_products.blank? %>
-    <table class="table table-striped">
-      <caption> 
-        Products in this portfolio
-      </caption>
-      <thead>
-        <tr>
-          <th> <%= t(:product) %> </th>
-          <th class='variable-size'> <%= t(:priority) %> </th>
-          <th> <%= t(:product_state) %> </th>
-          <th> <%= t(:product_type) %> </th>
-          <th> <%= t(:check_to_remove) %> </th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @portfolio_products.each_with_index do |portfolio_product, index| %>
-          <%= portfolio_form.fields_for "portfolio_products", portfolio_product do |form|%>
+  <h3> Products in this portfolio </h3>
+  <div class="tabs-right">
+    <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @portfolio_products.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td> 
-                <%= link_to portfolio_product.product.name, product_path(portfolio_product.product_id) %>
-              </td>
-              <td class='variable-size'> 
-                <%= portfolio_product.product.priority %>
-              </td>
-              <td > 
-                <%= portfolio_product.product.state %>
-              </td>
-              <td> 
-                <%= portfolio_product.product.type %>
-              </td>
-              <td>
-                <%= form.check_box :_destroy %>
-              </td>
+              <th> <%= t(:product) %> </th>
+              <th class='variable-size'> <%= t(:priority) %> </th>
+              <th> <%= t(:product_state) %> </th>
+              <th> <%= t(:product_type) %> </th>
+              <th> <%= t(:allocation) %> </th>
+              <th> <%= t(:check_to_remove) %> </th>
             </tr>
-          <% end %>
-        <% end %>
-      </tbody>
-    </table>
-  <% end %>
+          </thead>
+          <tbody>
+            <% @portfolio_products.each_with_index do |portfolio_product, index| %>
+              <%= portfolio_form.fields_for "portfolio_products", portfolio_product do |form|%>
+                <tr>
+                  <td> 
+                    <%= link_to portfolio_product.product.name, 
+                        product_path(portfolio_product.product_id) %>
+                  </td>
+                  <td class='variable-size'> 
+                    <%= portfolio_product.product.priority %>
+                  </td>
+                  <td > 
+                    <%= portfolio_product.product.state %>
+                  </td>
+                  <td> 
+                    <%= portfolio_product.product.type %>
+                  </td>
+                  <td> 
+                    <%= @product_allocations[index] %>
+                  </td>
+                  <td>
+                    <%= form.check_box :_destroy %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </div>
   <%= portfolio_form.submit  t(:save_changes) %>
 <% end %>

@@ -531,13 +531,21 @@ th.variable-size, td.variable-size {
   background-color: #F9F9F9;
 }
 
-.striped-0{
-  
-}
-
 .accordion-group{
   border: none; 
   margin-bottom: 0px;
+}
+
+#modal_content, .modal_content_2, .ui-dialog{
+  overflow: visible;
+}
+
+.year-content{
+  min-height: 350px;
+}
+
+.chzn-container .chzn-results {
+  max-height: 150px;
 }
 
 @media (max-width: 1120px) {

@@ -164,7 +164,7 @@ class GroupsController < ApplicationController
     end
     
     
-    # CLoads all years. Loads the last selected year
+    # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
       if cookies[:year].blank?

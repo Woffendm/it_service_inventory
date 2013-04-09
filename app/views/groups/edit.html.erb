@@ -87,7 +87,7 @@
                     <tbody>
                       <tr class="striped-<%=count%2%>">
                         <td>
-                          <%= portfolio[0].name %>
+                          <%= link_to portfolio[0].name, edit_portfolio_path(portfolio[0].id) %>
                         </td>
                         <td> 
                           <% if @portfolio_allocations[index][0].to_f == 0 %>
@@ -162,8 +162,9 @@
               <%= form.label :employee_id, t(:name) %>
               <%= form.select(:employee_id, options_from_collection_for_select(
                               @possible_employees, :id, :full_name),
-                              {:include_blank => "-" + t(:select) + t(:employee) + "-", 
-                              :class => "autocomplete large-select"}) %>
+                              {:include_blank => "-" + t(:select) + t(:employee) + "-"}, 
+                              {:class => "autocomplete large-select"}) %>
+                              
               <%= form.submit  t(:add) %>
             <% end %>
           </fieldset>
@@ -171,11 +172,14 @@
       <% end %>
       
       
-      <% unless @existing_employees.blank? %>
+      
+      <h3> <%= t(:existing_employees) %> </h3> 
+      <% if @existing_employees.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
         <table class="table table-striped">
-          <caption> 
-            <%= t(:existing_employees) %> 
-          </caption> 
           <thead>
             <tr>
               <th> 
