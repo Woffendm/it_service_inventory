@@ -409,7 +409,6 @@ h2 > a {
 
 
 .tabs-right > .nav-tabs{
-  border: none;
   margin-left: 0px;
 }
 
@@ -541,11 +540,28 @@ th.variable-size, td.variable-size {
 }
 
 .year-content{
-  min-height: 350px;
+  overflow: visible;
+  display: inline-block;
+  width: 87%;
+  padding: 0px;
+  min-height: 0px;
+  border-right: none;
+}
+
+.year-select{
+  display: inline-block;
+  width: 12%;
+  padding: 0px;
+  vertical-align: top;
+  border-left: 1px solid #DDDDDD;
+}
+
+.nav{
+  margin-bottom: 5px;
 }
 
 .chzn-container .chzn-results {
-  max-height: 150px;
+  max-height: 190px;
 }
 
 @media (max-width: 1120px) {
