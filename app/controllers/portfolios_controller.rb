@@ -1,5 +1,6 @@
 class PortfoliosController < ApplicationController
   before_filter :load_portfolio
+  before_filter :load_product,      :only => [:update]
   
   
   # View for editing a portfolio.
@@ -18,11 +19,16 @@ class PortfoliosController < ApplicationController
   end
   
   
-  # Adds new product to the portfolio if one is supplied, removes any which were marked for removal. 
+  # Adds new product to the portfolio if one is supplied, removes any which were marked for removal.
+  # If a new product is added, also adds it to the group's list of products if it is not already in 
+  # it. 
   def update
     unless params[:product].blank? || params[:product][:id].blank?
-      @portfolio.products << Product.find(params[:product][:id])
+      @portfolio.products << @product
       flash[:notice] = "Product added!"
+      if ProductGroup.where(:product_id => @product.id, :group_id => @portfolio.group_id).blank?
+        Group.find(@portfolio.group_id).products << @product
+      end
     end
     if @portfolio.update_attributes(params[:portfolio])
       flash[:notice] = "Yay!"
@@ -35,9 +41,18 @@ class PortfoliosController < ApplicationController
   end
   
   
+  
   private 
     # Loads the portfolio in question.
     def load_portfolio
       @portfolio = Portfolio.find(params[:id])
+    end
+    
+    
+    # Loads the product being added
+    def load_product
+      unless params[:product].blank? || params[:product][:id].blank?
+        @product = Product.find(params[:product][:id])
+      end
     end
 end

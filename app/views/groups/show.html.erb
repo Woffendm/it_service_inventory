@@ -226,7 +226,7 @@
     <%= render  :partial => "/shared/all_year_select", 
                   :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
-      <% if @portfolios.blank? %>
+      <% if @products.blank? %>
         <p>
           <%= t(:nothing_to_display) %>
         </p>
@@ -244,23 +244,29 @@
           </thead>
         </table>
         <div class="accordion" id="accordion">
+          <% count = 0 %>
           <% @portfolios.each_with_index do |portfolio, index| %>
-            <% next if portfolio.products.blank? %>
+            <% next if @portfolio_allocations[index][0].to_f == 0 %>
+            <% count+=1 %>
             <div class="accordion-group">
-              <div class="accordion-heading">
-                <div class="cake">
-                  <%= portfolio.name %>
-                </div>
-                <div class="cake"> 
-                  <a class="accordion-toggle" data-toggle="collapse"
+              <table class="table">
+                <tbody>
+                  <tr class="striped-<%=count%2%>">
+                    <td>
+                      <%= portfolio[0].name %>
+                    </td>
+                    <td> 
+                      <a class="accordion-toggle" data-toggle="collapse"
                           data-target="#collapse-<%=index%>"  href="#">
-                    <%= "#{portfolio.products.length} " + t(:products) %> 
-                  </a>
-                </div>
-              </div>
+                        <%= @portfolio_allocations[index][0] %> 
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               <div id="collapse-<%=index%>" class="accordion-body collapse">
                 <div class="accordion-inner">
-                  <% unless portfolio.products.blank? %>
+                  <% unless portfolio[1].blank? %>
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -272,7 +278,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <% portfolio.products.each_with_index do |product, index| %>
+                        <% portfolio[1].each_with_index do |product, product_index| %>
+                        <% next if @portfolio_allocations[index][1][product_index].to_f == 0 %>
                           <tr>
                             <td> 
                               <%= link_to product.name, product_path(product.id) %>
@@ -287,7 +294,7 @@
                               <%= product.type %>
                             </td>
                             <td>
-                    
+                              <%= @portfolio_allocations[index][1][product_index] %>
                             </td>
                           </tr>
                         <% end %>

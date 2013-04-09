@@ -6,7 +6,7 @@
 class GroupsController < ApplicationController
   before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
-  before_filter :load_all_years,  :only => [:show, :services]                                
+  before_filter :load_all_years,  :only => [:show, :services, :edit]                                
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_portfolios, :only => [:show, :edit]
   before_filter :load_possible_employees,  :only => [:edit]
@@ -213,7 +213,24 @@ class GroupsController < ApplicationController
     
     # Loads all portfolios associated with the given group
     def load_portfolios
-      @portfolios = @group.portfolios.order(:name).includes(@products)
+      portfolios = @group.portfolios.order(:name).includes(:products)
+      @portfolios = []
+      portfolios.each do |portfolio|
+        @portfolios << [portfolio, portfolio.products.order(:name)]
+      end
+      @portfolio_allocations = []
+      @portfolios.each do |portfolio|
+        product_allocations = []
+        portfolio[1].each do |product|
+          product_allocations << product.get_allocation_for_group(@group, @year, 
+                                  @allocation_precision).to_s + " " + t(:fte)
+        end
+        portfolio_allocation = 0.0
+        product_allocations.each do |product_allocation|
+          portfolio_allocation += product_allocation.to_f
+        end
+        @portfolio_allocations << ["#{portfolio_allocation} " + t(:fte), product_allocations]
+      end
     end
     
     

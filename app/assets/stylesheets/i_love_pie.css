@@ -186,7 +186,7 @@ th, td {
 }
 
 tbody {
-  border-bottom: 10px solid transparent;
+  border-bottom: none;
 }
 
 select {
@@ -527,9 +527,17 @@ th.variable-size, td.variable-size {
   font-weight: bold;
 }
 
-.cake{
-  width: 49%;
-  display: inline-block;
+.striped-1{
+  background-color: #F9F9F9;
+}
+
+.striped-0{
+  
+}
+
+.accordion-group{
+  border: none; 
+  margin-bottom: 0px;
 }
 
 @media (max-width: 1120px) {
