@@ -186,7 +186,7 @@ th, td {
 }
 
 tbody {
-  border-bottom: 10px solid transparent;
+  border-bottom: none;
 }
 
 select {
@@ -301,13 +301,19 @@ div.chart_div_container{
 a{
   cursor: pointer; 
 }
+.pagination{
+  height: 0;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
 .pagination, #results_per_page{
  font-size: 100%; 
  padding: .5em;
 }
 .pagination_footer{
   border-top: 1px dotted gray;
-  padding-top: .5em
+  padding-top: .5em;
+  padding-left: 20px;
 }
 .pagination_option, .pagination >a{
   font-weight: bold;
@@ -398,12 +404,11 @@ h2 > a {
 }
 
 .tab-content > .active, .pill-content > .active {
-    min-height: 400px;
+  padding-bottom: 10px;
 }
 
 
 .tabs-right > .nav-tabs{
-  border: none;
   margin-left: 0px;
 }
 
@@ -457,6 +462,14 @@ h2 > a {
   text-shadow: none;
 }
 
+.table {
+  margin-bottom: 0;
+}
+
+.overview {
+  margin-bottom: 20px;
+}
+
 .overview caption{
   margin-top: 5px;
 }
@@ -466,9 +479,6 @@ h2 > a {
   font-weight: bold;
 }
 
-.table {
-  margin-bottom: 0px;
-}
 
 .overview-label {
   display: inline-block;
@@ -479,6 +489,79 @@ th.variable-size, td.variable-size {
   max-width: 50px;
   min-width: 30px;
   width: 1px;
+}
+
+.accordion-title{
+  display: inline-block;
+  width: 150px;
+}
+
+.accordion-detail{
+  display: inline-block;
+}
+
+.accordion-heading a:hover{
+ text-decoration: none; 
+}
+
+.accordion-heading{
+  display: block;
+  padding: 8px 15px;
+  cursor: default;
+}
+
+.accordion-heading .accordion-toggle{
+  padding: 0px; 
+}
+
+.accordion-heading-block {
+  display: inline-block;
+  width: 400px;
+}
+
+.delete-button{
+  float: right;
+  display: inline;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.striped-1{
+  background-color: #F9F9F9;
+}
+
+.accordion-group{
+  border: none; 
+  margin-bottom: 0px;
+}
+
+#modal_content, .modal_content_2, .ui-dialog{
+  overflow: visible;
+}
+
+.year-content{
+  overflow: visible;
+  display: inline-block;
+  width: 87%;
+  padding: 0px;
+  min-height: 0px;
+  border-right: none;
+}
+
+.year-select{
+  display: inline-block;
+  width: 12%;
+  padding: 0px;
+  vertical-align: top;
+  border-left: 1px solid #DDDDDD;
+}
+
+.nav{
+  margin-bottom: 5px;
+}
+
+.chzn-container .chzn-results {
+  max-height: 190px;
 }
 
 @media (max-width: 1120px) {

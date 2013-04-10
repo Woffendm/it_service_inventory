@@ -1,5 +1,8 @@
 Project1::Application.routes.draw do
 
+  resources :portfolios
+
+
   resources :product_priorities
 
 

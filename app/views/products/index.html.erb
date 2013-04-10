@@ -17,16 +17,17 @@
     <%= text_field_tag "search[product_name]", @product_name, :placeholder => "-All Product Names-" %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
-                          :selected => @group}) %>
+                          :selected => @group}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_priority, @product_priorities, :id, :name, 
                          {:include_blank => "-" + t(:all_product_priorities) + "-",
-                          :selected => @product_priority}) %>
+                          :selected => @product_priority}, 
+                         {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_state, @product_states, :id, :name, 
                          {:include_blank => "-" + t(:all_product_states) + "-",
-                          :selected => @product_state}) %>
+                          :selected => @product_state}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_type, @product_types, :id, :name, 
                          {:include_blank => "-" + t(:all_product_types) + "-",
-                          :selected => @product_type}) %>
+                          :selected => @product_type}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
