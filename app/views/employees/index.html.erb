@@ -18,7 +18,7 @@
                          {:include_blank => "-" + t(:all_services) + "-",
                           :selected => @service}, {:class => "autocomplete large-select"}) %>
     <%= select(:search, :active, [[t(:active), true], [t(:inactive), false]],
-                         {:include_blank => "-#{t(:active)}/#{t(:inactive)}-",
+                         {:include_blank => "-#{t(:active)} / #{t(:inactive)}-",
                           :selected => @active}) if can? :destroy, Employee %>
     <%= submit_tag t(:search) %>
   <% end %>

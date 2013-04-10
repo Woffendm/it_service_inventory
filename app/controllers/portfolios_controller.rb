@@ -22,7 +22,7 @@ class PortfoliosController < ApplicationController
     @group = Group.find(@portfolio.group_id)
     @portfolio.destroy
     flash[:notice] = t(:portfolio) + t(:deleted)
-    redirect_to edit_groups_path(@group)
+    redirect_to edit_group_path(@group)
   end
   
   

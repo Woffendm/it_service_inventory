@@ -4,8 +4,18 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-#  column: value
+one: 
+  value: 2013
+  code: current_fiscal_year
+
+two: 
+  value: 0.1
+  code: allocation_precision
+  
+three:
+  value: default
+  code: rest_api_key
+  
+four:
+  value: 40.0
+  code: fte_hours_per_week

@@ -1,0 +1,7 @@
+one:
+  name: MyString
+  group: one 
+
+two:
+  name: YourString
+  group: one
