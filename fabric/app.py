@@ -34,26 +34,22 @@ def app_setup():
 def app_set_required_environment_vars():
     env.app_name = "itsi"
     env.repo_name = "it_service_inventory.git"
-#    env.web_user = "www-data"
-#    env.web_server_name = "apache2"
-#    env.web_config_directory = "/etc/apache2/sites-enabled"
-## Dev
-# env.dev_hosts = ['host_name']
-# env.dev_path = "/path/to/app/"
+
+    env.repo_type = "git"
+    env.repo_url = "git@gitlab.cws.oregonstate.edu"
+
+## Development
     env.develop_hosts = ['cwsruby18-vd01.cws.oregonstate.edu']
     env.develop_path = "/var/www/%s_code/" % env.app_name
-
 
 ## Staging
     env.staging_hosts = ['cwsruby18-vs01.cws.oregonstate.edu']
     env.staging_path = "/var/www/%s_code/" % env.app_name
 
 ## Production
-# env.production_hosts = ['host_name']
-# env.production_path = "/path/to/app/"
-
-    env.repo_type = "git"
-    env.repo_url = "git@gitlab.cws.oregonstate.edu"
+    env.production_hosts = ['fab-vd01.cws.oregonstate.edu']
+    env.production_path = "/var/www/%s_code/" % env.app_name
+    env.production_checkout = "0.5.0"
 
 # Array of symlinks to be created to the shared directory.  Each individual symlink is an array
 # The first element in the array is the path within the 'shared' directory which we will be
