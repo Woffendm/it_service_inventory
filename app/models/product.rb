@@ -22,7 +22,8 @@ class Product < ActiveRecord::Base
   belongs_to :product_state
   belongs_to :product_priority
   before_validation :smart_add_url_protocol
-  validates_presence_of :name
+  validates_presence_of   :name
+  validates_uniqueness_of :name
   accepts_nested_attributes_for :employee_products, :allow_destroy => true
   accepts_nested_attributes_for :product_services,  :allow_destroy => true
   accepts_nested_attributes_for :product_groups,    :allow_destroy => true

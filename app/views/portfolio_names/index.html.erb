@@ -1,0 +1,41 @@
+<h2> 
+  <%= t(:portfolio_names) %> 
+  <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
+               #{t(:new_portfolio_name)}".html_safe, "#", :class => "modal_trigger" %>
+</h2>
+
+
+<%= render :partial => "/shared/app_settings_tabs" %>
+
+
+<%= render  :partial => "/portfolio_names/new_portfolio_name", 
+            :locals => {:@new_portfolio_name => @new_portfolio_name} %>
+
+
+<% if !@portfolio_names.empty? %>
+  <table class="table table-striped">
+    <thead>
+      <th> <%= t(:title) %> </th>
+      <th> </th>
+    </thead>
+    <tbody>
+      <% @count = 0 %>
+      <% @portfolio_names.each do |portfolio_name| %>
+        <tr>
+          <td> 
+            <%= link_to "#{content_tag :em, '', :class => ''}
+                         #{portfolio_name.name}".html_safe, "#", :class => "modal_trigger_2" %>
+            <%= render  :partial => "/portfolio_names/edit_portfolio_name", 
+                        :locals => {:@portfolio_name => portfolio_name, :@count => @count} %>
+          </td>
+          <td> 
+            <%= link_to t(:delete), portfolio_name_path(portfolio_name.id), :method => :delete, 
+                        :confirm => t(:confirm_deletion) %>
+          </td>
+        </tr>  
+        <% @count += 1 %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+

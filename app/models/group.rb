@@ -14,7 +14,8 @@ class Group < ActiveRecord::Base
   has_many :portfolios
   accepts_nested_attributes_for :portfolios,        :allow_destroy => true
   accepts_nested_attributes_for :employee_groups,   :allow_destroy => true
-  validates_presence_of :name
+  validates_presence_of   :name
+  validates_uniqueness_of :name
   
   
   # Adds the given employee to the group

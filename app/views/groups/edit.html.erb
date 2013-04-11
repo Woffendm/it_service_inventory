@@ -48,8 +48,11 @@
         <fieldset class="light-border">
           <legend><%= t(:add) + t(:portfolio) %></legend>
           <%= fields_for "portfolio" do |form|%>
-            <%= form.label :portfolio, t(:name) %>
-            <%= form.text_field :name %>
+            <%= form.label :portfolio_name_id, t(:name) %>
+            <%= form.select(:portfolio_name_id, options_from_collection_for_select(
+                            @portfolio_names, :id, :name),
+                            {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                            {:class => "autocomplete large-select"}) %>
             <%= form.submit t(:add) %>
           <% end %>
         </fieldset>
@@ -163,8 +166,7 @@
               <%= form.select(:employee_id, options_from_collection_for_select(
                               @possible_employees, :id, :full_name),
                               {:include_blank => "-" + t(:select) + t(:employee) + "-"}, 
-                              {:class => "autocomplete large-select"}) %>
-                              
+                              {:class => "autocomplete large-select"}) %> 
               <%= form.submit  t(:add) %>
             <% end %>
           </fieldset>

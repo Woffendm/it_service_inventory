@@ -9,7 +9,8 @@ class Service < ActiveRecord::Base
   has_many :employees,            :through    => :employee_allocations
   has_many :product_services,     :dependent  => :delete_all
   has_many :products,             :through    => :product_services
-  validates_presence_of :name
+  validates_presence_of   :name
+  validates_uniqueness_of :name
 
 
   # Returns an array of groups that employees with this service have. The array is sorted by the

@@ -1,5 +1,8 @@
 Project1::Application.routes.draw do
 
+  resources :portfolio_names
+
+
   resources :portfolios
 
 

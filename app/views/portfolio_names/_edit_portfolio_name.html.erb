@@ -1,0 +1,10 @@
+<div class="form-inline light-border modal_content_2" id="modal_content_<%=@count%>">
+  <%= form_for @portfolio_name do |form| %>
+    <%= form.label :name, t(:name) %>
+    <%= form.text_field :name %>
+    <%= form.submit  t(:update) + t(:portfolio_name) %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  var modalTitle2 = "<%= t(:edit) + t(:portfolio_name) %>";
+</script>

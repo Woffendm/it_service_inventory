@@ -9,6 +9,7 @@ class GroupsController < ApplicationController
   before_filter :load_all_years,  :only => [:show, :services, :edit]                                
   before_filter :load_employee,   :only => [:add_employee]
   before_filter :load_portfolios, :only => [:show, :edit]
+  before_filter :load_portfolio_names,     :only => [:edit]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:edit]
   before_filter :load_services,            :only => [:show]
@@ -122,7 +123,7 @@ class GroupsController < ApplicationController
         return
       end
     end
-    unless params[:portfolio].blank? || params[:portfolio][:name].blank?
+    unless params[:portfolio].blank? || params[:portfolio][:portfolio_name_id].blank?
       if @group.portfolios.new(params[:portfolio]).save
         flash[:notice] = t(:portfolio) + t(:added)
       else
@@ -211,9 +212,16 @@ class GroupsController < ApplicationController
     end
     
     
+    # Loads all portfolio names not assigned to current group
+    def load_portfolio_names
+      @portfolio_names = PortfolioName.order(:name) - 
+          PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
+    end
+    
+    
     # Loads all portfolios associated with the given group
     def load_portfolios
-      portfolios = @group.portfolios.order(:name).includes(:products)
+      portfolios = @group.portfolios.joins(:portfolio_name).order(:name).includes(:products)
       @portfolios = []
       portfolios.each do |portfolio|
         @portfolios << [portfolio, portfolio.products.order(:name)]
@@ -234,11 +242,10 @@ class GroupsController < ApplicationController
     end
     
     
-
     # Loads all products allocated to the group for the given fiscal year.
     def load_products
-      @products = @group.products.joins(:employee_products, :employees => :groups).where(
-            "employee_products.fiscal_year_id = ?", @year.id).where(
+      @products = @group.products.joins(:employee_products, :employees =>
+            :groups).where(:employee_products => {:fiscal_year_id => @year.id},
             :groups => {:id => @group.id}).uniq.order(:name).paginate(:page =>   
             params[:products_page], :per_page => session[:results_per_page])
       @product_allocations = []
