@@ -244,10 +244,12 @@ class GroupsController < ApplicationController
     
     # Loads all products allocated to the group for the given fiscal year.
     def load_products
-      @products = @group.products.joins(:employee_products, :employees =>
-            :groups).where(:employee_products => {:fiscal_year_id => @year.id},
-            :groups => {:id => @group.id}).uniq.order(:name).paginate(:page =>   
-            params[:products_page], :per_page => session[:results_per_page])
+      @employees = @group.employees unless @employees
+      @products = @group.products.joins(:employee_products).where(
+          :employee_products => {:fiscal_year_id => @year.id, 
+          :employee_id => @employees.pluck("employees.id")}
+          ).uniq.order(:name).paginate(:page => params[:products_page], 
+          :per_page => session[:results_per_page])
       @product_allocations = []
       @products.each do |product|
         @product_allocations << [product.get_allocation_for_group(@group, @year, 
