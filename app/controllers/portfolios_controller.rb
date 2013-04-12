@@ -17,6 +17,21 @@ class PortfoliosController < ApplicationController
   end
   
   
+  # View of all portfolios
+  def index
+    @portfolio_array = []
+    PortfolioName.order(:name).each do |portfolio_name| 
+      product_array = []
+      Product.joins(:portfolios).where(:portfolios => 
+              {:portfolio_name_id => portfolio_name.id}).includes(
+              :groups).order(:name).each do |product| 
+        product_array << product 
+      end
+      @portfolio_array << [portfolio_name.name, product_array]
+    end
+  end
+  
+  
   # Destroys given portfolio and redirects to its parent group.
   def destroy
     @group = Group.find(@portfolio.group_id)

@@ -27,7 +27,7 @@ class PortfolioNamesController < ApplicationController
 
   # Creates a new product state
   def create
-    if PortfolioName.new(params[:portfolio_name]).save
+    if PortfolioName.new(params[:portfolio_name].merge({"global" => true})).save
       flash[:notice] = "Portfolio name created"
       redirect_to portfolio_names_path
       return
