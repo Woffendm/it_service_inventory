@@ -2,15 +2,20 @@
   <%= t(:portfolios) %> 
 </h2>
 
-
-<%= render  :partial => "/groups/new_group", 
-            :locals => {:@group => @group} %>
-
-
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
-  <%= form_tag(groups_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Group Names-" %>
+  <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
+    <%= text_field_tag "search[portfolio_name]", @portfolio_name, :placeholder => "-All Portfolio Names-" %>
+    <%= collection_select(:search, :group, @groups, :id, :name, 
+                         {:include_blank => "-" + t(:all_groups) + "-",
+                          :selected => @group}, {:class => "autocomplete large-select"}) %>
+
+    <%= collection_select(:search, :portfolio_state, @portfolio_states, :id, :name, 
+                         {:include_blank => "-" + t(:all_portfolio_states) + "-",
+                          :selected => @portfolio_state}, {:class => "autocomplete large-select"}) %>
+    <%= collection_select(:search, :portfolio_type, @portfolio_types, :id, :name, 
+                         {:include_blank => "-" + t(:all_portfolio_types) + "-",
+                          :selected => @portfolio_type}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
