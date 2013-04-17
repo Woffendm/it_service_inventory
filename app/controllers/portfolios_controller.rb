@@ -21,19 +21,17 @@ class PortfoliosController < ApplicationController
   # View of all portfolios
   def index
     portfolio_names = filter_portfolios(params[:search])
-    #portfolio_names = sort_results(params, @portfolio_names)
-    #@portfolios = @products.paginate(:page => params[:products_page], :per_page => session[:results_per_page])
-    
-    
+    portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
+    portfolio_names = portfolio_names.order("portfolio_names.name") if @order.blank?
     @portfolio_array = []
     portfolio_names.each do |portfolio_name| 
       product_array = []
       Product.joins(:portfolios).where(:portfolios => 
               {:portfolio_name_id => portfolio_name.id}).includes(
-              :groups).order(:name).each do |product| 
+              :groups).uniq.order(:name).each do |product| 
         product_array << product 
       end
-      @portfolio_array << [portfolio_name.name, product_array]
+      @portfolio_array << [portfolio_name.name, product_array] unless product_array.blank?
     end
   end
   
@@ -84,7 +82,7 @@ class PortfoliosController < ApplicationController
       search_array << "products.id = #{@product}" unless @product.blank? 
       search_array << "global = " + @global unless @global.blank? 
       search_string = search_array.join(" AND ")
-      portfolio_names = PortfolioName.order("portfolio_names.name")
+      portfolio_names = PortfolioName.where(true)
       portfolio_names = portfolio_names.where(
             "portfolio_names.name LIKE '%#{@portfolio_name}%'") unless @portfolio_name.blank?
       portfolio_names = portfolio_names.eager_load(

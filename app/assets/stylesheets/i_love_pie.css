@@ -564,6 +564,14 @@ th.variable-size, td.variable-size {
   max-height: 190px;
 }
 
+.thing0{
+  font-weight: bold;
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+}
+
 .thing1{
   display: block;
   margin-bottom: 5px;
@@ -575,7 +583,6 @@ th.variable-size, td.variable-size {
 }
 
 .thing3{
-  border: 2px solid #AD8;
   margin-right: 5px;
   padding: 1px;
 }

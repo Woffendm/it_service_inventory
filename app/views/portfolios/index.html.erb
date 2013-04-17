@@ -2,6 +2,7 @@
   <%= t(:portfolios) %> 
 </h2>
 
+
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
@@ -19,22 +20,24 @@
   <% end %>
 </fieldset>
 
-
+<h3> <%= t(:all_portfolios) %> </h3>
 <% unless @portfolio_array.blank? %>
-  <table class="table table-striped">
-    <caption> <%= t(:all_portfolios) %> </caption>
-    <thead>
-      <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
-      <th> <%= t(:total_employees) %> </th>
-      <th> </th>
-    </thead>
-    <tbody>
-      <% @portfolio_array.each do |portfolio| %>
-        <tr>
-          <td> 
-            <%= portfolio[0] %>
-          </td>
-          <td> 
+    <div class="whole">
+      <div class="half">
+         <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
+       </div>
+       <div>
+         <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
+       </div>
+     </div>
+      <% @count = 0 %>
+      <% while @portfolio_array[@count] %>
+        <div class="whole">
+          <div class="half">
+            <% portfolio = @portfolio_array[@count] %>
+            <span class="thing0">
+              <%= portfolio[0] %>
+            </span>
             <% portfolio[1].each do |product| %>
               <span class="thing1">
                 <span class="thing2">
@@ -47,11 +50,30 @@
                 <% end %>
               </span>
             <% end %>
-          </td>
-        </tr>  
+          </div>
+          <div class="half">
+            <% unless @portfolio_array[@count + 1].blank? %>
+              <% portfolio = @portfolio_array[@count + 1] %>
+              <span class="thing0">
+                <%= portfolio[0] %>
+              </span>
+              <% portfolio[1].each do |product| %>
+                <span class="thing1">
+                  <span class="thing2">
+                    <%= product.name %>
+                  </span>
+                  <% product.groups.order(:name).each do |group| %>
+                    <span class="thing3">
+                      <%= group.name %>
+                    </span>
+                  <% end %>
+                </span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>  
+        <% @count += 2 %>
       <% end %>
-    </tbody>
-  </table>
 <% end %>
 
 
