@@ -68,6 +68,11 @@
                            #{t(:products)}".html_safe, products_path, 
                            :class => cp(products_path) %>
             </li>
+            <li>
+              <%= link_to "#{content_tag :em, '', :class => ''}
+                           #{t(:portfolios)}".html_safe, portfolios_path, 
+                           :class => cp(portfolios_path) %>
+            </li>
             <% if can? :manage, AppSetting %>
               <li> 
                 <%= link_to "#{content_tag :em, '', :class => ''}

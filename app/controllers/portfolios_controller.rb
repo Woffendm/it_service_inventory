@@ -1,8 +1,8 @@
 class PortfoliosController < ApplicationController
-  before_filter :load_portfolio
+  before_filter :load_portfolio,  :only => [:edit, :update, :destroy]
   before_filter :load_product,    :only => [:update]
   before_filter :load_all_years,  :only => [:edit]                                
-  
+  before_filter :load_groups,     :only => [:index]
   
   
   # View for editing a portfolio.
@@ -73,6 +73,12 @@ class PortfoliosController < ApplicationController
       else
         @year = FiscalYear.find_by_year(cookies[:year])
       end
+    end
+  
+  
+    #
+    def load_groups
+      @groups = Group.order(:name)
     end
   
   

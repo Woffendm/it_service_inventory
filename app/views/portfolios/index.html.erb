@@ -9,46 +9,46 @@
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
                           :selected => @group}, {:class => "autocomplete large-select"}) %>
-
-    <%= collection_select(:search, :portfolio_state, @portfolio_states, :id, :name, 
-                         {:include_blank => "-" + t(:all_portfolio_states) + "-",
-                          :selected => @portfolio_state}, {:class => "autocomplete large-select"}) %>
-    <%= collection_select(:search, :portfolio_type, @portfolio_types, :id, :name, 
-                         {:include_blank => "-" + t(:all_portfolio_types) + "-",
-                          :selected => @portfolio_type}, {:class => "autocomplete large-select"}) %>
+    <%= select(:search, :active, [[t(:global), true], [t(:local), false]],
+                         {:include_blank => "-#{t(:global)} / #{t(:local)}-",
+                          :selected => @global}) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
 
 
-<table class="table table-striped">
-  <caption> <%= t(:all_groups) %> </caption>
-  <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
-    <th> <%= t(:total_employees) %> </th>
-    <th> </th>
-  </thead>
-  <tbody>
-    <% unless @groups.blank? %>
-      <% @groups.each do |group| %>
-        <tr class="<%= cycle('odd', 'even') %>">
+<% unless @portfolio_array.blank? %>
+  <table class="table table-striped">
+    <caption> <%= t(:all_portfolios) %> </caption>
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
+      <th> <%= t(:total_employees) %> </th>
+      <th> </th>
+    </thead>
+    <tbody>
+      <% @portfolio_array.each do |portfolio| %>
+        <tr>
           <td> 
-            <%= link_to group.name, group_path(group.id) %>
+            <%= portfolio[0] %>
           </td>
           <td> 
-            <%= group.employees.length.to_s %>
-          </td>
-          <td> 
-            <% if can? :destroy, Group %>
-              <%= link_to t(:delete), group_path(group.id), :method => :delete, 
-                          :confirm => t(:confirm_deletion) %> 
+            <% portfolio[1].each do |product| %>
+              <span>
+                <%= product.name %>
+                <% product.groups.order(:name).each do |group| %>
+                  <span>
+                    <%= group.name %>
+                  </span>
+                <% end %>
+              </span>
+              <br/>
             <% end %>
           </td>
         </tr>  
       <% end %>
-    <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+<% end %>
 
 
 <script type="text/javascript">
