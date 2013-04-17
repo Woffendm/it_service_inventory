@@ -564,6 +564,22 @@ th.variable-size, td.variable-size {
   max-height: 190px;
 }
 
+.thing1{
+  display: block;
+  margin-bottom: 5px;
+}
+
+.thing2{
+  display: inline-block;
+  width: 300px;
+}
+
+.thing3{
+  border: 2px solid #AD8;
+  margin-right: 5px;
+  padding: 1px;
+}
+
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {
     margin-top: 0; 

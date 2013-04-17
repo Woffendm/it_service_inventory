@@ -9,7 +9,10 @@
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
                           :selected => @group}, {:class => "autocomplete large-select"}) %>
-    <%= select(:search, :active, [[t(:global), true], [t(:local), false]],
+    <%= collection_select(:search, :product, @products, :id, :name, 
+                         {:include_blank => "-" + t(:all_products) + "-",
+                          :selected => @product}, {:class => "autocomplete large-select"}) %>
+    <%= select(:search, :global, [[t(:global), true], [t(:local), false]],
                          {:include_blank => "-#{t(:global)} / #{t(:local)}-",
                           :selected => @global}) %>
     <%= submit_tag t(:search) %>
@@ -33,15 +36,16 @@
           </td>
           <td> 
             <% portfolio[1].each do |product| %>
-              <span>
-                <%= product.name %>
+              <span class="thing1">
+                <span class="thing2">
+                  <%= product.name %>
+                </span>
                 <% product.groups.order(:name).each do |group| %>
-                  <span>
+                  <span class="thing3">
                     <%= group.name %>
                   </span>
                 <% end %>
               </span>
-              <br/>
             <% end %>
           </td>
         </tr>  

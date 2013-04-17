@@ -3,6 +3,7 @@ class PortfoliosController < ApplicationController
   before_filter :load_product,    :only => [:update]
   before_filter :load_all_years,  :only => [:edit]                                
   before_filter :load_groups,     :only => [:index]
+  before_filter :load_products,   :only => [:index]
   
   
   # View for editing a portfolio.
@@ -19,8 +20,13 @@ class PortfoliosController < ApplicationController
   
   # View of all portfolios
   def index
+    portfolio_names = filter_portfolios(params[:search])
+    #portfolio_names = sort_results(params, @portfolio_names)
+    #@portfolios = @products.paginate(:page => params[:products_page], :per_page => session[:results_per_page])
+    
+    
     @portfolio_array = []
-    PortfolioName.order(:name).each do |portfolio_name| 
+    portfolio_names.each do |portfolio_name| 
       product_array = []
       Product.joins(:portfolios).where(:portfolios => 
               {:portfolio_name_id => portfolio_name.id}).includes(
@@ -65,6 +71,28 @@ class PortfoliosController < ApplicationController
   
   
   private 
+    # Filters the portfolios displayed on the index page based on paramaters provided
+    def filter_portfolios(search)
+      return PortfolioName.where(true) if search.blank?
+      @group = search[:group]
+      @product = search[:product]
+      @portfolio_name = search[:portfolio_name]
+      @global = search[:global]
+      search_string = ""
+      search_array = []
+      search_array << "group_id = #{@group}" unless @group.blank? 
+      search_array << "products.id = #{@product}" unless @product.blank? 
+      search_array << "global = " + @global unless @global.blank? 
+      search_string = search_array.join(" AND ")
+      portfolio_names = PortfolioName.order("portfolio_names.name")
+      portfolio_names = portfolio_names.where(
+            "portfolio_names.name LIKE '%#{@portfolio_name}%'") unless @portfolio_name.blank?
+      portfolio_names = portfolio_names.eager_load(
+          :portfolios => :products).where(search_string).uniq unless search_string.blank?
+      return portfolio_names
+    end
+
+    
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
@@ -94,5 +122,10 @@ class PortfoliosController < ApplicationController
       unless params[:product].blank? || params[:product][:id].blank?
         @product = Product.find(params[:product][:id])
       end
+    end
+    
+    
+    def load_products
+      @products = Product.order(:name)
     end
 end
