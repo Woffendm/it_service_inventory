@@ -576,6 +576,7 @@ th.variable-size, td.variable-size {
 }
 
 .half1{
+  margin:5px;
 }
 
 .half2{
@@ -601,8 +602,28 @@ th.variable-size, td.variable-size {
 }
 
 .thing3{
+  display: inline-block;
   margin-right: 5px;
   padding: 1px;
+}
+
+table.accordion-inner{
+  border: 1px solid #E5E5E5;
+  margin-bottom: 10px;
+}
+
+.whole > ul{
+  margin: 0px;
+}
+
+.accordion-header{
+  margin-left: 15px;
+  font-size: 110%;
+  margin-bottom: 5px;
+}
+
+.accordion {
+  margin: 0px;
 }
 
 @media (max-width: 1120px) {
