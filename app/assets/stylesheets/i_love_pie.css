@@ -564,6 +564,24 @@ th.variable-size, td.variable-size {
   max-height: 190px;
 }
 
+.whole{
+  
+}
+
+.half1, .half2{
+  width: 48%;
+  display: inline-block;
+  min-height: 30px;
+  vertical-align: top;
+}
+
+.half1{
+}
+
+.half2{
+  margin-left: 2%;
+}
+
 .thing0{
   font-weight: bold;
   display: block;

@@ -20,20 +20,17 @@
   <% end %>
 </fieldset>
 
-<h3> <%= t(:all_portfolios) %> </h3>
 <% unless @portfolio_array.blank? %>
-    <div class="whole">
-      <div class="half">
+      <div class="half1">
          <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
        </div>
-       <div>
+       <div class="half2">
          <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
        </div>
-     </div>
       <% @count = 0 %>
       <% while @portfolio_array[@count] %>
         <div class="whole">
-          <div class="half">
+          <div class="half1">
             <% portfolio = @portfolio_array[@count] %>
             <span class="thing0">
               <%= portfolio[0] %>
@@ -51,7 +48,7 @@
               </span>
             <% end %>
           </div>
-          <div class="half">
+          <div class="half2">
             <% unless @portfolio_array[@count + 1].blank? %>
               <% portfolio = @portfolio_array[@count + 1] %>
               <span class="thing0">
