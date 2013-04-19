@@ -27,9 +27,9 @@ class PortfoliosController < ApplicationController
     portfolio_names.each do |portfolio_name| 
       product_array = []
       Product.joins(:portfolios).where(:portfolios => 
-              {:portfolio_name_id => portfolio_name.id}).includes(
-              :groups).uniq.order(:name).each do |product| 
-        product_array << product 
+              {:portfolio_name_id => portfolio_name.id}).uniq.order(:name).each do |product| 
+        product_array << [product, Group.joins(:portfolios => :products).where(
+                         :products => {:id => product.id}).uniq.order("groups.name")] 
       end
       @portfolio_array << [portfolio_name.name, product_array] unless product_array.blank?
     end

@@ -50,10 +50,10 @@
                 <% portfolio[1].each do |product| %>
                   <tr>
                     <td> 
-                      <%= link_to product.name, product_path(product.id) %>
+                      <%= link_to product[0].name, product_path(product[0].id) %>
                     </td>
                     <td>
-                      <% product.groups.order(:name).each do |group| %>
+                      <% product[1].each do |group| %>
                         <span class="thing3">
                           <%= group.name %>
                         </span>
