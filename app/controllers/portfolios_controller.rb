@@ -23,16 +23,8 @@ class PortfoliosController < ApplicationController
     portfolio_names = filter_portfolios(params[:search])
     portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
     portfolio_names = portfolio_names.order("portfolio_names.name") if @order.blank?
-    @portfolio_array = []
-    portfolio_names.each do |portfolio_name| 
-      product_array = []
-      Product.joins(:portfolios).where(:portfolios => 
-              {:portfolio_name_id => portfolio_name.id}).uniq.order(:name).each do |product| 
-        product_array << [product, Group.joins(:portfolios => :products).where(
-                         :products => {:id => product.id}).uniq.order("groups.name")] 
-      end
-      @portfolio_array << [portfolio_name.name, product_array] unless product_array.blank?
-    end
+    @portfolio_names = PortfolioName.includes(:products => [{:portfolios => :group}]).uniq.order("portfolio_names.name", "products.name", "groups.name")
+
   end
   
   
@@ -50,8 +42,14 @@ class PortfoliosController < ApplicationController
   # it. 
   def update
     unless params[:product].blank? || params[:product][:id].blank?
-      @portfolio.products << @product
-      flash[:notice] = "Product added!"
+      if @portfolio.portfolio_products.new(:product_id => params[:product][:id], 
+          :portfolio_name_id => @portfolio.portfolio_name_id).save
+        flash[:notice] = "Product added!"
+      else
+        flash[:error] = "Product cannot be added"
+        render :edit
+        return
+      end
       if ProductGroup.where(:product_id => @product.id, :group_id => @portfolio.group_id).blank?
         @group.products << @product
       end

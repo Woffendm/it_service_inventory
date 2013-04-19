@@ -4,9 +4,10 @@
 # Copyright:
 
 class PortfolioProduct < ActiveRecord::Base
-  attr_accessible :portfolio_id, :product_id
+  attr_accessible :portfolio_id, :product_id, :portfolio_name_id
   belongs_to :portfolio
   belongs_to :product
-  validates_presence_of :product_id, :portfolio_id
+  belongs_to :portfolio_name
+  validates_presence_of :product_id, :portfolio_id, :portfolio_name_id
 
 end

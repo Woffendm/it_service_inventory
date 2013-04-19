@@ -23,19 +23,19 @@
 
 
 
-<% unless @portfolio_array.blank? %>
+<% unless @portfolio_names.blank? %>
   <div>
     <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
   </div>
 
-  <% @portfolio_array.each_with_index do |portfolio, index| %>
+  <% @portfolio_names.each_with_index do |portfolio_name, index| %>
     <div class="half1">
       <div class="accordion" id="accordion">
         <div class="accordion-group">
           <div class="accordion-header">
             <a class="accordion-toggle" data-toggle="collapse"
                      data-target="#collapse-<%=index%>"  href="#">
-              <%= portfolio[0] %>
+              <%= portfolio_name.name %>
             </a>
           </div>
           <div id="collapse-<%=index%>" class="accordion-body collapse">
@@ -47,15 +47,15 @@
                 </tr>
               </thead>
               <tbody>
-                <% portfolio[1].each do |product| %>
+                <% portfolio_name.products.uniq.each do |product| %>
                   <tr>
                     <td> 
-                      <%= link_to product[0].name, product_path(product[0].id) %>
+                      <%= link_to product.name, product_path(product.id) %>
                     </td>
                     <td>
-                      <% product[1].each do |group| %>
+                      <% product.portfolios.each do |portfolio| %>
                         <span class="thing3">
-                          <%= group.name %>
+                          <%= portfolio.group.name %>
                         </span>
                       <% end %>
                     </td>
