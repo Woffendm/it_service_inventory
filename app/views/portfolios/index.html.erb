@@ -53,9 +53,9 @@
                       <%= link_to product.name, product_path(product.id) %>
                     </td>
                     <td>
-                      <% product.portfolios.each do |portfolio| %>
+                      <% portfolio_name.groups_for_product(product).each do |group| %>
                         <span class="thing3">
-                          <%= portfolio.group.name %>
+                          <%= link_to group.name, group_path(group.id) %>
                         </span>
                       <% end %>
                     </td>
