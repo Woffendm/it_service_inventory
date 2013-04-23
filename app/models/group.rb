@@ -39,10 +39,10 @@ class Group < ActiveRecord::Base
     self.products.each do |product| 
       product.employee_products.joins(:employee => :groups).where(
             :fiscal_year_id => year.id, :groups => {:id => self.id}).each do |product_allocation|  
-        total_allocation += product_allocation.rounded_allocation(allocation_precision)
+        total_allocation += product_allocation.allocation unless product_allocation.allocation.blank?
       end 
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   
@@ -51,9 +51,9 @@ class Group < ActiveRecord::Base
   def get_total_service_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employees.each do |employee|
-      total_allocation += employee.get_total_service_allocation(year, allocation_precision)
+      total_allocation += employee.get_total_service_allocation(year, allocation_precision) 
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   

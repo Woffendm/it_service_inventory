@@ -1,9 +1,11 @@
 class PortfoliosController < ApplicationController
   before_filter :load_portfolio,  :only => [:edit, :update, :destroy]
   before_filter :load_product,    :only => [:update]
-  before_filter :load_all_years,  :only => [:edit]                                
+  before_filter :load_all_years,  :only => [:edit]    
+  before_filter :load_group,      :only => [:new]                            
   before_filter :load_groups,     :only => [:index]
   before_filter :load_products,   :only => [:index]
+  before_filter :load_portfolio_names, :only => [:new, :create]
   
   
   # View for editing a portfolio.
@@ -23,7 +25,18 @@ class PortfoliosController < ApplicationController
     portfolio_names = filter_portfolios(params[:search])
     portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
     @portfolio_names = portfolio_names.includes(:products, :portfolios => :group).uniq.order("portfolio_names.name", "products.name", "groups.name")
-
+  end
+  
+  
+  # Page for creating a new portfolio
+  def new
+    @portfolio = Portfolio.new
+  end
+  
+  
+  # Creates new portfolio. 
+  def create
+    
   end
   
   
@@ -98,7 +111,13 @@ class PortfoliosController < ApplicationController
     end
   
   
-    #
+    # Loads the group that the portfolio will belong to
+    def load_group
+      @group = Group.find(params[:group_id])
+    end
+  
+  
+    # Loads all groups in alphabetical order
     def load_groups
       @groups = Group.order(:name)
     end
@@ -108,6 +127,13 @@ class PortfoliosController < ApplicationController
     def load_portfolio
       @portfolio = Portfolio.find(params[:id])
       @group = Group.find(@portfolio.group_id)
+    end
+    
+    
+    # Loads all global portfolio names
+    def load_portfolio_names
+      @portfolio_names = PortfolioName.order(:name) - 
+         PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
     end
     
     

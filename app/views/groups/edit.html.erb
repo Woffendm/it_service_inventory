@@ -59,7 +59,12 @@
       </div>
       
       
-      <h3> <%= t(:existing_portfolios) %> </h3>
+      <h3> 
+        <%= t(:existing_portfolios) %> 
+        <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
+                     #{t(:add)} #{t(:portfolio)}".html_safe, 
+                     new_portfolio_path + "?group_id=#{@group.id}" %>
+      </h3>
       <% if @portfolios.blank? %>
         <p>
           <%= t(:nothing_to_display) %>

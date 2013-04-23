@@ -377,7 +377,11 @@ h2 > a {
   font-weight: bold;
 }
 
-
+h3 > a {
+  margin-left: 30px;
+  font-size: 12px;
+  font-weight: bold;
+}
 
 #login-inline,
 #login-outline {
@@ -539,6 +543,10 @@ th.variable-size, td.variable-size {
   overflow: visible;
 }
 
+.tab-content{
+  overflow: visible;
+}
+
 .year-content{
   overflow: visible;
   display: inline-block;
@@ -624,6 +632,10 @@ table.accordion-inner{
 
 .accordion {
   margin: 0px;
+}
+
+.centered-label > label{
+  text-align: center;
 }
 
 @media (max-width: 1120px) {

@@ -1,0 +1,30 @@
+<h2> 
+  <%= t(:new) + t(:portfolio_colon) %> <%= @portfolio.name %>
+  <%= link_to "#{content_tag :em, '', :class => ''}
+              Cancel creation".html_safe, edit_group_path(@group.id) %> 
+</h2>
+
+
+
+
+
+<div class="form-inline">
+  <fieldset class="light-border">
+    <%= form_for @portfolio do |form| %>
+      <%= form.label :portfolio_name_id, "Existing name" %>
+      <%= form.select(:portfolio_name_id, options_from_collection_for_select(
+                      @portfolio_names, :id, :name),
+                      {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                      {:class => "autocomplete large-select"}) %>
+      <%= form.submit t(:create) %>
+    <% end %>
+    <div class="centered-label">
+      <%= label_tag t(:or) %>
+    </div>
+    <%= form_for @portfolio do |form|%>
+      <%= form.label :name, "Custom name" %>
+      <%= form.text_field :name, {:class => "small"} %>
+      <%= form.submit  t(:create) %>
+    <% end %>
+  </fieldset>
+</div>

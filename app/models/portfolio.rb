@@ -7,5 +7,5 @@ class Portfolio < ActiveRecord::Base
   has_many :products, :through => :portfolio_products
   accepts_nested_attributes_for :portfolio_products,  :allow_destroy => true
   
-  delegate :name, :to => :portfolio_name
+  delegate :name, :to => :portfolio_name, :allow_nil => true
 end
