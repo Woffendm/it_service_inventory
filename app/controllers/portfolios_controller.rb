@@ -22,7 +22,6 @@ class PortfoliosController < ApplicationController
   def index
     portfolio_names = filter_portfolios(params[:search])
     portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
-    portfolio_names = portfolio_names.order("portfolio_names.name") if @order.blank?
     @portfolio_names = portfolio_names.includes(:products, :portfolios => :group).uniq.order("portfolio_names.name", "products.name", "groups.name")
 
   end
@@ -76,15 +75,14 @@ class PortfoliosController < ApplicationController
       @global = search[:global]
       search_string = ""
       search_array = []
-      search_array << "group_id = #{@group}" unless @group.blank? 
+      search_array << "portfolios.group_id = #{@group}" unless @group.blank? 
       search_array << "products.id = #{@product}" unless @product.blank? 
-      search_array << "global = " + @global unless @global.blank? 
+      search_array << "portfolio_names.global = " + @global unless @global.blank? 
       search_string = search_array.join(" AND ")
-      portfolio_names = PortfolioName.joins(:products)
+      portfolio_names = PortfolioName.joins(:products => :portfolios)
       portfolio_names = portfolio_names.where(
             "portfolio_names.name LIKE '%#{@portfolio_name}%'") unless @portfolio_name.blank?
-      portfolio_names = portfolio_names.eager_load(
-          :portfolios => :products).where(search_string).uniq unless search_string.blank?
+      portfolio_names = portfolio_names.where(search_string).uniq unless search_string.blank?
       return portfolio_names
     end
 
