@@ -10,20 +10,31 @@
 
 <div class="form-inline">
   <fieldset class="light-border">
+    <legend> Add to set of global portfolios </legend>
     <%= form_for @portfolio do |form| %>
-      <%= form.label :portfolio_name_id, "Existing name" %>
+      <%= form.label :portfolio_name_id, t(:name) %>
       <%= form.select(:portfolio_name_id, options_from_collection_for_select(
                       @portfolio_names, :id, :name),
                       {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
                       {:class => "autocomplete large-select"}) %>
+      <%= form.hidden_field :group_id, :value => @group.id %>
       <%= form.submit t(:create) %>
     <% end %>
-    <div class="centered-label">
-      <%= label_tag t(:or) %>
-    </div>
+  </fieldset>
+</div>
+
+<div class="or-div">
+  <%= t(:or) %>
+</div>
+
+
+<div class="form-inline">
+  <fieldset class="light-border">
+    <legend> Create local portfolio </legend>
     <%= form_for @portfolio do |form|%>
-      <%= form.label :name, "Custom name" %>
+      <%= form.label :name, t(:name) %>
       <%= form.text_field :name, {:class => "small"} %>
+      <%= form.hidden_field :group_id, :value => @group.id %>
       <%= form.submit  t(:create) %>
     <% end %>
   </fieldset>

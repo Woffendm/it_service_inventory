@@ -2,7 +2,7 @@ class PortfoliosController < ApplicationController
   before_filter :load_portfolio,  :only => [:edit, :update, :destroy]
   before_filter :load_product,    :only => [:update]
   before_filter :load_all_years,  :only => [:edit]    
-  before_filter :load_group,      :only => [:new]                            
+  before_filter :load_group,      :only => [:new, :create]                            
   before_filter :load_groups,     :only => [:index]
   before_filter :load_products,   :only => [:index]
   before_filter :load_portfolio_names, :only => [:new, :create]
@@ -36,7 +36,26 @@ class PortfoliosController < ApplicationController
   
   # Creates new portfolio. 
   def create
-    
+    if params[:portfolio][:name]
+      @portfolio_name = PortfolioName.new(:name => params[:portfolio][:name])
+      unless @portfolio_name.save
+        flash[:error] = "Name already taken" 
+        render :new
+        return
+      end
+      @portfolio = Portfolio.new(:group_id => params[:portfolio][:group_id], 
+                                 :portfolio_name_id => @portfolio_name.id)
+    else
+      @portfolio = Portfolio.new(params[:portfolio])
+    end
+    if @portfolio.save
+      flash[:notice] = "Portfolio created!"
+      redirect_to edit_portfolio_path(@portfolio.id)
+      return
+    else
+      flash[:error] = "Portfolio could not be saved"
+      render :new
+    end
   end
   
   
@@ -113,7 +132,8 @@ class PortfoliosController < ApplicationController
   
     # Loads the group that the portfolio will belong to
     def load_group
-      @group = Group.find(params[:group_id])
+      @group = Group.find(params[:group_id]) unless params[:group_id].blank?
+      @group = Group.find(params[:portfolio][:group_id]) unless params[:portfolio].blank?
     end
   
   

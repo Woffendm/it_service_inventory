@@ -151,6 +151,7 @@ legend {
   margin-bottom: 0px;
   position: relative;
   width: auto;
+  font-style: italic;
 }
 
 
@@ -634,8 +635,9 @@ table.accordion-inner{
   margin: 0px;
 }
 
-.centered-label > label{
-  text-align: center;
+.or-div{
+  padding-left: 200px;
+  padding-top: 10px;
 }
 
 @media (max-width: 1120px) {
