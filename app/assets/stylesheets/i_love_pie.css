@@ -640,6 +640,125 @@ table.accordion-inner{
   padding-top: 10px;
 }
 
+
+
+
+.widget {
+    clear: both;
+    margin-bottom: 2em;
+    position: relative;
+    width: auto;
+}
+.widget .widget-header {
+    background: -moz-linear-gradient(center top , #FAFAFA 0%, #E9E9E9 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #D5D5D5;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+}
+.widget .widget-header h3 {
+    color: #555555;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    left: 10px;
+    line-height: 18px;
+    margin-right: 3em;
+    position: relative;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+    top: 2px;
+    margin-top: 0px;
+    border-bottom: none;
+}
+.widget .widget-header [class^="icon-"], .widget .widget-header [class*=" icon-"] {
+    color: #555555;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 13px;
+    margin-right: -2px;
+    vertical-align: middle;
+}
+.widget .widget-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px 5px 5px 5px;
+    padding: 20px 15px 15px;
+}
+.widget .widget-header + .widget-content {
+    border-top: medium none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.widget.widget-nopad .widget-content {
+    padding: 0;
+}
+.widget .widget-content {
+}
+.widget .widget-content:before, .widget .widget-content:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}
+.widget .widget-content:after {
+    clear: both;
+}
+.widget.widget-table .widget-content {
+    padding: 0;
+}
+.widget.widget-table .table {
+    border: medium none;
+    margin-bottom: 0;
+}
+.widget.widget-table .table tr td:first-child, .widget.widget-table .table tr th:first-child {
+    border-left: medium none;
+}
+.widget.widget-plain {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+}
+.widget.widget-plain .widget-content {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    padding: 0;
+}
+.widget.widget-box .widget-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.stacked {
+    position: relative;
+}
+.stacked:after, .stacked:before {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #FFFFFF;
+    border-color: -moz-use-text-color #D3D3D3 #D3D3D3;
+    border-image: none;
+    border-radius: 0 0 3px 3px;
+    border-right: 1px solid #D3D3D3;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+    bottom: -2px;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 3px;
+    position: absolute;
+    right: 3px;
+}
+.stacked:before {
+    bottom: -4px;
+    left: 6px;
+    right: 6px;
+}
+
+
+
+
 @media (max-width: 1120px) {
   .navbar-fixed-top + .container {
     margin-top: 0; 

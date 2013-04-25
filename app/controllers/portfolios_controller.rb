@@ -36,14 +36,16 @@ class PortfoliosController < ApplicationController
   
   # Creates new portfolio. 
   def create
-    if params[:portfolio][:name]
-      @portfolio_name = PortfolioName.new(:name => params[:portfolio][:name])
+    @name = params[:name]
+    unless @name.blank?
+      @portfolio_name = PortfolioName.new(:name => @name)
       unless @portfolio_name.save
+        @portfolio = Portfolio.new
         flash[:error] = "Name already taken" 
         render :new
         return
       end
-      @portfolio = Portfolio.new(:group_id => params[:portfolio][:group_id], 
+      @portfolio = Portfolio.new(:group_id => params[:group_id], 
                                  :portfolio_name_id => @portfolio_name.id)
     else
       @portfolio = Portfolio.new(params[:portfolio])
@@ -132,8 +134,9 @@ class PortfoliosController < ApplicationController
   
     # Loads the group that the portfolio will belong to
     def load_group
-      @group = Group.find(params[:group_id]) unless params[:group_id].blank?
-      @group = Group.find(params[:portfolio][:group_id]) unless params[:portfolio].blank?
+      @group = params[:group_id]
+      @group = params[:portfolio][:group_id] if @group.blank?
+      @group = Group.find(@group)
     end
   
   

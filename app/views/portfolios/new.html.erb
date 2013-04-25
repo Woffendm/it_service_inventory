@@ -1,41 +1,44 @@
 <h2> 
-  <%= t(:new) + t(:portfolio_colon) %> <%= @portfolio.name %>
+  <%= t(:new) + t(:portfolio) %>
   <%= link_to "#{content_tag :em, '', :class => ''}
               Cancel creation".html_safe, edit_group_path(@group.id) %> 
 </h2>
 
 
 
-
-
-<div class="form-inline">
-  <fieldset class="light-border">
-    <legend> Add to set of global portfolios </legend>
-    <%= form_for @portfolio do |form| %>
-      <%= form.label :portfolio_name_id, t(:name) %>
-      <%= form.select(:portfolio_name_id, options_from_collection_for_select(
-                      @portfolio_names, :id, :name),
-                      {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
-                      {:class => "autocomplete large-select"}) %>
-      <%= form.hidden_field :group_id, :value => @group.id %>
-      <%= form.submit t(:create) %>
-    <% end %>
-  </fieldset>
+<div class="span6">
+  <div class="widget stacked">
+    <div class="widget-header">
+      <h3> Assign a global portfolio to <%= @group.name %> </h3>
+    </div>
+    <div class="widget-content form-inline">
+      <%= form_for @portfolio do |form| %>
+        <%= form.label :portfolio_name_id, t(:name) %>
+        <%= form.select(:portfolio_name_id, options_from_collection_for_select(
+                        @portfolio_names, :id, :name),
+                        {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                        {:class => "autocomplete large-select"}) %>
+        <%= form.hidden_field :group_id, :value => @group.id %>
+        <%= form.submit t(:create) %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<div class="or-div">
-  <%= t(:or) %>
-</div>
 
 
-<div class="form-inline">
-  <fieldset class="light-border">
-    <legend> Create local portfolio </legend>
-    <%= form_for @portfolio do |form|%>
-      <%= form.label :name, t(:name) %>
-      <%= form.text_field :name, {:class => "small"} %>
-      <%= form.hidden_field :group_id, :value => @group.id %>
-      <%= form.submit  t(:create) %>
-    <% end %>
-  </fieldset>
+<div class="span6">
+  <div class="widget stacked">
+    <div class="widget-header">
+      <h3> Create a new portfolio for <%= @group.name %> </h3>
+    </div>
+    <div class="widget-content form-inline">
+      <%= form_tag(:action => :create, :method => :post) do %>
+        <%= label_tag :name, t(:name) %>
+        <%= text_field_tag :name, @name, {:class => "small"} %>
+        <%= hidden_field_tag :group_id, @group.id %>
+        <%= submit_tag  t(:create) %>
+      <% end %>
+    </div>
+  </div>
 </div>
