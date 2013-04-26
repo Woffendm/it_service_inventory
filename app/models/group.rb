@@ -11,7 +11,7 @@ class Group < ActiveRecord::Base
   has_many :employees,        :through    => :employee_groups
   has_many :product_groups,   :dependent  => :delete_all
   has_many :products,         :through    => :product_groups
-  has_many :portfolios
+  has_many :portfolios,       :dependent  => :delete_all
   accepts_nested_attributes_for :portfolios,        :allow_destroy => true
   accepts_nested_attributes_for :employee_groups,   :allow_destroy => true
   validates_presence_of   :name
