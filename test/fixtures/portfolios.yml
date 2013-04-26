@@ -1,7 +1,7 @@
 one:
-  name: MyString
+  portfolio_name: one
   group: one 
 
 two:
-  name: YourString
+  portfolio_name: two
   group: one

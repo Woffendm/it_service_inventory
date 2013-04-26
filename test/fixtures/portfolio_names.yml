@@ -1,0 +1,7 @@
+one:
+  name: MyString
+  global: true 
+
+two:
+  name: YourString
+  global: false
