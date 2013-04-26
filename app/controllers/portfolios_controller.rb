@@ -38,12 +38,15 @@ class PortfoliosController < ApplicationController
   def create
     @name = params[:name]
     unless @name.blank?
-      @portfolio_name = PortfolioName.new(:name => @name)
-      unless @portfolio_name.save
-        @portfolio = Portfolio.new
-        flash[:error] = "Name already taken" 
-        render :new
-        return
+      @portfolio_name = PortfolioName.find_by_name(@name)
+      if @portfolio_name.blank?
+        @portfolio_name = PortfolioName.new(:name => @name)
+        unless @portfolio_name.save
+          @portfolio = Portfolio.new
+          flash[:error] = "Name already taken" 
+          render :new
+          return
+        end
       end
       @portfolio = Portfolio.new(:group_id => params[:group_id], 
                                  :portfolio_name_id => @portfolio_name.id)
@@ -55,7 +58,7 @@ class PortfoliosController < ApplicationController
       redirect_to edit_portfolio_path(@portfolio.id)
       return
     else
-      flash[:error] = "Portfolio could not be saved"
+      flash[:error] = "Group already has a portfolio with this name"
       render :new
     end
   end
@@ -155,7 +158,7 @@ class PortfoliosController < ApplicationController
     
     # Loads all global portfolio names
     def load_portfolio_names
-      @portfolio_names = PortfolioName.order(:name) - 
+      @portfolio_names = PortfolioName.global_portfolio_names - 
          PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
     end
     

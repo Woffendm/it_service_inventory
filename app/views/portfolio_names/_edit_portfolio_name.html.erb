@@ -1,8 +1,28 @@
 <div class="form-inline light-border modal_content_2" id="modal_content_<%=@count%>">
   <%= form_for @portfolio_name do |form| %>
-    <%= form.label :name, t(:name) %>
-    <%= form.text_field :name %>
-    <%= form.submit  t(:update) + t(:portfolio_name) %>
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.label t(:name) %>
+      </span>
+      <span class="controls">
+        <%= form.number_field :name %>
+      </span>
+    </div>
+    
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.label :global, t(:global) %> 
+      </span>
+      <span class="controls">
+        <%= form.select(:global, ['true', 'false']) %>
+      </span>
+    </div>
+    
+    <div class="control-group">
+      <span class="control-label">
+        <%= form.submit  t(:update) + t(:portfolio_name) %>
+      </span>
+    </div>
   <% end %>
 </div>
 <script type="text/javascript">
