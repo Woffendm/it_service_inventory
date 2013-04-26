@@ -116,7 +116,7 @@ class PortfoliosController < ApplicationController
       search_array << "products.id = #{@product}" unless @product.blank? 
       search_array << "portfolio_names.global = " + @global unless @global.blank? 
       search_string = search_array.join(" AND ")
-      portfolio_names = PortfolioName.joins(:products => :portfolios)
+      portfolio_names = PortfolioName.joins(:portfolios, :products => :portfolios)
       portfolio_names = portfolio_names.where(
             "portfolio_names.name LIKE '%#{@portfolio_name}%'") unless @portfolio_name.blank?
       portfolio_names = portfolio_names.where(search_string).uniq unless search_string.blank?
