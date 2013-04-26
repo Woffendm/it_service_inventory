@@ -33,7 +33,7 @@ def app_setup():
 # env.my_variable_name = value
 def app_set_required_environment_vars():
     env.app_name = "itsi"
-    env.repo_name = "it_service_inventory.git"
+    env.repo_name = "core/it_service_inventory.git"
 
     env.repo_type = "git"
     env.repo_url = "git@gitlab.cws.oregonstate.edu"
