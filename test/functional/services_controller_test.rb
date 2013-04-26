@@ -18,7 +18,7 @@ class ServicesControllerTest < ActionController::TestCase
 
   test "should create service" do
     assert_difference('Service.count') do
-      post :create, :service => { :name => @service.name }
+      post :create, :service => { :name => "New Service" }
     end
     assert_redirected_to services_path
   end
@@ -37,7 +37,7 @@ class ServicesControllerTest < ActionController::TestCase
 
 
   test "should update service" do
-    put :update, :id => @service, :service => { :name => @service.name }
+    put :update, :id => @service, :service => { :name => "Differnet Name" }
     assert_redirected_to edit_service_path(assigns(:service))
   end
 
