@@ -24,7 +24,7 @@ def app_prompt_user_for_inputs():
 
 # Does application specific setup of what ever is not covered by the generic fabric script.
 def app_setup():
-    stupid_file = env.release_path + "bundle/ruby/1.8/gems/omniauth-ldap-1.0.2/lib/omniauth/strategies/ldap.rb"
+    stupid_file = env.release_path + "bundle/ruby/1.9.1/gems/omniauth-ldap-1.0.2/lib/omniauth/strategies/ldap.rb"
     run("sed -e 's/callback_path/callback_url/g' " + stupid_file + " > " + stupid_file + ".new && mv " + stupid_file + ".new " + stupid_file)
     return
 
@@ -33,21 +33,22 @@ def app_setup():
 # env.my_variable_name = value
 def app_set_required_environment_vars():
     env.app_name = "itsi"
-    env.repo_name = "it_service_inventory.git"
+    env.repo_name = "core/it_service_inventory.git"
 
     env.repo_type = "git"
     env.repo_url = "git@gitlab.cws.oregonstate.edu"
 
 ## Development
-    env.develop_hosts = ['cwsruby18-vd01.cws.oregonstate.edu']
+    env.develop_hosts = ['cwsruby19-vd01.cws.oregonstate.edu']
     env.develop_path = "/var/www/%s_code/" % env.app_name
+    env.develop_checkout = 'develop19'
 
 ## Staging
-    env.staging_hosts = ['cwsruby18-vs01.cws.oregonstate.edu']
+    env.staging_hosts = ['cwsruby19-vs01.cws.oregonstate.edu']
     env.staging_path = "/var/www/%s_code/" % env.app_name
 
 ## Production
-    env.production_hosts = ['fab-vd01.cws.oregonstate.edu']
+    env.production_hosts = ['cwsruby19-vp01.cws.oregonstate.edu']
     env.production_path = "/var/www/%s_code/" % env.app_name
     env.production_checkout = "0.5.0"
 

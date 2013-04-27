@@ -22,3 +22,6 @@
 /config/initializers/secret_token.rb
 /config/config.yml
 *.DS_STORE
+coverage
+coverage.data
+

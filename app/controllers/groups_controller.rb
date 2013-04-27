@@ -4,11 +4,12 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_group,       :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
+  before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
                                             :remove_employee, :show, :update]  
-  before_filter :load_all_years,   :only => [:show, :services]
-                                            
+  before_filter :load_all_years,  :only => [:show, :services, :edit]                                
   before_filter :load_employee,   :only => [:add_employee]
+  before_filter :load_portfolios, :only => [:show, :edit]
+  before_filter :load_portfolio_names,     :only => [:edit]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:edit]
   before_filter :load_services,            :only => [:show]
@@ -32,8 +33,8 @@ class GroupsController < ApplicationController
     @groups = sort_results(params, @groups)
     @groups = @groups.paginate(:page => params[:page], :per_page => session[:results_per_page])
   end
-  
-  
+
+
   # Page for viewing an existing group
   def show
     @total_employees = @employees.length
@@ -113,6 +114,24 @@ class GroupsController < ApplicationController
 
   # Updates a group based on the information endered on the "edit" page
   def update
+    unless params[:employee_group].blank? || params[:employee_group][:employee_id].blank?
+      if @group.employee_groups.new(params[:employee_group]).save
+        flash[:notice] = t(:employee) + t(:added)
+      else
+        flash[:error] = t(:employee) + t(:add) + t(:fail)
+        render :edit
+        return
+      end
+    end
+    unless params[:portfolio].blank? || params[:portfolio][:portfolio_name_id].blank?
+      if @group.portfolios.new(params[:portfolio]).save
+        flash[:notice] = t(:portfolio) + t(:added)
+      else
+        flash[:error] = t(:portfolio) + t(:add) + t(:fail)
+        render :edit
+        return
+      end
+    end
     if @group.update_attributes(params[:group])
       flash[:notice] = t(:group) + t(:updated)
       redirect_to edit_group_path(@group.id) 
@@ -146,7 +165,7 @@ class GroupsController < ApplicationController
     end
     
     
-    # CLoads all years. Loads the last selected year
+    # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
       if cookies[:year].blank?
@@ -174,7 +193,9 @@ class GroupsController < ApplicationController
 
     # Loads all employees
     def load_existing_employees
-      @existing_employees = @group.employees.order(:name_last, :name_first).paginate(:page =>   
+      @existing_employees = EmployeeGroup.joins(:employee).where(
+            :group_id => @group.id).includes(:employee).order(
+            :name_last, :name_first).paginate(:page =>   
             params[:employees_page], :per_page => session[:results_per_page])
     end
 
@@ -191,12 +212,44 @@ class GroupsController < ApplicationController
     end
     
     
+    # Loads all portfolio names not assigned to current group
+    def load_portfolio_names
+      @portfolio_names = PortfolioName.order(:name) - 
+          PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
+    end
+    
+    
+    # Loads all portfolios associated with the given group
+    def load_portfolios
+      portfolios = @group.portfolios.joins(:portfolio_name).order(:name).includes(:products)
+      @portfolios = []
+      portfolios.each do |portfolio|
+        @portfolios << [portfolio, portfolio.products.order(:name)]
+      end
+      @portfolio_allocations = []
+      @portfolios.each do |portfolio|
+        product_allocations = []
+        portfolio[1].each do |product|
+          product_allocations << product.get_allocation_for_group(@group, @year, 
+                                  @allocation_precision).to_s + " " + t(:fte)
+        end
+        portfolio_allocation = 0.0
+        product_allocations.each do |product_allocation|
+          portfolio_allocation += product_allocation.to_f
+        end
+        @portfolio_allocations << ["#{portfolio_allocation} " + t(:fte), product_allocations]
+      end
+    end
+    
+    
     # Loads all products allocated to the group for the given fiscal year.
     def load_products
-      @products = @group.products.joins(:employee_products, :employees => :groups).where(
-            "employee_products.fiscal_year_id = ?", @year.id).where(
-            :groups => {:id => @group.id}).uniq.order(:name).paginate(:page =>   
-            params[:products_page], :per_page => session[:results_per_page])
+      @employees = @group.employees unless @employees
+      @products = @group.products.joins(:employee_products).where(
+          :employee_products => {:fiscal_year_id => @year.id, 
+          :employee_id => @employees.pluck("employees.id")}
+          ).uniq.order(:name).paginate(:page => params[:products_page], 
+          :per_page => session[:results_per_page])
       @product_allocations = []
       @products.each do |product|
         @product_allocations << [product.get_allocation_for_group(@group, @year, 

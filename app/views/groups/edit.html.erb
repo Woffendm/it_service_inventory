@@ -5,89 +5,231 @@
 </h2>
 
 
-<ul class="nav nav-tabs" id="my-tab">
-  <li class="active">
-    <a href="#employees" id="employees_tab" data-toggle="tab" > 
-      <%= t(:employees) %>
-    </a>
-  </li>
-  <li>
-    <a href="#group" id="group_tab" data-toggle="tab"> 
-      <%= t(:group) + t(:information) %> 
-    </a>
-  </li>
-</ul>
+<%= form_for @group do |group_form| %>
 
 
-<div class="tab-content">
-    
-  <div class="tab-pane" id="group">
-    
-    <div class="form-inline light-border">
-      <%= form_for @group do |form| %>
-        <%= form.label :name, t(:name) %>
-        <%= form.text_field :name %>
-        <%= form.submit  t(:save_changes) %>
-      <% end %>
+  <ul class="nav nav-tabs" id="my-tab">
+    <li class="active">
+      <a href="#employees" id="employees_tab" data-toggle="tab" > 
+        <%= t(:employees) %>
+      </a>
+    </li>
+    <li>
+      <a href="#portfolios" id="portfolios_tab" data-toggle="tab"> 
+        <%= t(:portfolios) %> 
+      </a>
+    </li>
+    <li>
+      <a href="#group" id="group_tab" data-toggle="tab"> 
+        <%= t(:group) + t(:information) %> 
+      </a>
+    </li>
+  </ul>
+  
+  
+  <div class="tab-content">
+      
+    <div class="tab-pane" id="group"> 
+      <div class="form-inline light-border">
+        <%= fields_for @group do |form| %>
+          <%= form.label :name, t(:name) %>
+          <%= form.text_field :name %>
+        <% end %>
+      </div>
     </div>
-    
-  </div>
-
-
-
-
-  <div class="tab-pane active" id="employees">
-
-    <% unless @possible_employees.blank? %>
+  
+  
+  
+  
+  
+  
+    <div class="tab-pane" id="portfolios">
       <div class="form-inline">
         <fieldset class="light-border">
-          <legend><%= t(:add) + t(:employee) %></legend>
-          <%= form_tag( "add_employee", :method => "post") do %>
-            <%= label_tag :employee_id, t(:name) %>
-            <%= collection_select(:employee, :id, @possible_employees, :id, :full_name,
-                                 {:include_blank => true}, {:class => "autocomplete large-select", 
-                                 "data-placeholder" => "Choose an employee"}) %>
-            <%= submit_tag  t(:add) %>
+          <legend><%= t(:add) + t(:portfolio) %></legend>
+          <%= fields_for "portfolio" do |form|%>
+            <%= form.label :portfolio_name_id, t(:name) %>
+            <%= form.select(:portfolio_name_id, options_from_collection_for_select(
+                            @portfolio_names, :id, :name),
+                            {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                            {:class => "autocomplete large-select"}) %>
+            <%= form.submit t(:add) %>
           <% end %>
         </fieldset>
       </div>
-    <% end %>
-    
-    
-    <% unless @existing_employees.blank? %>
-      <table class="table table-striped"><caption> <%= t(:existing_employees) %> </caption>
-        <tbody>
-          <% @existing_employees.each do |employee| %>
+      
+      
+      <h3> 
+        <%= t(:existing_portfolios) %> 
+        <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
+                     #{t(:add)} #{t(:portfolio)}".html_safe, 
+                     new_portfolio_path + "?group_id=#{@group.id}" %>
+      </h3>
+      <% if @portfolios.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <div class="tabs-right">
+          <%= render  :partial => "/shared/all_year_select", 
+                      :locals => {:@year => @year, :@all_years => @all_years } %>
+          <div class="year-content">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>
+                    <%= t(:portfolio) %>
+                  </th>
+                  <th>
+                    <%= t(:allocation) %>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+            <div class="accordion" id="accordion">
+              <% count = 0 %>
+              <% @portfolios.each_with_index do |portfolio, index| %>
+                <% count+=1 %>
+                <div class="accordion-group">
+                  <table class="table">
+                    <tbody>
+                      <tr class="striped-<%=count%2%>">
+                        <td>
+                          <%= link_to portfolio[0].name, edit_portfolio_path(portfolio[0].id) %>
+                        </td>
+                        <td> 
+                          <% if @portfolio_allocations[index][0].to_f == 0 %>
+                            <%= "0 #{t(:fte)}" %>
+                          <% else %>
+                            <a class="accordion-toggle" data-toggle="collapse"
+                                data-target="#collapse-<%=index%>"  href="#">
+                              <%= @portfolio_allocations[index][0] %> 
+                            </a>
+                          <% end %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div id="collapse-<%=index%>" class="accordion-body collapse">
+                    <div class="accordion-inner">
+                      <% unless portfolio[1].blank? %>
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th> <%= t(:product) %> </th>
+                              <th class='variable-size'> <%= t(:priority) %> </th>
+                              <th> <%= t(:product_state) %> </th>
+                              <th> <%= t(:product_type) %> </th>
+                              <th> <%= t(:allocation) %> </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% portfolio[1].each_with_index do |product, product_index| %>
+                              <tr>
+                                <td> 
+                                  <%= link_to product.name, product_path(product.id) %>
+                                </td>
+                                <td class='variable-size'> 
+                                  <%= product.priority %>
+                                </td>
+                                <td > 
+                                  <%= product.state %>
+                                </td>
+                                <td> 
+                                  <%= product.type %>
+                                </td>
+                                <td>
+                                  <%= @portfolio_allocations[index][1][product_index] %>
+                                </td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>      
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  
+  
+  
+  
+  
+  
+    <div class="tab-pane active" id="employees">
+      <% unless @possible_employees.blank? %>
+        <div class="form-inline">
+          <fieldset class="light-border">
+            <legend><%= t(:add) + t(:employee) %></legend>
+            <%= fields_for "employee_group" do |form|%>
+              <%= form.label :employee_id, t(:name) %>
+              <%= form.select(:employee_id, options_from_collection_for_select(
+                              @possible_employees, :id, :full_name),
+                              {:include_blank => "-" + t(:select) + t(:employee) + "-"}, 
+                              {:class => "autocomplete large-select"}) %> 
+              <%= form.submit  t(:add) %>
+            <% end %>
+          </fieldset>
+        </div>
+      <% end %>
+      
+      
+      
+      <h3> <%= t(:existing_employees) %> </h3> 
+      <% if @existing_employees.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
             <tr>
-              <td>
-                <%= link_to employee.full_name, employee_path(employee.id) %>
-              </td>
-              <td>
-                <%= form_tag("toggle_group_admin", :method => "post", 
-                            :class => "prevent_double_submit") do %>
-                  <%= hidden_field_tag(:employee, employee.id) %>
-                  <% if @group.employee_groups.find_by_employee_id(employee.id).group_admin &&
-                        ((employee != @current_user) || @current_user.site_admin )%>
-                    <%= submit_tag  t(:remove) + t(:group_admin), :confirm => t(:confirm_removal) %>
-                  <% else %>
-                    <%= submit_tag  t(:make) + t(:group_admin), :confirm => t(:confirm_admin) %>
-                  <% end %>
-                <% end %>
-              </td>
-              <td>
-                <%= form_tag("remove_employee", :method => "post") do %>
-                  <%= hidden_field_tag(:employee, employee.id) %>
-                  <%= submit_tag  t(:remove), :confirm => t(:confirm_removal) %>
-                <% end %>
-              </td>
+              <th> 
+                <%= t(:name) %>
+              </th>
+              <th> 
+                <%= t(:group_admin) %>
+              </th>
+              <th> 
+                <%= t(:check_to_remove) %>
+              </th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <div class="pagination_footer">
-        <%= will_paginate @existing_employees, :param_name => :employees_page %>
-        <%= render :partial => "/shared/results_per_page" %>
-      </div>
-    <% end %>
+          </thead>
+          <tbody>
+            <% @existing_employees.each do |employee_group| %>
+              <%= group_form.fields_for "employee_groups", employee_group do |form|%>
+                <tr>
+                  <td>
+                    <%= link_to employee_group.employee.full_name,
+                        employee_path(employee_group.employee_id) %>
+                  </td>
+                  <td>
+                    <%= form.hidden_field(:employee_id, :value => employee_group.employee_id) %>
+                    <%= form.hidden_field(:id, :value => employee_group.id) %>
+                    <%= form.check_box :group_admin, :value => employee_group.group_admin %>
+                  </td>
+                  <td>
+                    <%= form.check_box :_destroy %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+        <div class="pagination_footer">
+          <%= will_paginate @existing_employees, :param_name => :employees_page %>
+          <%= render :partial => "/shared/results_per_page" %>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
+  <%= group_form.submit  t(:save_changes) %> 
+  
+  
+  
+<% end %>

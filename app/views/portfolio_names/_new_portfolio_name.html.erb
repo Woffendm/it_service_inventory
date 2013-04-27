@@ -1,0 +1,10 @@
+<div class="form-inline light-border" id="modal_content">
+  <%= form_for @new_portfolio_name do |form| %>
+    <%= form.label :name, t(:name) %>
+    <%= form.text_field :name %>
+    <%= form.submit  t(:create) + t(:portfolio_name) %>
+  <% end %>
+</div>
+<script type="text/javascript">
+  var modalTitle = "<%= t(:new_portfolio_name) %>";
+</script>

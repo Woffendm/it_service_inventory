@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130305233128) do
+ActiveRecord::Schema.define(:version => 20130419233326) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -75,6 +76,28 @@ ActiveRecord::Schema.define(:version => 20130305233128) do
     t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "portfolio_names", :force => true do |t|
+    t.string   "name"
+    t.boolean  "global",     :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  create_table "portfolio_products", :force => true do |t|
+    t.integer  "portfolio_id"
+    t.integer  "product_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "portfolio_name_id"
+  end
+
+  create_table "portfolios", :force => true do |t|
+    t.integer  "group_id"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.integer  "portfolio_name_id"
   end
 
   create_table "product_groups", :force => true do |t|

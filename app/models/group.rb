@@ -5,12 +5,17 @@
 # Copyright:
 
 class Group < ActiveRecord::Base
-  attr_accessible :employees, :name
-  has_many :employee_groups, :dependent => :delete_all
-  has_many :employees, :through => :employee_groups
-  has_many :product_groups, :dependent => :delete_all
-  has_many :products, :through => :product_groups
-  validates_presence_of :name
+  attr_accessible :employees, :name, :portfolios_attributes, :employee_groups,
+                  :employee_groups_attributes
+  has_many :employee_groups,  :dependent  => :delete_all
+  has_many :employees,        :through    => :employee_groups
+  has_many :product_groups,   :dependent  => :delete_all
+  has_many :products,         :through    => :product_groups
+  has_many :portfolios,       :dependent  => :delete_all
+  accepts_nested_attributes_for :portfolios,        :allow_destroy => true
+  accepts_nested_attributes_for :employee_groups,   :allow_destroy => true
+  validates_presence_of   :name
+  validates_uniqueness_of :name
   
   
   # Adds the given employee to the group
@@ -34,10 +39,10 @@ class Group < ActiveRecord::Base
     self.products.each do |product| 
       product.employee_products.joins(:employee => :groups).where(
             :fiscal_year_id => year.id, :groups => {:id => self.id}).each do |product_allocation|  
-        total_allocation += product_allocation.rounded_allocation(allocation_precision)
+        total_allocation += product_allocation.allocation unless product_allocation.allocation.blank?
       end 
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   
@@ -46,9 +51,9 @@ class Group < ActiveRecord::Base
   def get_total_service_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employees.each do |employee|
-      total_allocation += employee.get_total_service_allocation(year, allocation_precision)
+      total_allocation += employee.get_total_service_allocation(year, allocation_precision) 
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
   
   

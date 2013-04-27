@@ -1,0 +1,76 @@
+<h2> 
+  <%= t(:portfolios) %> 
+</h2>
+
+
+<fieldset class="light-border">
+  <legend> <%= t(:filter_results) %> </legend>
+  <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
+    <%= text_field_tag "search[portfolio_name]", @portfolio_name, 
+                          :placeholder => "-All Portfolio Names-" %>
+    <%= collection_select(:search, :group, @groups, :id, :name, 
+                         {:include_blank => "-" + t(:all_groups) + "-",
+                          :selected => @group}, {:class => "autocomplete large-select"}) %>
+    <%= collection_select(:search, :product, @products, :id, :name, 
+                         {:include_blank => "-" + t(:all_products) + "-",
+                          :selected => @product}, {:class => "autocomplete large-select"}) %>
+    <%= select(:search, :global, [[t(:global), true], [t(:local), false]],
+                         {:include_blank => "-#{t(:global)} / #{t(:local)}-",
+                          :selected => @global}) %>
+    <%= submit_tag t(:search) %>
+  <% end %>
+</fieldset>
+
+
+
+<% unless @portfolio_names.blank? %>
+  <div>
+    <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
+  </div>
+
+  <% @portfolio_names.each_with_index do |portfolio_name, index| %>
+    <div class="half1">
+      <div class="accordion" id="accordion">
+        <div class="accordion-group">
+          <div class="accordion-header">
+            <a class="accordion-toggle" data-toggle="collapse"
+                     data-target="#collapse-<%=index%>"  href="#">
+              <%= portfolio_name.name %>
+            </a>
+          </div>
+          <div id="collapse-<%=index%>" class="accordion-body collapse">
+            <table class="table table-striped accordion-inner">
+              <thead>
+                <tr>
+                  <th> <%= t(:product) %> </th>
+                  <th> <%= t(:groups) %> </th>
+                </tr>
+              </thead>
+              <tbody>
+                <% portfolio_name.products.uniq.each do |product| %>
+                  <tr>
+                    <td> 
+                      <%= link_to product.name, product_path(product.id) %>
+                    </td>
+                    <td>
+                      <% portfolio_name.groups_for_product(product).each do |group| %>
+                        <span class="thing3">
+                          <%= link_to group.name, group_path(group.id) %>
+                        </span>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>
+
+
+<script type="text/javascript">
+  var do_not_check_for_changes = true;
+</script>
