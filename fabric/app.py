@@ -44,11 +44,11 @@ def app_set_required_environment_vars():
     env.develop_checkout = 'develop19'
 
 ## Staging
-    env.staging_hosts = ['cwsruby18-vs01.cws.oregonstate.edu']
+    env.staging_hosts = ['cwsruby19-vs01.cws.oregonstate.edu']
     env.staging_path = "/var/www/%s_code/" % env.app_name
 
 ## Production
-    env.production_hosts = ['fab-vd01.cws.oregonstate.edu']
+    env.production_hosts = ['cwsruby19-vp01.cws.oregonstate.edu']
     env.production_path = "/var/www/%s_code/" % env.app_name
     env.production_checkout = "0.5.0"
 
