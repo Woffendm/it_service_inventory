@@ -24,6 +24,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rack-mini-profiler'
+  gem 'rcov'
 #  gem 'simplecov'
 #  gem 'simplecov-rcov'
 end
