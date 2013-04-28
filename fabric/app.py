@@ -24,7 +24,7 @@ def app_prompt_user_for_inputs():
 
 # Does application specific setup of what ever is not covered by the generic fabric script.
 def app_setup():
-    stupid_file = env.release_path + "bundle/ruby/1.9.1/gems/omniauth-ldap-1.0.2/lib/omniauth/strategies/ldap.rb"
+    stupid_file = env.release_path + "bundle/ruby/1.8/gems/omniauth-ldap-1.0.2/lib/omniauth/strategies/ldap.rb"
     run("sed -e 's/callback_path/callback_url/g' " + stupid_file + " > " + stupid_file + ".new && mv " + stupid_file + ".new " + stupid_file)
     return
 
