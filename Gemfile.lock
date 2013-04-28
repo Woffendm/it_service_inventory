@@ -38,6 +38,13 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    columnize (0.3.6)
+    debugger (1.5.0)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.0)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.0)
     diff-lcs (1.2.4)
     dynamic_form (1.1.4)
     erubis (2.7.0)
@@ -58,7 +65,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.23)
     multi_json (1.7.2)
-    mysql (2.9.1)
+    mysql2 (0.3.11)
     net-ldap (0.2.2)
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
@@ -122,6 +129,12 @@ GEM
     seed-fu (2.2.0)
       activerecord (~> 3.1)
       activesupport (~> 3.1)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
+    simplecov-rcov (0.2.3)
+      simplecov (>= 0.4.1)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -147,10 +160,11 @@ PLATFORMS
 DEPENDENCIES
   cancan (= 1.6.9)
   coffee-rails (~> 3.2.1)
+  debugger
   dynamic_form (= 1.1.4)
   jquery-rails (= 2.1.4)
   json (= 1.7.6)
-  mysql
+  mysql2
   omniauth-ldap (= 1.0.2)
   rack-mini-profiler
   rails (= 3.2.13)
@@ -158,6 +172,8 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 3.2.3)
   seed-fu (~> 2.2.0)
+  simplecov
+  simplecov-rcov
   therubyracer
   uglifier (>= 1.0.3)
   will_paginate (= 3.0.4)
