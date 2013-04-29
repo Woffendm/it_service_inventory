@@ -24,4 +24,4 @@
 *.DS_STORE
 coverage
 coverage.data
-
+.rvmrc
