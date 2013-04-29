@@ -14,19 +14,19 @@ gem 'omniauth-ldap', '1.0.2'
 
 gem 'will_paginate', '3.0.4'
 
-gem 'mysql'
-#gem 'mysql2'
+gem 'mysql2'
 
 gem 'seed-fu', '~> 2.2.0'
 
 group :development, :test do
-#  gem 'debugger'
+  gem 'debugger'
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rack-mini-profiler'
   gem 'rcov'
 #  gem 'simplecov'
 #  gem 'simplecov-rcov'
+
 end
 
 # Gems used only for assets and not required
