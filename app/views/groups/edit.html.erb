@@ -43,21 +43,7 @@
   
   
   
-    <div class="tab-pane" id="portfolios">
-      <div class="form-inline">
-        <fieldset class="light-border">
-          <legend><%= t(:add) + t(:portfolio) %></legend>
-          <%= fields_for "portfolio" do |form|%>
-            <%= form.label :portfolio_name_id, t(:name) %>
-            <%= form.select(:portfolio_name_id, options_from_collection_for_select(
-                            @portfolio_names, :id, :name),
-                            {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
-                            {:class => "autocomplete large-select"}) %>
-            <%= form.submit t(:add) %>
-          <% end %>
-        </fieldset>
-      </div>
-      
+    <div class="tab-pane" id="portfolios">   
       
       <h3> 
         <%= t(:existing_portfolios) %> 
