@@ -47,7 +47,7 @@ Project1::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   
-  config.assets.precompile += %w( bootstrap-responsive.css bootstrap.css chosen.css fte_calculator.css i_love_pie.css jquery-ui-1.8.23.custom.css autocomplete.js bootstrap.js bootstrap.min.js chosen.jquery.js  edit.js fte_calculator.js home.js jquery.cookie.js jquery-ui-1.8.23.custom.min.js jquery.tools.min.js ldap_search_results.js modal.js prevent_double_submit.js tab.js tooltip.js)
+  config.assets.precompile += %w( bootstrap-responsive.css bootstrap.css chosen.css fte_calculator.css i_love_pie.css jquery-ui-1.8.23.custom.css autocomplete.js bootstrap.js chosen.jquery.js edit.js fte_calculator.js home.js jquery.cookie.js jquery-ui-1.8.23.custom.min.js jquery.tools.min.js ldap_search_results.js modal.js prevent_double_submit.js tab.js tooltip.js)
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
