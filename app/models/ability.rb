@@ -1,14 +1,22 @@
-# This class stores information related to users' abilities. Here's the run down:
-# => Site Admin: Can manage everything (Create groups, employees, set group administration, etc.).
-#                Is the only one who can change application settings
-# => Group Admin: Can create and update services. Can add and remove employees from the group that
-#                 they admin, as well as change their group's name. Can update employees and
-#                 products within their group and create new employees and products. Can delete 
-#                 products, services, and employees that belong ONLY to their group (cannot delete
-#                 an employee for example who belongs to this group AND another group), as well as
-#                 unused employees, services, and products (Ones with no groups)
-# => Everyone Else: Can view everything except application settings. Can only edit their
-#                 own information.
+# This class stores information related to users' abilities. 
+#
+#
+#
+# Site Admin 
+#     * Everything:   Create, update, destroy
+#     * App settings: Update
+#
+# Group Admin 
+#     * Employees:    Create, update those within group, delete those only belonging to group
+#     * Groups:       Update own group
+#     * Portfolios:   Create, update and destroy those belonging to group 
+#     * Products:     Create, update, delete those without any allocations
+#     * Services:     Create, update, delete those without any allocations
+#
+# Regular user
+#     * Employee:     Update self if active
+#
+#
 #
 # Author: Michael Woffendin 
 # Copyright:
@@ -23,86 +31,38 @@ class Ability
       if user.site_admin
         can :manage, :all
       else
-        # Checks to see if user is an admin of any of their groups
-        user.employee_groups.each do |employee_group|
-          if employee_group.group_admin
-            can :update, Group, :id => employee_group.group_id
-            can :create, Product
-            can :create, Employee
-            can [:create, :update], Service
-            # Can delete services assigned ONLY to their group
-            employee_group.group.services.each do |service|
-              if service.groups.length < 2
-                can :destroy, Service, :id => service.id
-              end
+        admin_groups = Group.joins(:employee_groups).where(
+                      :employee_id => user.id, :group_admin => true).includes(
+                      :portolios, :products, :employees => :employee_groups)
+        unless admin_groups.blank? 
+          can :update, Group, :id => admin_groups.pluck(:id)
+          can :create, Employee
+          can :create, Portfolio
+          can [:create, :update], Product
+          can [:create, :update], Service
+          admin_groups.each do |group|
+            # Employees
+            can :update, Employee, :id => group.employees.pluck(:id)
+            group.employees.each do |employee|
+              can :destroy, Employee, :id => employee.id if employee.employee_groups.length < 2
             end
-            # Can edit info of all employees within their group
-            employee_group.group.employees.each do |employee|
-              can :update, Employee, :id => employee.id
-              # Can delete employees assigned ONLY to their group
-              if employee.groups.length < 2
-                can :destroy, Employee, :id => employee.id
-              end
-            end
-            # Can edit info of products assigned to their group
-            employee_group.group.products.each do |product|
-              can :update, Product, :id => product.id
-              # Can delete products assigned ONLY to their group
-              if product.groups.length < 2
-                can :destroy, Product, :id => product.id
-              end
-            end
-            # Can delete  and update products, services, and products not assigned to any groups 
-            # (for cleanup purposes)
-            Employee.all.each do |employee|
-              if employee.groups.empty?
-                can [:update, :destroy], Employee, :id => employee.id
-              end
-            end
-            Service.all.each do |service|
-              if service.groups.empty?
-                can :destroy, Service, :id => service.id
-              end
-            end
-            Product.all.each do |product|
-              if product.groups.empty?
-                can [:update, :destroy], Product, :id => product.id
-              end
-            end
+            # Portfolios
+            can [:update, :destroy], Portfolio, :id => group.portfolios.pluck(:id)
           end
+          # Products
+          can :destroy, Product, :id => Product.where("id not in (?)",
+                                        Product.joins(:employee_products).pluck(:id)).pluck(:id)
+          # Services
+          can :destroy, Service, :id => Service.where("id not in (?)",
+                                        Service.joins(:employee_allocations).pluck(:id)).pluck(:id)
         end
-        # Regular employees can only edit themselves if they are active.
+        # Regular users can only edit themselves if they are active.
         if user.active
           can :update, Employee, :id => user.id
         end
-        
         # Anyone logged into the application can read everything.
         can :read, :all
       end
     end
-    
-    
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user permission to do.
-    # If you pass :manage it will apply to every action. Other common actions here are
-    # :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on. If you pass
-    # :all it will apply to every resource. Otherwise pass a Ruby class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details: https://github.com/ryanb/cancan/wiki/Defining-Abilities
   end
 end

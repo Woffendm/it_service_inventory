@@ -1,46 +1,10 @@
-.topbar {
-    height: 40px;
-    left: 0;
-    overflow: visible;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 1000;
-    background: url("../assets/tophat-bg.jpg") repeat-x scroll left top #2F2A2B;
-    color: white;
-    -webkit-box-shadow: 0 0 4px black;
-    -moz-box-shadow: 0 0 4px black;
-    box-shadow: 0 0 4px black;
-}
 
-.page-header {
-  background: -moz-linear-gradient(45deg, #020031 0%, #c34500 100%) repeat scroll 0 0 transparent;
-  color: white;       
-  border-bottom: 1px solid #EEEEEE;
-  margin: -20px -10px 30px;
-  padding: 5px 5px 5px 20px;
-}
 
 .navbar-fixed-top + .container {
  margin-top: 60px; 
 }
 
 
-
-
-body {
-  background-color: #FFF;
-  margin-bottom: 50px;
-}
-
-#main{
-  margin: 100px;
-}
-
-#content-wrapper {
-  background: white;
-  padding: 10px 10px 10px 10px;
-}
 
 .controls {
   position: relative;
@@ -91,9 +55,6 @@ body {
   font-size: 20px;
 }
 
-.current_page {
-  background-color: #666;
-}
 
 .form-search label, 
 .form-inline label, 
@@ -781,4 +742,45 @@ table.accordion-inner{
   #login-inline{
     display: none;
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+  background-color: #F5F2ED;
+}
+
+.content{
+  background-color: #FFF;
+  padding: 0 10px;
+  min-height: 500px;
+  padding-bottom: 20px;
+}
+
+.footer {
+    background: none repeat scroll 0 0 #D44413;
+    border-top: 1px solid gray;
+    box-shadow: 0 1px 0 #292929 inset;
+    color: #999999;
+    font-size: 12px;
+    margin-top: 0;
+    padding: 15px 0;
+    margin-bottom: -20px;
+}
+
+.current_page {
+  background-color: #A5360F;
+}
+
+.navbar{
+  border-bottom: 1px solid gray;
 }
