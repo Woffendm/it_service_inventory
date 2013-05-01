@@ -784,8 +784,6 @@ body{
 .brand:focus,
 .brand > a:hover,
 .brand > a:focus {
-  color: #fff;
-  background-color: #A5360F;
   text-decoration: none;
 }
 
