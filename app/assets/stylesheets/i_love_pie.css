@@ -35,15 +35,6 @@
   min-height: 45px;
 }
 
-.navbar-inverse .nav > li > a:focus,
-.navbar-inverse .nav > li > a:hover,
-.brand > a:hover,
-.brand > a:focus {
-  color: #fff;
-  background-color: #888;
-  text-decoration: none;
-}
-
 
 .brand, .brand > a {
   color: white;
@@ -759,20 +750,28 @@ body{
   background-color: #F5F2ED;
 }
 
-.content{
+#page-header{
+  min-height: 60px;
+}
+
+#page-content{
+  min-height: calc(100% - 108px);
+}
+
+#content{
   background-color: #FFF;
   padding: 0 10px;
-  min-height: 500px;
+  min-height: 100%;
   padding-bottom: 20px;
 }
 
-.footer {
+#footer {
     background: none repeat scroll 0 0 #D44413;
     border-top: 1px solid gray;
     box-shadow: 0 1px 0 #292929 inset;
     color: #999999;
     font-size: 12px;
-    margin-top: 0;
+    margin-top: 30px;
     padding: 15px 0;
     margin-bottom: -20px;
 }
@@ -781,6 +780,21 @@ body{
   background-color: #A5360F;
 }
 
+.brand:hover,
+.brand:focus,
+.brand > a:hover,
+.brand > a:focus {
+  color: #fff;
+  background-color: #A5360F;
+  text-decoration: none;
+}
+
 .navbar{
   border-bottom: 1px solid gray;
 }
+
+html, body{
+  height: 98%;
+  padding: 0px;
+}
+
