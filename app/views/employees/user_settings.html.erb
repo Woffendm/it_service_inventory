@@ -1,8 +1,6 @@
 <h2> <%= t(:user_settings) %> </h2>
 
 
-<%= link_to t(:my_edit_page), edit_employee_path(@current_user.id) %>
-
 
 <%= form_tag("update_settings", :method => "post", :class => "form-horizontal") do %>
   <div class="light-border">
