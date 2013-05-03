@@ -33,7 +33,7 @@
       <div class="navbar-inner">
         <div class="container"> 
           <% unless @current_user.blank? %>
-            <ul class="nav pull-right ">
+            <ul class="nav pull-right" id="login">
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                   <i class="icon-user icon-white"></i>
@@ -106,7 +106,7 @@
               
               
               <% unless @current_user.blank? %>
-                <li class="dropdown login-in-dropdown">
+                <li class="dropdown" id ="login-collapse">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="icon-user icon-white"></i>
                     <%= @current_user.full_name %>
