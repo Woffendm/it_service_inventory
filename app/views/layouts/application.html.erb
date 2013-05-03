@@ -28,7 +28,7 @@
 
 
 <body>
-  <div id="page-header">
+  <div id="page-header" class="row">
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container"> 
@@ -146,8 +146,10 @@
           <p class="message"> <%= flash[:message] %>      </p>
         <% end %>
       </div>
-      <div id="content">
-        <%= yield %>
+      <div id="x" class="row">
+        <div class="span12">
+          <%= yield %>
+        </div>
       </div>
     </div>
   
