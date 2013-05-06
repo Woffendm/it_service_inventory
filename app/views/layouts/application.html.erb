@@ -73,6 +73,11 @@
             <ul class="nav">
               <li>
                 <%= link_to "#{content_tag :em, '', :class => ''}
+                             #{t(:services)}".html_safe, services_path, 
+                             :class => cp(services_path) %>
+              </li>
+              <li>
+                <%= link_to "#{content_tag :em, '', :class => ''}
                              #{t(:employees)}".html_safe, employees_path, 
                              :class => cp(employees_path) %>
               </li>
@@ -83,18 +88,13 @@
               </li>
               <li>
                 <%= link_to "#{content_tag :em, '', :class => ''}
-                             #{t(:services)}".html_safe, services_path, 
-                             :class => cp(services_path) %>
+                             #{t(:portfolios)}".html_safe, portfolios_path, 
+                             :class => cp(portfolios_path) %>
               </li>
               <li>
                 <%= link_to "#{content_tag :em, '', :class => ''}
                              #{t(:products)}".html_safe, products_path, 
                              :class => cp(products_path) %>
-              </li>
-              <li>
-                <%= link_to "#{content_tag :em, '', :class => ''}
-                             #{t(:portfolios)}".html_safe, portfolios_path, 
-                             :class => cp(portfolios_path) %>
               </li>
               <% if can? :manage, AppSetting %>
                 <li> 
@@ -146,8 +146,8 @@
           <p class="message"> <%= flash[:message] %>      </p>
         <% end %>
       </div>
-      <div id="x" class="row">
-        <div class="span12">
+      <div class="row">
+        <div id="content">
           <%= yield %>
         </div>
       </div>
