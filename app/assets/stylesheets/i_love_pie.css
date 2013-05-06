@@ -918,7 +918,7 @@ body{
 }
 
 #page-content{
-  min-height: calc(100% - 108px);
+  min-height: calc(100% - 136px);
 }
 
 #content{
@@ -931,12 +931,12 @@ body{
 #footer {
     background: none repeat scroll 0 0 #D44413;
     border-top: 1px solid gray;
-    box-shadow: 0 1px 0 #292929 inset;
     color: #999999;
     font-size: 12px;
     margin-top: 30px;
-    padding: 15px 0;
-    margin-bottom: -20px;
+    height: 45px;
+    width: 100%;
+    position: absolute;
 }
 
 .current_page {
@@ -955,7 +955,7 @@ body{
 }
 
 html, body{
-  height: 98%;
+  height: 100%;
   padding: 0px;
 }
 
