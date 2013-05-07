@@ -788,24 +788,20 @@ html, body{
 
 
 
-.navbar-fixed-top,
-.navbar-fixed-bottom,
+
 .navbar2 {
   position: fixed;
   right: 0;
   left: 0;
-  z-index: 1030;
   margin-bottom: 0;
 }
 
-.navbar-fixed-top .navbar-inner,
-.navbar-static-top .navbar-inner,
+
 .navbar2 .navbar-inner {
   border-width: 0 0 1px;
 }
 
-.navbar-fixed-top .navbar-inner,
-.navbar-fixed-bottom .navbar-inner,
+
 .navbar2 .navbar-inner {
   padding-right: 0;
   padding-left: 0;
@@ -814,9 +810,7 @@ html, body{
           border-radius: 0;
 }
 
-.navbar-static-top .container,
-.navbar-fixed-top .container,
-.navbar-fixed-bottom .container,
+
 .navbar2 .container {
   width: 940px;
 }
@@ -859,7 +853,6 @@ html, body{
   position: relative;
   width: 75px;
   background: transparent;
-  z-index: 0;
 }
 
 
