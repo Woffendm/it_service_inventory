@@ -724,7 +724,7 @@ body{
 
 #page-header{
   min-height: 40px;
-  margin-bottom: 20px
+  margin-bottom: 20px;
   width: 100%;
   background-color: #D44413;
   background-image: none;
@@ -733,11 +733,6 @@ body{
 .two-navs #page-header{
   min-height: 81px;
   margin-bottom: 15px;
-}
-
-.navbar2 .navbar-inner {
-  background-color: transparent;
-  background-image: none;
 }
 
 #page-content{
@@ -885,7 +880,7 @@ html, body{
 
 
 
-@media (max-width: 1220px) {
+@media (max-width: 755px) {
   body {
     padding-top: 0;
   }
@@ -1034,6 +1029,25 @@ html, body{
   }
 }
 
+
+
+
+
+#nav1, #nav2 {
+  display: inline-block;
+}
+
+#nav1 {
+  width: calc(100% - 325px);
+  float: right;
+} 
+
+#nav2 {
+}
+
+
+
+
 @media (min-width: 1221px) {
   .nav-collapse.collapse {
     height: auto !important;
@@ -1057,8 +1071,7 @@ html, body{
   .container,
   .navbar-static-top .container,
   .navbar-fixed-top .container,
-  .navbar-fixed-bottom .container,
-  .navbar2 .container {
+  .navbar-fixed-bottom .container {
     width: 724px;
   }
 }
@@ -1067,8 +1080,7 @@ html, body{
 @media (max-width: 767px) {
   .navbar-fixed-top,
   .navbar-fixed-bottom,
-  .navbar-static-top 
-  .navbar2 {
+  .navbar-static-top {
     margin-right: -10px;
     margin-left: -10px;
   }
@@ -1079,26 +1091,20 @@ html, body{
   .container,
   .navbar-static-top .container,
   .navbar-fixed-top .container,
-  .navbar-fixed-bottom .container,
-  .navbar2 .container {
+  .navbar-fixed-bottom .container {
     width: 1170px;
   }
 }
 
 
 @media (max-width: 979px) {
-  .navbar-fixed-top,
-  .navbar-fixed-bottom,
-  .navbar2 {
-    position: static;
-  }
-  .navbar2 {
+
+  .navbar-fixed-top {
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   .navbar-fixed-top .navbar-inner,
-  .navbar-fixed-bottom .navbar-inner,
-  .navbar2 .navbar-inner {
-    padding: 5px;
+  .navbar-fixed-bottom .navbar-inner {
+    padding: 0px;
   }
 }
