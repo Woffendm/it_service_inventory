@@ -1,0 +1,11 @@
+itsi:
+  name:             rails
+  product_type:     cool
+  product_state:    liquid
+  product_priority: alpha
+
+dnc:
+  name:             fails
+  product_type:     lame
+  product_state:    gas
+  product_priority: omega

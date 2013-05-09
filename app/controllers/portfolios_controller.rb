@@ -127,11 +127,8 @@ class PortfoliosController < ApplicationController
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
   
   

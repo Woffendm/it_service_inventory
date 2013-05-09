@@ -285,7 +285,6 @@ a{
   padding: .5em 5em;
   border: 1px solid #006600;
   margin: 7px;
-  margin-left: 35px;
   -webkit-box-shadow: 0 0 7px #006600;
   -moz-box-shadow: 0 0 7px #006600;
   box-shadow: 0 0 7px #006600;
@@ -732,7 +731,7 @@ body{
 
 .two-navs #page-header{
   min-height: 81px;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
 #page-content{
@@ -740,7 +739,7 @@ body{
 }
 
 .two-navs #page-content{
-  min-height: calc(100% - 176px);
+  min-height: calc(100% - 183px);
 }
 
 #content{
@@ -780,56 +779,6 @@ html, body{
 }
 
 
-
-
-
-
-.navbar2 {
-  position: fixed;
-  right: 0;
-  left: 0;
-  margin-bottom: 0;
-}
-
-
-.navbar2 .navbar-inner {
-  border-width: 0 0 1px;
-}
-
-
-.navbar2 .navbar-inner {
-  padding-right: 0;
-  padding-left: 0;
-  -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-          border-radius: 0;
-}
-
-
-.navbar2 .container {
-  width: 940px;
-}
-
-.navbar2 {
-  top: 41px;
-}
-
-
-
-
-.navbar-fixed-top .navbar-inner,
-.navbar-static-top .navbar-inner,
-.navbar2 .navbar-inner {
-  -webkit-box-shadow: none;
-     -moz-box-shadow: none;
-          box-shadow: none;
-}
-
-
-
-
-
-
 .logo {
   display: block;
   float: left;
@@ -844,18 +793,31 @@ html, body{
 }
 
 
-.navbar2 .logo {
-  position: relative;
-  width: 75px;
-  background: transparent;
+
+
+
+
+
+
+#nav1, #nav2 {
+  display: inline-block;
 }
 
+#nav1 {
+  width: calc(100% - 325px);
+  float: right;
+} 
 
+#nav2 {
+}
 
+#page-content .row{
+  background-color: white;
+}
 
-
-
-
+#flash.row {
+  background-color: transparent;
+}
 
 
 
@@ -1033,17 +995,6 @@ html, body{
 
 
 
-#nav1, #nav2 {
-  display: inline-block;
-}
-
-#nav1 {
-  width: calc(100% - 325px);
-  float: right;
-} 
-
-#nav2 {
-}
 
 
 

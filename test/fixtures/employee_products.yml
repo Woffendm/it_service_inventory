@@ -2,10 +2,10 @@
 
 one:
   employee: michael
-  service:  rails
+  product:  itsi
   allocation: 0.5
 
 two:
   employee: yoloswag
-  service:  rails
+  product:  itsi
   allocation: 0.9

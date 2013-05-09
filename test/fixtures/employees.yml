@@ -4,13 +4,15 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: 
-  name_first: michael
-  name_last:  woffendin
+michael: 
+  name_first:   michael
+  name_last:    woffendin
   osu_username: woffendm
-  osu_id: 93898765678
-  site_admin: true
-# column: value
-#
-two: {}
-#  column: value
+  osu_id:       93898765678
+  site_admin:   true
+
+yoloswag: 
+  name_first:   yolo
+  name_last:    swag
+  osu_username: middauri
+  osu_id:       12983213123

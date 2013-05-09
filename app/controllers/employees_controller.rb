@@ -273,22 +273,18 @@ class EmployeesController < ApplicationController
     # Loads all active years. Loads the last selected year if it is active
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
-      if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+      @year = FiscalYear.find_by_year(cookies[:year])
+      if @year.blank? || !@year.active
          flash[:message] = "Selected year #{@year.year} inactive. Year changed to #{@current_fiscal_year.year}." if @year
         @year = @current_fiscal_year
-      else 
-        @year = FiscalYear.find_by_year(cookies[:year])
       end
     end
     
     
-    # CLoads all years. Loads the last selected year
+    # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
 end

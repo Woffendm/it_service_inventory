@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ServicesControllerTest < ActionController::TestCase
   setup do
-    @service = services(:one)
-    session[:current_user_name] = employees(:one).full_name
-    session[:current_user_osu_username] = employees(:one).osu_username
+    @service = services(:rails)
+    session[:current_user_name] = employees(:michael).full_name
+    session[:current_user_osu_username] = employees(:michael).osu_username
     session[:results_per_page] = 25
   end
 

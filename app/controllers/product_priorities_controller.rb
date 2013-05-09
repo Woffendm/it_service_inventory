@@ -5,10 +5,11 @@
 
 class ProductPrioritiesController < ApplicationController
   
+  before_filter :load_product_priorities, :only => [:index, :create, :update]
+  
+  
   # View with a list of all current product priorities, and a form to add additional priorities
   def index
-    @new_product_priority = ProductPriority.new
-    @product_priorities = ProductPriority.order(:name)
   end
   
   
@@ -33,7 +34,7 @@ class ProductPrioritiesController < ApplicationController
       return
     end
     flash[:error] = "Product priority needs a unique name"
-    redirect_to product_priorities_path
+    render :index
   end
 
 
@@ -44,4 +45,12 @@ class ProductPrioritiesController < ApplicationController
     flash[:notice] = "Product priority deleted"
     redirect_to product_priorities_path
   end
+  
+  
+  private
+    # Loads all existing product priorities and creates new blank product priority
+    def load_product_priorities
+      @new_product_priority = ProductPriority.new
+      @product_priorities = ProductPriority.order(:name)
+    end
 end

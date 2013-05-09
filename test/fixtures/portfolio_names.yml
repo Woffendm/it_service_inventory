@@ -1,7 +1,7 @@
-one:
+awesome_stuff:
   name: MyString
   global: true 
 
-two:
+lame_stuff:
   name: YourString
   global: false
