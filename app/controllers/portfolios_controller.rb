@@ -39,15 +39,7 @@ class PortfoliosController < ApplicationController
     @name = params[:name]
     unless @name.blank?
       @portfolio_name = PortfolioName.find_by_name(@name)
-      if @portfolio_name.blank?
-        @portfolio_name = PortfolioName.new(:name => @name)
-        unless @portfolio_name.save
-          @portfolio = Portfolio.new
-          flash[:error] = "Name already taken" 
-          render :new
-          return
-        end
-      end
+      @portfolio_name = PortfolioName.create(:name => @name) if @portfolio_name.blank?
       @portfolio = Portfolio.new(:group_id => params[:group_id], 
                                  :portfolio_name_id => @portfolio_name.id)
     else
