@@ -69,10 +69,10 @@ class PortfoliosController < ApplicationController
   # If a new product is added, also adds it to the group's list of products if it is not already in 
   # it. 
   def update
-    unless params[:product].blank? || params[:product][:id].blank?
-      if @portfolio.portfolio_products.new(:product_id => params[:product][:id], 
+    unless @product.blank?
+      if @portfolio.portfolio_products.new(:product_id => @product.id, 
           :portfolio_name_id => @portfolio.portfolio_name_id).save
-        flash[:notice] = "Product added!"
+        flash[:notice] = "Product added."
       else
         flash[:error] = "Product cannot be added"
         render :edit
@@ -82,14 +82,9 @@ class PortfoliosController < ApplicationController
         @group.products << @product
       end
     end
-    if @portfolio.update_attributes(params[:portfolio])
-      flash[:notice] = "Yay!"
-      redirect_to edit_portfolio_path(@portfolio.id)
-      return
-    else
-      flash[:error] = "Oh no!"
-      render :edit
-    end
+    @portfolio.update_attributes(params[:portfolio])
+    flash[:notice] = "Portfolio updated"
+    redirect_to edit_portfolio_path(@portfolio.id)
   end
   
   
@@ -102,7 +97,6 @@ class PortfoliosController < ApplicationController
       @product = search[:product]
       @portfolio_name = search[:portfolio_name]
       @global = search[:global]
-      search_string = ""
       search_array = []
       search_array << "portfolios.group_id = #{@group}" unless @group.blank? 
       search_array << "products.id = #{@product}" unless @product.blank? 

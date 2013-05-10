@@ -63,30 +63,35 @@ class PortfoliosControllerTest < ActionController::TestCase
 
 
   test "should update portfolio if given valid portfolio" do
-    put :update, :id => @portfolio, :portfolio => { :portfolio_name_id => @portfolio_name.id }
+    put :update, :id => @portfolio, :portfolio => { :portfolio_name_id =>
+        portfolio_names(:lame_stuff).id }
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
 
 
   test "should add product to portfolio if not already in portfolio" do
-    put :update, :id => @portfolio, :portfolio => { :portfolio_name_id => @portfolio_name.id },
-        :product => {:id => products(:dnc)}
+    put :update, :id => @portfolio, :product => {:id => products(:dnc)}
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
   
   
   test "should add product to group's list of products if not already in it when added to portfolio" do
     @product = Product.create(:name => "new product")
-    put :update, :id => @portfolio, :portfolio => {:portfolio_name_id => @portfolio_name.id },
-        :product => {:id => @product.id}
+    put :update, :id => @portfolio, :product => {:id => @product.id}
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
   
   
   test "should not add product to portfolio if already in portfolio" do
-    put :update, :id => @portfolio, :portfolio => { :portfolio_name_id => @portfolio_name.id },
-        :product => {:id => products(:itsi)}
+    put :update, :id => @portfolio, :product => {:id => products(:itsi)}
     assert_response :success
+  end
+
+
+  test "should filter portfolios by name" do
+    get :index, :search => {:name => "awesome"}
+    assert_not_nil assigns(:portfolio_names)
+    assert_equal @portfolio_name, assigns(:portfolio_names).first
   end
 
 
