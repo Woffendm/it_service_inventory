@@ -65,7 +65,7 @@ class ServicesControllerTest < ActionController::TestCase
   
   test "should get all groups if no service id given" do
     get :groups, :service => {:id => "0"}
-    assert_equal assigns(:groups), Group.joins(:employees).uniq
+    assert_equal assigns(:groups), Group.joins(:employees).uniq.order(:name)
     assert_response :success
   end
   

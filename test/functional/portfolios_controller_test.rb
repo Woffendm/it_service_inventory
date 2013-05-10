@@ -70,14 +70,18 @@ class PortfoliosControllerTest < ActionController::TestCase
 
 
   test "should add product to portfolio if not already in portfolio" do
-    put :update, :id => @portfolio, :product => {:id => products(:dnc)}
+    assert_difference('@portfolio.products.count', 1) do
+      put :update, :id => @portfolio, :product => {:id => products(:dnc)}
+    end
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
   
   
   test "should add product to group's list of products if not already in it when added to portfolio" do
     @product = Product.create(:name => "new product")
-    put :update, :id => @portfolio, :product => {:id => @product.id}
+    assert_difference('@portfolio.group.products.count', 1) do
+      put :update, :id => @portfolio, :product => {:id => @product.id}
+    end
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
   
