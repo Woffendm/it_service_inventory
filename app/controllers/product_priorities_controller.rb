@@ -5,6 +5,7 @@
 
 class ProductPrioritiesController < ApplicationController
   
+  before_filter :load_permissions
   before_filter :load_product_priorities, :only => [:index, :create, :update]
   
   
@@ -48,6 +49,12 @@ class ProductPrioritiesController < ApplicationController
   
   
   private
+    # Only authorized users can view and edit app settings 
+    def load_permissions
+      authorize! :manage, :all
+    end
+    
+    
     # Loads all existing product priorities and creates new blank product priority
     def load_product_priorities
       @new_product_priority = ProductPriority.new

@@ -100,7 +100,7 @@ class EmployeesController < ApplicationController
     new_employee.name_MI = params[:name_MI]
     new_employee.osu_id = params[:osu_id]
     new_employee.osu_username = params[:osu_username]
-    new_employee.email = params[:email].downcase
+    new_employee.email = params[:email].downcase unless params[:email].blank?
     if new_employee.save
       flash[:notice] = t(:employee) + t(:added)
     else

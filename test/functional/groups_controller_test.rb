@@ -87,6 +87,13 @@ class GroupsControllerTest < ActionController::TestCase
   end
 
 
+  test "should filter groups by name" do
+    get :index, :search => {:name => "cws"}
+    assert_not_nil assigns(:groups)
+    assert_equal @group, assigns(:groups).first
+  end
+
+
   test "should destroy group" do
     assert_difference('Group.count', -1) do
       delete :destroy, :id => @group

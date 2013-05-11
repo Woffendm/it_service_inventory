@@ -16,3 +16,10 @@ yoloswag:
   name_last:    swag
   osu_username: middauri
   osu_id:       12983213123
+
+admin: 
+  name_first:   admin
+  name_last:    admin
+  osu_username: hansenm
+  osu_id:       63554675687
+  site_admin:   true

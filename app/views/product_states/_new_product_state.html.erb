@@ -1,5 +1,5 @@
 <div class="form-inline light-border" id="modal_content">
-  <%= form_for @new_product_state do |form| %>
+  <%= form_for new_product_state do |form| %>
     <%= form.label :name, t(:name) %>
     <%= form.text_field :name %>
     <%= form.submit  t(:create) + t(:product_state) %>
