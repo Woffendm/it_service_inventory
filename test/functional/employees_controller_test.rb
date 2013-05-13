@@ -11,8 +11,8 @@ class EmployeesControllerTest < ActionController::TestCase
 
   test "should get index" do
     get :index
-    assert_response :success
     assert_not_nil assigns(:employees)
+    assert_response :success
   end
 
 
@@ -46,31 +46,72 @@ class EmployeesControllerTest < ActionController::TestCase
   end
 
 
-  test "should update employee" do
-    put :update, :id => @employee, :employee => { :name => "Differnet Name" }
-    assert_redirected_to edit_employee_path(assigns(:employee))
-  end
-  
-  
-  test "should not update employee if no name given" do
-    put :update, :id => @employee, :employee => { :name => nil }
+  test "should get search_ldap_view" do
+    get :search_ldap_view
     assert_response :success
   end
 
 
-  test "should toggle active" do
+  test "should get ldap search results" do
+    get :ldap_search_results, :first_name => "J", :last_name => "Smith"
+    assert_not_nil assigns(:data)
+    assert_response :success
+  end
+
+
+  test "should update employee notes" do
+    put :update, :id => @employee, :employee => {:notes => "Different notes" }
+    assert_redirected_to edit_employee_path(@employee)
+  end
+  
+  
+  test "should add employee to group" do
+    put :update, :id => @employee, :employee_group => {:group_id => groups(:dic)}
+    assert_redirected_to edit_employee_path(@employee)
+  end
+  
+  
+  test "should add new allocation to employee" do
+    put :update, :id => @employee, :employee_allocations => {:service_id => services(:fails).id, :allocation => 0.1, :fiscal_year_id => fiscal_years(:year_2014).id}
+    assert_redirected_to edit_employee_path(@employee)
+  end
+  
+  
+  test "should reject update if employee is over-allocated" do
+    put :update, :id => @employee, :employee => {"employee_allocations_attributes"=> {
+        "0"=>{"service_id"=>"9", "id"=>"128", "allocation"=>"0.9"}, 
+        "1"=>{"service_id"=>"38", "id"=>"155", "allocation"=>"0.2"}}}
+    assert_response :success
+  end
+  
+  
+  test "should update all employees via ldap" do
+    post :update_all_employees_via_ldap
+    assert_redirected_to employees_path
+  end
+  
+  
+  test "should update employee settings" do
+    post :update_settings, :id => @employee, :employee => {:new_user_reminder => "false"}
+    assert_redirected_to user_settings_employee_path(@employee)
+  end
+
+
+  test "should toggle to active" do
+    @inactive = employees(:inactive)
+    assert_difference('Employee.where(:active => true).count', 1) do
+      post :toggle_active, :id => @inactive.id
+    end
+    assert_redirected_to employees_path
+  end
+  
+  
+  test "should toggle to inactive" do
     @active = employees(:yoloswag)
     assert_difference('Employee.where(:active => true).count', -1) do
-      get :toggle_active, :employee => {:id => @active.id}
+      post :toggle_active, :id => @active.id
     end
-    assert_response :success
-  end
-  
-  
-  test "should get all groups if no employee id given" do
-    get :groups, :employee => {:id => "0"}
-    assert_equal assigns(:groups), Group.joins(:employees).uniq.order(:name)
-    assert_response :success
+    assert_redirected_to employees_path
   end
   
   
@@ -78,9 +119,10 @@ class EmployeesControllerTest < ActionController::TestCase
     get :index, :search => {:name => "michael"}
     assert_not_nil assigns(:employees)
     assert_equal @employee, assigns(:employees).first
+    assert_response :success
   end
 
-
+  
   test "should destroy employee" do
     assert_difference('Employee.count', -1) do
       delete :destroy, :id => employees(:yoloswag)

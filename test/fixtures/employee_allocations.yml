@@ -3,9 +3,12 @@
 one:
   employee: michael
   service:  rails
+  fiscal_year: year_2013
   allocation: 0.5
+
 
 two:
   employee: yoloswag
   service:  rails
+  fiscal_year: year_2013
   allocation: 0.9

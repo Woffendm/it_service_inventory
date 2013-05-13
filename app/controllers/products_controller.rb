@@ -64,11 +64,8 @@ class ProductsController < ApplicationController
     authorize! :create, Product
     @product = Product.new(params[:product])
     if @product.save
-      if params[:product_groups]
-        unless params[:product_groups][:group_id].blank?
-          new_product_group = @product.product_groups.new(params[:product_groups])
-          new_product_group.save
-        end
+      unless params[:product_groups].blank? || params[:product_groups][:group_id].blank?
+        new_product_group = @product.product_groups.create(params[:product_groups])
       end
       flash[:notice] = t(:product) + t(:created)
       redirect_to edit_product_path(@product.id)
@@ -102,7 +99,8 @@ class ProductsController < ApplicationController
       new_product_group.save
     end
     # If a new employee was sent with the params, adds them to the product
-    unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank?
+    unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank? ||
+           params[:employee_product][:fiscal_year_id].blank?
       new_employee_product = @product.employee_products.new(params[:employee_product])
       new_employee_product.save
     end
@@ -124,13 +122,13 @@ class ProductsController < ApplicationController
     def filter_products(search)
       return Product.where(true) if search.blank?
       @group = search[:group]
+      @name = search[:name]
       @product_state = search[:product_state]
       @product_type = search[:product_type]
-      @product_name = search[:product_name]
       @product_priority = search[:product_priority]
       @search_string = ""
       @search_array = ["true"]
-      @search_array << "products.name LIKE '%#{@product_name}%'" unless @product_name.blank? 
+      @search_array << "products.name LIKE '%#{@name}%'" unless @name.blank? 
       @search_array << "product_state_id = #{@product_state}" unless @product_state.blank?
       @search_array << "product_type_id = #{@product_type}" unless @product_type.blank? 
       @search_array << "product_priority_id = #{@product_priority}" unless @product_priority.blank? 

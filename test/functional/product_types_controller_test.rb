@@ -16,7 +16,7 @@ class ProductTypesControllerTest < ActionController::TestCase
 
 
   test "should create product type" do
-    assert_difference('ProductType.count') do
+    assert_difference('ProductType.count', 1) do
       post :create, :product_type => {:name => "new type"}
     end
     assert_redirected_to product_types_path

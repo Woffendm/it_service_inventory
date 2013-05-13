@@ -14,7 +14,7 @@ michael:
 yoloswag: 
   name_first:   yolo
   name_last:    swag
-  osu_username: middauri
+  osu_username: yoloswag
   osu_id:       12983213123
 
 admin: 
@@ -23,3 +23,10 @@ admin:
   osu_username: hansenm
   osu_id:       63554675687
   site_admin:   true
+  
+inactive:
+  name_first:   in
+  name_last:    active
+  osu_username: inactive
+  osu_id:       24234321523
+  active:       false

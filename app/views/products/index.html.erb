@@ -14,7 +14,7 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[product_name]", @product_name, :placeholder => "-All Product Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => "-All Product Names-" %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => "-" + t(:all_groups) + "-",
                           :selected => @group}, {:class => "autocomplete large-select"}) %>

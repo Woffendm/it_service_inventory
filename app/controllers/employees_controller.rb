@@ -138,7 +138,7 @@ class EmployeesController < ApplicationController
       end
     end
     # Calculates the total allocation passed in params.
-    if params["employee"]["employee_allocations_attributes"]
+    if params["employee"] && params[:employee]["employee_allocations_attributes"]
       params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
         if new_allocation.last["_destroy"].to_f != 1
           new_total_allocation += new_allocation.last["allocation"].to_f
@@ -157,7 +157,6 @@ class EmployeesController < ApplicationController
   end
 
 
-
   # Searches OSU's ldap for all employees in the applicaiton by both their username and ids. Once 
   # found, updates the employee's name and email. 
   def update_all_employees_via_ldap
@@ -174,13 +173,6 @@ class EmployeesController < ApplicationController
     @employee.update_attributes(params[:employee])
     flash[:notice] = t(:settings) + t(:updated)
     redirect_to user_settings_employee_path(@current_user.id)
-  end
-
-
-  # Updates the names and emails of all employees in the application based off the most recent
-  # information provided in the OSU online directory
-  def update_all_employees
-    RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
   end
 
 

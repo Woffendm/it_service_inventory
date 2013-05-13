@@ -16,7 +16,7 @@ class LoginsController < ApplicationController
 
   # Development tool for logging in without a password
   def new_backdoor
-    redirect_to :new unless Rails.env.development?
+    redirect_to logins_new_path unless Rails.env.development?
   end
 
 
@@ -26,12 +26,12 @@ class LoginsController < ApplicationController
   def change_results_per_page
     session[:results_per_page] = params[:results_per_page]
     referring_page = request.referer
+    flash[:notice] = t(:results_per_page) + " #{params[:results_per_page]}"
     if referring_page
-      flash[:notice] = t(:results_per_page) + " #{params[:results_per_page]}"
       if referring_page.index("=")
         referring_page = referring_page[0..referring_page.index("=")] + "1"
       end
-      if !params[:name_to_search_for].blank?
+      unless params[:name_to_search_for].blank?
         referring_page += "&name_to_search_for=#{params[:name_to_search_for]}"
       end
       redirect_to referring_page
@@ -45,8 +45,8 @@ class LoginsController < ApplicationController
   def change_year
     cookies[:year] = { :value => params[:year], :expires => Time.now + 15.minutes }
     referring_page = request.referer
+    flash[:notice] = "Year changed to " + " #{params[:year]}"
     if referring_page
-      flash[:notice] = "Year changed to " + " #{params[:year]}"
       redirect_to referring_page
     else
       redirect_to pages_home_path
@@ -65,14 +65,17 @@ class LoginsController < ApplicationController
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
-      render :new
+      redirect_to logins_new_path
     end
   end
 
 
   # Development tool for logging in without a password
   def create_backdoor
-    redirect_to home_path unless Rails.env.development?
+    unless Rails.env.development?
+      redirect_to logins_new_path
+      return
+    end
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)
     if employee_exists
       session[:current_user_name] = employee_exists.full_name
@@ -82,7 +85,7 @@ class LoginsController < ApplicationController
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
-      render :new
+      redirect_to logins_new_path
     end
   end
 

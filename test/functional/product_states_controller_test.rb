@@ -16,7 +16,7 @@ class ProductStatesControllerTest < ActionController::TestCase
 
 
   test "should create product state" do
-    assert_difference('ProductState.count') do
+    assert_difference('ProductState.count', 1) do
       post :create, :product_state => {:name => "new state"}
     end
     assert_redirected_to product_states_path
