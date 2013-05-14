@@ -782,7 +782,7 @@ html, body{
 .logo {
   display: block;
   float: left;
-  padding: 5px;
+  padding: 0px 5px;
   position: relative;
   margin-left: -10px;
 }
@@ -792,7 +792,10 @@ html, body{
   text-decoration: none;
 }
 
-
+#login a {
+  border-left: none;
+  border-right: none;
+}
 
 
 
@@ -868,9 +871,9 @@ html, body{
     padding: 0;
   }
   .navbar .brand {
-    padding-right: 10px;
-    padding-left: 10px;
-    margin: 0 0 0 -5px;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin: 0px;
   }
   .nav-collapse {
     clear: both;
@@ -988,6 +991,10 @@ html, body{
   .navbar-static .navbar-inner {
     padding-right: 10px;
     padding-left: 10px;
+  }
+  
+  .logo{
+    margin-left: -5px;
   }
 }
 

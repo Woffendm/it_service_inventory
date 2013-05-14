@@ -59,8 +59,9 @@ class ApplicationController < ActionController::Base
     def load_current_fiscal_year
       @current_fiscal_year = AppSetting.get_current_fiscal_year
       if @current_fiscal_year.nil?
-        FiscalYear.create(:year => AppSetting.find_by_code("current_fiscal_year").value)
-        @current_fiscal_year = AppSetting.get_current_fiscal_year
+        @current_fiscal_year = FiscalYear.order(:updated_at).last
+        AppSetting.find_by_code("current_fiscal_year").update_attributes(
+            :value => @current_fiscal_year.year)
       end
     end
     
