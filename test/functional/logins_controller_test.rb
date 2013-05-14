@@ -38,6 +38,24 @@ class LoginsControllerTest < ActionController::TestCase
   end
   
   
+  test "should change results per page and redirect to referring page with pagination" do
+    @request.env['HTTP_REFERER'] = employees_path + "?page=2"
+    get :change_results_per_page, :results_per_page => 100
+    assert_not_nil session[:results_per_page]
+    assert_equal session[:results_per_page], "100"
+    assert_redirected_to employees_path + "?page=1"
+  end
+  
+  
+  test "should change results per page and redirect to referring page with additional url items" do
+    @request.env['HTTP_REFERER'] = employees_path + "?page=3&ascending=true&commit=Search+&current_order=&order=name_last&search[active]=&search[group]=&search[name]=&search[service]=&table="
+    get :change_results_per_page, :results_per_page => 100
+    assert_not_nil session[:results_per_page]
+    assert_equal session[:results_per_page], "100"
+    assert_redirected_to employees_path + "?page=1"
+  end
+  
+  
   test "should change selected fiscal year" do
     get :change_year, :year => 2014
     assert_not_nil cookies[:year]
