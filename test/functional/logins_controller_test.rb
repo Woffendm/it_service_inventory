@@ -29,6 +29,15 @@ class LoginsControllerTest < ActionController::TestCase
   end
   
   
+  test "should change results per page and redirect to referring page" do
+    @request.env['HTTP_REFERER'] = employees_path
+    get :change_results_per_page, :results_per_page => 100
+    assert_not_nil session[:results_per_page]
+    assert_equal session[:results_per_page], "100"
+    assert_redirected_to employees_path
+  end
+  
+  
   test "should change selected fiscal year" do
     get :change_year, :year => 2014
     assert_not_nil cookies[:year]
