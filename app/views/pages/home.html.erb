@@ -31,10 +31,8 @@
 
 <% if @data_to_graph && @full_time_employees > 0 %>
 <h3 class=""> <%= @graph_title %> </h3>
-<div class="row">
-  <div id="bar_graph_div" class="span7"></div>
+  <div id="bar_graph_div" class="span6"></div>
   <div id="pie_chart_div" class="span5"></div>
-</div>
 <% else %>
   <br/> <br/>
   <p class="error"> 

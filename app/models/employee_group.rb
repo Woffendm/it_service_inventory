@@ -8,6 +8,7 @@ class EmployeeGroup < ActiveRecord::Base
   belongs_to :employee
   belongs_to :group
   validates_presence_of :employee_id, :group_id
+  validates_uniqueness_of :employee_id, :scope => :group_id
   delegate :name, :to => :group
   
 end

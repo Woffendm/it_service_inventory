@@ -1,14 +1,17 @@
-# This class controls Product Types, which are used to determine the type of products.
+# This class controls Product Types, which are used to determine the status of products.
 #
 # Author: Michael Woffendin 
 # Copyright:
 
 class ProductTypesController < ApplicationController
   
+  before_filter :load_permissions
+  before_filter :load_product_types, :only => [:index, :create, :update]
+  
+  
   # View with a list of all current product types, and a form to add additional types
   def index
-    @new_product_type = ProductType.new
-    @product_types = ProductType.order(:name)
+
   end
   
   
@@ -27,13 +30,13 @@ class ProductTypesController < ApplicationController
 
   # Creates a new product type
   def create
-    if ProductType.new(params[:product_type]).save
-      flash[:notice] = "Product type created"
-      redirect_to product_types_path
+    unless ProductType.new(params[:product_type]).save
+      flash[:error] = "Product type needs a unique name"
+      render :index
       return
     end
-    flash[:error] = "Product type needs a unique name"
-    render :index
+    flash[:notice] = "Product type created"
+    redirect_to product_types_path
   end
 
 
@@ -44,4 +47,18 @@ class ProductTypesController < ApplicationController
     flash[:notice] = "Product type deleted"
     redirect_to product_types_path
   end
+  
+  
+  private
+    # Only authorized users can view and edit app settings 
+    def load_permissions
+      authorize! :manage, :all
+    end
+    
+    
+    # Loads all product types and creates a blank new one
+    def load_product_types
+      @new_product_type = ProductType.new
+      @product_types = ProductType.order(:name)
+    end
 end

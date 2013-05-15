@@ -1,9 +1,16 @@
+<h2> <%= t(:application_settings) %> </h2>
+
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li class="<%=ct(app_settings_path)%>">
     <%= link_to t(:application_settings), app_settings_path %>
   </li>
-  <li class="<%=ct(app_settings_admins_path)%>">
-    <%= link_to t(:site_admins), app_settings_admins_path %>
+  <li class="<%=ct(fiscal_years_path)%>">
+    <%= link_to t(:fiscal_years), fiscal_years_path %>
+  </li>
+  <li class="<%=ct(portfolio_names_path)%>">
+    <%= link_to t(:portfolio_names), portfolio_names_path %>
   </li>
   <li class="<%=ct(product_priorities_path)%>">
     <%= link_to t(:product_priorities), product_priorities_path %>
@@ -14,10 +21,7 @@
   <li class="<%=ct(product_types_path)%>">
     <%= link_to t(:product_types), product_types_path %>
   </li>
-  <li class="<%=ct(portfolio_names_path)%>">
-    <%= link_to t(:portfolio_names), portfolio_names_path %>
-  </li>
-  <li class="<%=ct(fiscal_years_path)%>">
-    <%= link_to t(:fiscal_years), fiscal_years_path %>
+  <li class="<%=ct(app_settings_admins_path)%>">
+    <%= link_to t(:site_admins), app_settings_admins_path %>
   </li>
 </ul>
