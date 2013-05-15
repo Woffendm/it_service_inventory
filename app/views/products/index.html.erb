@@ -42,7 +42,6 @@
     <th class='variable-size'> <%= sort_column(t(:priority), request.fullpath, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:product_state), request.fullpath, 'product_state', 'product_states.name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:product_type), request.fullpath, 'product_type', 'product_types.name', @order, @ascending) %> </th>
-    <th> </th>
   </thead>
   <tbody>
     <% @products.each do |product| %>
@@ -75,12 +74,6 @@
         </td>
         <td>
             <%= product.type %>
-        </td>
-        <td>
-          <% if can? :destroy, product %>
-            <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
-                        t(:confirm_deletion) %>
-          <% end %>
         </td>
       </tr>
     <% end %>

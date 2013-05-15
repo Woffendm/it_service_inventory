@@ -1,7 +1,14 @@
 <h2> 
   <%= t(:edit) + t(:service_colon) %> <%= @service.name %>
   <%= link_to "#{content_tag :em, '', :class => ''}
-              #{t(:show)}".html_safe, service_path(@service.id) %> 
+               #{t(:show)}".html_safe, service_path(@service.id) %> 
+  <% if can? :destroy, @service %>
+    <a  class="btn btn-danger pull-right" data-method="delete"
+        data-confirm="<%=t(:confirm_deletion)%>" href="<%=service_path(@service)%>">
+      <i class="icon-trash icon-white"></i>
+      <%= t(:delete) %>
+    </a>
+  <% end %>
 </h2>
 
   <div class="form-horizontal">

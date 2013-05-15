@@ -2,10 +2,11 @@
   <%= t(:edit) + t(:portfolio_colon) %> <%= @portfolio.name %> 
   <%= link_to "#{content_tag :em, '', :class => ''}
             #{t(:return_to)} #{t(:group)}".html_safe, edit_group_path(@portfolio.group_id) %>
-  <span class="delete-button">  
-    <%= link_to t(:delete), portfolio_path(@portfolio), :method => :delete, 
-                :confirm => t(:confirm_deletion) %>
-  </span>
+  <a  class="btn btn-danger pull-right" data-method="delete"
+      data-confirm="<%=t(:confirm_deletion)%>" href="<%=portfolio_path(@portfolio)%>">
+    <i class="icon-trash icon-white"></i>
+    <%= t(:delete) %>
+  </a>
 </h2>
 
 

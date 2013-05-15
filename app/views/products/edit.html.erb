@@ -2,6 +2,14 @@
   <%= t(:edit) + t(:product_colon) %> <%= @product.name %>
   <%= link_to "#{content_tag :em, '', :class => ''}
               #{t(:show)}".html_safe, product_path(@product.id) %>
+              
+  <% if can? :destroy, @product %>
+    <a  class="btn btn-danger pull-right" data-method="delete"
+        data-confirm="<%=t(:confirm_deletion)%>" href="<%=product_path(@product)%>">
+      <i class="icon-trash icon-white"></i>
+      <%= t(:delete) %>
+    </a>
+  <% end %>
 </h2>
 
 

@@ -2,6 +2,14 @@
   <%= t(:edit) + t(:group_colon) %> <%= @group.name %> 
   <%= link_to "#{content_tag :em, '', :class => ''}
             #{t(:show)}".html_safe, group_path(@group.id) %>
+  
+  <% if can? :destroy, Group %>
+    <a  class="btn btn-danger pull-right" data-method="delete"
+        data-confirm="<%=t(:confirm_deletion)%>" href="<%=group_path(@group)%>">
+      <i class="icon-trash icon-white"></i>
+      <%= t(:delete) %>
+    </a>
+  <% end %>
 </h2>
 
 
