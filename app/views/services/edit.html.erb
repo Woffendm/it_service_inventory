@@ -1,5 +1,5 @@
-<h2> 
-  <%= t(:edit) + t(:service_colon) %> <%= @service.name %>
+<div class="view-header">
+<h2> <%= "#{t(:edit_colon)} #{@service.name}" %> </h2>
   <%= link_to "#{content_tag :em, '', :class => ''}
                #{t(:show)}".html_safe, service_path(@service.id) %> 
   <% if can? :destroy, @service %>
@@ -9,7 +9,8 @@
       <%= t(:delete) %>
     </a>
   <% end %>
-</h2>
+</div>
+  
 
   <div class="form-horizontal">
     <%= form_for @service do |form| %>

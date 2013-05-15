@@ -62,30 +62,6 @@ form {
   margin: 0;
 }
 
-h1 {
-  font-size: 26px;
-}
-
-h2 {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: left;
-  border-bottom: 1px solid #F2F2F2;
-  padding: 5px 5px 5px 20px;
-}
-
-h3, caption {
-  margin-top: 20px;
-  font-size: 16px;
-  border-bottom: 2px solid #555555;
-  font-weight: bold;
-  text-align: left;
-}
-
-caption {
-  padding-bottom: 10px;
-}
-
 legend {
   border-width: 0;
   font-size: 14px;
@@ -829,6 +805,45 @@ html, body{
 
 
 
+.view-header{
+  border-bottom: 1px solid #F2F2F2;
+  padding: 5px 5px 5px 20px;
+}
+
+h1 {
+  font-size: 26px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: left;
+  display: inline-block;
+}
+
+h3, caption {
+  margin-top: 20px;
+  font-size: 16px;
+  border-bottom: 2px solid #555555;
+  font-weight: bold;
+  text-align: left;
+}
+
+caption {
+  padding-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 @media (min-width: 491px) {
   #login-collapse{
     display: none;
@@ -840,10 +855,6 @@ html, body{
     display: none;
   }
 }
-
-
-
-
 
 @media (max-width: 755px) {
   body {
