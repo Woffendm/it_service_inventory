@@ -1,16 +1,5 @@
-<div class="view-header">
-<h2> <%= "#{t(:edit_colon)} #{@service.name}" %> </h2>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-               #{t(:show)}".html_safe, service_path(@service.id) %> 
-  <% if can? :destroy, @service %>
-    <a  class="btn btn-danger pull-right" data-method="delete"
-        data-confirm="<%=t(:confirm_deletion)%>" href="<%=service_path(@service)%>">
-      <i class="icon-trash icon-white"></i>
-      <%= t(:delete) %>
-    </a>
-  <% end %>
-</div>
-  
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @service} %>
 
   <div class="form-horizontal">
     <%= form_for @service do |form| %>

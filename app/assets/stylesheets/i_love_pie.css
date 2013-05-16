@@ -804,10 +804,22 @@ html, body{
 
 
 
+.view-header {
+  margin-bottom: 10px;
+}
 
-.view-header{
+.view-header-inner{
   border-bottom: 1px solid #F2F2F2;
   padding: 5px 5px 5px 20px;
+}
+
+.view-header .btn-group {
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.view-header .dropdown-toggle > i {
+  margin-right: 5px;
 }
 
 h1 {
@@ -819,6 +831,7 @@ h2 {
   font-weight: bold;
   text-align: left;
   display: inline-block;
+  margin: 0px;
 }
 
 h3, caption {

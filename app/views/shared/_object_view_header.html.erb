@@ -1,0 +1,45 @@
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> 
+      <% if object.respond_to?(:name) %>
+        <%= view + " #{object.name}" %> 
+      <% else %>
+        <%= view + " #{object.full_name}"%> 
+      <% end %>
+    </h2>
+    
+    
+    <div class="btn-group">
+      <a class="btn  dropdown-toggle" data-toggle="dropdown" href="#">
+        <i class="icon-wrench "></i>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <% if ct(url_for(object)).blank? %>
+          <li>
+            <a href="<%= url_for(object) %>">
+              <i class="icon-eye-open"></i>
+              <%= t(:show) %>
+            </a>
+          </li>
+        <% else %>
+          <li>
+            <a href="<%= url_for(object) + "/edit" %>">
+              <i class="icon-edit"></i>
+              <%= t(:edit) %>
+            </a>
+          </li>
+        <% end %>
+        <% if can? :destroy, object %>
+          <li>
+            <a  data-method="delete" data-confirm="<%= t(:confirm_deletion) %>" 
+                href="<%= url_for(object) %>">
+              <i class="icon-trash"></i>
+              <%= t(:delete) %>
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
