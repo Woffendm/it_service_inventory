@@ -1,8 +1,5 @@
-<h2> 
-  <%= t(:edit) + t(:employee_colon) %> &nbsp; <%= @employee.full_name %>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-              #{t(:show)}".html_safe, employee_path(@employee.id) %>
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @employee} %>
 
 
 

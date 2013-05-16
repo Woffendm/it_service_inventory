@@ -1,11 +1,6 @@
-<h2> 
-  <%= t(:service_colon) %>  <%= @service.name %> 
-  <% if can? :update, @service %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe, edit_service_path(@service.id) %>
-  <% end %>
-</h2> 
-
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => nil, :object => @service} %>
+            
 
 <table class="table table-striped overview">
   <caption> <%= t(:overview) %> </caption>

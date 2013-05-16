@@ -25,7 +25,6 @@
   <thead>
     <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
     <th> <%= t(:total_employees) %> </th>
-    <th> </th>
   </thead>
   <tbody>
     <% unless @groups.blank? %>
@@ -36,12 +35,6 @@
           </td>
           <td> 
             <%= group.employees.length.to_s %>
-          </td>
-          <td> 
-            <% if can? :destroy, Group %>
-              <%= link_to t(:delete), group_path(group.id), :method => :delete, 
-                          :confirm => t(:confirm_deletion) %> 
-            <% end %>
           </td>
         </tr>  
       <% end %>

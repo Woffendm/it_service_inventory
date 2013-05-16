@@ -1,11 +1,5 @@
-<h2> 
-  <%= t(:product_colon) %> <%= @product.name %> 
-  <% if can? :update, @product %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe,
-                edit_product_path(@product.id) %>
-  <% end %>
-</h2> 
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => nil, :object => @product} %>
 
 
 <table class="table table-striped overview">

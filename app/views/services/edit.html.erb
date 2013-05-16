@@ -1,8 +1,6 @@
-<h2> 
-  <%= t(:edit) + t(:service_colon) %> <%= @service.name %>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-              #{t(:show)}".html_safe, service_path(@service.id) %> 
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @service} %>
+
 
   <div class="form-horizontal">
     <%= form_for @service do |form| %>

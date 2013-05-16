@@ -161,6 +161,7 @@ en:
   delete:                       "Delete"
   deleted:                      "deleted"
   edit:                         "Edit "
+  edit_colon:                   "Edit: "
   editing:                      "Editing "
   filter_results:               "Filter Results"
   logged_in_as:                 "Logged in as: "

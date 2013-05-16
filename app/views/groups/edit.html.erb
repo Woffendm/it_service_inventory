@@ -1,8 +1,5 @@
-<h2> 
-  <%= t(:edit) + t(:group_colon) %> <%= @group.name %> 
-  <%= link_to "#{content_tag :em, '', :class => ''}
-            #{t(:show)}".html_safe, group_path(@group.id) %>
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @group} %>
 
 
 <%= form_for @group do |group_form| %>
@@ -73,13 +70,11 @@
               </thead>
             </table>
             <div class="accordion" id="accordion">
-              <% count = 0 %>
               <% @portfolios.each_with_index do |portfolio, index| %>
-                <% count+=1 %>
                 <div class="accordion-group">
                   <table class="table">
                     <tbody>
-                      <tr class="striped-<%=count%2%>">
+                      <tr class="striped-<%=index%2%>">
                         <td>
                           <%= link_to portfolio[0].name, edit_portfolio_path(portfolio[0].id) %>
                         </td>
