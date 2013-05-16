@@ -39,15 +39,15 @@ def app_set_required_environment_vars():
     env.repo_url = "git@gitlab.cws.oregonstate.edu"
 
 ## Development
-    env.develop_hosts = ['cwsruby18-vd01.cws.oregonstate.edu']
+    env.develop_hosts = ['cwsruby19-vd01.cws.oregonstate.edu']
     env.develop_path = "/var/www/%s_code/" % env.app_name
 
 ## Staging
-    env.staging_hosts = ['cwsruby18-vs01.cws.oregonstate.edu']
+    env.staging_hosts = ['cwsruby19-vs01.cws.oregonstate.edu']
     env.staging_path = "/var/www/%s_code/" % env.app_name
 
 ## Production
-    env.production_hosts = ['cwsruby18-vp01.cws.oregonstate.edu']
+    env.production_hosts = ['cwsruby19-vp01.cws.oregonstate.edu']
     env.production_path = "/var/www/%s_code/" % env.app_name
     env.production_checkout = "0.6.0"
 
