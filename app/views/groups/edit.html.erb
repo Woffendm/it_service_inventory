@@ -1,16 +1,5 @@
-<h2> 
-  <%= t(:edit) + t(:group_colon) %> <%= @group.name %> 
-  <%= link_to "#{content_tag :em, '', :class => ''}
-            #{t(:show)}".html_safe, group_path(@group.id) %>
-  
-  <% if can? :destroy, Group %>
-    <a  class="btn btn-danger pull-right" data-method="delete"
-        data-confirm="<%=t(:confirm_deletion)%>" href="<%=group_path(@group)%>">
-      <i class="icon-trash icon-white"></i>
-      <%= t(:delete) %>
-    </a>
-  <% end %>
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @group} %>
 
 
 <%= form_for @group do |group_form| %>
@@ -85,7 +74,7 @@
                 <div class="accordion-group">
                   <table class="table">
                     <tbody>
-                      <tr class="striped-<%=count%2%>">
+                      <tr class="striped-<%=index%2%>">
                         <td>
                           <%= link_to portfolio[0].name, edit_portfolio_path(portfolio[0].id) %>
                         </td>

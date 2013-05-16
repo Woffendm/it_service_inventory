@@ -1,10 +1,5 @@
-<h2> 
-  <%= t(:employee_colon) + @employee.full_name %> 
-  <% if can? :update, @employee %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe, edit_employee_path(@employee.id) %>
-  <% end %>
-</h2> 
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view =>nil, :object => @employee} %>
 
 
 <table class="table table-striped overview">

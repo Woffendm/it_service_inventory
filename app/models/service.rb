@@ -30,9 +30,9 @@ class Service < ActiveRecord::Base
   def get_total_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_allocations.where(:fiscal_year_id => year.id).each do |employee_allocation|
-      total_allocation += employee_allocation.rounded_allocation(allocation_precision)
+      total_allocation += employee_allocation.allocation
     end
-    return total_allocation
+    return total_allocation.round(allocation_precision)
   end
 
 
@@ -51,9 +51,9 @@ class Service < ActiveRecord::Base
                      ).where(:service_id => self.id, :fiscal_year_id => year.id, 
                              :groups => {:id => group.id}
                      ).each do |employee_allocation|
-      allocation_sum += employee_allocation.rounded_allocation(allocation_precision)
+      allocation_sum += employee_allocation.allocation
     end
-    return allocation_sum
+    return allocation_sum.round(allocation_precision)
   end
   
   

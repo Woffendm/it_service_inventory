@@ -2,9 +2,9 @@
   <div class="view-header-inner">
     <h2> 
       <% if object.respond_to?(:name) %>
-        <%= view + " #{object.name}" %> 
+        <%= "#{view} #{object.name}" %> 
       <% else %>
-        <%= view + " #{object.full_name}"%> 
+        <%= "#{view} #{object.full_name}"%> 
       <% end %>
     </h2>
     
@@ -22,7 +22,7 @@
               <%= t(:show) %>
             </a>
           </li>
-        <% else %>
+        <% elsif can? :edit, object %>
           <li>
             <a href="<%= url_for(object) + "/edit" %>">
               <i class="icon-edit"></i>
