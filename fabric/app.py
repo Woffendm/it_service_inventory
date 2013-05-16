@@ -42,11 +42,6 @@ def app_set_required_environment_vars():
     env.develop_hosts = ['cwsruby18-vd01.cws.oregonstate.edu']
     env.develop_path = "/var/www/%s_code/" % env.app_name
 
-## Development19
-    env.develop19_hosts = ['cwsruby19-vd01.cws.oregonstate.edu']
-    env.develop19_path = "/var/www/%s_code/" % env.app_name
-    env.develop19_checkout = "develop19"
-
 ## Staging
     env.staging_hosts = ['cwsruby18-vs01.cws.oregonstate.edu']
     env.staging_path = "/var/www/%s_code/" % env.app_name
@@ -54,7 +49,7 @@ def app_set_required_environment_vars():
 ## Production
     env.production_hosts = ['cwsruby18-vp01.cws.oregonstate.edu']
     env.production_path = "/var/www/%s_code/" % env.app_name
-    env.production_checkout = "0.5.2"
+    env.production_checkout = "0.6.0"
 
 # Array of symlinks to be created to the shared directory.  Each individual symlink is an array
 # The first element in the array is the path within the 'shared' directory which we will be
