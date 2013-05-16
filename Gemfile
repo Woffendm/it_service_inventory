@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '3.2.13'
 
@@ -23,10 +23,8 @@ group :development, :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rack-mini-profiler'
-#  gem 'rcov'
   gem 'simplecov'
   gem 'simplecov-rcov'
-
 end
 
 # Gems used only for assets and not required
