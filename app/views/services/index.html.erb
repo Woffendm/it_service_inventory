@@ -28,7 +28,6 @@
   <thead>
     <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
     <th> <%= t(:description) %> </th>
-    <th>  </th>
   </thead>
   <tbody>
     <% @services.each do |service| %>
@@ -45,12 +44,6 @@
                  style="<%=max_width_by_word(service.description)%>">
               <%= simple_format service.description %>
             </div>
-          <% end %>
-        </td>
-        <td> 
-          <% if can? :destroy, service %>
-            <%= link_to t(:delete), service_path(service.id), :method => :delete, :confirm =>
-                        t(:confirm_deletion) %> 
           <% end %>
         </td>
       </tr>

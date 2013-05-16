@@ -1,10 +1,5 @@
-<h2> 
-  <%= t(:group_colon) + @group.name %> 
-  <% if can? :update, @group %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-edit'}
-                #{t(:edit)}".html_safe, edit_group_path(@group.id) %>
-  <% end %>
-</h2> 
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => nil, :object => @group} %>
 
 
 <table class="table table-striped overview">

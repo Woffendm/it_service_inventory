@@ -1,8 +1,5 @@
-<h2> 
-  <%= t(:edit) + t(:product_colon) %> <%= @product.name %>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-              #{t(:show)}".html_safe, product_path(@product.id) %>
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @product} %>
 
 
 <%= form_for @product do |product_form| %>
