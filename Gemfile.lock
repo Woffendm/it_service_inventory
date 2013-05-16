@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: http://rubygems.org/
   specs:
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
@@ -38,13 +38,6 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
-    columnize (0.3.6)
-    debugger (1.5.0)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.0)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.0)
     diff-lcs (1.2.4)
     dynamic_form (1.1.4)
     erubis (2.7.0)
@@ -160,7 +153,6 @@ PLATFORMS
 DEPENDENCIES
   cancan (= 1.6.9)
   coffee-rails (~> 3.2.1)
-  debugger
   dynamic_form (= 1.1.4)
   jquery-rails (= 2.1.4)
   json (= 1.7.6)
