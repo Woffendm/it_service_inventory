@@ -100,7 +100,7 @@ class EmployeesController < ApplicationController
     new_employee.name_MI = params[:name_MI]
     new_employee.osu_id = params[:osu_id]
     new_employee.osu_username = params[:osu_username]
-    new_employee.email = params[:email].downcase
+    new_employee.email = params[:email].downcase unless params[:email].blank?
     if new_employee.save
       flash[:notice] = t(:employee) + t(:added)
     else
@@ -138,7 +138,7 @@ class EmployeesController < ApplicationController
       end
     end
     # Calculates the total allocation passed in params.
-    if params["employee"]["employee_allocations_attributes"]
+    if params["employee"] && params[:employee]["employee_allocations_attributes"]
       params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
         if new_allocation.last["_destroy"].to_f != 1
           new_total_allocation += new_allocation.last["allocation"].to_f
@@ -157,7 +157,6 @@ class EmployeesController < ApplicationController
   end
 
 
-
   # Searches OSU's ldap for all employees in the applicaiton by both their username and ids. Once 
   # found, updates the employee's name and email. 
   def update_all_employees_via_ldap
@@ -174,13 +173,6 @@ class EmployeesController < ApplicationController
     @employee.update_attributes(params[:employee])
     flash[:notice] = t(:settings) + t(:updated)
     redirect_to user_settings_employee_path(@current_user.id)
-  end
-
-
-  # Updates the names and emails of all employees in the application based off the most recent
-  # information provided in the OSU online directory
-  def update_all_employees
-    RemoteEmployee.update_search(Employee.first.osu_username, Employee.first.osu_id).first.uid.first
   end
 
 
@@ -273,22 +265,18 @@ class EmployeesController < ApplicationController
     # Loads all active years. Loads the last selected year if it is active
     def load_active_years
       @active_years = FiscalYear.active_fiscal_years
-      if cookies[:year].blank? || !(@year = FiscalYear.find_by_year(cookies[:year])).active
+      @year = FiscalYear.find_by_year(cookies[:year])
+      if @year.blank? || !@year.active
          flash[:message] = "Selected year #{@year.year} inactive. Year changed to #{@current_fiscal_year.year}." if @year
         @year = @current_fiscal_year
-      else 
-        @year = FiscalYear.find_by_year(cookies[:year])
       end
     end
     
     
-    # CLoads all years. Loads the last selected year
+    # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
 end

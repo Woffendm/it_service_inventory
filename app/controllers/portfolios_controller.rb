@@ -39,15 +39,7 @@ class PortfoliosController < ApplicationController
     @name = params[:name]
     unless @name.blank?
       @portfolio_name = PortfolioName.find_by_name(@name)
-      if @portfolio_name.blank?
-        @portfolio_name = PortfolioName.new(:name => @name)
-        unless @portfolio_name.save
-          @portfolio = Portfolio.new
-          flash[:error] = "Name already taken" 
-          render :new
-          return
-        end
-      end
+      @portfolio_name = PortfolioName.create(:name => @name) if @portfolio_name.blank?
       @portfolio = Portfolio.new(:group_id => params[:group_id], 
                                  :portfolio_name_id => @portfolio_name.id)
     else
@@ -77,10 +69,10 @@ class PortfoliosController < ApplicationController
   # If a new product is added, also adds it to the group's list of products if it is not already in 
   # it. 
   def update
-    unless params[:product].blank? || params[:product][:id].blank?
-      if @portfolio.portfolio_products.new(:product_id => params[:product][:id], 
+    unless @product.blank?
+      if @portfolio.portfolio_products.new(:product_id => @product.id, 
           :portfolio_name_id => @portfolio.portfolio_name_id).save
-        flash[:notice] = "Product added!"
+        flash[:notice] = "Product added."
       else
         flash[:error] = "Product cannot be added"
         render :edit
@@ -90,14 +82,9 @@ class PortfoliosController < ApplicationController
         @group.products << @product
       end
     end
-    if @portfolio.update_attributes(params[:portfolio])
-      flash[:notice] = "Yay!"
-      redirect_to edit_portfolio_path(@portfolio.id)
-      return
-    else
-      flash[:error] = "Oh no!"
-      render :edit
-    end
+    @portfolio.update_attributes(params[:portfolio])
+    flash[:notice] = "Portfolio updated"
+    redirect_to edit_portfolio_path(@portfolio.id)
   end
   
   
@@ -110,7 +97,6 @@ class PortfoliosController < ApplicationController
       @product = search[:product]
       @portfolio_name = search[:portfolio_name]
       @global = search[:global]
-      search_string = ""
       search_array = []
       search_array << "portfolios.group_id = #{@group}" unless @group.blank? 
       search_array << "products.id = #{@product}" unless @product.blank? 
@@ -127,11 +113,8 @@ class PortfoliosController < ApplicationController
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
   
   

@@ -5,7 +5,7 @@
 
 class AppSettingsController < ApplicationController
   before_filter :load_permissions
-
+  before_filter :load_settings,     :only => [:index, :update_settings]
 
 
   # View-related methods
@@ -19,11 +19,6 @@ class AppSettingsController < ApplicationController
 
   # View with all configurable settings for the application, and forms to alter said settings
   def index
-    @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-    @allocation_precision = AppSetting.get_allocation_precision
-    @current_fiscal_year = AppSetting.get_current_fiscal_year
-    @fiscal_years = FiscalYear.active_fiscal_years
-    @rest_api_key = AppSetting.get_rest_api_key
   end
 
 
@@ -54,7 +49,7 @@ class AppSettingsController < ApplicationController
     AppSetting.all.each do |app_setting|
       unless AppSetting.save_setting(app_setting, params[:app_setting][app_setting.code])
         flash[:error] = "One or more of your fields is invalid!"
-        redirect_to app_settings_path 
+        render :index
         return
       end
     end
@@ -63,9 +58,20 @@ class AppSettingsController < ApplicationController
   end
 
 
+
   private
     # Only authorized users can view and edit app settings 
     def load_permissions
       authorize! :manage, :all
+    end
+    
+    
+    # Loads all app settings
+    def load_settings
+      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+      @allocation_precision = AppSetting.get_allocation_precision
+      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      @fiscal_years = FiscalYear.active_fiscal_years
+      @rest_api_key = AppSetting.get_rest_api_key
     end
 end

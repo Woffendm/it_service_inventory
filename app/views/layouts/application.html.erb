@@ -12,7 +12,7 @@
     google.load('visualization', '1.0', {packages:['corechart']});
   </script>
   <%= stylesheet_link_tag "bootstrap" %>
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag "bootstrap-responsive.css" %>
   <%= stylesheet_link_tag "jquery-ui-1.8.23.custom.css" %>
   <%= stylesheet_link_tag "chosen" %>
@@ -23,112 +23,156 @@
   <!-- <%# stylesheet_link_tag @current_theme %> -->
   <%= csrf_meta_tags %>
 </head>
+
+
+
+
 <body>
-  <div class="navbar navbar-inverse navbar-fixed-top">
-    <ul class="" id="login-inline">
-      <% if session[:current_user_name] && @current_user %>
-        <li> 
-          <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
-                       #{session[:current_user_name]}".html_safe,
-                       user_settings_employee_path(@current_user.id) %>
-        </li>
-        <li> <%= link_to t(:logout), logins_destroy_path %> </li>
-      <% end %>
-    </ul>
-    <div class="navbar-inner">
-      <div class="container">
-        <span class="brand">
-          <%= link_to t(:IT_service_inventory), pages_home_path %>
-        </span>
-        <button data-target=".nav-collapse" data-toggle="collapse" 
-          class="btn btn-navbar" type="button">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <div class="nav-collapse collapse">
-          <ul class="nav">
-            <li>
-              <%= link_to "#{content_tag :em, '', :class => ''}
-                           #{t(:employees)}".html_safe, employees_path, 
-                           :class => cp(employees_path) %>
-            </li>
-            <li>
-              <%= link_to "#{content_tag :em, '', :class => ''}
-                           #{t(:groups)}".html_safe, groups_path, 
-                           :class => cp(groups_path) %>
-            </li>
-            <li>
-              <%= link_to "#{content_tag :em, '', :class => ''}
-                           #{t(:services)}".html_safe, services_path, 
-                           :class => cp(services_path) %>
-            </li>
-            <li>
-              <%= link_to "#{content_tag :em, '', :class => ''}
-                           #{t(:products)}".html_safe, products_path, 
-                           :class => cp(products_path) %>
-            </li>
-            <li>
-              <%= link_to "#{content_tag :em, '', :class => ''}
-                           #{t(:portfolios)}".html_safe, portfolios_path, 
-                           :class => cp(portfolios_path) %>
-            </li>
-            <% if can? :manage, AppSetting %>
-              <li> 
-                <%= link_to "#{content_tag :em, '', :class => ''}
-                             #{t(:settings)}".html_safe, app_settings_path, 
-                             :class => cp(app_settings_path) %>
-              </li>
-            <% end %>
+  <span id="overall-container" class="two-navs">
+    <div id="page-header" class="navbar row">
+      <div class="navbar-fixed-top"> <!-- add navbar-fixed-top to make it anchored to top -->
+        <div class="navbar-inner">
+          <div class="container"> 
             
-            <li class="login-in-dropdown"> 
-              <% if session[:current_user_name] && @current_user %>
-              
-                <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-white'}
-                            #{session[:current_user_name]}".html_safe,
-                            user_settings_employee_path(@current_user.id) %>
+            
+            <span class="logo">
+              <%= image_tag(
+                  "http://oregonstate.edu/osuhomepage/regions/top-hat/current/images/osu-tag.png",
+                  {:height => 75, :width => 75}) %>
+            </span>
+
+            
+            <span class="brand">
+              <%= link_to t(:IT_service_inventory), pages_home_path %>
+            </span>            
+
+
+            <div id="nav1">
+              <% unless @current_user.blank? %>
+                <ul class="nav pull-right" id="login">
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      <i class="icon-user icon-white"></i>
+                      <%= @current_user.full_name %>
+                      <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <%= link_to t(:user_settings), user_settings_employee_path(@current_user.id) %>
+                      </li>
+                      <li>
+                        <%= link_to t(:profile), edit_employee_path(@current_user.id) %>
+                      </li>
+                      <li>
+                        <%= link_to t(:logout), logins_destroy_path %> 
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
               <% end %>
-            </li>
-            <li class="login-in-dropdown"> 
-              <%= link_to t(:logout), logins_destroy_path %> 
-            </li>
-          </ul>
+            </div>
+            
+            
+            
+            <div id="nav2">
+              <button data-target=".nav-collapse" data-toggle="collapse" 
+                class="btn btn-navbar" type="button">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <div class="nav-collapse collapse">
+                <ul class="nav">
+                  <li>
+                    <%= link_to "#{content_tag :em, '', :class => ''}
+                                 #{t(:services)}".html_safe, services_path, 
+                                 :class => cp(services_path) %>
+                  </li>
+                  <li>
+                    <%= link_to "#{content_tag :em, '', :class => ''}
+                                 #{t(:employees)}".html_safe, employees_path, 
+                                 :class => cp(employees_path) %>
+                  </li>
+                  <li>
+                    <%= link_to "#{content_tag :em, '', :class => ''}
+                                 #{t(:groups)}".html_safe, groups_path, 
+                                 :class => cp(groups_path) %>
+                  </li>
+                  <li>
+                    <%= link_to "#{content_tag :em, '', :class => ''}
+                                 #{t(:portfolios)}".html_safe, portfolios_path, 
+                                 :class => cp(portfolios_path) %>
+                  </li>
+                  <li>
+                    <%= link_to "#{content_tag :em, '', :class => ''}
+                                 #{t(:products)}".html_safe, products_path, 
+                                 :class => cp(products_path) %>
+                  </li>
+                  <% if can? :manage, AppSetting %>
+                    <li> 
+                      <%= link_to "#{content_tag :em, '', :class => ''}
+                                   #{t(:settings)}".html_safe, app_settings_path, 
+                                   :class => cp(app_settings_path) %>
+                    </li>
+                  <% end %>
+                  <% unless @current_user.blank? %>
+                    <li class="dropdown" id="login-collapse">
+                      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-user icon-white"></i>
+                        <%= @current_user.full_name %>
+                        <b class="caret"></b>
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <%= link_to t(:user_settings), user_settings_employee_path(@current_user.id) %>
+                        </li>
+                        <li>
+                          <%= link_to t(:profile), edit_employee_path(@current_user.id) %>
+                        </li>
+                        <li>
+                          <%= link_to t(:logout), logins_destroy_path %> 
+                        </li>
+                      </ul>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     
-  </div>
-  <div class="container">
-    <!--
-    <div class="row">
-      <ul class="" id="login-in-list">
-        <% if session[:current_user_name] %>
-          <li> 
-            <%= link_to "#{content_tag :em, '', :class => 'icon-user icon-black'}
-                         #{session[:current_user_name]}".html_safe,
-                         user_settings_employee_path(@current_user.id) %>
-          </li>
-          <li> <%= link_to t(:logout), logins_destroy_path %> </li>
-        <% else %>
-          <li> <%= link_to t(:login), logins_new_path %> </li>
-        <% end %>
-      </ul>
+    
+    
+      <div class="container" id="page-content">
+        <div class="row" id="flash">
+          <% if flash[:notice] %>
+            <p class="notice">  <%= flash[:notice] %>       </p>
+          <% end %>
+          <% if flash[:error] %>
+            <p class="error">   Error: <%= flash[:error] %> </p>
+          <% end %>
+          <% if flash[:message] %>
+            <p class="message"> <%= flash[:message] %>      </p>
+          <% end %>
+        </div>
+        <div class="row">
+          <div id="content">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    
+    
+    
+    <div id="footer">
+      <div class="container">
+        <div class="row">
+          &nbsp;
+        </div>
+      </div>
     </div>
-    -->
-    <div class="row">
-      <% if flash[:notice] %>
-        <p class="notice">  <%= flash[:notice] %>       </p>
-      <% end %>
-      <% if flash[:error] %>
-        <p class="error">   Error: <%= flash[:error] %> </p>
-      <% end %>
-      <% if flash[:message] %>
-        <p class="message"> <%= flash[:message] %>      </p>
-      <% end %>
-    </div>
-    <div class="content">
-      <%= yield %>
-    </div>
-  </div>
+  </span>
 </body>
 </html>

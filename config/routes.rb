@@ -39,7 +39,7 @@ Project1::Application.routes.draw do
     member do
       get 'user_settings'
       post 'update_settings'
-      get 'toggle_active'
+      post 'toggle_active'
     end
     collection do
       get 'ldap_search_results'

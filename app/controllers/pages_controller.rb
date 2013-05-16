@@ -35,8 +35,10 @@ class PagesController < ApplicationController
   # Retrieves and sets information related to the group and/or service selected by the user on the 
   # home page. Will not retrieve information if neither a group nor service is selected.
   def home_search
-    @group = Group.find(params[:group][:id]) unless params[:group][:id].blank?
-    @service = Service.find(params[:service][:id]) unless params[:service][:id].blank?
+    @group = Group.find(params[:group][:id]) unless params[:group].blank? || 
+        params[:group][:id].blank?
+    @service = Service.find(params[:service][:id]) unless params[:service].blank? || 
+        params[:service][:id].blank?
     data_array = []
     @data_title_1 = t(:full_time_employees)
     @data_title_2 = t(:employee_headcount)

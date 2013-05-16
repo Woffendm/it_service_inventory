@@ -1,11 +1,14 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  employee_id: 1
-  service_id: 1
-  allocation: 1.5
+  employee: michael
+  service:  rails
+  fiscal_year: year_2013
+  allocation: 0.5
+
 
 two:
-  employee_id: 1
-  service_id: 1
-  allocation: 1.5
+  employee: yoloswag
+  service:  rails
+  fiscal_year: year_2013
+  allocation: 0.9

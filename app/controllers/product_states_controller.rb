@@ -5,10 +5,13 @@
 
 class ProductStatesController < ApplicationController
   
+  before_filter :load_permissions
+  before_filter :load_product_states, :only => [:index, :create, :update]
+  
+  
   # View with a list of all current product states, and a form to add additional states
   def index
-    @new_product_state = ProductState.new
-    @product_states = ProductState.order(:name)
+
   end
   
   
@@ -27,12 +30,12 @@ class ProductStatesController < ApplicationController
 
   # Creates a new product state
   def create
-    if ProductState.new(params[:product_state]).save
-      flash[:notice] = "Product state created"
-      redirect_to product_states_path
+    unless ProductState.new(params[:product_state]).save
+      flash[:error] = "Product state needs a unique name"
+      render :index
       return
     end
-    flash[:error] = "Product state needs a unique name"
+    flash[:notice] = "Product state created"
     redirect_to product_states_path
   end
 
@@ -44,4 +47,18 @@ class ProductStatesController < ApplicationController
     flash[:notice] = "Product state deleted"
     redirect_to product_states_path
   end
+  
+  
+  private
+    # Only authorized users can view and edit app settings 
+    def load_permissions
+      authorize! :manage, :all
+    end
+    
+    
+    # Loads all product states and creates a blank new one
+    def load_product_states
+      @new_product_state = ProductState.new
+      @product_states = ProductState.order(:name)
+    end
 end

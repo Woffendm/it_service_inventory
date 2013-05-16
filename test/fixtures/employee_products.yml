@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  employee: michael
+  product:  itsi
+  allocation: 0.5
+
+two:
+  employee: yoloswag
+  product:  itsi
+  allocation: 0.9

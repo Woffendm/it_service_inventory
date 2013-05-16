@@ -80,6 +80,8 @@ class ServicesController < ApplicationController
       flash[:notice] = t(:service) + t(:updated)
     else
       flash[:error] = t(:service) + t(:needs_a_name)
+      render :edit
+      return
     end
     redirect_to edit_service_path(@service.id) 
   end
@@ -94,7 +96,6 @@ class ServicesController < ApplicationController
     return Service.where(true) if search.blank?
     @group = search[:group]
     @name = search[:name]
-    @search_string = ""
     @search_array = ["true"]
     @search_array << "services.name LIKE '%#{@name}%'" unless @name.blank? 
     @search_string = @search_array.join(" AND ")
@@ -107,11 +108,8 @@ class ServicesController < ApplicationController
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
   
   

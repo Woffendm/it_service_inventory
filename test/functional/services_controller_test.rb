@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ServicesControllerTest < ActionController::TestCase
   setup do
-    @service = services(:one)
-    session[:current_user_name] = employees(:one).full_name
-    session[:current_user_osu_username] = employees(:one).osu_username
+    @service = services(:rails)
+    session[:current_user_name] = employees(:michael).full_name
+    session[:current_user_osu_username] = employees(:michael).osu_username
     session[:results_per_page] = 25
   end
 
@@ -19,6 +19,14 @@ class ServicesControllerTest < ActionController::TestCase
   test "should create service" do
     assert_difference('Service.count') do
       post :create, :service => { :name => "New Service" }
+    end
+    assert_redirected_to services_path
+  end
+
+
+  test "should not create service if no name given" do
+    assert_no_difference('Service.count') do
+      post :create, :service => { :name => nil }
     end
     assert_redirected_to services_path
   end
@@ -39,6 +47,33 @@ class ServicesControllerTest < ActionController::TestCase
   test "should update service" do
     put :update, :id => @service, :service => { :name => "Differnet Name" }
     assert_redirected_to edit_service_path(assigns(:service))
+  end
+  
+  
+  test "should not update service if no name given" do
+    put :update, :id => @service, :service => { :name => nil }
+    assert_response :success
+  end
+
+
+  test "should get groups of service if given service id" do
+    get :groups, :service => {:id => @service.id}
+    assert_equal @service.groups(AppSetting.get_current_fiscal_year), assigns(:groups)
+    assert_response :success
+  end
+  
+  
+  test "should get all groups if no service id given" do
+    get :groups, :service => {:id => "0"}
+    assert_equal assigns(:groups), Group.joins(:employees).uniq.order(:name)
+    assert_response :success
+  end
+  
+  
+  test "should filter services by name" do
+    get :index, :search => {:name => "rails"}
+    assert_not_nil assigns(:services)
+    assert_equal @service, assigns(:services).first
   end
 
 

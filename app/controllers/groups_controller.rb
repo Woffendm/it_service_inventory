@@ -4,19 +4,17 @@
 # Copyright:
 
 class GroupsController < ApplicationController
-  before_filter :load_group,      :only => [:add_employee, :toggle_group_admin, :destroy, :edit,
-                                            :remove_employee, :show, :update]  
-  before_filter :load_all_years,  :only => [:show, :services, :edit]                                
-  before_filter :load_employee,   :only => [:add_employee]
-  before_filter :load_portfolios, :only => [:show, :edit]
+  before_filter :load_group,               :only => [:toggle_group_admin, :destroy, :edit,
+                                                     :show, :update]  
+  before_filter :load_all_years,           :only => [:show, :services, :edit]                                
+  before_filter :load_portfolios,          :only => [:show, :edit]
   before_filter :load_portfolio_names,     :only => [:edit]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:edit]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
   before_filter :load_employees_for_year,  :only => [:show]
-  before_filter :authorize_update, :only => [:add_employee, :toggle_group_admin, :edit,
-                                            :remove_employee, :update]
+  before_filter :authorize_update,         :only => [:edit, :update]
                                             
   
 # View-related methods
@@ -46,28 +44,7 @@ class GroupsController < ApplicationController
   
   
 # Action-related methods
-  
-  # Adds the employee selected on the "roster" page to the given group
-  def add_employee
-    @group.add_employee_to_group(@employee)
-    flash[:notice] = t(:employee) + t(:added)
-    redirect_to edit_group_path(@group.id)
-  end
-  
-  
-  # Gives / removes the selected employee administrative abilities for the group
-  def toggle_group_admin
-    employee_group = Employee.find(params[:employee]).employee_groups.find_by_group_id(params[:id])
-    employee_group.update_attributes(:group_admin => !employee_group.group_admin)
-    if employee_group.group_admin
-      flash[:notice] = t(:admin) + t(:added)
-    else
-      flash[:notice] = t(:admin) + t(:removed)
-    end
-    redirect_to edit_group_path(@group.id)
-  end
-  
-  
+
   # Creates a new group using the information entered on the "new" page
   def create
     authorize! :create, Group
@@ -87,15 +64,6 @@ class GroupsController < ApplicationController
     @group.destroy 
     flash[:notice] = t(:group) + t(:deleted)
     redirect_to groups_path 
-  end
-
-
-  # Removes the employee selected on the "roster" page from the given group
-  def remove_employee
-    @employee = Employee.find(params[:employee])
-    @group.remove_employee_from_group(@employee)
-    flash[:notice] = t(:employee) + t(:removed)
-    redirect_to edit_group_path(@group.id)
   end
 
 
@@ -119,15 +87,6 @@ class GroupsController < ApplicationController
         flash[:notice] = t(:employee) + t(:added)
       else
         flash[:error] = t(:employee) + t(:add) + t(:fail)
-        render :edit
-        return
-      end
-    end
-    unless params[:portfolio].blank? || params[:portfolio][:portfolio_name_id].blank?
-      if @group.portfolios.new(params[:portfolio]).save
-        flash[:notice] = t(:portfolio) + t(:added)
-      else
-        flash[:error] = t(:portfolio) + t(:add) + t(:fail)
         render :edit
         return
       end
@@ -156,7 +115,6 @@ class GroupsController < ApplicationController
     def filter_groups(search)
       return Group.where(true) if search.blank?
       @name = search[:name]
-      @search_string = ""
       @search_array = ["true"]
       @search_array << "groups.name LIKE '%#{@name}%'" unless @name.blank? 
       @search_string = @search_array.join(" AND ")
@@ -168,20 +126,11 @@ class GroupsController < ApplicationController
     # Loads all years. Loads the last selected year
     def load_all_years
       @all_years = FiscalYear.order(:year)
-      if cookies[:year].blank?
-        @year = @current_fiscal_year
-      else
-        @year = FiscalYear.find_by_year(cookies[:year])
-      end
+      @year = FiscalYear.find_by_year(cookies[:year])
+      @year = @current_fiscal_year if @year.blank?
     end
     
     
-    # Loads an employee based on given parameters
-    def load_employee
-      @employee = Employee.find(params[:employee][:id])
-    end
-
-
     # Loads all employees for the given year
     def load_employees_for_year
       @employees = @group.employees.joins(:employee_allocations).where(

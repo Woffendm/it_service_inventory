@@ -65,8 +65,8 @@ class Group < ActiveRecord::Base
   
   # Returns a table of services that the employees of the group have. The table is sorted by the
   # services' names, and does not contain duplicates. 
-  def services(year = 0)
-    if year == 0
+  def services(year = nil)
+    if year.blank?
       Service.joins(:employees => :groups).where(:groups => {:id => self.id}).uniq.order(:name)
     else
       Service.joins(:employees => :groups).where(:groups => {:id => self.id},

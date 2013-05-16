@@ -10,6 +10,9 @@ class EmployeeProduct < ActiveRecord::Base
   belongs_to :product
   belongs_to :fiscal_year
   validates_presence_of :employee_id, :product_id, :fiscal_year_id
+  validates_uniqueness_of :employee_id, :scope => [:fiscal_year_id, :product_id]
+  validates_uniqueness_of :product_id, :scope => [:fiscal_year_id, :employee_id]
+  validates_uniqueness_of :fiscal_year_id, :scope => [:employee_id, :product_id]
   delegate :name, :to => :product
 
 
