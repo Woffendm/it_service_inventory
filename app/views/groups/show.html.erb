@@ -239,14 +239,12 @@
           </thead>
         </table>
         <div class="accordion" id="accordion">
-          <% count = 0 %>
           <% @portfolios.each_with_index do |portfolio, index| %>
             <% next if @portfolio_allocations[index][0].to_f == 0 %>
-            <% count+=1 %>
             <div class="accordion-group">
               <table class="table">
                 <tbody>
-                  <tr class="striped-<%=count%2%>">
+                  <tr class="striped-<%=index%2%>">
                     <td>
                       <%= portfolio[0].name %>
                     </td>

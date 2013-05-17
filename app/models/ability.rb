@@ -33,7 +33,7 @@ class Ability
       else
         admin_groups = Group.joins(:employee_groups).where(
                       :employee_groups => {:employee_id => user.id, :group_admin => true}
-                      ).includes(:portolios, :products, :employees => :employee_groups)
+                      ).includes(:portfolios, :products, :employees => :employee_groups)
         unless admin_groups.blank? 
           can :update, Group, :id => admin_groups.pluck(:id)
           can :create, Employee
