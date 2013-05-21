@@ -846,9 +846,15 @@ caption {
   padding-bottom: 10px;
 }
 
+.popover {
+  min-width: 200px;
+  max-width: 375px; 
+  word-wrap: break-word;
+}
 
-
-
+.modal-body {
+  min-height: 100px;
+}
 
 
 

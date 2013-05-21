@@ -186,7 +186,8 @@ class GroupsController < ApplicationController
         product_allocations.each do |product_allocation|
           portfolio_allocation += product_allocation.to_f
         end
-        @portfolio_allocations << ["#{portfolio_allocation} " + t(:fte), product_allocations]
+        @portfolio_allocations << ["#{portfolio_allocation.round(@allocation_precision)} " +
+            t(:fte), product_allocations]
       end
     end
     
