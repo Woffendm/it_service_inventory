@@ -1,17 +1,18 @@
-<a class="btn btn-small" data-toggle="modal" data-target="#modal_content" href="#">
+<a class="btn btn-small" data-toggle="modal" data-target="#modal-content" href="#">
   <i class="icon-plus"></i>
   <%= "#{t(:add)} #{t(:site_admin)}" %>
 </a>
 
 
 
-<div class="modal hide fade" id="modal_content">
+<div class="modal hide fade" id="modal-content">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <%= t(:new) + " " + t(:site_admin) %>
+    <h4> <%= t(:new) + " " + t(:site_admin) %> </h4>
   </div>
   <%= form_tag("add_admin", :method => "post") do %>
-    <div class="modal-body">
+    <div class="modal-body form-inline">
+      <%= label_tag :employee_id, t(:employee) %>
       <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
                            {:include_blank => "-" + t(:select) + t(:employee) + "-"},
                            {:class => "autocomplete large-select"}) %>

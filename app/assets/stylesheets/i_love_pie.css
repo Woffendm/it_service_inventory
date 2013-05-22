@@ -856,6 +856,22 @@ caption {
   min-height: 100px;
 }
 
+.modal-header {
+  background-color: #D44413;
+  border-radius: 5px 5px 0 0;
+  color: #fff;
+}
+
+.modal h4{
+  line-height: 30px;
+  margin: 0px;
+}
+
+.modal-footer{
+  padding: 10px 15px;
+}
+
+
 
 
 

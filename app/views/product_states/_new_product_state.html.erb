@@ -1,10 +1,23 @@
-<div class="form-inline light-border" id="modal_content">
+<a class="btn btn-small" data-toggle="modal" data-target="#modal-content" href="#">
+  <i class="icon-plus"></i>
+  <%= "#{t(:new)} #{t(:product_state)}" %>
+</a>
+
+
+
+<div class="modal hide fade" id="modal-content">
+  <div class="modal-header">
+    <button state="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4> <%= "#{t(:new)} #{t(:product_state)}" %> </h4>
+  </div>
   <%= form_for new_product_state do |form| %>
-    <%= form.label :name, t(:name) %>
-    <%= form.text_field :name %>
-    <%= form.submit  t(:create) + t(:product_state) %>
+    <div class="modal-body form-inline">
+      <%= form.label :name, t(:name) %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <%= form.submit  t(:create), :class => "btn btn-success" %>
+    </div>
   <% end %>
 </div>
-<script type="text/javascript">
-  var modalTitle = "<%= t(:new_product_state) %>";
-</script>

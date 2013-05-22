@@ -1,17 +1,10 @@
 <%= render :partial => "/shared/app_settings_tabs" %>
 
 
-<%= render  :partial => "/product_states/new_product_state", 
-            :locals => {:new_product_state => @new_product_state} %>
-
-
-
 <h3>
   <%= t(:product_states) %>
-  <a class="modal_trigger" href="#">
-    <i class="icon-plus"></i>
-    <%= "#{t(:new)} #{t(:product_state)}" %>
-  </a>
+  <%= render  :partial => "/product_states/new_product_state", 
+              :locals => {:new_product_state => @new_product_state} %>
 </h3>
 
 
@@ -30,14 +23,12 @@
       <% @product_states.each_with_index do |product_state, index| %>
         <tr>
           <td> 
-            <%= link_to "#{content_tag :em, '', :class => ''}
-                         #{product_state.name}".html_safe, "#", :class => "modal_trigger_2" %>
             <%= render  :partial => "/product_states/edit_product_state", 
                         :locals => {:product_state => product_state, :index => index } %>
           </td>
           <td> 
             <%= link_to t(:delete), product_state_path(product_state.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion) %>
+                        :confirm => t(:confirm_deletion), :class => "btn btn-danger btn-small" %>
           </td>
         </tr>  
       <% end %>

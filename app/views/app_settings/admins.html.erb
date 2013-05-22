@@ -26,7 +26,7 @@
             <% if admin != @current_user %>
               <%= form_tag("remove_admin", :method => "post", :class => "prevent_double_submit") do %>
                 <%= hidden_field_tag(:employee, admin.id) %>
-                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal), :class => "btn btn-danger" %>
+                <%= submit_tag  t(:remove), :confirm => t(:confirm_removal), :class => "btn btn-danger btn-small" %>
               <% end %>
             <% end %>
           </td>

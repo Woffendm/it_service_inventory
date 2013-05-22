@@ -1,10 +1,23 @@
-<div class="form-inline light-border modal_content_2" id="modal_content_<%=index%>">
+<a data-toggle="modal" data-target="#modal-content-<%= index %>" href="#">
+  <%= product_state.name %>
+</a>
+
+
+
+
+<div class="modal hide fade" id="modal-content-<%= index %>">
+  <div class="modal-header">
+    <button state="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4> <%= "#{t(:edit)} #{t(:product_state)}" %> </h4>
+  </div>
   <%= form_for product_state do |form| %>
-    <%= form.label :name, t(:name) %>
-    <%= form.text_field :name %>
-    <%= form.submit  t(:update) + t(:product_state) %>
+    <div class="modal-body form-inline">
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <%= form.submit  t(:update), :class => "btn btn-success" %>
+    </div>
   <% end %>
 </div>
-<script type="text/javascript">
-  var modalTitle2 = "<%= t(:edit) + t(:product_state) %>";
-</script>
