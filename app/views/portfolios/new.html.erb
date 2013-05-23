@@ -1,12 +1,15 @@
-<h2> 
-  <%= t(:new) + t(:portfolio) %>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-              Cancel creation".html_safe, edit_group_path(@group.id) %> 
-</h2>
+<div class="span12">
+  <h2> 
+    <%= t(:new) + t(:portfolio) %>
+    <%= link_to "#{content_tag :em, '', :class => ''}
+                Cancel creation".html_safe, edit_group_path(@group.id) %> 
+  </h2>
+</div>
 
 
 
-<div class="span6">
+
+<div class="span5">
   <div class="widget stacked">
     <div class="widget-header">
       <h3> Assign a global portfolio to <%= @group.name %> </h3>
@@ -27,7 +30,7 @@
 
 
 
-<div class="span6">
+<div class="span5">
   <div class="widget stacked">
     <div class="widget-header">
       <h3> Create a new portfolio for <%= @group.name %> </h3>

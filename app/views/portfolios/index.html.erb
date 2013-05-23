@@ -24,10 +24,6 @@
 
 
 <% unless @portfolio_names.blank? %>
-  <div>
-    <%= sort_column(t(:name), request.fullpath, nil, 'portfolio_names.name', @order, @ascending) %> 
-  </div>
-
   <% @portfolio_names.each_with_index do |portfolio_name, index| %>
     <div class="half1">
       <div class="accordion" id="accordion">
@@ -53,7 +49,7 @@
                       <%= link_to product.name, product_path(product.id) %>
                     </td>
                     <td>
-                      <% portfolio_name.groups_for_product(product).each do |group| %>
+                      <% product.groups.each do |group| %>
                         <span class="thing3">
                           <%= link_to group.name, group_path(group.id) %>
                         </span>
