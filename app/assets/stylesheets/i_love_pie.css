@@ -54,9 +54,6 @@
   z-index: 100000;
 }
 
-textarea {
-  width: 400px;
-}
 
 form {
   margin: 0;
@@ -323,50 +320,6 @@ h3 > a {
   color: white;
 }
 
-.navbar .btn-navbar {
-    float: left;
-}
-
-.tab-content > .active, .pill-content > .active {
-  padding-bottom: 10px;
-}
-
-
-.tabs-right > .nav-tabs{
-  margin-left: 0px;
-}
-
-.year-content{
-  border-right: 1px solid #DDDDDD;
-  padding-right: 15px;
-  min-height: 200px;
-  overflow: auto;
-}
-
-.tabs-right .active > a {
-  background: #444;
-  color: #fff;
-}
-
-.tabs-right > .nav-tabs > li > a:hover {
-  background: #777;
-  color: #fff;
-}
-
-.tabs-right > .nav-tabs > li {
-  text-align: left;
-}
-
-.tabs-right > .nav-tabs > li a{
-  font-size: 1.4em;
-  padding-left: 30px;
-}
-
-.tabs-right > .nav-tabs > li:first-child {
-  font-weight: bold;
-  margin: 1px;
-  padding-left: 15px;
-}
 
 .tiny-select {
   height: 22px;
@@ -871,6 +824,65 @@ caption {
   padding: 10px 15px;
 }
 
+textarea {
+  height: 120px;
+}
+
+.tab-content > .active, .pill-content > .active {
+  padding-bottom: 10px;
+}
+
+
+.tabs-right > .nav-tabs{
+  margin-left: 0px;
+}
+
+.tabs-right .active > a {
+  background: #A5360F;
+  color: #fff;
+}
+
+.tabs-right > .nav-tabs > li > a:hover {
+  background: #D44413;
+  color: #fff;
+}
+
+.tabs-right > .nav-tabs > li {
+  text-align: left;
+}
+
+.tabs-right > .nav-tabs > li a{
+  font-size: 1.4em;
+  padding-left: 30px;
+}
+
+.tabs-right > .nav-tabs > li:first-child {
+  font-weight: bold;
+  margin: 1px;
+  padding-left: 15px;
+}
+
+.year-content{
+  overflow: visible;
+  display: inline-block;
+  width: 87%;
+  padding: 0px;
+  min-height: 0px;
+  border-right: none;
+}
+
+.uncollapsed-buttons {
+  display: inline-block;
+  vertical-align: 10%;
+}
+
+.uncollapsed-buttons a{
+  margin-left: 15px;
+}
+
+a > i{
+  margin-right: 3px;
+}
 
 
 
@@ -883,10 +895,18 @@ caption {
   #login-collapse{
     display: none;
   }
+  
+  .collapsed-buttons {
+    display: none;
+  }
 }
 
 @media (max-width:490px) {
   #login{
+    display: none;
+  }
+  
+  .uncollapsed-buttons {
     display: none;
   }
 }

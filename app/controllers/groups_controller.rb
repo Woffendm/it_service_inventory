@@ -26,7 +26,7 @@ class GroupsController < ApplicationController
 
   # List of all groups
   def index
-    @group = Group.new
+    @new_group = Group.new
     @groups = filter_groups(params[:search])
     @groups = sort_results(params, @groups)
     @groups = @groups.paginate(:page => params[:page], :per_page => session[:results_per_page])

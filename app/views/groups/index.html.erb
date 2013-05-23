@@ -1,14 +1,13 @@
-<h2> 
-  <%= t(:groups) %> 
-  <% if can? :create, Group %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
-                 #{t(:new_group)}".html_safe, "#", :class => "modal_trigger" %>
-  <% end %>
-</h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> 
+      <%= t(:groups) %> 
+      <%= render  :partial => "/groups/new_group", 
+                  :locals => {:new_group => @new_group} %>
+    </h2>
+  </div>
+</div>
 
-
-<%= render  :partial => "/groups/new_group", 
-            :locals => {:@group => @group} %>
 
 
 <fieldset class="light-border">

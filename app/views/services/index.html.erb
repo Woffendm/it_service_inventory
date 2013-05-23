@@ -1,14 +1,13 @@
-<h2> 
-  <%= t(:services) %> 
-  <% if can? :create, Service %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
-                 #{t(:new_service)}".html_safe, "#", :class => "modal_trigger" %>
-  <% end %>
-</h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> 
+      <%= t(:services) %> 
+      <%= render  :partial => "/services/new_service", 
+                  :locals => {:new_service => @new_service} %>
+    </h2>
+  </div>
+</div>
 
-
-<%= render  :partial => "/services/new_service", 
-            :locals => {:@service => @service} %>
 
 
 <fieldset class="light-border">

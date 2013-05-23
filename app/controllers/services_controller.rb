@@ -24,7 +24,7 @@ class ServicesController < ApplicationController
     @services = sort_results(params, @services)
     @services = @services.paginate(:page => params[:page], 
                 :per_page => session[:results_per_page])
-    @service = Service.new
+    @new_service = Service.new
   end
   
   
