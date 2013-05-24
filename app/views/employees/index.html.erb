@@ -1,14 +1,12 @@
 <div class="view-header">
   <div class="view-header-inner">
-    <h2> 
-      <%= t(:employees) %> 
-      <% if can? :create, Employee %>
-        <a class="btn btn-small" href="<%= employees_search_ldap_view_path %>">
-          <i class="icon-plus"></i>
-          <%= "#{t(:new)} #{t(:employee)}" %>
-        </a>
-      <% end %>
-    </h2>
+    <h2> <%= t(:employees) %> </h2>
+    <% if can? :create, Employee %>
+      <a class="btn btn-small" href="<%= employees_search_ldap_view_path %>">
+        <i class="icon-plus"></i>
+        <%= "#{t(:new)} #{t(:employee)}" %>
+      </a>
+    <% end %>
   </div>
 </div>
 

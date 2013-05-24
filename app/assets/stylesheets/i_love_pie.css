@@ -871,19 +871,19 @@ textarea {
   border-right: none;
 }
 
-.uncollapsed-buttons {
+.view-header-inner > a, .view-header-inner > div > a{
+  margin-left: 15px;
   display: inline-block;
   vertical-align: 10%;
-}
-
-.uncollapsed-buttons a{
-  margin-left: 15px;
 }
 
 a > i{
   margin-right: 3px;
 }
 
+.modal-body, .modal-footer {
+  font-weight: normal;
+}
 
 
 

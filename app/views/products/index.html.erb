@@ -1,10 +1,8 @@
 <div class="view-header">
   <div class="view-header-inner">
-    <h2> 
-      <%= t(:products) %> 
-      <%= render  :partial => "/products/new_product", 
-                  :locals => {:new_product => @new_product} %>
-    </h2>
+    <h2> <%= t(:products) %> </h2>
+    <%= render  :partial => "/products/new_product", 
+                :locals => {:new_product => @new_product} %>
   </div>
 </div>
 
@@ -15,10 +13,10 @@
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => "-All Product Names-" %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
-                          :selected => @group}, {:class => "autocomplete large-select"}) %>
+                         {:include_blank => t(:all_groups), :selected => @group}, 
+                         {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_priority, @product_priorities, :id, :name, 
-                         {:include_blank => "-" + t(:all_product_priorities) + "-",
+                         {:include_blank => t(:all_product_priorities),
                           :selected => @product_priority}, 
                          {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_state, @product_states, :id, :name, 
