@@ -884,10 +884,8 @@ a > i{
 }
 
 .modal-body, .modal-footer {
-  font-weight: normal;
+  font-weight: normal;  
 }
-
-
 
 
 
@@ -910,6 +908,14 @@ a > i{
   
   .uncollapsed-buttons {
     display: none;
+  }
+  
+  .modal-body {
+    max-height: 180px;
+  }
+  
+  textarea {
+    height: 80px;
   }
 }
 
