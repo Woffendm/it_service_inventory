@@ -85,6 +85,8 @@ class Employee < ActiveRecord::Base
 
   # Returns the employee's full name, in the format "lastname, firstname"
   def full_name
-    return "#{name_last}, #{name_first}"
+    full_name = "#{name_last}, #{name_first}"
+    full_name += " (#{I18n.t :inactive})" unless active
+    return full_name
   end
 end

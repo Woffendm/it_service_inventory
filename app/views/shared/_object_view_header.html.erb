@@ -32,6 +32,23 @@
           </li>
         <% end %>
         <% if can? :destroy, object %>
+          <% if object.respond_to?(:active) %>
+            <li>
+              <% if object.active %>
+                <a data-confirm="<%= t(:confirm_deactivation) %>" data-method="post" 
+                    href="<%= toggle_active_employee_path(object.id) %>">
+                  <i class="icon-lock"></i>
+                  <%= t(:deactivate) %>
+                </a>
+              <% else %>
+                <a data-confirm="<%= t(:confirm_activation) %>" data-method="post" 
+                    href="<%= toggle_active_employee_path(object.id) %>">
+                  <i class="icon-ok"></i>
+                  <%= t(:activate) %>
+                </a>
+              <% end %>
+            </li>
+          <% end %>
           <li>
             <a  data-method="delete" data-confirm="<%= t(:confirm_deletion) %>" 
                 href="<%= url_for(object) %>">
@@ -57,11 +74,28 @@
           <%= t(:edit) %>
         </a>
       <% end %>
-      <a class="btn btn-danger btn-small" data-method="delete" 
-          data-confirm="<%= t(:confirm_deletion) %>" href="<%= url_for(object) %>">
-        <i class="icon-trash icon-white"></i>
-        <%= t(:delete) %>
-      </a>
+      <% if can? :destroy, object %>
+        <% if object.respond_to?(:active) %>
+          <% if object.active %>
+            <a class="btn btn-danger btn-small" data-confirm="<%= t(:confirm_deactivation) %>" 
+                data-method="post" href="<%= toggle_active_employee_path(object.id) %>">
+              <i class="icon-lock icon-white"></i>
+              <%= t(:deactivate) %>
+            </a>
+          <% else %>
+            <a class="btn btn-success btn-small" data-confirm="<%= t(:confirm_activation) %>" 
+                data-method="post" href="<%= toggle_active_employee_path(object.id) %>">
+              <i class="icon-ok icon-white"></i>
+              <%= t(:activate) %>
+            </a>
+          <% end %>
+        <% end %>
+        <a class="btn btn-danger btn-small" data-method="delete" 
+            data-confirm="<%= t(:confirm_deletion) %>" href="<%= url_for(object) %>">
+          <i class="icon-trash icon-white"></i>
+          <%= t(:delete) %>
+        </a>
+      <% end %>
     </div>
     
     
