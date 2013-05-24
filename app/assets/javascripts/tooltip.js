@@ -10,11 +10,17 @@ $(document).ready(function(){
   var tooltip_contents = $(".tooltip");
   
   
+   tooltip_triggers.each(function(e) {
+   var index = tooltip_triggers.index(this);
+   tooltip_contents[index].setAttribute("id", "tooltip-content-" + index);
+   });
+  
+  
   $(".tooltip_trigger").popover({
     html: true,
     trigger: 'hover',
     content: function() {
       return $("#tooltip-content-" + tooltip_triggers.index(this)).html();
     }
-  })
+  });
 });

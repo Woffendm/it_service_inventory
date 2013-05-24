@@ -5,7 +5,7 @@
       <span id="group_select_div">
         <%= label_tag :group_id, t(:group)%>
         <%= collection_select(:group, :id, @groups, :id, :name, 
-                             {:include_blank => '-' + t(:all_groups) + '-'}, 
+                             {:include_blank => t(:all_groups) }, 
                              {:class => "autocomplete large-select"}) %>
       </span>
     </span>
@@ -13,7 +13,7 @@
       <span id="service_select_div">
         <%= label_tag :service_id, t(:service)%>
         <%= collection_select(:service, :id, @services, :id, :name,  
-                             {:include_blank => '-' + t(:all_services) + '-'}, 
+                             {:include_blank => t(:all_services) }, 
                              {:class => "autocomplete large-select"}) %>
       </span>
     </span>
