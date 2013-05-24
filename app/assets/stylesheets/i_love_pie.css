@@ -689,6 +689,28 @@ body{
     position: absolute;
 }
 
+html, body{
+  height: 100%;
+  padding: 0px;
+}
+
+/*
+*  This is used to stop the scroll bar from moving the page's contents.
+*/
+
+html, body {
+  /* overflow-y: scroll; */
+  padding-bottom: 1px;
+}
+
+
+
+
+
+
+
+
+
 .current_page {
   background-color: #A5360F;
 }
@@ -698,13 +720,6 @@ body{
 .brand > a:hover,
 .brand > a:focus {
   text-decoration: none;
-}
-
-
-
-html, body{
-  height: 100%;
-  padding: 0px;
 }
 
 
@@ -822,14 +837,29 @@ caption {
   padding: 10px 15px;
 }
 
+.modal-body, .modal-footer {
+  font-weight: normal;  
+}
+
+.modal-body input, .modal-body select, .modal-body div, .modal-body textarea {
+  margin-bottom: 5px;
+}
+
 textarea {
   height: 120px;
+}
+
+.select2 {
+  width: 206px;
+}
+
+.select {
+  width: 200px;
 }
 
 .tab-content > .active, .pill-content > .active {
   padding-bottom: 10px;
 }
-
 
 .tabs-right > .nav-tabs{
   margin-left: 0px;
@@ -883,13 +913,6 @@ a > i{
   margin-right: 3px;
 }
 
-.modal-body, .modal-footer {
-  font-weight: normal;  
-}
-
-.modal-body input, .modal-body select, .modal-body div, .modal-body textarea {
-  margin-bottom: 5px;
-}
 
 
 
