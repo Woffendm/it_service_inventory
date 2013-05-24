@@ -1,10 +1,8 @@
 <div class="view-header">
   <div class="view-header-inner">
-    <h2> 
-      <%= t(:groups) %> 
-      <%= render  :partial => "/groups/new_group", 
-                  :locals => {:new_group => @new_group} %>
-    </h2>
+    <h2> <%= t(:groups) %> </h2>
+    <%= render  :partial => "/groups/new_group", 
+                :locals => {:new_group => @new_group} %>
   </div>
 </div>
 
@@ -13,7 +11,7 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(groups_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Group Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => t(:group) + t(:name) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>

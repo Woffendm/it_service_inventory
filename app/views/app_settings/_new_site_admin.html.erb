@@ -14,7 +14,7 @@
     <div class="modal-body form-inline">
       <%= label_tag :employee_id, t(:employee) %>
       <%= collection_select(:employee, :id, @not_admins, :id, :full_name,
-                           {:include_blank => "-" + t(:select) + t(:employee) + "-"},
+                           {:include_blank => t(:select) + t(:employee)},
                            {:class => "autocomplete large-select"}) %>
     </div>
     <div class="modal-footer">

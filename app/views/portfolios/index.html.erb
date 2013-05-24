@@ -7,12 +7,12 @@
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[portfolio_name]", @portfolio_name, 
-                          :placeholder => "-All Portfolio Names-" %>
+                          :placeholder => t(:portfolio) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
+                         {:include_blank =>   t(:all_groups),
                           :selected => @group}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product, @products, :id, :name, 
-                         {:include_blank => "-" + t(:all_products) + "-",
+                         {:include_blank =>   t(:all_products),
                           :selected => @product}, {:class => "autocomplete large-select"}) %>
     <%= select(:search, :global, [[t(:global), true], [t(:local), false]],
                          {:include_blank => "-#{t(:global)} / #{t(:local)}-",

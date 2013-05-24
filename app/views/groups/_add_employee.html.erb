@@ -18,7 +18,7 @@
         <%= form.label :employee_id, t(:name) %>
         <%= form.select(:employee_id, options_from_collection_for_select(
                         @possible_employees, :id, :full_name),
-                        {:include_blank => "-" + t(:select) + t(:employee) + "-"}, 
+                        {:include_blank => t(:select) + t(:employee)}, 
                         {:class => "autocomplete large-select"}) %> 
       </v>
       <div class="modal-footer">

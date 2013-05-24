@@ -14,15 +14,15 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Employee Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => t(:employee) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
+                         {:include_blank =>   t(:all_groups),
                           :selected => @group}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :service, @services, :id, :name, 
-                         {:include_blank => "-" + t(:all_services) + "-",
+                         {:include_blank =>   t(:all_services),
                           :selected => @service}, {:class => "autocomplete large-select"}) %>
     <%= select(:search, :active, [[t(:active), true], [t(:inactive), false]],
-                         {:include_blank => "-#{t(:active)} / #{t(:inactive)}-",
+                         {:include_blank => "#{t(:active)} / #{t(:inactive)}",
                           :selected => @active}) if can? :destroy, Employee %>
     <%= submit_tag t(:search) %>
   <% end %>

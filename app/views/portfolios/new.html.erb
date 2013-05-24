@@ -19,7 +19,7 @@
         <%= form.label :portfolio_name_id, t(:name) %>
         <%= form.select(:portfolio_name_id, options_from_collection_for_select(
                         @portfolio_names, :id, :name),
-                        {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                        {:include_blank => t(:select) + t(:name)}, 
                         {:class => "autocomplete large-select"}) %>
         <%= form.hidden_field :group_id, :value => @group.id %>
         <%= form.submit t(:create) %>

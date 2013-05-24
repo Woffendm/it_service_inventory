@@ -805,9 +805,7 @@ caption {
   word-wrap: break-word;
 }
 
-.modal-body {
-  min-height: 100px;
-}
+
 
 .modal-header {
   background-color: #D44413;
@@ -875,6 +873,10 @@ textarea {
   margin-left: 15px;
   display: inline-block;
   vertical-align: 10%;
+}
+
+.uncollapsed-buttons, .collapsed-buttons{
+  display: inline;
 }
 
 a > i{
