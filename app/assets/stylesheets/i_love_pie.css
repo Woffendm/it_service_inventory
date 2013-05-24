@@ -887,6 +887,13 @@ a > i{
   font-weight: normal;  
 }
 
+.modal-body input, .modal-body select, .modal-body div, .modal-body textarea {
+  margin-bottom: 5px;
+}
+
+
+
+
 
 
 
@@ -914,8 +921,16 @@ a > i{
     max-height: 180px;
   }
   
+  .modal-body, .modal-header, .modal-footer {
+    padding: 5px 15px; 
+  }
+  
   textarea {
     height: 80px;
+  }
+  
+  .modal-body input, .modal-body select, .modal-body div, .modal-body textarea {
+    margin-bottom: 0px;
   }
 }
 
