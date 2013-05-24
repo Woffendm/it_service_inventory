@@ -10,26 +10,11 @@ $(document).ready(function(){
   var tooltip_contents = $(".tooltip");
   
   
-  tooltip_triggers.each(function(e) {
-    var index = tooltip_triggers.index(this);
-    tooltip_contents[index].setAttribute("id", "tooltip-content-" + index);
-  });
-  
-  
   $(".tooltip_trigger").popover({
     html: true,
+    trigger: 'hover',
     content: function() {
       return $("#tooltip-content-" + tooltip_triggers.index(this)).html();
     }
-  }).on('click', function(e) {
-    e.stopPropagation();
-  });
-});
-
-
-// Allows users to close all popovers by clicking anywhere on the screen
-$(document).on('click', function(e) {
-  $('.tooltip_trigger').each(function() {
-       $(this).popover('hide');
-   });
+  })
 });
