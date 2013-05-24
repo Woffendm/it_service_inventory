@@ -79,6 +79,7 @@ class EmployeesController < ApplicationController
   # Sets the specified employee's 'active' field to false. Inactive no longer appear in lists for
   # creating new associations, but all their existing associations are preserved.
   def toggle_active
+    referring_page = request.referer
     authorize! :destroy, @employee
     if @employee.active
       @employee.active = false
@@ -88,7 +89,11 @@ class EmployeesController < ApplicationController
       flash[:notice] = t(:employee) + "Activated"
     end
     @employee.save
-    redirect_to employees_path
+    unless referring_page.blank?
+      redirect_to referring_page
+    else
+      redirect_to pages_home_path
+    end
   end
 
 
