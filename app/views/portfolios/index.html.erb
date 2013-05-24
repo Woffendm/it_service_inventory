@@ -15,7 +15,7 @@
                          {:include_blank =>   t(:all_products),
                           :selected => @product}, {:class => "autocomplete large-select"}) %>
     <%= select(:search, :global, [[t(:global), true], [t(:local), false]],
-                         {:include_blank => "-#{t(:global)} / #{t(:local)}-",
+                         {:include_blank => "#{t(:global)} / #{t(:local)}",
                           :selected => @global}) %>
     <%= submit_tag t(:search) %>
   <% end %>
