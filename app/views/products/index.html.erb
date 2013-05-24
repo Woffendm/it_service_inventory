@@ -1,32 +1,29 @@
-<h2> 
-  <%= t(:products) %> 
-  <% if can? :create, Product %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
-                 #{t(:new_product)}".html_safe, "#", :class => "modal_trigger" %>
-  <% end %>
-</h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:products) %> </h2>
+    <%= render  :partial => "/products/new_product", 
+                :locals => {:new_product => @new_product} %>
+  </div>
+</div>
 
-
-<%= render  :partial => "/products/new_product", 
-            :locals => {:@product => @product, :@groups => @groups} %>
 
 
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Product Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => t(:product) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
-                          :selected => @group}, {:class => "autocomplete large-select"}) %>
+                         {:include_blank => t(:all_groups), :selected => @group}, 
+                         {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_priority, @product_priorities, :id, :name, 
-                         {:include_blank => "-" + t(:all_product_priorities) + "-",
+                         {:include_blank => t(:all_product_priorities),
                           :selected => @product_priority}, 
                          {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_state, @product_states, :id, :name, 
-                         {:include_blank => "-" + t(:all_product_states) + "-",
+                         {:include_blank => t(:all_product_states),
                           :selected => @product_state}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :product_type, @product_types, :id, :name, 
-                         {:include_blank => "-" + t(:all_product_types) + "-",
+                         {:include_blank => t(:all_product_types),
                           :selected => @product_type}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>

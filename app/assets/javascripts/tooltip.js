@@ -21,5 +21,15 @@ $(document).ready(function(){
     content: function() {
       return $("#tooltip-content-" + tooltip_triggers.index(this)).html();
     }
+  }).on('click', function(e) {
+    e.stopPropagation();
   });
+});
+
+
+// Allows users to close all popovers by clicking anywhere on the screen
+$(document).on('click', function(e) {
+  $('.tooltip_trigger').each(function() {
+       $(this).popover('hide');
+   });
 });

@@ -9,7 +9,8 @@
     </h2>
     
     
-    <div class="btn-group">
+    
+    <div class="btn-group collapsed-buttons">
       <a class="btn  dropdown-toggle" data-toggle="dropdown" href="#">
         <i class="icon-wrench "></i>
         <b class="caret"></b>
@@ -41,5 +42,28 @@
         <% end %>
       </ul>
     </div>
+    
+    
+
+    <div class="uncollapsed-buttons">
+      <% if ct(url_for(object)).blank? %>
+        <a href="<%= url_for(object) %>" class="btn btn-small">
+          <i class="icon-eye-open"></i>
+          <%= t(:show) %>
+        </a>
+      <% elsif can? :edit, object %>
+        <a href="<%= url_for(object) + "/edit" %>" class="btn btn-small">
+          <i class="icon-edit"></i>
+          <%= t(:edit) %>
+        </a>
+      <% end %>
+      <a class="btn btn-danger btn-small" data-method="delete" 
+          data-confirm="<%= t(:confirm_deletion) %>" href="<%= url_for(object) %>">
+        <i class="icon-trash icon-white"></i>
+        <%= t(:delete) %>
+      </a>
+    </div>
+    
+    
   </div>
 </div>

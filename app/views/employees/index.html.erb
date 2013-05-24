@@ -1,24 +1,28 @@
-<h2> 
-  <%= t(:employees) %> 
-  <% if can? :create, Employee %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
-                 #{t(:new_employee)}".html_safe, employees_search_ldap_view_path %>
-  <% end %>
-</h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:employees) %> </h2>
+    <% if can? :create, Employee %>
+      <a class="btn btn-small" href="<%= employees_search_ldap_view_path %>">
+        <i class="icon-plus"></i>
+        <%= "#{t(:new)} #{t(:employee)}" %>
+      </a>
+    <% end %>
+  </div>
+</div>
 
 
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Employee Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => t(:employee) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
+                         {:include_blank =>   t(:all_groups),
                           :selected => @group}, {:class => "autocomplete large-select"}) %>
     <%= collection_select(:search, :service, @services, :id, :name, 
-                         {:include_blank => "-" + t(:all_services) + "-",
+                         {:include_blank =>   t(:all_services),
                           :selected => @service}, {:class => "autocomplete large-select"}) %>
     <%= select(:search, :active, [[t(:active), true], [t(:inactive), false]],
-                         {:include_blank => "-#{t(:active)} / #{t(:inactive)}-",
+                         {:include_blank => "#{t(:active)} / #{t(:inactive)}",
                           :selected => @active}) if can? :destroy, Employee %>
     <%= submit_tag t(:search) %>
   <% end %>

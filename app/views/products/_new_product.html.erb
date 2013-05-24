@@ -1,104 +1,58 @@
-<% if can? :create, Product %>
-  <div class="form-horizontal" id="modal_content">
-    <%= form_for @product do |product_form| %>
-      <%= fields_for @product do |form| %>
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :name, t(:name) %>
-          </span>
-          <span class="controls">
-            <%= form.text_field :name %>
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :description, t(:description) %> 
-          </span>
-          <span class="controls">
-            <%= form.text_area :description, :maxlength => 1000, :rows => 4, :cols => 100 %>
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :url, "URL" %>
-          </span>
-          <span class="controls">
-            <%= form.text_field :url %>
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :product_priority_id, t(:product_priority) %> 
-          </span>
-          <span class="controls">
-            <%= form.select(:product_priority_id,
-                            options_from_collection_for_select(@product_priorities, :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:priority) + "-"}, 
-                           {:class => "autocomplete large-select"}) %> 
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :product_state_id, t(:product_state) %> 
-          </span>
-          <span class="controls">
-            <%= form.select(:product_state_id, options_from_collection_for_select(@product_states, 
-                            :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:product_state) + "-"}, 
-                           {:class => "autocomplete large-select"}) %> 
-          </span>
-        </div>
-        
-        <div class="control-group">
-          <span class="control-label">
-            <%= form.label :product_type_id, t(:product_type) %> 
-          </span>
-          <span class="controls">
-            <%= form.select(:product_type_id, options_from_collection_for_select(@product_types, 
-                            :id, :name),  
-                           {:include_blank => "-" + t(:select) + t(:product_type) + "-"}, 
-                           {:class => "autocomplete large-select"}) %> 
-          </span>
-        </div>
-      <% end %>
-      
-      <%= fields_for 'product_groups' do |form| %>  
-        <% if can? :manage, :all %>
-          <div class="control-group">
-            <span class="control-label">
-              <%= form.label :group_id, t(:group) %>
-            </span>
-            <span class="controls">
-              <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name),  
-                             {:include_blank => "-" + t(:select) + t(:group) + "-"}, 
-                             {:class => "autocomplete large-select"}) %> 
-            </span>
-          </div>
-        <% else %>
-          <div class="control-group">
-            <span class="control-label">
-              <%= form.label :group_id, t(:group) %>
-            </span>
-            <span class="controls">
-              <%= @current_user.groups.first.name %>
-              <%= form.hidden_field :group_id, :value => @current_user.groups.first.id  %>
-            </span>
-          </div>
+<% if can? :create, Service %>
+  <a class="btn btn-small" data-toggle="modal" data-target="#modal-content" href="#">
+    <i class="icon-plus"></i>
+    <%= "#{t(:new)} #{t(:product)}" %>
+  </a>
+  
+  
+  
+  <div class="modal hide fade" id="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h4> <%= "#{t(:new)} #{t(:product)}" %> </h4>
+    </div>
+    <%= form_for @new_product do |product_form| %>
+      <div class="modal-body form-inline">
+        <%= fields_for @new_product do |form| %>
+          <%= form.label :name, t(:name) %>
+          <%= form.text_field :name %>
+          <br/>
+          <%= form.label :description, t(:description) %> 
+          <%= form.text_area :description %>
+          <br/>
+          <%= form.label :url, "URL" %>
+          <%= form.text_field :url %>
+          <br/>
+          <%= form.label :product_priority_id, t(:product_priority) %> 
+          <%= form.select(:product_priority_id,
+                          options_from_collection_for_select(@product_priorities, :id, :name),  
+                         {:include_blank => t(:select) + t(:priority)}, 
+                         {:class => "autocomplete "}) %> 
+          <br/>
+          <%= form.label :product_state_id, t(:product_state) %> 
+          <%= form.select(:product_state_id, options_from_collection_for_select(@product_states, 
+                          :id, :name),  
+                         {:include_blank => t(:select) + t(:product_state)}, 
+                         {:class => "autocomplete large-select"}) %> 
+          <br/>
+          <%= form.label :product_type_id, t(:product_type) %> 
+          <%= form.select(:product_type_id, options_from_collection_for_select(@product_types, 
+                          :id, :name),  
+                         {:include_blank => t(:select) + t(:product_type)}, 
+                         {:class => "autocomplete large-select"}) %>
         <% end %>
-      <% end %>
-        
-      <div class="control-group">
-        <span class="control-label">
-          <%= product_form.submit  t(:create) + t(:product) %>
-        </span>
+        <br/>
+        <%= fields_for 'product_groups' do |form| %>  
+          <%= form.label :group_id, t(:group) %>
+          <%= form.select(:group_id, options_from_collection_for_select(@groups, :id, :name),  
+                               {:include_blank => t(:select) + t(:group)}, 
+                               {:class => "autocomplete large-select"}) %> 
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" aria-hidden="true"> <%= t(:cancel) %> </a>
+        <%= product_form.submit  t(:create), :class => "btn btn-success" %>
       </div>
     <% end %>
   </div>
-  <script type="text/javascript">
-    var modalTitle = "<%= t(:new_product) %>";
-  </script>
 <% end %>

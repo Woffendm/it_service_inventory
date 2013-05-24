@@ -1,23 +1,20 @@
-<h2> 
-  <%= t(:services) %> 
-  <% if can? :create, Service %>
-    <%= link_to "#{content_tag :em, '', :class => 'icon-plus'}
-                 #{t(:new_service)}".html_safe, "#", :class => "modal_trigger" %>
-  <% end %>
-</h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:services) %> </h2>
+    <%= render  :partial => "/services/new_service", 
+                :locals => {:new_service => @new_service} %>
+  </div>
+</div>
 
-
-<%= render  :partial => "/services/new_service", 
-            :locals => {:@service => @service} %>
 
 
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(services_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[name]", @name, :placeholder => "-All Service Names-" %>
+    <%= text_field_tag "search[name]", @name, :placeholder => t(:service) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
-                         {:include_blank => "-" + t(:all_groups) + "-",
-                          :selected => @group}, {:class => "autocomplete large-select"}) %>
+                         {:include_blank => t(:all_groups), :selected => @group}, 
+                         {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
 </fieldset>
@@ -40,8 +37,7 @@
             <div class="tooltip_trigger">
               <%= service.description.truncate(20) %> 
             </div>
-            <div class="tooltip tooltip_paragraph" 
-                 style="<%=max_width_by_word(service.description)%>">
+            <div class="tooltip tooltip_paragraph">
               <%= simple_format service.description %>
             </div>
           <% end %>

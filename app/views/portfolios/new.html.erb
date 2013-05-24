@@ -1,12 +1,15 @@
-<h2> 
-  <%= t(:new) + t(:portfolio) %>
-  <%= link_to "#{content_tag :em, '', :class => ''}
-              Cancel creation".html_safe, edit_group_path(@group.id) %> 
-</h2>
+<div class="span12">
+  <h2> 
+    <%= t(:new) + t(:portfolio) %>
+    <%= link_to "#{content_tag :em, '', :class => ''}
+                Cancel creation".html_safe, edit_group_path(@group.id) %> 
+  </h2>
+</div>
 
 
 
-<div class="span6">
+
+<div class="span5">
   <div class="widget stacked">
     <div class="widget-header">
       <h3> Assign a global portfolio to <%= @group.name %> </h3>
@@ -16,7 +19,7 @@
         <%= form.label :portfolio_name_id, t(:name) %>
         <%= form.select(:portfolio_name_id, options_from_collection_for_select(
                         @portfolio_names, :id, :name),
-                        {:include_blank => "-" + t(:select) + t(:name) + "-"}, 
+                        {:include_blank => t(:select) + t(:name)}, 
                         {:class => "autocomplete large-select"}) %>
         <%= form.hidden_field :group_id, :value => @group.id %>
         <%= form.submit t(:create) %>
@@ -27,7 +30,7 @@
 
 
 
-<div class="span6">
+<div class="span5">
   <div class="widget stacked">
     <div class="widget-header">
       <h3> Create a new portfolio for <%= @group.name %> </h3>

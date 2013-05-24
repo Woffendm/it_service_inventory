@@ -21,7 +21,7 @@
           <%= form.label :id, t(:name) %>
           <%= form.select(:id, options_from_collection_for_select(
                           @possible_products, :id, :name),
-                          {:include_blank => "-" + t(:select) + t(:product) + "-"}, 
+                          {:include_blank => t(:select) + t(:product)}, 
                           {:class => "autocomplete large-select"}) %>
           <%= form.submit  t(:add) %>
         <% end %>

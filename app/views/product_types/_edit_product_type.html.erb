@@ -1,10 +1,23 @@
-<div class="form-inline light-border modal_content_2" id="modal_content_<%=index%>">
+<a data-toggle="modal" data-target="#modal-content-<%= index %>" href="#">
+  <%= product_type.name %>
+</a>
+
+
+
+
+<div class="modal hide fade" id="modal-content-<%= index %>">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4> <%= "#{t(:edit)} #{t(:product_type)}" %> </h4>
+  </div>
   <%= form_for product_type do |form| %>
-    <%= form.label :name, t(:name) %>
-    <%= form.text_field :name %>
-    <%= form.submit  t(:update) + t(:product_type) %>
+    <div class="modal-body form-inline">
+      <%= form.label :name, t(:name) %>
+      <%= form.text_field :name %>
+    </div>
+    <div class="modal-footer">
+      <a class="btn" data-dismiss="modal" aria-hidden="true"> <%= t(:cancel) %> </a>
+      <%= form.submit  t(:update), :class => "btn btn-success" %>
+    </div>
   <% end %>
 </div>
-<script type="text/javascript">
-  var modalTitle2 = "<%= t(:edit) + t(:product_type) %>";
-</script>

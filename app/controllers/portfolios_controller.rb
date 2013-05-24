@@ -24,7 +24,7 @@ class PortfoliosController < ApplicationController
   def index
     portfolio_names = filter_portfolios(params[:search])
     portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
-    @portfolio_names = portfolio_names.includes(:products, :portfolios => :group).uniq.order("portfolio_names.name", "products.name", "groups.name")
+    @portfolio_names = portfolio_names.includes(:products, :products => :groups).uniq.order("portfolio_names.name", "products.name", "groups.name")
   end
   
   
