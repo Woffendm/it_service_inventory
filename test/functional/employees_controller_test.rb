@@ -102,7 +102,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', 1) do
       post :toggle_active, :id => @inactive.id
     end
-    assert_redirected_to employees_path
+    assert_redirected_to pages_home_path
   end
   
   
@@ -111,7 +111,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', -1) do
       post :toggle_active, :id => @active.id
     end
-    assert_redirected_to employees_path
+    assert_redirected_to pages_home_path
   end
   
   
@@ -120,6 +120,16 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_not_nil assigns(:employees)
     assert_equal @employee, assigns(:employees).first
     assert_response :success
+  end
+
+
+  test "should toggle to inactive and redirect to referring page" do
+    @active = employees(:yoloswag)
+    @request.env['HTTP_REFERER'] = edit_employee_path(@active)
+    assert_difference('Employee.where(:active => true).count', -1) do
+      post :toggle_active, :id => @active.id
+    end
+    assert_redirected_to edit_employee_path(@active)
   end
 
   
