@@ -14,43 +14,23 @@
   font-size: 110%;
 }
 
-#or_div{
-  padding: 5px;
-  padding-left: 3em;
-}
 
 #allocation_result_container{
-  clear: both;
-  text-align: center;
-  margin-top: 20px;
+  display: inline-block;
 }
 
-span.form_input{
-  float: right;
-}
-
-#ui-dialog-titlebar-close{
-  display: none;
-}
-
-.ui-widget-content a {
-  color: blue;
-}
-
-.ui-widget-header {
-  background: #c34500;
-  color: white;
-}
 
 .hidden{
   display: none;
 }
 
 #use_this_number{
-  clear: both;
-  text-align: center;
 }
 
-#fte_calculator > .form-inline > label {
-  width: 150px;
+#fte_calculator input{
+  margin-bottom: 5px;
 } 
+
+#fte_calculator label:last-of-type, #allocation_result_container{
+  margin-top: 15px;
+}

@@ -4,22 +4,6 @@
 * because most people don't know their allocations off the top of their heads.
 */
 $(document).ready(function(){
-  // check to see if there are any modal triggers
-  if($("#fte_calculator")[0] != undefined) {
-  
-  // Sets the specified content to be a dialog window, and also sets some options for it. 
-  $("#fte_calculator").dialog({ 
-    autoOpen  : false,
-    width     : "auto",
-    modal     : true,
-    closeText : "",
-    show      : "drop",
-    title     : modal_title,
-    close     : function(event){
-      correspondingSelectBox = null;
-    } 
-  });
-
 
 
   // Establishes a number of variables to be used later on. Variables in all caps are constants.
@@ -37,12 +21,10 @@ $(document).ready(function(){
   // select box came directly before the trigger. 
   $(".fte_calculator_trigger").click(function(e){ 
     if(correspondingSelectBox != $(".calculator_select")[$(".fte_calculator_trigger").index(this)]){
-      $("#fte_calculator").dialog("close");
       correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
       hoursPerMonth.val("");
       hoursPerWeek.val("");
-      popAllocationResult(0)
-      $("#fte_calculator").dialog("open");
+      popAllocationResult(-1)
     }
   });
 
@@ -74,17 +56,20 @@ $(document).ready(function(){
   // Sets the selected value in the corresponding select box to the calculated value. Fires the 
   // 'change' event for the select box.
   useThisNumber.click(function(e) {
-    fteResult = Math.round(fteResult*Math.pow(10,allocationPrecision)) /
-                Math.pow(10,allocationPrecision);
-    if(fteResult == 1) {
-      fteResult = "1.0";
+    if(canSubmit) {
+      fteResult = Math.round(fteResult*Math.pow(10,allocationPrecision)) /
+                  Math.pow(10,allocationPrecision);
+      if(fteResult == 1) {
+        fteResult = "1.0";
+      }
+      correspondingSelectBox.value = fteResult;
+      $(".calculator_select").trigger("change");
+      $("#fte_calculator").modal("toggle");
     }
-    correspondingSelectBox.value = fteResult;
-    $(".calculator_select").trigger("change");
-    $("#fte_calculator").dialog("close");
   });
-  } // ends check to see if there is a modal trigger
 });
+
+
 
 
 
@@ -94,7 +79,8 @@ $(document).ready(function(){
 // the user entered a negative number or non-number character, then it displays an apropriate 
 // message. If the calculated value is greater than 1, displays an apropriate message.
 function popAllocationResult(fteResult){
-  $("#use_this_number").html("");
+  $("#use_this_number").attr("class", off);
+  canSubmit = false;
   if(fteResult > 1) {
     $("#allocation_result_container").html(over_allocated);
   } 
@@ -102,14 +88,9 @@ function popAllocationResult(fteResult){
     $("#allocation_result_container").html(incorrect_time);
   } 
   else {
-    $("#allocation_result_container").html("");
-    if(fteResult > 0) {
-      $("#use_this_number").html(your_allocation_is + "<a>" + 
-                                 fteResult.toFixed(allocationPrecision) + " " + fte + " </a>");
-    }
-    else {
-      $("#use_this_number").html(your_allocation_is + " 0 " + fte);
-    }
+    $("#allocation_result_container").html(fteResult.toFixed(allocationPrecision) + " " + fte);
+    $("#use_this_number").attr("class", on);
+    canSubmit = true;
   }
   return false;
 }
