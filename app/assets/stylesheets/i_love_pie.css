@@ -672,13 +672,6 @@ html, body {
 }
 
 
-
-
-
-
-
-
-
 .current_page {
   background-color: #A5360F;
 }
@@ -707,6 +700,10 @@ html, body {
 #login a {
   border-left: none;
   border-right: none;
+}
+
+.navbar .btn-navbar {
+  float: left;
 }
 
 #nav1, #nav2 {
@@ -963,6 +960,8 @@ a > i{
   }
 }
 
+
+
 @media (max-width: 755px) {
   body {
     padding-top: 0;
@@ -1175,6 +1174,29 @@ a > i{
 
 @media (max-width: 979px) {
 
+  #page-header{
+    min-height: 40px;
+    margin-bottom: 10px;
+    width: 100%;
+    background-color: #D44413;
+    background-image: none;
+  }
+
+  .two-navs #page-header{
+    min-height: 81px;
+    margin-bottom: 10px;
+  }
+
+  #flash {
+    position: static;
+    bottom: 0px;
+    max-width: 100%;
+    right: 0px;
+    width: 100%;
+    z-index: 100000;
+  }
+  
+  
   .navbar-fixed-top {
     margin-top: 0px;
     margin-bottom: 0px;
