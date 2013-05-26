@@ -144,24 +144,25 @@
     
     
     
-      <div class="container" id="page-content">
-        <div class="row" id="flash">
-          <% if flash[:notice] %>
-            <p class="notice">  <%= flash[:notice] %>       </p>
-          <% end %>
-          <% if flash[:error] %>
-            <p class="error">   Error: <%= flash[:error] %> </p>
-          <% end %>
-          <% if flash[:message] %>
-            <p class="message"> <%= flash[:message] %>      </p>
-          <% end %>
-        </div>
-        <div class="row">
-          <div id="content">
-            <%= yield %>
-          </div>
+    
+    <div class="container" id="page-content">
+      <div class="row" id="flash">
+        <% if flash[:notice] %>
+          <p class="notice">  <%= flash[:notice] %>       </p>
+        <% end %>
+        <% if flash[:error] %>
+          <p class="error">   Error: <%= flash[:error] %> </p>
+        <% end %>
+        <% if flash[:message] %>
+          <p class="message"> <%= flash[:message] %>      </p>
+        <% end %>
+      </div>
+      <div class="row">
+        <div id="content">
+          <%= yield %>
         </div>
       </div>
+    </div>
     
     
     
