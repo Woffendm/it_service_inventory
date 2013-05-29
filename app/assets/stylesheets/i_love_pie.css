@@ -75,7 +75,7 @@ legend {
 .light-border {
   border: 1px dotted #DDDDDD;
   text-align: left;  
-  margin: 1em;
+  margin: 0em 1em;
   padding: .5em .5em .5em 1em;
   clear: both;
 }
@@ -111,13 +111,6 @@ select {
   width: 200px;
 }
 
-select.small {
-  width: 120px;
-}
-
-input.small {
-  width: 186px;
-}
 
 div.chart_div_container{
   height: 480px;
@@ -287,25 +280,6 @@ h3 > a {
 #login-outline > li > a{
   padding-right: 20px;
   color: white;
-}
-
-
-.tiny-select {
-  height: 22px;
-  margin: 1px;
-  padding: 0px;
-  width: 65px; 
-}
-
-.tiny-submit {
-  background: none;
-  border: none;
-  color: #0088CC;
-  cursor: pointer;
-  font-style: italic;
-  margin: 0;
-  padding: 0;
-  text-shadow: none;
 }
 
 .table {
@@ -605,6 +579,18 @@ table.accordion-inner{
 
 
 
+.form-horizontal .control-label{
+  margin-right: 90px;
+}
+
+.form-horizontal .controls {
+  margin-left: 0px;
+}
+
+
+
+
+
 
 
 
@@ -735,32 +721,43 @@ html, body {
   z-index: 100000;
 }
 
-.notice, .error, .message {
-  background-color: #e4fdf6;
-  padding: 1.1em;
+#flash p{
+  margin-top: 5px;
+  min-height: 1.5em; 
+}
+
+.alert {
+  padding-bottom: 10px;
+  padding-right: 35px;
+  padding-top: 10px;
+}
+
+.alert-success {
+  color: #006600;
   border: 1px solid #006600;
-  margin: 7px;
   -webkit-box-shadow: 0 0 7px #006600;
   -moz-box-shadow: 0 0 7px #006600;
   box-shadow: 0 0 7px #006600;
-  min-height: 1.5em;
 }
 
-.error {
-  background-color: #fee7d8;
-  border-color: #D85A1A;
+.alert-success h4 {
+ color: #006600; 
+}
+
+.alert-error {
+  border: 1px solid #D85A1A;
   -webkit-box-shadow: 0 0 7px #d85a1a;
   -moz-box-shadow: 0 0 7px #d85a1a;
   box-shadow: 0 0 7px #d85a1a; 
 }
 
-.message {
-  background-color: #E2F4FD;
-  border-color: #2268AB;
-  -webkit-box-shadow: 0 0 7px #2268AB;
-  -moz-box-shadow: 0 0 7px #2268AB;
-  box-shadow: 0 0 7px #2268AB;
+.alert-info {
+  border: 1px solid #772953;
+  -webkit-box-shadow: 0 0 7px #772953;
+  -moz-box-shadow: 0 0 7px #772953;
+  box-shadow: 0 0 7px #772953;
 }
+
 
 
 
@@ -806,7 +803,7 @@ h2 {
 }
 
 h3, caption {
-  margin-top: 20px;
+  margin-top: 5px;
   font-size: 16px;
   border-bottom: 2px solid #555555;
   font-weight: bold;
@@ -842,6 +839,7 @@ caption {
 
 .modal-body, .modal-footer {
   font-weight: normal;  
+  font-size: 14px;
 }
 
 .modal-body input, .modal-body select, .modal-body div, .modal-body textarea {
@@ -852,6 +850,10 @@ textarea {
   height: 120px;
 }
 
+input, textarea, .uneditable-input{
+  width: 200px;
+}
+
 .select2 {
   width: 206px;
 }
@@ -860,8 +862,12 @@ textarea {
   width: 200px;
 }
 
-.tab-content > .active, .pill-content > .active {
-  padding-bottom: 10px;
+.small {
+  width: 120px;
+}
+
+.tab-content > input[type=submit], .tab-pane > input[type=submit] {
+  margin-top: 10px;
 }
 
 .tabs-right > .nav-tabs{

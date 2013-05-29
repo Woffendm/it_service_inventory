@@ -1,4 +1,11 @@
-<h2> <%= t(:add_employee_to_application) %> </h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:add_employee_to_application) %> </h2>
+    <%= link_to t(:return_to) + t(:all_employees), employees_path, :class => "btn" %>
+    
+  </div>
+</div>
+
 
 
 <h3> <%= t(:search_OSU_directory) %> </h3>
@@ -27,8 +34,6 @@
 <div id = "ldap_search_results">
 </div>
 
-<br/><br/>
-<%= link_to t(:return_to) + t(:all_employees), employees_path %>
 
 <script type="text/javascript">
   var pathname = "<%= ldap_search_results_employees_path %>";

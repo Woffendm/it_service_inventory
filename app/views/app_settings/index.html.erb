@@ -1,7 +1,7 @@
 <%= render :partial => "/shared/app_settings_tabs" %>
 
 
-<%= form_tag( update_settings_app_settings_path, :method => "POST", :class => "light-border form-horizontal") do %>
+<%= form_tag( update_settings_app_settings_path, :method => "POST", :class => "form-horizontal") do %>
   <div class="control-group">
     <span class="control-label">
       <%= label_tag :app_setting_allocation_precision, t(:allocation_precision) %>
