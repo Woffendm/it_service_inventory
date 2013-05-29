@@ -19,7 +19,12 @@
    </li>
    <li class="active">
      <a href="#services" id="services_tab" data-toggle="tab"> 
-       <%= t(:service) + t(:allocations) %> 
+       <%= t(:services)%> 
+     </a>
+   </li>
+   <li>
+     <a href="#products" id="products_tab" data-toggle="tab"> 
+       <%= t(:products)%> 
      </a>
    </li>
  </ul>
@@ -30,7 +35,7 @@
      
     <div class="tab-pane" id="employee">
       <h3><%= t(:basic_information) %> </h3>
-      <div class="form-horizontal">
+      <div class="form-horizontal light-border">
         <%= fields_for @employee do |form| %>
           <div class="control-group">
             <span class="control-label">
@@ -64,6 +69,11 @@
               <%= form.text_area :notes, :maxlength => 1000, :rows => 4, :cols => 100 %>
             </span>
           </div>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.submit  t(:save_changes), :class => "submission" %>
+            </span>
+          </div>
         <% end %>
       </div>
     </div>
@@ -75,34 +85,18 @@
 
 
     <div class="tab-pane" id="groups">
-      
-      <!-- Drop-down list of groups that can be added. Only populated with groups that the employee
-       doesn't already belong to. -->
-      <h3><%= t(:groups) %></h3>
-      <% if can? :manage, :all %>
-        <% unless @available_groups.blank? %>
-          <div class="form-inline" >
-            <fieldset class="light-border">
-              <legend> 
-                <%= t(:add_to) + t(:group) %>
-              </legend>
-              <%= fields_for "employee_group" do |form|%>
-                <%= form.label :id, t(:group)  %>
-                <%= form.select(:group_id, options_from_collection_for_select(
-                                @available_groups, :id, :name),  
-                               {:include_blank => t(:select) + t(:group)},
-                               {:class => "autocomplete large-select"}) %> 
-                <%= form.submit t(:add), :class => "submission" %>
-              <% end %>
-            </fieldset>
-          </div>
-        <% end %>
-      <% end %>
+      <h3>
+        <%= t(:groups) %>
+        <%= render  :partial => "/employees/add_group", 
+                    :locals => {:available_groups => @available_groups} %>
+      </h3>
       
       
-      <!-- Table of all groups that the employee currently belongs to. Admins are able to make changes
-       to the employee's group membership here --> 
-      <% unless @employee_groups.blank? %>
+      <% if @employee_groups.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -135,55 +129,34 @@
             <% end %>
           </tbody>
         </table>
+        
+        <%= employee_form.submit  t(:save_changes), :class => "submission" %>
+        
       <% end %>
     </div>
-    
-    
-    
+
+
+
+
 
 
     <div class="tab-pane active" id="services">
-      
-      <h3><%= t(:services) %></h3>
-      <div id="over_allocation" class="error hidden">
-          Error: <%= t(:over_allocated) %>
-      </div>
-      
-      
-      
+      <h3> 
+        <%= t(:services) %> 
+        <%= render  :partial => "/employees/add_service", 
+                    :locals => {:available_services => @available_services, :year => @year} %>
+      </h3>
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
                     :locals => {:@year => @year, :@active_years => @active_years } %>
+        
+        
         <div class="tab-content year-content">
-          <!-- Drop-down list of services that can be added. Only populated with services that the
-           employee doesn't already have. -->
-          <% unless @available_services.blank? %>
-            <div class="form-inline" >
-              <fieldset class="light-border">
-                <legend> 
-                  <%= t(:add) + t(:new_service_allocation) %>
-                </legend>
-                <%= fields_for "employee_allocations" do |form|%>
-                  <%= form.label :service_id, t(:service) %>
-                  <%= form.select(:service_id, 
-                                  options_from_collection_for_select(@available_services, :id, :name),  
-                                 {:include_blank => t(:select) + t(:service)} ,
-                                 {:class => "autocomplete large-select"}) %> 
-                  <%= form.select(:allocation, @possible_allocations,
-                                 {:include_blank => t(:select) + t(:allocation)},
-                                  :class => "calculator_select allocation_value") %>
-                  <%= form.hidden_field(:fiscal_year_id, :value => @year.id) %>
-                  <%= render  :partial => "/shared/fte_calculator_trigger" %>
-                  <%= form.submit t(:add), :class => "submission"%>
-                <% end %>
-              </fieldset>
-            </div>
-          <% end %>
-      
-      
-          <!-- Creates table with the employee's services and allocations. Can be edited by employee or
-           admin -->
-          <% unless @service_allocations.blank? %>
+          <% if @service_allocations.blank? %>
+            <p>
+              <%= t(:nothing_to_display) %>
+            </p>
+          <% else %>
             <table class="table table-striped">
               <thead>
                 <tr>
@@ -202,10 +175,8 @@
                       <td class="form-inline"> 
                         <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
                         <%= form.hidden_field(:id, :value => service_allocation.id) %>
-                        <%= form.select(:allocation, @possible_allocations, 
-                                       {:selected =>
-                                       service_allocation.rounded_allocation(@allocation_precision)}, 
-                                        :class => "calculator_select allocation_value") %>
+                        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+                            "calculator_select allocation_value small"}) %>
                         <%= render  :partial => "/shared/fte_calculator_trigger" %>
                       </td>
                       <td> 
@@ -225,16 +196,86 @@
                 </tr>
               </tbody>
             </table>
+            
+            <%= employee_form.submit  t(:save_changes), :class => "submission" %>
+            
           <% end %>
         </div>
       </div>
-      <br/>
     </div>
+
+
+
+
+
+
+
+    <div class="tab-pane" id="products">
+      <h3> 
+        <%= t(:products) %> 
+        <%= render  :partial => "/employees/add_product", 
+                    :locals => {:available_products => @available_products, :year => @year} %>
+      </h3>
+      <div class="tabbable tabs-right">
+        <%= render  :partial => "/shared/active_year_select", 
+                    :locals => {:@year => @year, :@active_years => @active_years } %>
+
+
+        <div class="tab-content year-content">
+          <% if @product_allocations.blank? %>
+            <p>
+              <%= t(:nothing_to_display) %>
+            </p>
+          <% else %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th><%= t(:product) %></th>
+                  <th><%= t(:allocation) %></th>
+                  <th> <%= t(:check_to_remove) %> </th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @product_allocations.each do |product_allocation| %>
+                  <%= employee_form.fields_for "employee_products", product_allocation do |form|%>
+                    <tr>
+                      <td> 
+                        <%= link_to product_allocation.name, product_path(product_allocation.product_id) %>
+                      </td>
+                      <td class="form-inline"> 
+                        <%= form.hidden_field(:product_id, :value => product_allocation.product_id) %>
+                        <%= form.hidden_field(:id, :value => product_allocation.id) %>
+                        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+                            "calculator_select allocation_value small"}) %>
+                        <%= render  :partial => "/shared/fte_calculator_trigger" %>
+                      </td>
+                      <td> 
+                        <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+                <tr> 
+                  <td>
+                    <%= t(:total_allocation) %>
+                  </td>
+                  <td id="total-allocation">
+                    <%= "#{@employee.get_total_product_allocation(@year, @allocation_precision)} " + t(:fte) %>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <%= employee_form.submit  t(:save_changes), :class => "submission" %>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    
   </div>
-
-
-
-  <%= employee_form.submit  t(:save_changes), :class => "submission" %> 
 <% end %>
 
 

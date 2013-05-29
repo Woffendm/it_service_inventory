@@ -745,10 +745,11 @@ html, body {
 }
 
 .alert-error {
-  border: 1px solid #D85A1A;
-  -webkit-box-shadow: 0 0 7px #d85a1a;
-  -moz-box-shadow: 0 0 7px #d85a1a;
-  box-shadow: 0 0 7px #d85a1a; 
+  background-color: #FCDFDF;
+  border: 1px solid #DF382C;
+  -webkit-box-shadow: 0 0 7px #DF382C;
+  -moz-box-shadow: 0 0 7px #DF382C;
+  box-shadow: 0 0 7px #DF382C; 
 }
 
 .alert-info {

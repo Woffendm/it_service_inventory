@@ -219,8 +219,7 @@
       <h3> 
         <%= t(:employees) %> 
         <%= render  :partial => "/products/add_employee", 
-                    :locals => {:available_employees => @available_employees, :year => @year,
-                    :possible_allocations => @possible_allocations} %>
+                    :locals => {:available_employees => @available_employees, :year => @year} %>
       </h3>
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
@@ -229,10 +228,10 @@
         
         <div class="tab-content year-content">
           <% if @employee_products.blank? %>
-             <p>
-               <%= t(:nothing_to_display) %>
-             </p>
-           <% else %>
+            <p>
+              <%= t(:nothing_to_display) %>
+            </p>
+          <% else %>
             <table class="table table-striped">
               <thead>
                 <tr>

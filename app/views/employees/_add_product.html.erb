@@ -1,0 +1,38 @@
+<% unless available_products.blank? %>
+
+
+  <a class="btn btn-small" data-toggle="modal" data-target="#add-product" href="#">
+    <i class="icon-plus"></i>
+    <%= t(:add) + t(:product) %>
+  </a>
+  
+  
+  
+  <div class="modal hide fade" id="add-product">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h4> <%= t(:add) + t(:product) %> </h4>
+    </div>
+    <%= fields_for "employee_product" do |form|%>
+      <div class="modal-body form-inline">
+        <%= form.label :product_id, t(:name) %>
+        <%= form.select(:product_id, options_from_collection_for_select(
+                        available_products, :id, :name),
+                        {:include_blank => t(:select) + t(:product)}, 
+                        {:class => "autocomplete large-select"}) %> 
+        <br/>
+        <%= form.label :allocation, t(:allocation) %>
+        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+            "calculator_select allocation_value"}) %>
+        <%= form.hidden_field(:fiscal_year_id, :value => year.id) %>
+        <%= render  :partial => "/shared/fte_calculator_trigger" %>
+      </div>
+      <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" aria-hidden="true"> <%= t(:cancel) %> </a>
+        <%= form.submit t(:add), :class => "btn btn-success submission" %>
+      </div>
+    <% end %>
+  </div>
+  
+  
+<% end %>
