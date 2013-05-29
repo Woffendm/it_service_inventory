@@ -1,50 +1,53 @@
-<h2> <%= t(:user_settings) %> </h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:user_settings) %> </h2>
+  </div>
+</div>
+
 
 
 
 <%= form_tag("update_settings", :method => "post", :class => "form-horizontal") do %>
-  <div class="light-border">
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag t(:preferred_language) %>
-      </span>
-      <span class="controls">
-        <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
-                     :selected => @current_user.preferred_language) %>
-        <span class="tooltip_trigger information"> &nbsp; </span>
-      </span>
-      <span class="tooltip">
-        <p class="tooltip_paragraph"> 
-          <%= t(:preferred_language_info) %> 
-        </p>
-      </span>
-    </div>
-
-    <div class="control-group">
-      <span class="control-label">
-        <%= label_tag t(:new_user_reminder) %>
-      </span>
-      <span class="controls">
-        <%= select(:employee, :new_user_reminder, [[t(:automatic), true], [t(:disabled), false]],
-                     :selected => @current_user.new_user_reminder) %>
-        <span class="tooltip_trigger information"> &nbsp; </span>
-      </span>
-      <span class="tooltip">
-        <ul>
-          <li class='tooltip_li'>
-            <%= t(:new_user_reminder_info_0) %> 
-          </li>
-          <li class='tooltip_li'>
-            <%= t(:new_user_reminder_info_1) %>
-          </li>
-        </ul>
-      </span>
-    </div>
-
-    <div class="control-group">
-      <div class="control-label">
-        <%= submit_tag  t(:save_changes) %>
-      </div>
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag t(:preferred_language) %>
+    </span>
+    <span class="controls">
+      <%= select(:employee, :preferred_language, [["English", "en"], ["Español", "es"]],
+                   :selected => @current_user.preferred_language) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <p class="tooltip_paragraph"> 
+        <%= t(:preferred_language_info) %> 
+      </p>
+    </span>
+  </div>
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag t(:new_user_reminder) %>
+    </span>
+    <span class="controls">
+      <%= select(:employee, :new_user_reminder, [[t(:automatic), true], [t(:disabled), false]],
+                   :selected => @current_user.new_user_reminder) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <ul>
+        <li class='tooltip_li'>
+          <%= t(:new_user_reminder_info_0) %> 
+        </li>
+        <li class='tooltip_li'>
+          <%= t(:new_user_reminder_info_1) %>
+        </li>
+      </ul>
+    </span>
+  </div>
+  
+  <div class="control-group">
+    <div class="control-label">
+      <%= submit_tag  t(:save_changes) %>
     </div>
   </div>
 <% end %>

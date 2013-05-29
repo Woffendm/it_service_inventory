@@ -1,17 +1,19 @@
 /*
 *  This makes automatically fading alerts using pixy dust and magic
 */
-$(document).ready(function(){
-  $("#flash").fadeOut(7000);
+$(document).ready(function(){  
+  $(".alert-success, .alert-error, .alert-info").alert();
   
   
+  $(".alert-success").fadeOut(4000);
   
-  $("#flash").hover(
-    function() {
-      $(this).stop().fadeOut(0).fadeIn(0);
-    },
-    function() {
-      $(this).fadeOut(2500);
-    }
-  );
+  
+  $(".alert-success").mouseenter(function(){
+    $(this).stop().fadeOut(0).fadeIn(0);
+  });
+  
+  
+  $(".alert-success").mouseleave(function(){
+    $(this).fadeOut(2500);
+  });
 });

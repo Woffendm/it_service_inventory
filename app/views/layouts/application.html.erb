@@ -148,13 +148,25 @@
     <div class="container" id="page-content">
       <div class="row" id="flash">
         <% if flash[:notice] %>
-          <p class="notice">  <%= flash[:notice] %>       </p>
+          <div class="alert alert-block alert-success fade in">  
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4> Success </h4>
+            <p><%= flash[:notice] %> </p>
+          </div>
         <% end %>
         <% if flash[:error] %>
-          <p class="error">   Error: <%= flash[:error] %> </p>
+          <div class="alert alert-block alert-error fade in">  
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4> Error </h4>
+            <p><%= flash[:error] %> </p>
+          </div>
         <% end %>
         <% if flash[:message] %>
-          <p class="message"> <%= flash[:message] %>      </p>
+          <div class="alert alert-block alert-info fade in">  
+            <a class="close" data-dismiss="alert" href="#">&times;</a>
+            <h4> Heads Up </h4>
+            <p><%= flash[:message] %> </p>
+          </div>
         <% end %>
       </div>
       <div class="row">
