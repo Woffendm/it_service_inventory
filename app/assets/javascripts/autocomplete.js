@@ -3,5 +3,7 @@
 *    it like a regular select box, or type stuff in. Nifty!
 */
 jQuery(document).ready(function(){
-  jQuery(".autocomplete").select2();
+  jQuery(".autocomplete").select2({
+    width: 200
+  });
 });

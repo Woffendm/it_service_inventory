@@ -22,7 +22,7 @@
         <br/>
         <%= form.label :allocation, t(:allocation) %>
         <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
-            "calculator_select allocation_value"}) %>
+            "calculator_select new-allocation-1"}) %>
         <%= form.hidden_field(:fiscal_year_id, :value => year.id) %>
         <%= render  :partial => "/shared/fte_calculator_trigger" %>
       </div>

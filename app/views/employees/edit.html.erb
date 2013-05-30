@@ -146,11 +146,18 @@
         <%= render  :partial => "/employees/add_service", 
                     :locals => {:available_services => @available_services, :year => @year} %>
       </h3>
+      
+      
+      <div class="alert alert-block alert-error fade in javascript-notice hidden over-allocation">  
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4> <%= t(:error) %> </h4>
+        <p><%= t(:over_allocated) %> </p>
+      </div>
+      
+      
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
                     :locals => {:@year => @year, :@active_years => @active_years } %>
-        
-        
         <div class="tab-content year-content">
           <% if @service_allocations.blank? %>
             <p>
@@ -166,7 +173,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @service_allocations.each do |service_allocation| %>
+                <% @service_allocations.each_with_index do |service_allocation, index| %>
                   <%= employee_form.fields_for "employee_allocations", service_allocation do |form|%>
                     <tr>
                       <td> 
@@ -176,11 +183,11 @@
                         <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
                         <%= form.hidden_field(:id, :value => service_allocation.id) %>
                         <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
-                            "calculator_select allocation_value small"}) %>
+                            "calculator_select allocation-1 small"}) %>
                         <%= render  :partial => "/shared/fte_calculator_trigger" %>
                       </td>
                       <td> 
-                        <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                        <%= form.check_box :_destroy, :class => "remove-1", :id => "remove-1-" + index.to_s %>
                       </td>
                     </tr>
                   <% end %>
@@ -189,7 +196,7 @@
                   <td>
                     <%= t(:total) + " " + t(:allocation) %>
                   </td>
-                  <td id="total-allocation">
+                  <td id="total-1">
                     <%= "#{@employee.get_total_service_allocation(@year, @allocation_precision)} " + t(:fte) %>
                   </td>
                   <td></td>
@@ -216,11 +223,18 @@
         <%= render  :partial => "/employees/add_product", 
                     :locals => {:available_products => @available_products, :year => @year} %>
       </h3>
+      
+    
+      <div class="alert alert-block alert-error fade in javascript-notice hidden over-allocation">  
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4> <%= t(:error) %> </h4>
+        <p><%= t(:over_allocated) %> </p>
+      </div>
+      
+      
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
                     :locals => {:@year => @year, :@active_years => @active_years } %>
-
-
         <div class="tab-content year-content">
           <% if @product_allocations.blank? %>
             <p>
@@ -236,7 +250,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @product_allocations.each do |product_allocation| %>
+                <% @product_allocations.each_with_index do |product_allocation, index| %>
                   <%= employee_form.fields_for "employee_products", product_allocation do |form|%>
                     <tr>
                       <td> 
@@ -246,11 +260,11 @@
                         <%= form.hidden_field(:product_id, :value => product_allocation.product_id) %>
                         <%= form.hidden_field(:id, :value => product_allocation.id) %>
                         <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
-                            "calculator_select allocation_value small"}) %>
+                            "calculator_select allocation-2 small"}) %>
                         <%= render  :partial => "/shared/fte_calculator_trigger" %>
                       </td>
                       <td> 
-                        <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                        <%= form.check_box :_destroy, :class => "remove-2", :id => "remove-2-" + index.to_s %>
                       </td>
                     </tr>
                   <% end %>
@@ -259,7 +273,7 @@
                   <td>
                     <%= t(:total_allocation) %>
                   </td>
-                  <td id="total-allocation">
+                  <td id="total-2">
                     <%= "#{@employee.get_total_product_allocation(@year, @allocation_precision)} " + t(:fte) %>
                   </td>
                   <td></td>
