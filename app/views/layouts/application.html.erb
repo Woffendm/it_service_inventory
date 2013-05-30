@@ -146,25 +146,25 @@
     
     
     <div class="container" id="page-content">
-      <div class="row" id="flash">
+      <div class="row flash">
         <% if flash[:notice] %>
           <div class="alert alert-block alert-success fade in">  
             <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4> Success </h4>
+            <h4> <%= t(:success) %> </h4>
             <p><%= flash[:notice] %> </p>
           </div>
         <% end %>
         <% if flash[:error] %>
           <div class="alert alert-block alert-error fade in">  
             <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4> Error </h4>
+            <h4> <%= t(:error) %> </h4>
             <p><%= flash[:error] %> </p>
           </div>
         <% end %>
         <% if flash[:message] %>
           <div class="alert alert-block alert-info fade in">  
             <a class="close" data-dismiss="alert" href="#">&times;</a>
-            <h4> Heads Up </h4>
+            <h4> <%= t(:heads_up) %> </h4>
             <p><%= flash[:message] %> </p>
           </div>
         <% end %>

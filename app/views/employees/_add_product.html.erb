@@ -1,29 +1,29 @@
-<% unless available_employees.blank? %>
+<% unless available_products.blank? %>
 
 
-  <a class="btn btn-small" data-toggle="modal" data-target="#add-employee" href="#">
+  <a class="btn btn-small" data-toggle="modal" data-target="#add-product" href="#">
     <i class="icon-plus"></i>
-    <%= t(:add) + t(:employee) %>
+    <%= t(:add) + t(:product) %>
   </a>
   
   
   
-  <div class="modal hide fade" id="add-employee">
+  <div class="modal hide fade" id="add-product">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4> <%= t(:add) + t(:employee) %> </h4>
+      <h4> <%= t(:add) + t(:product) %> </h4>
     </div>
-    <%= fields_for "employee_product" do |form|%>
+    <%= fields_for "employee_products" do |form|%>
       <div class="modal-body form-inline">
-        <%= form.label :employee_id, t(:name) %>
-        <%= form.select(:employee_id, options_from_collection_for_select(
-                        available_employees, :id, :full_name),
-                        {:include_blank => t(:select) + t(:employee)}, 
+        <%= form.label :product_id, t(:name) %>
+        <%= form.select(:product_id, options_from_collection_for_select(
+                        available_products, :id, :name),
+                        {:include_blank => t(:select) + t(:product)}, 
                         {:class => "autocomplete large-select"}) %> 
         <br/>
         <%= form.label :allocation, t(:allocation) %>
         <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
-            "calculator_select new-allocation-1"}) %>
+            "calculator_select new-allocation-2"}) %>
         <%= form.hidden_field(:fiscal_year_id, :value => year.id) %>
         <%= render  :partial => "/shared/fte_calculator_trigger" %>
       </div>

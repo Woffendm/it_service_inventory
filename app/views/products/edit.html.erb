@@ -219,8 +219,7 @@
       <h3> 
         <%= t(:employees) %> 
         <%= render  :partial => "/products/add_employee", 
-                    :locals => {:available_employees => @available_employees, :year => @year,
-                    :possible_allocations => @possible_allocations} %>
+                    :locals => {:available_employees => @available_employees, :year => @year} %>
       </h3>
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
@@ -229,10 +228,10 @@
         
         <div class="tab-content year-content">
           <% if @employee_products.blank? %>
-             <p>
-               <%= t(:nothing_to_display) %>
-             </p>
-           <% else %>
+            <p>
+              <%= t(:nothing_to_display) %>
+            </p>
+          <% else %>
             <table class="table table-striped">
               <thead>
                 <tr>
@@ -253,11 +252,11 @@
                         <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
                         <%= form.hidden_field :id %>
                         <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
-                            "calculator_select allocation_value small"}) %>
+                            "calculator_select allocation-1 small"}) %>
                         <%= render :partial => "/shared/fte_calculator_trigger" %>
                       </td>
                       <td> 
-                        <%= form.check_box :_destroy, :class => "remove_allocation" %>
+                        <%= form.check_box :_destroy, :class => "remove-1" %>
                       </td>
                     </tr>
                   <% end %>
@@ -266,7 +265,7 @@
                   <td>
                     <%= t(:total) + " " + t(:allocation) %>
                   </td>
-                  <td id="total-allocation">
+                  <td id="total-1">
                     <%= "#{@product.get_total_allocation(@year, @allocation_precision)} " + t(:fte) %>
                   </td>
                   <td></td>
@@ -286,7 +285,15 @@
 
 
 
-
 <%= render  :partial => "/shared/fte_calculator_body", 
             :locals => {:@allocation_precision => @allocation_precision,
                         :@fte_hours_per_week => @fte_hours_per_week } %>
+
+
+
+<script type="text/javascript">
+  var noOverAllocation1 = false;
+</script>
+
+
+

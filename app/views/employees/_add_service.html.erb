@@ -1,24 +1,23 @@
-<% unless available_employees.blank? %>
+<% unless available_services.blank? %>
 
-
-  <a class="btn btn-small" data-toggle="modal" data-target="#add-employee" href="#">
+  <a class="btn btn-small" data-toggle="modal" data-target="#add-service" href="#">
     <i class="icon-plus"></i>
-    <%= t(:add) + t(:employee) %>
+    <%= t(:add) + t(:service) %>
   </a>
   
   
   
-  <div class="modal hide fade" id="add-employee">
+  <div class="modal hide fade" id="add-service">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4> <%= t(:add) + t(:employee) %> </h4>
+      <h4> <%= t(:add) + t(:service) %> </h4>
     </div>
-    <%= fields_for "employee_product" do |form|%>
+    <%= fields_for "employee_allocations" do |form|%>
       <div class="modal-body form-inline">
-        <%= form.label :employee_id, t(:name) %>
-        <%= form.select(:employee_id, options_from_collection_for_select(
-                        available_employees, :id, :full_name),
-                        {:include_blank => t(:select) + t(:employee)}, 
+        <%= form.label :service_id, t(:name) %>
+        <%= form.select(:service_id, options_from_collection_for_select(
+                        available_services, :id, :name),
+                        {:include_blank => t(:select) + t(:service)}, 
                         {:class => "autocomplete large-select"}) %> 
         <br/>
         <%= form.label :allocation, t(:allocation) %>
@@ -34,5 +33,5 @@
     <% end %>
   </div>
   
-  
 <% end %>
+

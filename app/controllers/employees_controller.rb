@@ -142,6 +142,18 @@ class EmployeesController < ApplicationController
         new_total_allocation += new_employee_allocation.allocation
       end
     end
+    # If a new service and allocation were sent with the params, adds them to the employee
+    if params[:employee_products]
+      unless (params[:employee_products][:product_id].blank?) ||
+             (params[:employee_products][:fiscal_year_id].blank?)
+        new_employee_product = @employee.employee_products.new(params[:employee_products])
+        unless new_employee_product.save
+          flash[:error] = t(:product) + t(:add) + t(:error)
+          render :edit
+          return
+        end
+      end
+    end
     # Calculates the total allocation passed in params.
     if params["employee"] && params[:employee]["employee_allocations_attributes"]
       params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
