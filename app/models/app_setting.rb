@@ -48,6 +48,12 @@ class AppSetting < ActiveRecord::Base
   end
   
   
+  # Returns the URL for the application's logo.
+  def self.get_theme
+    return AppSetting.find_by_code("theme").value
+  end
+  
+  
   # Returns the application's REST API key
   # Let's say that this app is running on www.cheese.com and you want to get products from this app.
   # 

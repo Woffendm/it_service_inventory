@@ -17,3 +17,8 @@ AppSetting.seed_once(:code) do |t|
   t.code = "rest_api_key"
   t.value = "default"
 end
+
+AppSetting.seed_once(:code) do |t|
+  t.code = "theme"
+  t.value = ""
+end
