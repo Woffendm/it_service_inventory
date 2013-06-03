@@ -33,20 +33,18 @@
         <div class="navbar-inner">
           <div class="container"> 
             
-            
-            <span class="logo">
-              <%= image_tag(
-                  "http://oregonstate.edu/osuhomepage/regions/top-hat/current/images/osu-tag.png",
-                  {:height => 75, :width => 75}) %>
-            </span>
+            <% unless @logo.blank? %>
+              <span class="logo">
+                <%= image_tag(@logo) %>
+              </span>
+            <% end %>
 
-            
-            <span class="brand">
-              <%= link_to t(:IT_service_inventory), pages_home_path %>
-            </span>            
 
 
             <div id="nav1">
+              <span class="brand">
+                <%= link_to t(:IT_service_inventory), pages_home_path %>
+              </span>
               <% unless @current_user.blank? %>
                 <ul class="nav pull-right" id="login">
                   <li class="dropdown">

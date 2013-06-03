@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   # before_filter :load_theme
   before_filter :current_user
   before_filter :require_login
+  before_filter :load_logo
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
   before_filter :set_user_language
@@ -46,10 +47,10 @@ class ApplicationController < ActionController::Base
       end
     end
 
-
-    # Loads the active theme.
-    def load_theme
-      @current_theme = AppSetting.find_by_code('active-theme').active
+    
+    # Loads the application's allocation precision as specified in the app settings.
+    def load_allocation_precision
+      @allocation_precision = AppSetting.get_allocation_precision
     end
 
 
@@ -64,14 +65,20 @@ class ApplicationController < ActionController::Base
             :value => @current_fiscal_year.year)
       end
     end
-    
-    
-    # Loads the application's allocation precision as specified in the app settings.
-    def load_allocation_precision
-      @allocation_precision = AppSetting.get_allocation_precision
+
+
+    # Loads the logo's url specified in the app settings.
+    def load_logo
+      @logo = Project1::Application.config.config['logo']
     end
 
 
+    # Loads the active theme.
+    def load_theme
+      @current_theme = AppSetting.find_by_code('active-theme')
+    end
+    
+    
     # If there is a current user, and if they have a preferred language, then it will set the
     # language to the current user's preferred language. 
     def set_user_language

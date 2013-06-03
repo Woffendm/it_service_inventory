@@ -5,12 +5,10 @@
 }
 
 
-.brand, .brand > a {
-  color: white;
-  padding-top: 8px;
-  padding-bottom: 7px;
-  padding-right: 5px;
-  padding-left: 5px;
+.navbar .brand, .navbar .brand  a {
+  color: #fff;
+  padding: 8px 0px;
+  margin: 0px;
   font-weight: bold;
   font-size: 20px;
 }
@@ -129,22 +127,6 @@ div.chart_div_container{
   margin-right: 3.5em;
 }
 
-
-
-
-.tooltip{
-  display: none;
-  position: absolute;
-  max-width: 25em;
-  padding: 3px 8px;
-  color: #fff;
-  text-align: left;
-  text-decoration: none;
-  background-color: #444;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-}
 
 .tooltip_trigger{
   min-width: 10px;
@@ -408,10 +390,7 @@ table.accordion-inner{
   margin: 0px;
 }
 
-.or-div{
-  padding-left: 200px;
-  padding-top: 10px;
-}
+
 
 
 
@@ -629,11 +608,13 @@ html, body {
 
 
 .logo {
-  display: block;
+  display: inline-block;
   float: left;
   padding: 0px 5px;
   position: relative;
   margin-left: -10px;
+  max-width: 90px;
+  max-height: 80px;
 }
 
 .logo:hover,
@@ -646,17 +627,19 @@ html, body {
   border-right: none;
 }
 
+
 .navbar .btn-navbar {
   float: left;
 }
 
 #nav1, #nav2 {
   display: inline-block;
+  width: calc(100% - 100px);
+  float: right;
 }
 
 #nav1 {
-  width: calc(100% - 325px);
-  float: right;
+
 } 
 
 #nav2 {
@@ -1147,6 +1130,10 @@ a > i{
 
 @media (max-width: 979px) {
 
+  .navbar-inner {
+    height: auto;
+  }
+
   #page-header{
     min-height: 40px;
     margin-bottom: 10px;
@@ -1157,10 +1144,10 @@ a > i{
 
   .two-navs #page-header{
     min-height: 81px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
-  #flash {
+  .flash {
     position: static;
     bottom: 0px;
     max-width: 100%;

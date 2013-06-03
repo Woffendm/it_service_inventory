@@ -1,9 +1,18 @@
-# ATTENTION!!! You will want to change these values to whatever your university / organization
-# uses for your ldap server.
+# You will want to change treebase, host, port, and encryption to match what your organization's 
+# LDAP servers use. 
 treebase: 
 host: 
 port: 
 encryption: 
+ldap_login_host:
+
+# This always ends with "/auth/ldap". If ITSI is installed in a subdirectory on your server, precede
+# this path with the subdirectory's name.
 ldap_login_path: 
-ldap_login_host: 
+
+# This is an array of numbers, such as [1, 2, 3] 
 results_per_page_options: 
+
+# The logo can be either an external url ("http://www.hscheese.com/cheese2.jpg") or an image in the 
+# project ("../cheese2.jpg")
+logo: 

@@ -11,26 +11,11 @@
                 {:selected => @allocation_precision} ) %>
       <span class="tooltip_trigger information"> &nbsp; </span>
     </span>
-    <span class="tooltip tooltip_paragraph">
-        <%= t(:allocation_precision_info) %> 
-    </span>
-  </div>
-  
-  
-  <div class="control-group">
-    <span class="control-label">
-      <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
-    </span>
-    <span class="controls">
-      <%= number_field_tag "app_setting[fte_hours_per_week]", @fte_hours_per_week %>
-      <span class="tooltip_trigger information"> &nbsp; </span>
-    </span>
     <span class="tooltip">
-      <p class="tooltip_paragraph"> 
-        <%= t(:fte_hours_per_week_info) %> 
-      </p>
+      <%= t(:allocation_precision_info) %> 
     </span>
   </div>
+  
   
   
   <div class="control-group">
@@ -43,11 +28,25 @@
       <span class="tooltip_trigger information"> &nbsp; </span>
     </span>
     <span class="tooltip">
-      <p class="tooltip_paragraph"> 
-        <%= t(:fiscal_year_info) %> 
-      </p>
+      <%= t(:fiscal_year_info) %> 
     </span>
   </div>
+  
+  
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
+    </span>
+    <span class="controls">
+      <%= number_field_tag "app_setting[fte_hours_per_week]", @fte_hours_per_week %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <%= t(:fte_hours_per_week_info) %> 
+    </span>
+  </div>
+  
   
   
   <div class="control-group">
@@ -59,11 +58,10 @@
       <span class="tooltip_trigger information"> &nbsp; </span>
     </span>
     <span class="tooltip">
-      <p class="tooltip_paragraph"> 
-        <%= t(:rest_api_key_info) %> 
-      </p>
+      <%= t(:rest_api_key_info) %> 
     </span>
   </div>
+  
   
   
   <div class="control-group">
