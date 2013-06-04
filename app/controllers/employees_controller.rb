@@ -92,7 +92,7 @@ class EmployeesController < ApplicationController
     unless referring_page.blank?
       redirect_to referring_page
     else
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     end
   end
 

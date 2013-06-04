@@ -16,7 +16,7 @@ class LoginsController < ApplicationController
 
   # Development tool for logging in without a password
   def new_backdoor
-    redirect_to logins_new_path unless Rails.env.development?
+    redirect_to new_logins_path unless Rails.env.development?
   end
 
 
@@ -33,7 +33,7 @@ class LoginsController < ApplicationController
       end
       redirect_to referring_page
     else
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     end
   end
 
@@ -46,7 +46,7 @@ class LoginsController < ApplicationController
     if referring_page
       redirect_to referring_page
     else
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     end
   end
 
@@ -59,10 +59,10 @@ class LoginsController < ApplicationController
       session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
       flash[:notice] = "Welcome " + employee_exists.name_first + "!"
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
-      redirect_to logins_new_path
+      redirect_to new_logins_path
     end
   end
 
@@ -70,7 +70,7 @@ class LoginsController < ApplicationController
   # Development tool for logging in without a password
   def create_backdoor
     unless Rails.env.development?
-      redirect_to logins_new_path
+      redirect_to new_logins_path
       return
     end
     employee_exists = Employee.find_by_osu_username(params[:username].downcase)
@@ -79,20 +79,20 @@ class LoginsController < ApplicationController
       session[:current_user_osu_username] = employee_exists.osu_username
       session[:results_per_page] = 25
       flash[:notice] = "Welcome " + employee_exists.name_first + "!"
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
-      redirect_to logins_new_path
+      redirect_to new_logins_path
     end
   end
 
   
   # Removes session value (logout)
-  def destroy
+  def logout
     session[:current_user_name] = nil
     session[:current_user_osu_username] = nil
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
-    redirect_to logins_new_path
+    redirect_to new_logins_path
   end
 end

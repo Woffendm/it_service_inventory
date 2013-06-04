@@ -17,7 +17,7 @@ class LoginsControllerTest < ActionController::TestCase
   
   test "backdoor login to application should be disabled" do
     get :new_backdoor
-    assert_redirected_to logins_new_path
+    assert_redirected_to new_logins_path
   end
   
   
@@ -25,7 +25,7 @@ class LoginsControllerTest < ActionController::TestCase
     get :change_results_per_page, :results_per_page => 100
     assert_not_nil session[:results_per_page]
     assert_equal session[:results_per_page], "100"
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
@@ -60,7 +60,7 @@ class LoginsControllerTest < ActionController::TestCase
     get :change_year, :year => 2014
     assert_not_nil cookies[:year]
     assert_equal cookies[:year], "2014"
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
@@ -69,19 +69,19 @@ class LoginsControllerTest < ActionController::TestCase
     assert_equal 25, session[:results_per_page]
     assert_equal session[:current_user_name], @user.full_name
     assert_equal session[:current_user_osu_username], @user.osu_username
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
   test "should not create login session if user is not in application" do 
     post :create, :username => "not in application"
-    assert_redirected_to logins_new_path
+    assert_redirected_to new_logins_path
   end
   
   
   test "backdoor login session creation should be disabled" do
     get :create_backdoor, :username => "woffendm"
-    assert_redirected_to logins_new_path
+    assert_redirected_to new_logins_path
   end
   
   
@@ -90,6 +90,6 @@ class LoginsControllerTest < ActionController::TestCase
     assert_nil session[:current_user_name]
     assert_nil session[:current_user_osu_username]
     assert_nil session[:results_per_page]
-    assert_redirected_to logins_new_path
+    assert_redirected_to new_logins_path
   end
 end

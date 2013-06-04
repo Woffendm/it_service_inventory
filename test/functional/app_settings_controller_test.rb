@@ -25,7 +25,7 @@ class AppSettingsControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:site_admin => true).count', 1) do
       post :add_admin, :employee => {:id => @not_admin.id}
     end
-    assert_redirected_to app_settings_admins_path
+    assert_redirected_to admins_app_settings_path
   end
 
 
@@ -34,7 +34,7 @@ class AppSettingsControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:site_admin => true).count', -1) do
       post :remove_admin, :employee => @admin
     end
-    assert_redirected_to app_settings_admins_path
+    assert_redirected_to admins_app_settings_path
   end
 
 

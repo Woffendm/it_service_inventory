@@ -30,7 +30,7 @@ class AppSettingsController < ApplicationController
     @new_admin.site_admin = true
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:added)
-    redirect_to app_settings_admins_path 
+    redirect_to admins_app_settings_path 
   end
 
 
@@ -40,7 +40,7 @@ class AppSettingsController < ApplicationController
     @new_admin.site_admin = nil
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:removed)
-    redirect_to app_settings_admins_path 
+    redirect_to admins_app_settings_path 
   end
 
 

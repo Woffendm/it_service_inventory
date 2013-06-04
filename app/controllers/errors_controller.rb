@@ -4,6 +4,8 @@ class ErrorsController < ApplicationController
   end
   
   def invalid_credentials
+    flash[:error] = params[:message]
+    redirect '/'
   end
   
   def permission_denied
