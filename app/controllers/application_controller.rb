@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   before_filter :set_user_language
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
-  rescue_from OmniAuth::Error, :with => :invalid_credentials
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from ActionController::RoutingError, :with => :page_not_found
 
