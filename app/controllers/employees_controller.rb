@@ -99,12 +99,12 @@ class EmployeesController < ApplicationController
 
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
-    new_employee=Employee.new
-    new_employee.name_last = params[:name_last]
-    new_employee.name_first = params[:name_first]
-    new_employee.name_MI = params[:name_MI]
+    new_employee = Employee.new
+    new_employee.last_name = params[:last_name]
+    new_employee.first_name = params[:first_name]
+    new_employee.middle_name = params[:middle_name]
     new_employee.osu_id = params[:osu_id]
-    new_employee.osu_username = params[:osu_username]
+    new_employee.uid = params[:uid]
     new_employee.email = params[:email].downcase unless params[:email].blank?
     if new_employee.save
       flash[:notice] = t(:employee) + t(:added)
@@ -225,12 +225,12 @@ class EmployeesController < ApplicationController
         # either the first or last name.
         array_of_strings_to_search_for = @name.split(" ")
         # Searches for the first name (the first index)
-        search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
-        search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        search_array << ("last_name LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        search_array << ("first_name LIKE '%#{array_of_strings_to_search_for[0]}%'")
         # Searches for the last name if present (the second index)
         if array_of_strings_to_search_for.length > 1
-          search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
-          search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
+          search_array << ("last_name LIKE '%#{array_of_strings_to_search_for[1]}%'")
+          search_array << ("first_name LIKE '%#{array_of_strings_to_search_for[1]}%'")
         end
         search_string = search_array.join(" OR ")
       end

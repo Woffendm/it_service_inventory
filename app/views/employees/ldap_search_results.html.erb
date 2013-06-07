@@ -22,22 +22,22 @@
           </td>
           <td> 
             <% if Employee.find_by_osu_id(entry.osuuid.first) &&
-                  Employee.find_by_osu_username(entry.uid.first) %>
+                  Employee.find_by_uid(entry.uid.first) %>
               <%= t(:already_in_application) %>
             <% else %>
               <%= form_tag("ldap_create", :method => "post", :class => "prevent_double_submit") do %>
                 <!-- Splits returned string about the ',', separating the last name from the 
                 first and middle names -->
                 <% temp = entry.cn.first.split(",") %>
-                <%= hidden_field_tag(:name_last, temp[0]) %>
+                <%= hidden_field_tag(:last_name, temp[0]) %>
                 <!-- Splits the first and middle names around the " " between them. Only takes 
                 the first letter of the middle name -->
                 <% first_and_middle_names = temp[1].split(" ") %>
-                <%= hidden_field_tag(:name_first, first_and_middle_names[0]) %>
+                <%= hidden_field_tag(:first_name, first_and_middle_names[0]) %>
                 <% if first_and_middle_names[1] %>
-                  <%= hidden_field_tag(:name_MI, first_and_middle_names[1].first) %>
+                  <%= hidden_field_tag(:middle_name, first_and_middle_names[1].first) %>
                 <% end %>
-                <%= hidden_field_tag(:osu_username, entry.uid.first) %>
+                <%= hidden_field_tag(:uid, entry.uid.first) %>
                 <%= hidden_field_tag(:osu_id, entry.osuuid.first) %>
                 <% if entry.respond_to?(:mail) %>
                   <%= hidden_field_tag(:email, entry.mail.first) %>

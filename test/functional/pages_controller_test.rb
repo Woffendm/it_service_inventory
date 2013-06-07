@@ -5,7 +5,7 @@ class PagesControllerTest < ActionController::TestCase
     @group = groups(:cws)
     @service = services(:rails)
     session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
+    session[:uid] = employees(:michael).uid
     session[:results_per_page] = 25
   end
 

@@ -4,7 +4,7 @@ class LoginsControllerTest < ActionController::TestCase
   setup do
     @user = employees(:yoloswag)
     session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
+    session[:uid] = employees(:michael).uid
     session[:results_per_page] = 24
   end
 
@@ -48,7 +48,7 @@ class LoginsControllerTest < ActionController::TestCase
   
   
   test "should change results per page and redirect to referring page with additional url items" do
-    @request.env['HTTP_REFERER'] = employees_path + "?page=3&ascending=true&commit=Search+&current_order=&order=name_last&search[active]=&search[group]=&search[name]=&search[service]=&table="
+    @request.env['HTTP_REFERER'] = employees_path + "?page=3&ascending=true&commit=Search+&current_order=&order=last_name&search[active]=&search[group]=&search[name]=&search[service]=&table="
     get :change_results_per_page, :results_per_page => 100
     assert_not_nil session[:results_per_page]
     assert_equal session[:results_per_page], "100"
@@ -68,7 +68,7 @@ class LoginsControllerTest < ActionController::TestCase
     post :create, :username => "yoloswag"
     assert_equal 25, session[:results_per_page]
     assert_equal session[:current_user_name], @user.full_name
-    assert_equal session[:current_user_osu_username], @user.osu_username
+    assert_equal session[:uid], @user.uid
     assert_redirected_to pages_home_path
   end
   
@@ -88,7 +88,7 @@ class LoginsControllerTest < ActionController::TestCase
   test "should destroy login session" do
     post :destroy
     assert_nil session[:current_user_name]
-    assert_nil session[:current_user_osu_username]
+    assert_nil session[:uid]
     assert_nil session[:results_per_page]
     assert_redirected_to logins_new_path
   end

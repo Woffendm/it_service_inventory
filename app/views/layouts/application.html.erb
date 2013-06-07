@@ -179,8 +179,10 @@
     <div id="footer">
       <div class="container">
         <div class="row">
+          <%= !!session[:cas_user] %>
           <%= session[:cas_user] %>
-          <%= session[:current_user_osu_username] %>
+          <%= @current_user %>
+          <%= session[:uid] %>
           &nbsp;
         </div>
       </div>

@@ -12,8 +12,8 @@ class AppSettingsController < ApplicationController
 
   # View with a list of all current site admins, and a form to add additional admins
   def admins
-    @admins = Employee.where(:site_admin => true).order(:name_last, :name_first)
-    @not_admins = Employee.order(:name_last, :name_first) - @admins
+    @admins = Employee.where(:site_admin => true).order(:last_name, :first_name)
+    @not_admins = Employee.order(:last_name, :first_name) - @admins
   end
 
 

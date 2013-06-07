@@ -19,7 +19,7 @@ class PagesController < ApplicationController
       @data_title_2 = t(:employee_headcount)
       @group = @current_user.groups.first
       @services = @group.services(@year)
-      @employees = @group.employees.order(:name_last, :name_first)
+      @employees = @group.employees.order(:last_name, :first_name)
       @graph_title = t(:allocations_for_group) + @group.name
       @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
@@ -44,7 +44,7 @@ class PagesController < ApplicationController
     @data_title_2 = t(:employee_headcount)
     if @group && @service.nil?
       @services = @group.services(@year)
-      @employees = @group.employees.order(:name_last, :name_first)
+      @employees = @group.employees.order(:last_name, :first_name)
       @graph_title = t(:allocations_for_group) + @group.name
       @x_axis_title = t(:service)
       @employee_headcount = @group.employees.length
@@ -55,7 +55,7 @@ class PagesController < ApplicationController
     end
     if @group.nil? && @service
       @groups = @service.groups(@year)
-      @employees = @service.employees.order(:name_last, :name_first)
+      @employees = @service.employees.order(:last_name, :first_name)
       @graph_title = t(:allocations_for_service) + @service.name 
       @x_axis_title = t(:group)
       @employee_headcount = @service.employees.length
@@ -69,7 +69,7 @@ class PagesController < ApplicationController
       @groups = @service.groups(@year)
       @employees = Employee.joins(:groups, :services).where(
                   :groups => {:id => 1}, :employee_allocations => {:fiscal_year_id => 1},
-                  :services => {:id => 1}).order(:name_last, :name_first)
+                  :services => {:id => 1}).order(:last_name, :first_name)
       @graph_title = t(:allocations_for_group) + @group.name + t(:and_service) + @service.name
       @x_axis_title = t(:employee)
       data_array = @service.employee_allocations_within_group(@group, @year, @allocation_precision)

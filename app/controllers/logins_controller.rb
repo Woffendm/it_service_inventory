@@ -16,7 +16,7 @@ class LoginsController < ApplicationController
 
   # Development tool for logging in without a password
   def new_backdoor
-    redirect_to logins_new_path unless Rails.env.development?
+    redirect_to RubyCAS::Filter.login_url(self) unless Rails.env.development?
   end
 
 
@@ -53,12 +53,12 @@ class LoginsController < ApplicationController
 
   # Sets session value to current user/employee (login)
   def create
-    employee_exists = Employee.find_by_osu_username(params[:username].downcase)
+    employee_exists = Employee.find_by_uid(params[:username].downcase)
     if employee_exists
       session[:current_user_name] = employee_exists.full_name
-      session[:current_user_osu_username] = employee_exists.osu_username
+      session[:uid] = employee_exists.uid
       session[:results_per_page] = 25
-      flash[:notice] = "Welcome " + employee_exists.name_first + "!"
+      flash[:notice] = "Welcome " + employee_exists.first_name + "!"
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
@@ -73,12 +73,12 @@ class LoginsController < ApplicationController
       redirect_to logins_new_path
       return
     end
-    employee_exists = Employee.find_by_osu_username(params[:username].downcase)
+    employee_exists = Employee.find_by_uid(params[:username].downcase)
     if employee_exists
       session[:current_user_name] = employee_exists.full_name
-      session[:current_user_osu_username] = employee_exists.osu_username
+      session[:uid] = employee_exists.uid
       session[:results_per_page] = 25
-      flash[:notice] = "Welcome " + employee_exists.name_first + "!"
+      flash[:notice] = "Welcome " + employee_exists.first_name + "!"
       redirect_to pages_home_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
@@ -90,9 +90,9 @@ class LoginsController < ApplicationController
   # Removes session value (logout)
   def destroy
     session[:current_user_name] = nil
-    session[:current_user_osu_username] = nil
+    session[:uid] = nil
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
-    redirect_to logins_new_path
+    RubyCAS::Filter.logout(self, request.referer)
   end
 end

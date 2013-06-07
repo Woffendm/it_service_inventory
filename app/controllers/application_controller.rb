@@ -5,12 +5,13 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
+  before_filter RubyCAS::Filter
   # Makes the active theme available throughout application (disabled until we get some actual
   # themes, but will be used later)
   # before_filter :load_theme
-  before_filter :current_user
-  before_filter :require_login
+  before_filter :get_current_user
+  helper_method :current_user
+  #before_filter :require_login
   before_filter :load_logo
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
@@ -29,21 +30,41 @@ class ApplicationController < ActionController::Base
     end
     
     
+    def current_user
+      return @current_user
+    end
+    
+    
     # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
     # the persion described by the session still exists in the database. If they do, then it stores 
     # the corresponding Employee/User in @current_user. Then checks to see if the request was in
     # a supported format. If it is, then checks to see if the request sent the correct REST api key
     # in its headers. If not, clears the session. 
-    def current_user
-      if !Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
-        @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
-      elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
-        @key_passed = true if request.headers['app_key'] == AppSetting.get_rest_api_key
-      else
-        session[:current_user_name] = nil
-        session[:results_per_page] = nil
-        session[:current_user_osu_username] = nil
+    def get_current_user
+      if session[:cas_user]
+        uid = session[:cas_user]
+
+        @current_user = Employee.find_by_uid(uid)
+
+        # Ensure the user was successfully retrieved from ldap. If no information for them is
+        # available, the app is unusable, so we need to let them try to log in again
+        unless @current_user
+          Rails.logger.error "Valid CAS session, but no LDAP record for " + uid
+          # Destroy old session
+          session[:cas_user] = nil
+          redirect_to RubyCAS::Filter.login_url(self)
+          return
+        end
       end
+      #if !Employee.where(:uid => session[:uid]).blank? 
+      #  @current_user = Employee.find_by_uid(session[:uid])
+      #elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
+      #  @key_passed = true if request.headers['app_key'] == AppSetting.get_rest_api_key
+      #else
+      #  session[:current_user_name] = nil
+      #  session[:results_per_page] = nil
+      #  session[:uid] = nil
+      #end
     end
 
     
@@ -118,7 +139,7 @@ class ApplicationController < ActionController::Base
         if objects.first.respond_to?(:name)
           objects = objects.order(:name)
          else
-          objects = objects.order(:name_last, :name_first)
+          objects = objects.order(:last_name, :first_name)
         end
       end 
       return objects

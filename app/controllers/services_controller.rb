@@ -116,7 +116,7 @@ class ServicesController < ApplicationController
     # Loads all employees allocated to this service
     def load_associations
       @employee_allocations = @service.employee_allocations.joins(:employee).where(
-          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
+          :fiscal_year_id => @year.id).includes(:employee).order(:last_name, :first_name)
       @products = @service.products.order(:name)
       @groups = @service.groups(@year).order(:name)
     end

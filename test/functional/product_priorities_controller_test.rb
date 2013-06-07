@@ -3,7 +3,7 @@ require 'test_helper'
 class ProductPrioritiesControllerTest < ActionController::TestCase
   setup do
     session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
+    session[:uid] = employees(:michael).uid
     session[:results_per_page] = 25
     @product_priority = product_priorities(:omega)
   end

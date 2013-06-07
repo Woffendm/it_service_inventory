@@ -4,7 +4,7 @@ class EmployeesControllerTest < ActionController::TestCase
   setup do
     @employee = employees(:michael)
     session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
+    session[:uid] = employees(:michael).uid
     session[:results_per_page] = 25
   end
 
@@ -18,8 +18,8 @@ class EmployeesControllerTest < ActionController::TestCase
 
   test "should create employee if valid employee given" do
     assert_difference('Employee.count', 1) do
-      post :ldap_create, "name_last"=>"Person", "name_first"=>"New", 
-          "osu_username"=>"newperson", "osu_id"=>"34524243342", "email"=>"newperson@pie.com"
+      post :ldap_create, "last_name"=>"Person", "first_name"=>"New", 
+          "uid"=>"newperson", "osu_id"=>"34524243342", "email"=>"newperson@pie.com"
     end
     assert_response :success
   end
@@ -27,8 +27,8 @@ class EmployeesControllerTest < ActionController::TestCase
 
   test "should not create employee if invalid employee given" do
     assert_no_difference('Employee.count') do
-      post :ldap_create, "name_last"=> nil, "name_first"=> nil, 
-          "osu_username"=> nil, "osu_id"=> nil, "email"=>nil
+      post :ldap_create, "last_name"=> nil, "first_name"=> nil, 
+          "uid"=> nil, "osu_id"=> nil, "email"=>nil
     end
     assert_response :success
   end

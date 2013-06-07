@@ -183,7 +183,7 @@ class ProductsController < ApplicationController
       @product_services =
           @product.product_services.joins(:service).includes(:service).order("services.name")
       @employee_products = @product.employee_products.joins(:employee).where(
-          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
+          :fiscal_year_id => @year.id).includes(:employee).order(:last_name, :first_name)
     end
 
 
