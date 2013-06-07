@@ -3,9 +3,9 @@ require 'test_helper'
 class ServicesControllerTest < ActionController::TestCase
   setup do
     @service = services(:rails)
-    session[:current_user_name] = employees(:michael).full_name
     session[:cas_user] = employees(:michael).uid
-    session[:results_per_page] = 25
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 

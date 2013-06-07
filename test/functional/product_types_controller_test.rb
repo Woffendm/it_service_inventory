@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ProductTypesControllerTest < ActionController::TestCase
   setup do
-    session[:current_user_name] = employees(:michael).full_name
     session[:cas_user] = employees(:michael).uid
-    session[:results_per_page] = 25
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
     @product_type = product_types(:awesome)
   end
 

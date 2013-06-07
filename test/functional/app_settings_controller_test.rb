@@ -4,6 +4,7 @@ class AppSettingsControllerTest < ActionController::TestCase
   setup do
     session[:cas_user] = employees(:michael).uid
     session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 

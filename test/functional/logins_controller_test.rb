@@ -3,21 +3,16 @@ require 'test_helper'
 class LoginsControllerTest < ActionController::TestCase
   setup do
     @user = employees(:yoloswag)
-    session[:current_user_name] = employees(:michael).full_name
     session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
     session[:results_per_page] = 24
-  end
-
-
-  test "should get login" do
-    get :new
-    assert_redirected_to Project1::Application.config.config['ldap_login_path']
   end
   
   
   test "backdoor login to application should be disabled" do
     get :new_backdoor
-    assert_redirected_to logins_new_path
+    assert_redirected_to logout_path
   end
   
   
@@ -67,29 +62,24 @@ class LoginsControllerTest < ActionController::TestCase
   test "should create login session" do
     post :create, :username => "yoloswag"
     assert_equal 25, session[:results_per_page]
-    assert_equal session[:current_user_name], @user.full_name
-    assert_equal session[:uid], @user.uid
     assert_redirected_to pages_home_path
   end
   
   
   test "should not create login session if user is not in application" do 
     post :create, :username => "not in application"
-    assert_redirected_to logins_new_path
+    assert_redirected_to logout_path
   end
   
   
   test "backdoor login session creation should be disabled" do
     get :create_backdoor, :username => "woffendm"
-    assert_redirected_to logins_new_path
+    assert_redirected_to logout_path
   end
   
   
   test "should destroy login session" do
     post :destroy
-    assert_nil session[:current_user_name]
-    assert_nil session[:uid]
-    assert_nil session[:results_per_page]
-    assert_redirected_to logins_new_path
+    assert_redirected_to logout_path
   end
 end
