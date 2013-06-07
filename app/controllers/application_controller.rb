@@ -5,13 +5,12 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter RubyCAS::Filter
   # Makes the active theme available throughout application (disabled until we get some actual
   # themes, but will be used later)
   # before_filter :load_theme
+  before_filter :check_for_api_key
+  before_filter  RubyCAS::Filter
   before_filter :get_current_user
-  helper_method :current_user
-  #before_filter :require_login
   before_filter :load_logo
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
@@ -20,51 +19,48 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, :with => :permission_denied
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from ActionController::RoutingError, :with => :page_not_found
+  helper_method :current_user
+  
 
+
+  # Destroys session and logs user out of CAS.
+  def logout
+    reset_session
+    flash[:notice] = t(:logged_out)
+    RubyCAS::Filter.logout(self, root_path)
+  end
 
 
   private
-    # Redirects user to login page unless they are logged in
-    def require_login
-      redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user || @key_passed
-    end
-    
-    
+    # Returns the current user (required method for CanCan)
     def current_user
       return @current_user
     end
     
     
-    # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
-    # the persion described by the session still exists in the database. If they do, then it stores 
-    # the corresponding Employee/User in @current_user. Then checks to see if the request was in
-    # a supported format. If it is, then checks to see if the request sent the correct REST api key
-    # in its headers. If not, clears the session. 
-    def get_current_user
-      if session[:cas_user]
-        uid = session[:cas_user]
-
-        @current_user = Employee.find_by_uid(uid)
-
-        # Ensure the user was successfully retrieved from ldap. If no information for them is
-        # available, the app is unusable, so we need to let them try to log in again
-        unless @current_user
-          Rails.logger.error "Valid CAS session, but no LDAP record for " + uid
-          # Destroy old session
-          session[:cas_user] = nil
-          redirect_to RubyCAS::Filter.login_url(self)
-          return
-        end
+    # Checks to see if the request header contains the api key
+    def check_for_api_key
+      if ['xml', 'json', 'jsonp'].include?(params[:format]) && request.headers['app_key'] == AppSetting.get_rest_api_key
+        session[:cas_user] = Employee.first.uid 
       end
-      #if !Employee.where(:uid => session[:uid]).blank? 
-      #  @current_user = Employee.find_by_uid(session[:uid])
-      #elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
-      #  @key_passed = true if request.headers['app_key'] == AppSetting.get_rest_api_key
-      #else
-      #  session[:current_user_name] = nil
-      #  session[:results_per_page] = nil
-      #  session[:uid] = nil
-      #end
+    end
+    
+    
+    # Loads the currently logged-in user. If the user in the session is blank or not in the
+    # database, clears the session.
+    def get_current_user
+      uid = session[:cas_user] 
+      @current_user = Employee.find_by_uid(uid) unless uid.blank?
+      if @current_user.blank?
+        # Destroy old session
+        redirect_to :logout
+        return
+      elsif session[:already_logged_in].blank?
+        session[:already_logged_in] = true
+        session[:results_per_page] = 25
+        flash[:notice] = t(:welcome) + @current_user.first_name + "!"
+        redirect_to root_path
+      end
     end
 
     

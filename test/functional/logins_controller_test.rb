@@ -4,7 +4,7 @@ class LoginsControllerTest < ActionController::TestCase
   setup do
     @user = employees(:yoloswag)
     session[:current_user_name] = employees(:michael).full_name
-    session[:uid] = employees(:michael).uid
+    session[:cas_user] = employees(:michael).uid
     session[:results_per_page] = 24
   end
 

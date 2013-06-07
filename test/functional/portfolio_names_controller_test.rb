@@ -3,7 +3,7 @@ require 'test_helper'
 class PortfolioNamesControllerTest < ActionController::TestCase
   setup do
     session[:current_user_name] = employees(:michael).full_name
-    session[:uid] = employees(:michael).uid
+    session[:cas_user] = employees(:michael).uid
     session[:results_per_page] = 25
     @portfolio_name = portfolio_names(:awesome_stuff)
   end

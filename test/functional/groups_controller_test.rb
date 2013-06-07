@@ -5,7 +5,7 @@ class GroupsControllerTest < ActionController::TestCase
     @group = groups(:cws)
     @employee = employees(:yoloswag)
     session[:current_user_name] = employees(:michael).full_name
-    session[:uid] = employees(:michael).uid
+    session[:cas_user] = employees(:michael).uid
     session[:results_per_page] = 25
   end
 

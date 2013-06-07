@@ -21,6 +21,8 @@ Project1::Application.routes.draw do
   match 'pages/home' => 'pages#home'
   match '/404' => 'errors#page_not_found'
   match '/500' => 'errors#internal_server_error'
+  match 'logout', :controller => :application, :action => :logout, :via => :get
+
 
 
   resources :groups do

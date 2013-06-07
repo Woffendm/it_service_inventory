@@ -7,26 +7,27 @@
 michael: 
   first_name:   michael
   last_name:    woffendin
-  uid: woffendm
+  uid:          woffendm
   osu_id:       93898765678
   site_admin:   true
 
 yoloswag: 
   first_name:   yolo
   last_name:    swag
-  uid: yoloswag
+  uid:          yoloswag
   osu_id:       12983213123
+  site_admin:   false
 
 admin: 
   first_name:   admin
   last_name:    admin
-  uid: hansenm
+  uid:          hansenm
   osu_id:       63554675687
   site_admin:   true
   
 inactive:
   first_name:   in
   last_name:    active
-  uid: inactive
+  uid:          inactive
   osu_id:       24234321523
   active:       false

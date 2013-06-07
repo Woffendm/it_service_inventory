@@ -3,7 +3,7 @@ require 'test_helper'
 class FiscalYearsControllerTest < ActionController::TestCase
   setup do
     session[:current_user_name] = employees(:michael).full_name
-    session[:uid] = employees(:michael).uid
+    session[:cas_user] = employees(:michael).uid
     session[:results_per_page] = 25
     @fiscal_year = fiscal_years(:year_2014)
   end

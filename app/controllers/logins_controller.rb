@@ -8,13 +8,12 @@ class LoginsController < ApplicationController
 
 
 
-  # Redirects to secure onid login page
+  # View for logging into the application (Currently unused).
   def new
-    redirect_to Project1::Application.config.config['ldap_login_path']
   end
 
 
-  # Development tool for logging in without a password
+  # Development tool for logging in as any user without a password
   def new_backdoor
     redirect_to RubyCAS::Filter.login_url(self) unless Rails.env.development?
   end
@@ -51,12 +50,10 @@ class LoginsController < ApplicationController
   end
 
 
-  # Sets session value to current user/employee (login)
+  # Sets session value to current user/employee (currently unused)
   def create
     employee_exists = Employee.find_by_uid(params[:username].downcase)
     if employee_exists
-      session[:current_user_name] = employee_exists.full_name
-      session[:uid] = employee_exists.uid
       session[:results_per_page] = 25
       flash[:notice] = "Welcome " + employee_exists.first_name + "!"
       redirect_to pages_home_path
@@ -70,27 +67,16 @@ class LoginsController < ApplicationController
   # Development tool for logging in without a password
   def create_backdoor
     unless Rails.env.development?
-      redirect_to logins_new_path
+      redirect_to RubyCAS::Filter.login_url(self)
       return
     end
-    employee_exists = Employee.find_by_uid(params[:username].downcase)
-    if employee_exists
-      session[:current_user_name] = employee_exists.full_name
-      session[:uid] = employee_exists.uid
-      session[:results_per_page] = 25
-      flash[:notice] = "Welcome " + employee_exists.first_name + "!"
-      redirect_to pages_home_path
-    else
-      flash[:error] = "No employee with that ONID username is in the application"
-      redirect_to logins_new_path
-    end
+    session[:cas_user] = params[:username].downcase
+    redirect_to pages_home_path
   end
 
   
-  # Removes session value (logout)
+  # Removes session value (currently used)
   def destroy
-    session[:current_user_name] = nil
-    session[:uid] = nil
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
     RubyCAS::Filter.logout(self, request.referer)
