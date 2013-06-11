@@ -9,6 +9,8 @@ $(document).ready(function(){
   // Establishes a number of variables to be used later on. Variables in all caps are constants.
   var correspondingSelectBox;
   var fteResult;
+  var triggers = $(".fte_calculator_trigger");
+  var selectBoxes = $(".calculator_select");
   var hoursPerMonth = $('#hours_per_month');
   var hoursPerWeek = $('#hours_per_week');
   var useThisNumber = $('#use_this_number');
@@ -19,13 +21,11 @@ $(document).ready(function(){
   // Closes and clears any open FTE calculator dialogue windows. Opens the FTE calculator next to
   // the trigger when user clicks on the trigger. Sets the corresponding select box to whichever
   // select box came directly before the trigger. 
-  $(".fte_calculator_trigger").click(function(e){ 
-    if(correspondingSelectBox != $(".calculator_select")[$(".fte_calculator_trigger").index(this)]){
-      correspondingSelectBox = $(".calculator_select")[$(".fte_calculator_trigger").index(this)];
-      hoursPerMonth.val("");
-      hoursPerWeek.val("");
-      popAllocationResult(-1)
-    }
+  triggers.on('click', function(){ 
+    correspondingSelectBox = selectBoxes[triggers.index(this)];
+    hoursPerMonth.val("");
+    hoursPerWeek.val("");
+    popAllocationResult(-1)
   });
 
 
@@ -55,17 +55,19 @@ $(document).ready(function(){
 
   // Sets the selected value in the corresponding select box to the calculated value. Fires the 
   // 'change' event for the select box.
-  useThisNumber.click(function(e) {
-    if(canSubmit) {
+  useThisNumber.on('click', function() {
+    $(".calculator_select").trigger("keyup");
+  });
+  
+  
+  // Sets the selected value in the corresponding select box to the calculated value. Fires the 
+  // 'change' event for the select box.
+  useThisNumber.on('click', function() {
       fteResult = Math.round(fteResult*Math.pow(10,allocationPrecision)) /
                   Math.pow(10,allocationPrecision);
-      if(fteResult == 1) {
-        fteResult = "1.0";
-      }
       correspondingSelectBox.value = fteResult;
-      $(".calculator_select").trigger("change");
+      $(".new-allocation-1, .new-allocation-2").trigger("keyup");
       $("#fte_calculator").modal("toggle");
-    }
   });
 });
 
@@ -80,7 +82,6 @@ $(document).ready(function(){
 // message. If the calculated value is greater than 1, displays an apropriate message.
 function popAllocationResult(fteResult){
   $("#use_this_number").attr("class", off);
-  canSubmit = false;
   if(fteResult > 1) {
     $("#allocation_result_container").html(over_allocated);
   } 
@@ -90,7 +91,6 @@ function popAllocationResult(fteResult){
   else {
     $("#allocation_result_container").html(fteResult.toFixed(allocationPrecision) + " " + fte);
     $("#use_this_number").attr("class", on);
-    canSubmit = true;
   }
   return false;
 }
