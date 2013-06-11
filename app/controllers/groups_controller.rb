@@ -135,7 +135,7 @@ class GroupsController < ApplicationController
     def load_employees_for_year
       @employees = @group.employees.joins(:employee_allocations).where(
           "employee_allocations.fiscal_year_id = ?",  @year.id).uniq.includes(
-          :employee_allocations).order(:name_last, :name_first).paginate(:page =>   
+          :employee_allocations).order(:last_name, :first_name).paginate(:page =>   
           params[:employees_page], :per_page => session[:results_per_page])
     end
 
@@ -144,7 +144,7 @@ class GroupsController < ApplicationController
     def load_existing_employees
       @existing_employees = EmployeeGroup.joins(:employee).where(
             :group_id => @group.id).includes(:employee).order(
-            :name_last, :name_first).paginate(:page =>   
+            :last_name, :first_name).paginate(:page =>   
             params[:employees_page], :per_page => session[:results_per_page])
     end
 
@@ -206,7 +206,7 @@ class GroupsController < ApplicationController
                                 @allocation_precision).to_s + " " + t(:fte),
                                 product.employee_products.joins(:employee => :groups).where(
                                 :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
-                                "employees.name_last").includes(:employee)]
+                                "employees.last_name").includes(:employee)]
       end
     end
     
@@ -221,7 +221,7 @@ class GroupsController < ApplicationController
                                 @allocation_precision).to_s + " " + t(:fte), 
                                 service.employee_allocations.joins(:employee => :groups).where(
                                 :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
-                                "employees.name_last").includes(:employee)]
+                                "employees.last_name").includes(:employee)]
       end
     end
 end

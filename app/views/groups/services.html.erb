@@ -1,4 +1,4 @@
-<%= label_tag :service_id, t(:service), :class => "inline" %>
 <%= collection_select(:service, :id, @services, :id, :name,  
-                     {:include_blank => t(:all_services), 
-                      :selected => @selected_service }) %>
+                     {:include_blank => t(:all_services),
+                      :selected => @selected_service }, 
+                     {:class => "autocomplete large-select"}) %>

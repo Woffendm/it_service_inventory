@@ -3,9 +3,9 @@ require 'test_helper'
 class ServicesControllerTest < ActionController::TestCase
   setup do
     @service = services(:rails)
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 
@@ -58,7 +58,7 @@ class ServicesControllerTest < ActionController::TestCase
 
   test "should get groups of service if given service id" do
     get :groups, :service => {:id => @service.id}
-    assert_equal @service.groups(AppSetting.get_current_fiscal_year), assigns(:groups)
+    assert_equal @service.groups(AppSetting.current_fiscal_year), assigns(:groups)
     assert_response :success
   end
   

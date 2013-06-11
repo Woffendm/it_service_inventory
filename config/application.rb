@@ -2,7 +2,6 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 require 'rubygems'
-require 'net/ldap'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -63,7 +62,22 @@ module Project1
     
     config.exceptions_app = self.routes
     
+    
+    
     # Loads a bunch of configurations for the application
     config.config = YAML.load_file("#{Rails.root}/config/config.yml")
+    
+    # Configure OSU LDAP
+    config.ldap = config.config['ldap']
+
+    # Configure CAS
+    config.rubycas.cas_base_url = config.config['cas']['cas_base_url']
+    config.rubycas.logger = Rails.logger
+    #config.rubycas.use_gatewaying = true
+
+    if config.config['force_ssl'].equal?(true) || config.config['force_ssl'].equal?(false)
+      config.force_ssl = config.config['force_ssl']
+    end
+    
   end
 end

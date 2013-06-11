@@ -6,18 +6,18 @@ describe Employee do
   it "should require a name" do
     employee = Employee.new
     employee.should_not be_valid
-    employee.should have_at_least(1).error_on(:name_first)
-    employee.should have_at_least(1).error_on(:name_last)
-    employee.should have_at_least(1).error_on(:osu_username)
+    employee.should have_at_least(1).error_on(:first_name)
+    employee.should have_at_least(1).error_on(:last_name)
+    employee.should have_at_least(1).error_on(:uid)
   end
 
 
   # Can save when given a name
   it "should save when given a name" do
     employee = Employee.new
-    employee.name_first = "some"
-    employee.name_last = "employee"
-    employee.osu_username = "yoloswag4ever"
+    employee.first_name = "some"
+    employee.last_name = "employee"
+    employee.uid = "yoloswag4ever"
     employee.should be_valid
   end
 
@@ -26,16 +26,16 @@ describe Employee do
   describe "only one of each employee" do
     before do
       @employee = Employee.new
-      @employee.name_first = "some"
-      @employee.name_last = "employee"
+      @employee.first_name = "some"
+      @employee.last_name = "employee"
       @employee.osu_id = "1"
-      @employee.osu_username = "bob"
+      @employee.uid = "bob"
       @employee.save
       @employee2 = Employee.new
-      @employee2.name_first = "some"
-      @employee2.name_last = "employee"
+      @employee2.first_name = "some"
+      @employee2.last_name = "employee"
       @employee2.osu_id = "1"
-      @employee2.osu_username = "bob"
+      @employee2.uid = "bob"
     end
 
 
@@ -48,7 +48,7 @@ describe Employee do
     # Unique employees are valid
     it "should save when given a unique osu username and id" do
       @employee2.osu_id = "unique id"
-      @employee2.osu_username = "unique username"
+      @employee2.uid = "unique username"
       @employee2.should be_valid
     end
   end
@@ -60,7 +60,7 @@ describe Employee do
       @fiscal_year = FiscalYear.create(:year => 9001)
       @service = Service.create(:name => "first service")
       @service_2 = Service.create(:name => "last service")
-      @employee = Employee.create(:name_first => "some", :name_last => "employee", :osu_username => "yoloswag4ever")
+      @employee = Employee.create(:first_name => "some", :last_name => "employee", :uid => "yoloswag4ever")
       @employee.employee_allocations.create(:service_id => @service.id, :allocation => 0.1, :fiscal_year_id => @fiscal_year.id)
     end
 

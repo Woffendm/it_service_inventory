@@ -116,7 +116,7 @@ class Product < ActiveRecord::Base
     def rest_employees
       employee_array = []
       self.employees.uniq.each do |employee|
-        employee_array << {"id" => employee.id, "name_first" => employee.name_first, "name_last" => employee.name_last}
+        employee_array << {"id" => employee.id, "first_name" => employee.first_name, "last_name" => employee.last_name}
       end
       return employee_array
     end

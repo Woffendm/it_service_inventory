@@ -3,9 +3,9 @@ require 'test_helper'
 class PortfoliosControllerTest < ActionController::TestCase
   setup do
     @portfolio = portfolios(:one)
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
     @portfolio_name = portfolio_names(:awesome_stuff)
   end
 

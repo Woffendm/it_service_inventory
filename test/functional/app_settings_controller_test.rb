@@ -2,9 +2,9 @@ require 'test_helper'
 
 class AppSettingsControllerTest < ActionController::TestCase
   setup do
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 
@@ -25,7 +25,7 @@ class AppSettingsControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:site_admin => true).count', 1) do
       post :add_admin, :employee => {:id => @not_admin.id}
     end
-    assert_redirected_to app_settings_admins_path
+    assert_redirected_to admins_app_settings_path
   end
 
 
@@ -34,7 +34,7 @@ class AppSettingsControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:site_admin => true).count', -1) do
       post :remove_admin, :employee => @admin
     end
-    assert_redirected_to app_settings_admins_path
+    assert_redirected_to admins_app_settings_path
   end
 
 

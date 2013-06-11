@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130419233326) do
+ActiveRecord::Schema.define(:version => 20130606205150) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -48,11 +48,11 @@ ActiveRecord::Schema.define(:version => 20130419233326) do
   end
 
   create_table "employees", :force => true do |t|
-    t.string   "name_first"
-    t.string   "name_last"
-    t.string   "name_MI"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "middle_name"
     t.string   "email"
-    t.string   "osu_username"
+    t.string   "uid"
     t.string   "osu_id"
     t.boolean  "site_admin"
     t.text     "notes"
@@ -62,14 +62,25 @@ ActiveRecord::Schema.define(:version => 20130419233326) do
     t.string   "preferred_theme"
     t.boolean  "new_user_reminder",  :default => true
     t.boolean  "active",             :default => true
+    t.string   "ldap_identifier"
   end
+
+  add_index "employees", ["email"], :name => "index_employees_on_email", :unique => true
 
   create_table "fiscal_years", :force => true do |t|
     t.integer  "year"
-    t.boolean  "active",     :default => true
-    t.datetime "created_at",                   :null => false
-    t.datetime "updated_at",                   :null => false
+    t.boolean  "active"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.integer  "seed_id"
+  end
+
+  create_table "group_portfolios", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "portfolio_id"
+    t.integer  "product_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "groups", :force => true do |t|

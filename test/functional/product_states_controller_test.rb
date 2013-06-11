@@ -2,9 +2,9 @@ require 'test_helper'
 
 class ProductStatesControllerTest < ActionController::TestCase
   setup do
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
     @product_state = product_states(:liquid)
   end
 

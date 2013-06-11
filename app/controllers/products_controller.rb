@@ -173,7 +173,7 @@ class ProductsController < ApplicationController
 
     # Loads the application setting fte_hours_per_week 
     def load_application_settings
-      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+      @fte_hours_per_week = AppSetting.fte_hours_per_week
     end
 
 
@@ -183,7 +183,7 @@ class ProductsController < ApplicationController
       @product_services =
           @product.product_services.joins(:service).includes(:service).order("services.name")
       @employee_products = @product.employee_products.joins(:employee).where(
-          :fiscal_year_id => @year.id).includes(:employee).order(:name_last, :name_first)
+          :fiscal_year_id => @year.id).includes(:employee).order(:last_name, :first_name)
     end
 
 

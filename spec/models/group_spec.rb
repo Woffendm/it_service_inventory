@@ -13,16 +13,16 @@ describe Group do
   describe "available employees" do
     before do
       @employee = Employee.new
-      @employee.name_first = "some"
-      @employee.name_last = "employee"
+      @employee.first_name = "some"
+      @employee.last_name = "employee"
       @employee.osu_id = "1"
-      @employee.osu_username = "bob"
+      @employee.uid = "bob"
       @employee.save
       @employee_2 = Employee.new
-      @employee_2.name_first = "other"
-      @employee_2.name_last = "employee"
+      @employee_2.first_name = "other"
+      @employee_2.last_name = "employee"
       @employee_2.osu_id = "2"
-      @employee_2.osu_username = "frank"
+      @employee_2.uid = "frank"
       @employee_2.save
       @group = Group.create(:name => "some group")
       @group.employees.push(@employee)

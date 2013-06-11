@@ -31,10 +31,11 @@ $(document).ready(function(){
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
   // is clicked
   removeSet1.click(function(e) {
-    allocationSet1.trigger("keyup");
+    calculateAllocation(allocationSet1, 1, total1, newAllocation1, noOverAllocation1);
   });
+  
   removeSet2.click(function(e) {
-    allocationSet2.trigger("keyup");
+    calculateAllocation(allocationSet2, 2, total2, newAllocation2, noOverAllocation2);
   });
   
   
@@ -42,10 +43,11 @@ $(document).ready(function(){
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
   // is clicked
   newAllocation1.keyup(function(e) {
-    allocationSet1.trigger("keyup");
+    calculateAllocation(allocationSet1, 1, total1, newAllocation1, noOverAllocation1);
   });
+  
   newAllocation2.keyup(function(e) {
-    allocationSet2.trigger("keyup");
+    calculateAllocation(allocationSet2, 2, total2, newAllocation2, noOverAllocation2);
   });
   
   
@@ -54,9 +56,11 @@ $(document).ready(function(){
   allocationSet1.keyup(function() {
     calculateAllocation(allocationSet1, 1, total1, newAllocation1, noOverAllocation1);
   });
+  
   allocationSet2.keyup(function() {
     calculateAllocation(allocationSet2, 2, total2, newAllocation2, noOverAllocation2);
   });
+  
 });
 
 

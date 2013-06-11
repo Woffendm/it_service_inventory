@@ -3,9 +3,9 @@ require 'test_helper'
 class EmployeesControllerTest < ActionController::TestCase
   setup do
     @employee = employees(:michael)
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 
@@ -18,17 +18,15 @@ class EmployeesControllerTest < ActionController::TestCase
 
   test "should create employee if valid employee given" do
     assert_difference('Employee.count', 1) do
-      post :ldap_create, "name_last"=>"Person", "name_first"=>"New", 
-          "osu_username"=>"newperson", "osu_id"=>"34524243342", "email"=>"newperson@pie.com"
+      post :ldap_create, :uid => 'hansenm'
     end
     assert_response :success
   end
 
 
-  test "should not create employee if invalid employee given" do
+  test "should not create employee if already in application" do
     assert_no_difference('Employee.count') do
-      post :ldap_create, "name_last"=> nil, "name_first"=> nil, 
-          "osu_username"=> nil, "osu_id"=> nil, "email"=>nil
+      post :ldap_create, :uid => 'woffendm'
     end
     assert_response :success
   end
@@ -102,7 +100,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', 1) do
       post :toggle_active, :id => @inactive.id
     end
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
@@ -111,7 +109,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', -1) do
       post :toggle_active, :id => @active.id
     end
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   

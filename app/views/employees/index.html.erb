@@ -2,7 +2,7 @@
   <div class="view-header-inner">
     <h2> <%= t(:employees) %> </h2>
     <% if can? :create, Employee %>
-      <a class="btn btn-small" href="<%= employees_search_ldap_view_path %>">
+      <a class="btn btn-small" href="<%= search_ldap_view_employees_path %>">
         <i class="icon-plus"></i>
         <%= "#{t(:new)} #{t(:employee)}" %>
       </a>
@@ -33,7 +33,7 @@
 <table class="table table-striped">
   <caption> <%= t(:all_employees) %></caption>
   <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name_last', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:name), request.fullpath, nil, 'last_name', @order, @ascending) %> </th>
     <th> <%= t(:notes) %> </th>
     <th> <%= t(:total_allocation) %> </th>
   </thead>

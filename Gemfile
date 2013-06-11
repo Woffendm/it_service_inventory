@@ -10,7 +10,10 @@ gem 'therubyracer'
 
 gem 'cancan', '1.6.9'
 
-gem 'omniauth-ldap', '1.0.2'
+gem 'net-ldap'
+
+gem 'rubycas-client', '~> 2.2.1'
+gem 'rubycas-client-rails'
 
 gem 'will_paginate', '3.0.4'
 

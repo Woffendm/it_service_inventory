@@ -51,6 +51,37 @@
   
   <div class="control-group">
     <span class="control-label">
+      <%= label_tag :app_setting_logo, t(:logo) %>
+    </span>
+    <span class="controls">
+      <%= text_field_tag "app_setting[logo]", @logo %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <%= t(:logo_info) %> 
+    </span>
+  </div>
+  
+  
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :app_setting_open_login, t(:open_login) %>
+    </span>
+    <span class="controls">
+      <%= select(:app_setting, :open_login, [[t(:enabled), true], [t(:disabled), false]],
+                {:selected => @open_login} ) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <%= t(:open_login_info) %> 
+    </span>
+  </div>
+  
+  
+  
+  <div class="control-group">
+    <span class="control-label">
       <%= label_tag :app_setting_rest_api_key, t(:rest_api_key) %>
     </span>
     <span class="controls">
