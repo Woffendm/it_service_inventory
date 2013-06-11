@@ -5,6 +5,7 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  include CwsLogger
   # Makes the active theme available throughout application (disabled until we get some actual
   # themes, but will be used later)
   # before_filter :load_theme
