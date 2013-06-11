@@ -47,7 +47,7 @@ class AppSettingsControllerTest < ActionController::TestCase
   
   test "should not update app settings if invalid" do
     post :update_settings, :app_setting => {"current_fiscal_year" => "invalid",
-       "allocation_precision" => "invalid", "rest_api_key" => "", "fte_hours_per_week" => "invalid"}
+       "allocation_precision" => "invalid", "fte_hours_per_week" => "invalid"}
     assert_response :success
   end
 end
