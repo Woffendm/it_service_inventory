@@ -3,19 +3,14 @@
 # Author: Michael Woffendin 
 # Copyright:
 class LoginsController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_filter :get_current_user, :only => [:new_backdoor, :create_backdoor]
   skip_before_filter :remind_user_to_set_allocations
 
 
 
-  # View for logging into the application (Currently unused).
-  def new
-  end
-
-
   # Development tool for logging in as any user without a password
   def new_backdoor
-    redirect_to RubyCAS::Filter.login_url(self) unless Rails.env.development?
+    redirect_to logout_path unless Rails.env.development?
   end
 
 
@@ -32,7 +27,7 @@ class LoginsController < ApplicationController
       end
       redirect_to referring_page
     else
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     end
   end
 
@@ -45,7 +40,7 @@ class LoginsController < ApplicationController
     if referring_page
       redirect_to referring_page
     else
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     end
   end
 
@@ -56,10 +51,10 @@ class LoginsController < ApplicationController
     if employee_exists
       session[:results_per_page] = 25
       flash[:notice] = "Welcome " + employee_exists.first_name + "!"
-      redirect_to pages_home_path
+      redirect_to home_pages_path
     else
       flash[:error] = "No employee with that ONID username is in the application"
-      redirect_to logins_new_path
+      redirect_to logout_path
     end
   end
 
@@ -67,11 +62,17 @@ class LoginsController < ApplicationController
   # Development tool for logging in without a password
   def create_backdoor
     unless Rails.env.development?
-      redirect_to RubyCAS::Filter.login_url(self)
+      redirect_to logout_path
       return
     end
-    session[:cas_user] = params[:username].downcase
-    redirect_to pages_home_path
+    uid = params[:username].downcase
+    if Employee.find_by_uid(uid) || Employee.ldap_create(uid)
+      session[:cas_user] = uid
+      redirect_to home_pages_path
+      return
+    else
+      redirect_to new_logins_backdoor_path
+    end
   end
 
   
@@ -79,6 +80,6 @@ class LoginsController < ApplicationController
   def destroy
     session[:results_per_page] = nil
     flash[:notice] = t(:logged_out)
-    RubyCAS::Filter.logout(self, request.referer)
+    redirect_to logout_path
   end
 end

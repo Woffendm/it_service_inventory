@@ -2,7 +2,6 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 require 'rubygems'
-require 'net/ldap'
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -69,7 +68,7 @@ module Project1
     config.config = YAML.load_file("#{Rails.root}/config/config.yml")
     
     # Configure OSU LDAP
-    config.osu_ldap = config.config['osu_ldap']
+    config.ldap = config.config['ldap']
 
     # Configure CAS
     config.rubycas.cas_base_url = config.config['cas']['cas_base_url']

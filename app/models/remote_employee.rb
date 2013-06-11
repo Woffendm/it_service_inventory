@@ -27,12 +27,12 @@ class RemoteEmployee
   # This method preforms actions common to all above queries. They were consolodated into this one
   # method to avoid repetition.
   def self.search_by_filter(filter)
-    ldap = Net::LDAP.new :host => Project1::Application.config.config['host'], 
-                         :port => Project1::Application.config.config['port'],
-                         :encryption => Project1::Application.config.config['encryption']
-    ldap_results = ldap.search(:base => Project1::Application.config.config['treebase'], 
+    ldap = Net::LDAP.new :host => Project1::Application.config.ldap['host'], 
+                         :port => Project1::Application.config.ldap['port'],
+                         :encryption => Project1::Application.config.ldap['encryption']
+    ldap_results = ldap.search(:base => Project1::Application.config.ldap['base'], 
                          :filter => filter)
-    return nil if ldap_results == false
+    return nil if ldap_results.blank?
     return ldap_results.sort_by { |u| u.cn }
   end
   

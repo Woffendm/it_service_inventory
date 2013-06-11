@@ -20,7 +20,7 @@ class LoginsControllerTest < ActionController::TestCase
     get :change_results_per_page, :results_per_page => 100
     assert_not_nil session[:results_per_page]
     assert_equal session[:results_per_page], "100"
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
@@ -55,14 +55,14 @@ class LoginsControllerTest < ActionController::TestCase
     get :change_year, :year => 2014
     assert_not_nil cookies[:year]
     assert_equal cookies[:year], "2014"
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
   test "should create login session" do
     post :create, :username => "yoloswag"
     assert_equal 25, session[:results_per_page]
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   

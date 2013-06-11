@@ -43,7 +43,7 @@
 
             <div id="nav1">
               <span class="brand">
-                <%= link_to t(:IT_service_inventory), pages_home_path %>
+                <%= link_to t(:IT_service_inventory), home_pages_path %>
               </span>
               <% unless @current_user.blank? %>
                 <ul class="nav pull-right" id="login">
@@ -61,7 +61,7 @@
                         <%= link_to t(:profile), edit_employee_path(@current_user.id) %>
                       </li>
                       <li>
-                        <%= link_to t(:logout), logins_destroy_path %> 
+                        <%= link_to t(:logout), logout_path %> 
                       </li>
                     </ul>
                   </li>
@@ -127,7 +127,7 @@
                           <%= link_to t(:profile), edit_employee_path(@current_user.id) %>
                         </li>
                         <li>
-                          <%= link_to t(:logout), logins_destroy_path %> 
+                          <%= link_to t(:logout), logout_path %> 
                         </li>
                       </ul>
                     </li>

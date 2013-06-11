@@ -102,7 +102,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', 1) do
       post :toggle_active, :id => @inactive.id
     end
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   
@@ -111,7 +111,7 @@ class EmployeesControllerTest < ActionController::TestCase
     assert_difference('Employee.where(:active => true).count', -1) do
       post :toggle_active, :id => @active.id
     end
-    assert_redirected_to pages_home_path
+    assert_redirected_to home_pages_path
   end
   
   

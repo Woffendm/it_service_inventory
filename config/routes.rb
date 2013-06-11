@@ -11,17 +11,11 @@ Project1::Application.routes.draw do
 
   resources :products
 
-  match 'app_settings/admins' => 'app_settings#admins'
-  match 'employees/search_ldap_view' => 'employees#search_ldap_view'
-  match 'logins/new' => 'logins#new'
-  match 'logins/new_backdoor' => 'logins#new_backdoor'
-  match 'logins/destroy' => 'logins#destroy'
-  match '/auth/:provider/callback' => 'logins#create'
-  match 'logins/create_backdoor' => 'logins#create_backdoor'
-  match 'pages/home' => 'pages#home'
+
   match '/404' => 'errors#page_not_found'
   match '/500' => 'errors#internal_server_error'
   match 'logout', :controller => :application, :action => :logout, :via => :get
+
 
 
 
@@ -46,6 +40,7 @@ Project1::Application.routes.draw do
     collection do
       get 'ldap_search_results'
       get 'search_ldap'
+      get 'search_ldap_view'
       post 'ldap_create'
       post 'update_all_employees_via_ldap'
     end
@@ -54,6 +49,7 @@ Project1::Application.routes.draw do
 
   resources :app_settings do
     collection do
+      get 'admins'
       post 'add_admin'
       post 'remove_admin'
       post 'update_settings'
@@ -83,8 +79,11 @@ Project1::Application.routes.draw do
 
   resources :logins do
     collection do
+      get 'new_backdoor'
       get 'change_results_per_page'
       get 'change_year'
+      get 'destroy'
+      post 'create_backdoor'
     end
   end
 
@@ -92,6 +91,7 @@ Project1::Application.routes.draw do
   resources :pages do
     collection do
       get 'home_search'
+      get 'home'
     end
   end
 

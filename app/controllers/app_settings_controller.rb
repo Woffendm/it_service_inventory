@@ -30,7 +30,7 @@ class AppSettingsController < ApplicationController
     @new_admin.site_admin = true
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:added)
-    redirect_to app_settings_admins_path 
+    redirect_to admins_app_settings_path 
   end
 
 
@@ -40,7 +40,7 @@ class AppSettingsController < ApplicationController
     @new_admin.site_admin = nil
     @new_admin.save
     flash[:notice] = t(:site_admin) + t(:removed)
-    redirect_to app_settings_admins_path 
+    redirect_to admins_app_settings_path 
   end
 
 
@@ -68,10 +68,12 @@ class AppSettingsController < ApplicationController
     
     # Loads all app settings
     def load_settings
-      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-      @allocation_precision = AppSetting.get_allocation_precision
-      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      @allocation_precision = AppSetting.allocation_precision
+      @current_fiscal_year = AppSetting.current_fiscal_year
       @fiscal_years = FiscalYear.active_fiscal_years
-      @rest_api_key = AppSetting.get_rest_api_key
+      @fte_hours_per_week = AppSetting.fte_hours_per_week
+      @logo = AppSetting.logo
+      @open_login = AppSetting.open_login
+      @rest_api_key = AppSetting.rest_api_key
     end
 end

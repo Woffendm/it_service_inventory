@@ -10,12 +10,10 @@ gem 'therubyracer'
 
 gem 'cancan', '1.6.9'
 
-
+gem 'net-ldap'
 
 gem 'rubycas-client', '~> 2.2.1'
-gem 'rubycas-client-rails', :git => 'git@gitlab.cws.oregonstate.edu:rubycas-client-rails-osu.git'
-gem 'osu-ldap', :git => 'git@gitlab.cws.oregonstate.edu:osu-ldap.git'
-
+gem 'rubycas-client-rails'
 
 gem 'will_paginate', '3.0.4'
 

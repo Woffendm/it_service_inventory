@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   # before_filter :load_theme
   before_filter :check_for_api_key
   before_filter  RubyCAS::Filter
-  before_filter :get_current_user
+  before_filter :get_current_user, :except =>[:logout]
   before_filter :load_logo
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
@@ -47,15 +47,28 @@ class ApplicationController < ActionController::Base
     
     
     # Loads the currently logged-in user. If the user in the session is blank or not in the
-    # database, clears the session.
+    # database, checks to see if application accepts open login. If so, creates a new user.
+    # Otherwise destroys session.
     def get_current_user
       uid = session[:cas_user] 
       @current_user = Employee.find_by_uid(uid) unless uid.blank?
       if @current_user.blank?
-        # Destroy old session
-        redirect_to :logout
-        return
-      elsif session[:already_logged_in].blank?
+        # Creates new user
+        if AppSetting.open_login && uid
+          new_employee = Employee.ldap_create(uid)
+          if new_employee && new_employee.save
+            @current_user = new_employee
+          else
+            redirect_to :logout
+            return
+          end
+        else
+          redirect_to :logout
+          return
+        end
+      end
+      # Sets greeting if just logged in
+      if session[:already_logged_in].blank?
         session[:already_logged_in] = true
         session[:results_per_page] = 25
         flash[:notice] = t(:welcome) + @current_user.first_name + "!"
@@ -66,7 +79,7 @@ class ApplicationController < ActionController::Base
     
     # Loads the application's allocation precision as specified in the app settings.
     def load_allocation_precision
-      @allocation_precision = AppSetting.get_allocation_precision
+      @allocation_precision = AppSetting.allocation_precision
     end
 
 
@@ -74,7 +87,7 @@ class ApplicationController < ActionController::Base
     # deleted on accident) then the application creates a new one based off of the currently set
     # fiscal year value.
     def load_current_fiscal_year
-      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      @current_fiscal_year = AppSetting.current_fiscal_year
       if @current_fiscal_year.nil?
         @current_fiscal_year = FiscalYear.order(:updated_at).last
         AppSetting.find_by_code("current_fiscal_year").update_attributes(
@@ -85,13 +98,13 @@ class ApplicationController < ActionController::Base
 
     # Loads the logo's url specified in the app settings.
     def load_logo
-      @logo = Project1::Application.config.config['logo']
+      @logo = AppSetting.logo
     end
 
 
     # Loads the active theme.
     def load_theme
-      @current_theme = AppSetting.find_by_code('active-theme')
+      @theme = AppSetting.theme
     end
     
     

@@ -129,7 +129,7 @@ div.chart_div_container{
 
 
 .tooltip {
-  display: inline-block;
+  visibility: hidden;
 }
 
 .tooltip_trigger{
@@ -560,11 +560,12 @@ body{
 }
 
 #page-content{
-  min-height: calc(100% - 136px);
+  padding-top: 5px;
+  min-height: calc(100% - 140px);
 }
 
 .two-navs #page-content{
-  min-height: calc(100% - 183px);
+  min-height: calc(100% - 185px);
 }
 
 #content{

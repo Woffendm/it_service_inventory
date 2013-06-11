@@ -1,26 +1,40 @@
-<h2> <%= t(:home) %> </h2>
+<div class="view-header">
+  <div class="view-header-inner">
+    <h2> <%= t(:home) %> </h2>
+  </div>
+</div>
 
-  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-inline home-header") do %>
-    <span id="group_dropdown">
-      <span id="group_select_div">
-        <%= label_tag :group_id, t(:group)%>
+
+
+  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-horizontal light-border home-header") do %>
+    <div id="group_dropdown" class="control-group">
+      <span class="control-label">
+        <%= label_tag :group_id, t(:group) %>
+      </span>
+      <span id="group_select_div" class="controls">
         <%= collection_select(:group, :id, @groups, :id, :name, 
                              {:include_blank => t(:all_groups) }, 
                              {:class => "autocomplete large-select"}) %>
       </span>
-    </span>
-    <span id="service_dropdown">
-      <span id="service_select_div">
-        <%= label_tag :service_id, t(:service)%>
+    </div>
+    <div id="service_dropdown" class="control-group">
+      <span class="control-label">
+        <%= label_tag :service_id, t(:service) %>
+      </span>
+      <span id="service_select_div" class="controls">
         <%= collection_select(:service, :id, @services, :id, :name,  
                              {:include_blank => t(:all_services) }, 
                              {:class => "autocomplete large-select"}) %>
       </span>
-    </span>
-    <span id="home_header_buttons">
-      <%= submit_tag t(:view), :id => "search" %> 
-      <%= submit_tag t(:reset), :id => "clear", :type => :button %>
-    </span>
+    </div>
+    <div id="home_header_buttons" class="control-group">
+      <span class="control-label">
+      </span>
+      <span class="controls">
+        <%= submit_tag t(:view), :id => "search" %> 
+        <%= submit_tag t(:reset), :id => "clear", :type => :submit %>
+      </span>
+    </div>
   <% end %>
 
 
@@ -35,15 +49,20 @@
   <div id="pie_chart_div" class="span5"></div>
 <% else %>
   <br/> <br/>
-  <p class="error"> 
-    <%= t(:group_no_allocations_0) %>
-    <br/> <br/>
-    <%= t(:group_no_allocations_1) %>
-    <br/>
-    <%= t(:group_no_allocations_2) %>
-    <br/>
-    <%= t(:group_no_allocations_3) %>
-  </p>
+  
+  <div class="alert alert-block alert-info fade in">  
+    <a class="close" data-dismiss="alert" href="#">&times;</a>
+    <h4> <%= t(:heads_up) %> </h4>
+    <p>
+      <%= t(:group_no_allocations_0) %>
+      <br/>
+      <%= t(:group_no_allocations_1) %>
+      <br/>
+      <%= t(:group_no_allocations_2) %>
+      <br/>
+      <%= t(:group_no_allocations_3) %>
+    </p>
+  </div>
   <% if @employees %>
     <%= render  :partial => "/pages/employee_results",
                 :locals => {:@employees => @employees} %>

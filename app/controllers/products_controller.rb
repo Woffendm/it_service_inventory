@@ -173,7 +173,7 @@ class ProductsController < ApplicationController
 
     # Loads the application setting fte_hours_per_week 
     def load_application_settings
-      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+      @fte_hours_per_week = AppSetting.fte_hours_per_week
     end
 
 

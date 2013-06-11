@@ -28,9 +28,25 @@ class Employee < ActiveRecord::Base
   end
 
 
-  # Creates an employee using information gathered from LDAP.
+  # Creates an employee using information gathered from LDAP. Returns the new, unsaved employee 
   def self.ldap_create(uid)
-    RemoteEmployee.find_by_uid(uid)
+    employee_information = RemoteEmployee.find_by_uid(uid)
+    return nil if employee_information.blank?
+    employee_information = employee_information[0]
+    return nil if employee_information.blank?
+    # Splits returned string about the ',', separating the last name from the first and middle names
+    name = employee_information.cn.first.split(",")
+    # Splits the first and middle names around the " " between them. 
+    first_and_middle_names = name[1].split(" ")
+    # Creates the employee
+    new_employee = Employee.new
+    new_employee.last_name = name[0]
+    new_employee.first_name = first_and_middle_names[0]
+    new_employee.middle_name = first_and_middle_names[1]
+    new_employee.osu_id = employee_information[:osuuid][0]
+    new_employee.uid = uid
+    new_employee.email = employee_information[:mail][0].downcase unless employee_information[:mail].blank?
+    return new_employee
   end
 
 
