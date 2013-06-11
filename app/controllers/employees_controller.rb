@@ -99,14 +99,8 @@ class EmployeesController < ApplicationController
 
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
-    new_employee=Employee.new
-    new_employee.name_last = params[:name_last]
-    new_employee.name_first = params[:name_first]
-    new_employee.name_MI = params[:name_MI]
-    new_employee.osu_id = params[:osu_id]
-    new_employee.osu_username = params[:osu_username]
-    new_employee.email = params[:email].downcase unless params[:email].blank?
-    if new_employee.save
+    new_employee = Employee.ldap_create(params[:uid])
+    if new_employee && new_employee.save
       flash[:notice] = t(:employee) + t(:added)
     else
       flash[:error] = t(:already_in_application)
@@ -125,7 +119,8 @@ class EmployeesController < ApplicationController
 
   # Updates an employee based on info entered on the "edit" page.
   def update
-    new_total_allocation = 0.0
+    total_service_allocation = 0.0
+    total_product_allocation = 0.0
     # If a new group was sent with the params, adds it to the employee's list of groups
     if params[:employee_group]
       unless params[:employee_group][:group_id].blank?
@@ -138,11 +133,15 @@ class EmployeesController < ApplicationController
              (params[:employee_allocations][:allocation].blank?) ||
              (params[:employee_allocations][:fiscal_year_id].blank?)
         new_employee_allocation = @employee.employee_allocations.new(params[:employee_allocations])
-        new_employee_allocation.save
-        new_total_allocation += new_employee_allocation.allocation
+        unless new_employee_allocation.save
+          flash[:error] = t(:service) + t(:add) + t(:error)
+          render :edit
+          return
+        end
+        total_service_allocation += new_employee_allocation.allocation
       end
     end
-    # If a new service and allocation were sent with the params, adds them to the employee
+    # If a new product and allocation were sent with the params, adds them to the employee
     if params[:employee_products]
       unless (params[:employee_products][:product_id].blank?) ||
              (params[:employee_products][:fiscal_year_id].blank?)
@@ -152,19 +151,29 @@ class EmployeesController < ApplicationController
           render :edit
           return
         end
+        allocation = new_employee_product.allocation
+        total_product_allocation += allocation unless allocation.blank?
       end
     end
-    # Calculates the total allocation passed in params.
+    # Calculates the total service allocation passed in params.
     if params["employee"] && params[:employee]["employee_allocations_attributes"]
       params["employee"]["employee_allocations_attributes"].to_a.each do |new_allocation|
         if new_allocation.last["_destroy"].to_f != 1
-          new_total_allocation += new_allocation.last["allocation"].to_f
+          total_service_allocation += new_allocation.last["allocation"].to_f
+        end
+      end
+    end
+    # Calculates the total product eallocation passed in params.
+    if params["employee"] && params[:employee]["employee_products_attributes"]
+      params["employee"]["employee_products_attributes"].to_a.each do |new_allocation|
+        if new_allocation.last["_destroy"].to_f != 1 && !new_allocation.last["allocation"].blank?
+          total_product_allocation += new_allocation.last["allocation"].to_f
         end
       end
     end
     # Validates that the total allocation passed in params does not exceed 1FTE. It is only possible
     # to over-allocate a user if javascript is disabled.
-    if (new_total_allocation <= 1) && (@employee.update_attributes(params[:employee]))        
+    if (total_service_allocation <= 1) && (total_product_allocation <=1) && (@employee.update_attributes(params[:employee]))        
       flash[:notice] = t(:employee) + t(:updated)      
       redirect_to edit_employee_path(@employee.id)
       return
@@ -225,12 +234,12 @@ class EmployeesController < ApplicationController
         # either the first or last name.
         array_of_strings_to_search_for = @name.split(" ")
         # Searches for the first name (the first index)
-        search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[0]}%'")
-        search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        search_array << ("last_name LIKE '%#{array_of_strings_to_search_for[0]}%'")
+        search_array << ("first_name LIKE '%#{array_of_strings_to_search_for[0]}%'")
         # Searches for the last name if present (the second index)
         if array_of_strings_to_search_for.length > 1
-          search_array << ("name_last LIKE '%#{array_of_strings_to_search_for[1]}%'")
-          search_array << ("name_first LIKE '%#{array_of_strings_to_search_for[1]}%'")
+          search_array << ("last_name LIKE '%#{array_of_strings_to_search_for[1]}%'")
+          search_array << ("first_name LIKE '%#{array_of_strings_to_search_for[1]}%'")
         end
         search_string = search_array.join(" OR ")
       end
@@ -244,7 +253,7 @@ class EmployeesController < ApplicationController
 
     # Loads the application setting fte_hours_per_week
     def load_fte_hours_per_week
-      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
+      @fte_hours_per_week = AppSetting.fte_hours_per_week
     end
 
 

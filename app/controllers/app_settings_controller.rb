@@ -12,8 +12,8 @@ class AppSettingsController < ApplicationController
 
   # View with a list of all current site admins, and a form to add additional admins
   def admins
-    @admins = Employee.where(:site_admin => true).order(:name_last, :name_first)
-    @not_admins = Employee.order(:name_last, :name_first) - @admins
+    @admins = Employee.where(:site_admin => true).order(:last_name, :first_name)
+    @not_admins = Employee.order(:last_name, :first_name) - @admins
   end
 
 
@@ -68,10 +68,12 @@ class AppSettingsController < ApplicationController
     
     # Loads all app settings
     def load_settings
-      @fte_hours_per_week = AppSetting.get_fte_hours_per_week
-      @allocation_precision = AppSetting.get_allocation_precision
-      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      @allocation_precision = AppSetting.allocation_precision
+      @current_fiscal_year = AppSetting.current_fiscal_year
       @fiscal_years = FiscalYear.active_fiscal_years
-      @rest_api_key = AppSetting.get_rest_api_key
+      @fte_hours_per_week = AppSetting.fte_hours_per_week
+      @logo = AppSetting.logo
+      @open_login = AppSetting.open_login
+      @rest_api_key = AppSetting.rest_api_key
     end
 end

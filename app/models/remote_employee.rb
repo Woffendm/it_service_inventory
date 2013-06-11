@@ -8,10 +8,8 @@ class RemoteEmployee
   
   # This method searches the OSU LDAP directory for a given employee by OSU id and ONID username and
   # returns an array with one result. 
-  def self.find_by_username_and_id(osu_username, osu_id)
-    id_filter = Net::LDAP::Filter.eq("osuuid", osu_id)
-    username_filter = Net::LDAP::Filter.eq("uid", osu_username)
-    filter = id_filter & username_filter
+  def self.find_by_uid(uid)
+    filter = Net::LDAP::Filter.eq("uid", uid)
     search_by_filter(filter)
   end
   
@@ -29,12 +27,12 @@ class RemoteEmployee
   # This method preforms actions common to all above queries. They were consolodated into this one
   # method to avoid repetition.
   def self.search_by_filter(filter)
-    ldap = Net::LDAP.new :host => Project1::Application.config.config['host'], 
-                         :port => Project1::Application.config.config['port'],
-                         :encryption => Project1::Application.config.config['encryption']
-    ldap_results = ldap.search(:base => Project1::Application.config.config['treebase'], 
+    ldap = Net::LDAP.new :host => Project1::Application.config.ldap['host'], 
+                         :port => Project1::Application.config.ldap['port'],
+                         :encryption => Project1::Application.config.ldap['encryption']
+    ldap_results = ldap.search(:base => Project1::Application.config.ldap['base'], 
                          :filter => filter)
-    return nil if ldap_results == false
+    return nil if ldap_results.blank?
     return ldap_results.sort_by { |u| u.cn }
   end
   
@@ -45,11 +43,9 @@ class RemoteEmployee
   # institution
   def self.update_all_employees
     Employee.all.each do |employee|
-      next if employee.osu_username.nil? || employee.osu_id.nil?
-      updated_info = self.find_by_username_and_id(employee.osu_username,
-                     employee.osu_id)
-      if updated_info.empty?
-        employee.destroy
+      next if employee.uid.blank?
+      updated_info = self.find_by_uid(employee.uid)
+      if updated_info.blank?
         next
       else
         updated_info = updated_info.first
@@ -57,12 +53,12 @@ class RemoteEmployee
       # Splits returned string about the ',', separating the last name from the 
       # first and middle names
       updated_name = updated_info.cn.first.split(",")
-      employee.name_last = updated_name[0]
+      employee.last_name = updated_name[0]
       # Splits the first and middle names around the " " between them. Only takes 
       # the first letter of the middle name
       first_and_middle_names = updated_name[1].split(" ")
-      employee.name_first = first_and_middle_names[0]
-      employee.name_MI = first_and_middle_names[1].first if first_and_middle_names[1]
+      employee.first_name = first_and_middle_names[0]
+      employee.middle_name = first_and_middle_names[1].first if first_and_middle_names[1]
       if updated_info.respond_to?(:mail)
         employee.email = updated_info.mail.first
       else

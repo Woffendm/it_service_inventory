@@ -18,6 +18,8 @@ en:
     previous_label:   "Previous"
 
 
+
+
   # Nouns
   active:                       "Active"
   admin:                        "Admin "
@@ -81,6 +83,7 @@ en:
   information:                  "Information"
   last_name:                    "Last Name"
   local:                        "Local"
+  logo:                         "Logo URL"
   manager:                      "Manager "
   maximum_is:                   "Maximum is "
   my_edit_page:                 "Edit my Allocations"
@@ -101,6 +104,7 @@ en:
   new_user_reminder:            "New user reminder: "
   none:                         "None"
   notes:                        "Notes"
+  open_login:                   "Open login"
   options:                      "Options"
   or:                           " or "
   overview:                     "Overview"
@@ -140,6 +144,7 @@ en:
   user_settings:                "User Settings"
   year:                         "Year"
   your_allocation_is:           "Your allocation is "
+
 
 
 
@@ -191,10 +196,13 @@ en:
   showing:                      "Showing "
   update:                       "Update "
   updated:                      "updated"
-  view:                         "View"
+  view:                         "View "
+  welcome:                      "Welcome "
 
 
-  # Error page things
+
+
+  # Error pages
   internal_server_error:        "Internal Server Error"
   invalid_credentials:          "Invalid Credentials"
   page_not_found:               "Page Not Found"
@@ -209,11 +217,29 @@ en:
   
   
   
-
-
-  # Notifications and Stuff
+  # Application Settings
   allocation_precision_info:    "Sets precision for employee allocations. Default is 0.1"
   
+  fiscal_year_info:             "Determines the default fiscal year."
+  
+  fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
+  
+  logo_info:                    "Determines what image is displayed to the left of the application's title. The URL must be to an external image (http://.../pie.jpg)."
+  
+  new_user_reminder_info_0:     "Automatic: reminds you to set up your business service allocations. Disables once you set up your service allocations."
+
+  new_user_reminder_info_1:     "Disabled: disables the reminder."
+  
+  open_login_info:              "If enabled, users will automatically be added to the application after signing in with valid credentials. If disabled, they must be manually added. Default is enabled."
+  
+  preferred_language_info:      "Translates the application into the language of your choice"
+  
+  rest_api_key_info:            "Use this password to access this application's data from other apps. Simply add this key to the request header in the appropriate model of the calling application."
+  
+
+
+
+  # Notifications, errors, flash messages
   cannot_delete_self:           "You cannot delete yourself. Get someone else to do it."
   
   compatability_message:        "If you are using Internet Explorer 8, the graphs will not show up on this page. Either upgrade to Internet Explorer 9 or switch to a different browser."
@@ -224,15 +250,11 @@ en:
   
   confirm_deactivation:         "Deactivate this employee? They will remain in the application."
 
-  confirm_deletion:             "Are you sure about this deletion? (Cannot be reversed!!)"
+  confirm_deletion:             "Are you sure about this deletion? (Cannot be reversed)"
 
   confirm_removal:              "Confirm removal."
 
   first_name_optional:          "First name is optional"
-  
-  fiscal_year_info:             "Determines the default fiscal year."
-  
-  fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
 
   group_no_allocations_0:       "The group you are viewing has employees, but none of them have entered their business service allocations. You can fix this by following these steps."
 
@@ -256,16 +278,8 @@ en:
 
   new_user_message_1:           ". <br/><br/> This notice will disable automatically once you add a business service allocation, or can be disabled manually from "
 
-  new_user_reminder_info_0:     "Automatic: reminds you to set up your business service allocations. Disables once you set up your service allocations."
-
-  new_user_reminder_info_1:     "Disabled: disables the reminder."
-
   over_allocated:               "The total allocation for a given employee cannot exceed 1. You must lower the employee's total allocation before proceeding."
   
   over_allocated_calc:          "You are over allocated!"
-
-  preferred_language_info:      "Translates the application into the language of your choice"
-  
-  rest_api_key_info:            "Use this password to access this application's data from other apps. Simply add this key to the request header in the model of the calling application."
 
   update_all:                   "Update Names and Contact Information for all Employees"

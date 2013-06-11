@@ -1,0 +1,25 @@
+defaults: &defaults
+   port: 12201
+   max_size: LAN
+   facility: CWS-ITSI
+
+development:
+   logger_1:
+     environment: development
+     enabled: 1
+     host: vs-graylog.cws.oregonstate.edu
+     <<: *defaults
+
+production:
+   logger_1:
+     environment: development
+     enabled: 1
+     host: vs-graylog.cws.oregonstate.edu
+     <<: *defaults
+
+test:
+   logger_1:
+     environment: development
+     enabled: 1
+     host: vs-graylog.cws.oregonstate.edu
+     <<: *defaults

@@ -11,10 +11,12 @@ Project1::Application.routes.draw do
 
   resources :products
 
-  match '/auth/:provider/callback' => 'logins#create'
-  match '/auth/failure' => 'errors#invalid_credentials'
+
   match '/404' => 'errors#page_not_found'
   match '/500' => 'errors#internal_server_error'
+  match 'logout', :controller => :application, :action => :logout, :via => :get
+
+
 
 
   resources :groups do
@@ -39,6 +41,7 @@ Project1::Application.routes.draw do
       get 'search_ldap_view'
       get 'ldap_search_results'
       get 'search_ldap'
+      get 'search_ldap_view'
       post 'ldap_create'
       post 'update_all_employees_via_ldap'
     end
@@ -77,11 +80,10 @@ Project1::Application.routes.draw do
 
   resources :logins do
     collection do
+      get 'new_backdoor'
       get 'change_results_per_page'
       get 'change_year'
-      post 'new'
-      get 'logout'
-      post 'new_backdoor'
+      get 'destroy'
       post 'create_backdoor'
     end
   end

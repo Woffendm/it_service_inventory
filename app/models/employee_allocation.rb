@@ -13,8 +13,18 @@ class EmployeeAllocation < ActiveRecord::Base
   validates_uniqueness_of :employee_id, :scope => [:fiscal_year_id, :service_id]
   validates_uniqueness_of :service_id, :scope => [:fiscal_year_id, :employee_id]
   validates_uniqueness_of :fiscal_year_id, :scope => [:employee_id, :service_id]
-  
+  validate :validate_allocation
   delegate :name, :to => :service
+
+
+  # Validates that the allocation is within proper range
+  def validate_allocation
+    unless allocation.blank?
+      unless (allocation >= 0) && (allocation <= 1)
+        errors.add(:allocation, "Allocation must be between 0 and 1 FTE")
+      end
+    end
+  end
 
 
   # Generates an array of floats between 0.0 and 1.00 inclusive. Incrementation determined by app

@@ -19,3 +19,11 @@ three:
 four:
   value: 40.0
   code: fte_hours_per_week
+
+five:
+  value: http://oregonstate.edu/osuhomepage/regions/top-hat/current/images/osu-tag.png
+  code: logo
+
+six:
+  value: true
+  code: open_login

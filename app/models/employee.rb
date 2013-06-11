@@ -5,8 +5,8 @@
 
 class Employee < ActiveRecord::Base
   attr_accessible :email, :employee_allocations_attributes, :employee_allocations, 
-                  :employee_groups_attributes, :osu_username,
-                  :name_first, :name_last, :notes, :preferred_language, :preferred_theme,
+                  :employee_groups_attributes, :uid,
+                  :first_name, :last_name, :notes, :preferred_language, :preferred_theme,
                   :new_user_reminder, :employee_products_attributes
   has_many :employee_allocations, :dependent => :delete_all
   has_many :employee_groups,      :dependent => :delete_all
@@ -14,8 +14,8 @@ class Employee < ActiveRecord::Base
   has_many :groups,   :through => :employee_groups
   has_many :products, :through => :employee_products
   has_many :services, :through => :employee_allocations
-  validates_presence_of   :name_first,    :name_last,   :osu_username
-  validates_uniqueness_of :osu_username,  :scope => :osu_id
+  validates_presence_of   :first_name,    :last_name,   :uid
+  validates_uniqueness_of :uid,  :scope => :osu_id
   accepts_nested_attributes_for :employee_allocations,  :allow_destroy => true
   accepts_nested_attributes_for :employee_groups,       :allow_destroy => true
   accepts_nested_attributes_for :employee_products,     :allow_destroy => true
@@ -24,7 +24,30 @@ class Employee < ActiveRecord::Base
 
   # Returns all active employees, sorted by both names.
   def self.active_employees
-    Employee.where(:active => true).order(:name_last, :name_first)
+    Employee.where(:active => true).order(:last_name, :first_name)
+  end
+
+
+  # Creates an employee using information gathered from LDAP. Returns the new, unsaved employee 
+  def self.ldap_create(uid)
+    return nil if Employee.find_by_uid(uid)
+    employee_information = RemoteEmployee.find_by_uid(uid)
+    return nil if employee_information.blank?
+    employee_information = employee_information[0]
+    return nil if employee_information.blank?
+    # Splits returned string about the ',', separating the last name from the first and middle names
+    name = employee_information.cn.first.split(",")
+    # Splits the first and middle names around the " " between them. 
+    first_and_middle_names = name[1].split(" ")
+    # Creates the employee
+    new_employee = Employee.new
+    new_employee.last_name = name[0]
+    new_employee.first_name = first_and_middle_names[0]
+    new_employee.middle_name = first_and_middle_names[1]
+    new_employee.osu_id = employee_information[:osuuid][0]
+    new_employee.uid = uid
+    new_employee.email = employee_information[:mail][0].downcase unless employee_information[:mail].blank?
+    return new_employee
   end
 
 
@@ -85,7 +108,7 @@ class Employee < ActiveRecord::Base
 
   # Returns the employee's full name, in the format "lastname, firstname"
   def full_name
-    full_name = "#{name_last}, #{name_first}"
+    full_name = "#{last_name}, #{first_name}"
     full_name += " (#{I18n.t :inactive})" unless active
     return full_name
   end

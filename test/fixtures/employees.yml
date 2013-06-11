@@ -5,28 +5,29 @@
 # below each fixture, per the syntax in the comments below
 #
 michael: 
-  name_first:   michael
-  name_last:    woffendin
-  osu_username: woffendm
+  first_name:   michael
+  last_name:    woffendin
+  uid:          woffendm
   osu_id:       93898765678
   site_admin:   true
 
 yoloswag: 
-  name_first:   yolo
-  name_last:    swag
-  osu_username: yoloswag
+  first_name:   yolo
+  last_name:    swag
+  uid:          yoloswag
   osu_id:       12983213123
+  site_admin:   false
 
 admin: 
-  name_first:   admin
-  name_last:    admin
-  osu_username: hansenm
+  first_name:   admin
+  last_name:    admin
+  uid:          amdin
   osu_id:       63554675687
   site_admin:   true
   
 inactive:
-  name_first:   in
-  name_last:    active
-  osu_username: inactive
+  first_name:   in
+  last_name:    active
+  uid:          inactive
   osu_id:       24234321523
   active:       false

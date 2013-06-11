@@ -4,9 +4,9 @@ class GroupsControllerTest < ActionController::TestCase
   setup do
     @group = groups(:cws)
     @employee = employees(:yoloswag)
-    session[:current_user_name] = employees(:michael).full_name
-    session[:current_user_osu_username] = employees(:michael).osu_username
-    session[:results_per_page] = 25
+    session[:cas_user] = employees(:michael).uid
+    session[:already_logged_in] = true
+    RubyCAS::Filter.fake(session[:cas_user])
   end
 
 
@@ -75,7 +75,7 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "should get services of group if given group id" do
     get :services, :group => {:id => @group.id}
-    assert_equal @group.services(AppSetting.get_current_fiscal_year), assigns(:services)
+    assert_equal @group.services(AppSetting.current_fiscal_year), assigns(:services)
     assert_response :success
   end
   

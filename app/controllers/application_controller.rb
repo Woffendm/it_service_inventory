@@ -5,52 +5,82 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery
-
+  include CwsLogger
   # Makes the active theme available throughout application (disabled until we get some actual
   # themes, but will be used later)
   # before_filter :load_theme
-  before_filter :current_user
-  before_filter :require_login
+  before_filter :check_for_api_key
+  before_filter  RubyCAS::Filter
+  before_filter :get_current_user, :except =>[:logout]
   before_filter :load_logo
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
   before_filter :set_user_language
   before_filter :remind_user_to_set_allocations
   rescue_from CanCan::AccessDenied, :with => :permission_denied
-  rescue_from OmniAuth::Error, :with => :invalid_credentials
   rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
   rescue_from ActionController::RoutingError, :with => :page_not_found
+  helper_method :current_user
+  
 
+
+  # Destroys session and logs user out of CAS.
+  def logout
+    reset_session
+    flash[:notice] = t(:logged_out)
+    RubyCAS::Filter.logout(self, root_path)
+  end
 
 
   private
-    # Redirects user to login page unless they are logged in
-    def require_login
-      redirect_to Project1::Application.config.config['ldap_login_path'] unless @current_user || @key_passed
+    # Returns the current user (required method for CanCan)
+    def current_user
+      return @current_user
     end
     
     
-    # Loads the currently logged-in user for use by the ability.rb model. First it checks to see if
-    # the persion described by the session still exists in the database. If they do, then it stores 
-    # the corresponding Employee/User in @current_user. Then checks to see if the request was in
-    # a supported format. If it is, then checks to see if the request sent the correct REST api key
-    # in its headers. If not, clears the session. 
-    def current_user
-      if !Employee.where(:osu_username => session[:current_user_osu_username]).blank? 
-        @current_user = Employee.find_by_osu_username(session[:current_user_osu_username])
-      elsif ['xml', 'json', 'jsonp'].include?(params[:format]) 
-        @key_passed = true if request.headers['app_key'] == AppSetting.get_rest_api_key
-      else
-        session[:current_user_name] = nil
-        session[:results_per_page] = nil
-        session[:current_user_osu_username] = nil
+    # Checks to see if the request header contains the api key
+    def check_for_api_key
+      if ['xml', 'json', 'jsonp'].include?(params[:format]) && request.headers['app_key'] == AppSetting.get_rest_api_key
+        session[:cas_user] = Employee.first.uid 
+      end
+    end
+    
+    
+    # Loads the currently logged-in user. If the user in the session is blank or not in the
+    # database, checks to see if application accepts open login. If so, creates a new user.
+    # Otherwise destroys session.
+    def get_current_user
+      uid = session[:cas_user] 
+      @current_user = Employee.find_by_uid(uid) unless uid.blank?
+      if @current_user.blank?
+        # Creates new user
+        if AppSetting.open_login && uid
+          new_employee = Employee.ldap_create(uid)
+          if new_employee && new_employee.save
+            @current_user = new_employee
+          else
+            redirect_to :logout
+            return
+          end
+        else
+          redirect_to :logout
+          return
+        end
+      end
+      # Sets greeting if just logged in
+      if session[:already_logged_in].blank?
+        session[:already_logged_in] = true
+        session[:results_per_page] = 25
+        flash[:notice] = t(:welcome) + @current_user.first_name + "!"
+        redirect_to root_path
       end
     end
 
     
     # Loads the application's allocation precision as specified in the app settings.
     def load_allocation_precision
-      @allocation_precision = AppSetting.get_allocation_precision
+      @allocation_precision = AppSetting.allocation_precision
     end
 
 
@@ -58,7 +88,7 @@ class ApplicationController < ActionController::Base
     # deleted on accident) then the application creates a new one based off of the currently set
     # fiscal year value.
     def load_current_fiscal_year
-      @current_fiscal_year = AppSetting.get_current_fiscal_year
+      @current_fiscal_year = AppSetting.current_fiscal_year
       if @current_fiscal_year.nil?
         @current_fiscal_year = FiscalYear.order(:updated_at).last
         AppSetting.find_by_code("current_fiscal_year").update_attributes(
@@ -69,13 +99,13 @@ class ApplicationController < ActionController::Base
 
     # Loads the logo's url specified in the app settings.
     def load_logo
-      @logo = Project1::Application.config.config['logo']
+      @logo = AppSetting.logo
     end
 
 
     # Loads the active theme.
     def load_theme
-      @current_theme = AppSetting.find_by_code('active-theme')
+      @theme = AppSetting.theme
     end
     
     
@@ -119,7 +149,7 @@ class ApplicationController < ActionController::Base
         if objects.first.respond_to?(:name)
           objects = objects.order(:name)
          else
-          objects = objects.order(:name_last, :name_first)
+          objects = objects.order(:last_name, :first_name)
         end
       end 
       return objects

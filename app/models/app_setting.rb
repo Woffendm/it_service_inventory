@@ -18,6 +18,10 @@ class AppSetting < ActiveRecord::Base
       unless (value.to_f > 0) && (value.to_f. <= 168)
         errors.add(:value, "Must be between 0 and 168")
       end
+    elsif code == "logo" 
+      unless (value.index("http"))
+        errors.add(:value, "Must be a valid external URL")
+      end
     end
   end
 
@@ -30,27 +34,35 @@ class AppSetting < ActiveRecord::Base
 
 
   # Gets the number of hours full-time employees work per week
-  def self.get_fte_hours_per_week
+  def self.fte_hours_per_week
     return AppSetting.find_by_code("fte_hours_per_week").value.to_f.round(1)
   end
 
 
   # Gets level of decimal precision for allocations.
-  def self.get_allocation_precision
+  def self.allocation_precision
     return AppSetting.find_by_code("allocation_precision").value.to_f.to_int
   end
   
   
   # Returns the fiscal year object that corresponds to the currently set fiscal year
-  def self.get_current_fiscal_year
+  def self.current_fiscal_year
     return nil if FiscalYear.first.blank?
     return FiscalYear.find_by_year(AppSetting.find_by_code("current_fiscal_year").value)
   end
   
   
-  # Returns the URL for the application's logo.
-  def self.get_theme
-    return AppSetting.find_by_code("theme").value
+  # Returns the URL of the application's logo. The URL can be either to an external image, 
+  # or one within the project. For images within the project, some guessing may be required.
+  def self.logo
+    return AppSetting.find_by_code("logo").value
+  end
+  
+  
+  # Returns whether the application accepts open logins or not. If enabled, any
+  # authenticated user is automatically added to the application.
+  def self.open_login
+    return AppSetting.find_by_code("open_login").value
   end
   
   
@@ -64,7 +76,13 @@ class AppSetting < ActiveRecord::Base
   # end
   #
   # Of course 'testo' would have to match the API key specified in this application's settings. 
-  def self.get_rest_api_key
+  def self.rest_api_key
     return AppSetting.find_by_code("rest_api_key").value
+  end
+  
+  
+  # Returns the URL for the application's logo.
+  def self.theme
+    return AppSetting.find_by_code("theme").value
   end
 end
