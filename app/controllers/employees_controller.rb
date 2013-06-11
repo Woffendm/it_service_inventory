@@ -100,7 +100,7 @@ class EmployeesController < ApplicationController
   # Imports an employee from the OSU LDAP and saves them to the application
   def ldap_create
     new_employee = Employee.ldap_create(params[:uid])
-    if new_employee.save
+    if new_employee && new_employee.save
       flash[:notice] = t(:employee) + t(:added)
     else
       flash[:error] = t(:already_in_application)

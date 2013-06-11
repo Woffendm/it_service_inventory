@@ -18,17 +18,15 @@ class EmployeesControllerTest < ActionController::TestCase
 
   test "should create employee if valid employee given" do
     assert_difference('Employee.count', 1) do
-      post :ldap_create, "last_name"=>"Person", "first_name"=>"New", 
-          "uid"=>"newperson", "osu_id"=>"34524243342", "email"=>"newperson@pie.com"
+      post :ldap_create, :uid => 'hansenm'
     end
     assert_response :success
   end
 
 
-  test "should not create employee if invalid employee given" do
+  test "should not create employee if already in application" do
     assert_no_difference('Employee.count') do
-      post :ldap_create, "last_name"=> nil, "first_name"=> nil, 
-          "uid"=> nil, "osu_id"=> nil, "email"=>nil
+      post :ldap_create, :uid => 'woffendm'
     end
     assert_response :success
   end

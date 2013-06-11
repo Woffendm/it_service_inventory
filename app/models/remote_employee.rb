@@ -43,9 +43,9 @@ class RemoteEmployee
   # institution
   def self.update_all_employees
     Employee.all.each do |employee|
-      next if employee.uid.nil?
+      next if employee.uid.blank?
       updated_info = self.find_by_uid(employee.uid)
-      if updated_info.empty?
+      if updated_info.blank?
         next
       else
         updated_info = updated_info.first

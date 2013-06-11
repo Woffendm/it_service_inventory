@@ -75,7 +75,7 @@ class GroupsControllerTest < ActionController::TestCase
 
   test "should get services of group if given group id" do
     get :services, :group => {:id => @group.id}
-    assert_equal @group.services(AppSetting.get_current_fiscal_year), assigns(:services)
+    assert_equal @group.services(AppSetting.current_fiscal_year), assigns(:services)
     assert_response :success
   end
   

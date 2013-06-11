@@ -30,6 +30,7 @@ class Employee < ActiveRecord::Base
 
   # Creates an employee using information gathered from LDAP. Returns the new, unsaved employee 
   def self.ldap_create(uid)
+    return nil if Employee.find_by_uid(uid)
     employee_information = RemoteEmployee.find_by_uid(uid)
     return nil if employee_information.blank?
     employee_information = employee_information[0]
