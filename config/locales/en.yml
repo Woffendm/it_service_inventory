@@ -224,7 +224,7 @@ en:
   
   fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
   
-  logo_info:                    "Determines what image is displayed to the left of the application's title. The URL can be to an external image (http://.../pie.jpg) or one within the project (../assets/pie.jpg)."
+  logo_info:                    "Determines what image is displayed to the left of the application's title. The URL must be to an external image (http://.../pie.jpg)."
   
   new_user_reminder_info_0:     "Automatic: reminds you to set up your business service allocations. Disables once you set up your service allocations."
 

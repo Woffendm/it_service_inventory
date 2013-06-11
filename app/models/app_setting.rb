@@ -18,6 +18,10 @@ class AppSetting < ActiveRecord::Base
       unless (value.to_f > 0) && (value.to_f. <= 168)
         errors.add(:value, "Must be between 0 and 168")
       end
+    elsif code == "logo" 
+      unless (value.index("http"))
+        errors.add(:value, "Must be a valid external URL")
+      end
     end
   end
 
