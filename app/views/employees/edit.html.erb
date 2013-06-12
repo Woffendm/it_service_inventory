@@ -182,7 +182,7 @@
                       <td class="form-inline"> 
                         <%= form.hidden_field(:service_id, :value => service_allocation.service_id) %>
                         <%= form.hidden_field(:id, :value => service_allocation.id) %>
-                        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+                        <%= form.text_field(:allocation, {:placeholder => t(:optional), :class =>
                             "calculator_select allocation-1 small"}) %>
                         <%= render  :partial => "/shared/fte_calculator_trigger" %>
                       </td>
@@ -259,7 +259,7 @@
                       <td class="form-inline"> 
                         <%= form.hidden_field(:product_id, :value => product_allocation.product_id) %>
                         <%= form.hidden_field(:id, :value => product_allocation.id) %>
-                        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+                        <%= form.text_field(:allocation, {:placeholder => t(:optional), :class =>
                             "calculator_select allocation-2 small"}) %>
                         <%= render  :partial => "/shared/fte_calculator_trigger" %>
                       </td>

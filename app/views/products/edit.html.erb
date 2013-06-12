@@ -251,7 +251,7 @@
                       <td class="form-inline"> 
                         <%= form.hidden_field(:employee_id, :value => employee_product.employee_id) %>
                         <%= form.hidden_field :id %>
-                        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+                        <%= form.text_field(:allocation, {:placeholder => t(:optional), :class =>
                             "calculator_select allocation-1 small"}) %>
                         <%= render :partial => "/shared/fte_calculator_trigger" %>
                       </td>

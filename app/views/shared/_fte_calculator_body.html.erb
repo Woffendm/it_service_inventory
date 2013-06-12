@@ -5,11 +5,11 @@
   </div>
   <div class="modal-body form-inline">
     <%= label_tag :hours_per_week, t(:hours_per_week) %>
-    <%= number_field_tag 'hours_per_week', nil, 
+    <%= text_field_tag 'hours_per_week', nil, 
         :placeholder => t(:maximum_is) + "#{@fte_hours_per_week.round(3)}" %>
     <br/>
     <%= label_tag :hours_per_month, t(:hours_per_month) %>
-    <%= number_field_tag 'hours_per_month', nil, 
+    <%= text_field_tag 'hours_per_month', nil, 
         :placeholder => t(:maximum_is) + "#{(365 / 7 * @fte_hours_per_week / 12).round(3)}" %>
     <br/>
     <%= label_tag :result, t(:result) %>

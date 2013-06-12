@@ -22,7 +22,7 @@
                         {:class => "autocomplete large-select"}) %> 
         <br/>
         <%= form.label :allocation, t(:allocation) %>
-        <%= form.number_field(:allocation, {:placeholder => t(:optional), :class =>
+        <%= form.text_field(:allocation, {:placeholder => t(:optional), :class =>
             "calculator_select new-allocation-1"}) %>
         <%= form.hidden_field(:fiscal_year_id, :value => year.id) %>
         <%= render  :partial => "/shared/fte_calculator_trigger" %>

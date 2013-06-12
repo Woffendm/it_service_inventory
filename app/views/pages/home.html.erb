@@ -6,41 +6,45 @@
 
 
 
-  <%= form_tag(home_search_pages_path, :method => "get", :class => "form-horizontal light-border home-header") do %>
-    <div id="group_dropdown" class="control-group">
-      <span class="control-label">
-        <%= label_tag :group_id, t(:group) %>
-      </span>
-      <span id="group_select_div" class="controls">
-        <%= collection_select(:group, :id, @groups, :id, :name, 
-                             {:include_blank => t(:all_groups) }, 
-                             {:class => "autocomplete large-select"}) %>
-      </span>
-    </div>
-    <div id="service_dropdown" class="control-group">
-      <span class="control-label">
-        <%= label_tag :service_id, t(:service) %>
-      </span>
-      <span id="service_select_div" class="controls">
-        <%= collection_select(:service, :id, @services, :id, :name,  
-                             {:include_blank => t(:all_services) }, 
-                             {:class => "autocomplete large-select"}) %>
-      </span>
-    </div>
-    <div id="home_header_buttons" class="control-group">
-      <span class="control-label">
-      </span>
-      <span class="controls">
-        <%= submit_tag t(:view), :id => "search" %> 
-        <%= submit_tag t(:reset), :id => "clear", :type => :submit %>
-      </span>
-    </div>
-  <% end %>
+<%= form_tag(home_search_pages_path, :method => "get", :class => "form-horizontal light-border home-header") do %>
+  <div id="group_dropdown" class="control-group">
+    <span class="control-label">
+      <%= label_tag :group_id, t(:group) %>
+    </span>
+    <span id="group_select_div" class="controls">
+      <%= collection_select(:group, :id, @groups, :id, :name, 
+                           {:include_blank => t(:all_groups) }, 
+                           {:class => "autocomplete large-select"}) %>
+    </span>
+  </div>
+  <div id="service_dropdown" class="control-group">
+    <span class="control-label">
+      <%= label_tag :service_id, t(:service) %>
+    </span>
+    <span id="service_select_div" class="controls">
+      <%= collection_select(:service, :id, @services, :id, :name,  
+                           {:include_blank => t(:all_services) }, 
+                           {:class => "autocomplete large-select"}) %>
+    </span>
+  </div>
+  <div id="home_header_buttons" class="control-group">
+    <span class="control-label">
+    </span>
+    <span class="controls">
+      <%= submit_tag t(:view), :id => "search" %> 
+      <%= submit_tag t(:reset), :id => "clear", :type => :submit %>
+    </span>
+  </div>
+<% end %>
 
 
-<div id="no_filters" class="error hidden">
-    Error: <%= t(:need_selection) %>
+
+<div id="no_filters" class="alert alert-block alert-info fade in hidden">  
+  <a class="close" data-dismiss="alert" href="#">&times;</a>
+  <h4> <%= t(:heads_up) %> </h4>
+  <p> <%= t(:need_selection) %> </p>
 </div>
+
 
 
 <% if @data_to_graph && @full_time_employees > 0 %>
