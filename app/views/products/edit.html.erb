@@ -221,10 +221,20 @@
         <%= render  :partial => "/products/add_employee", 
                     :locals => {:available_employees => @available_employees, :year => @year} %>
       </h3>
+      
+      
+      
+      <div class="alert alert-block alert-error fade in javascript-notice hidden over-allocation">  
+        <a class="close" data-dismiss="alert" href="#">&times;</a>
+        <h4> <%= t(:error) %> </h4>
+        <p><%= t(:over_allocated) %> </p>
+      </div>
+      
+      
+      
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
                     :locals => {:@year => @year, :@active_years => @active_years } %>
-        
         
         <div class="tab-content year-content">
           <% if @employee_products.blank? %>
