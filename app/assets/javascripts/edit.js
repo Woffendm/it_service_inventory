@@ -18,23 +18,14 @@ $(document).ready(function(){
   
   
   
-  // By default, will assume over-allocation is not allowed.
-  if(typeof noOverAllocation1 == "undefined") {
-    var noOverAllocation1 = true;
-  }
-  if(typeof noOverAllocation2 == "undefined") {
-    var noOverAllocation2 = true;
-  }
-  
-  
   
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
   // is clicked
-  removeSet1.click(function(e) {
+  removeSet1.click(function() {
     calculateAllocation(allocationSet1, 1, total1, newAllocation1, noOverAllocation1);
   });
   
-  removeSet2.click(function(e) {
+  removeSet2.click(function() {
     calculateAllocation(allocationSet2, 2, total2, newAllocation2, noOverAllocation2);
   });
   
@@ -42,11 +33,11 @@ $(document).ready(function(){
   
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
   // is clicked
-  newAllocation1.keyup(function(e) {
+  newAllocation1.keyup(function() {
     calculateAllocation(allocationSet1, 1, total1, newAllocation1, noOverAllocation1);
   });
   
-  newAllocation2.keyup(function(e) {
+  newAllocation2.keyup(function() {
     calculateAllocation(allocationSet2, 2, total2, newAllocation2, noOverAllocation2);
   });
   
@@ -76,7 +67,10 @@ function calculateAllocation(allocationSet, removeSet, total, newAllocation, noO
   var submissionButtons = $('.submission');
   var totalAllocation = 0;
   var count = 0;
-  
+  if(null == noOverAllocation) {
+    noOverAllocation = true;
+  }
+
   
   // Gets total of all allocations on page that aren't marked for deletion
   allocationSet.each(function(e) {
@@ -101,7 +95,7 @@ function calculateAllocation(allocationSet, removeSet, total, newAllocation, noO
   
   // Hides submit buttons and shows error message if employee is over-allocated. Note that due to 
   // the inprecision of floats, the total allocation is not compared to exactly 1.
-  if((totalAllocation > 1.0001) && noOverAllocation) {
+  if(noOverAllocation && (totalAllocation > 1.0001)) {
     submissionButtons.hide();
     overAllocationMessage.show();
   } 

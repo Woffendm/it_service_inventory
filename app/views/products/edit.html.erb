@@ -106,7 +106,7 @@
       
           <div class="control-group">
             <span class="control-label">
-              <%= form.submit  t(:save_changes) %>
+              <%= form.submit  t(:save_changes), :class => "submission"  %>
             </span>
           </div>
         <% end %>
@@ -154,7 +154,7 @@
           </tbody>
         </table>
         
-        <%= product_form.submit  t(:save_changes) %>
+        <%= product_form.submit  t(:save_changes), :class => "submission"  %>
         
       <% end %> 
     </div>
@@ -202,7 +202,7 @@
           </tbody>
         </table>
         
-        <%= product_form.submit  t(:save_changes) %>
+        <%= product_form.submit  t(:save_changes), :class => "submission"  %>
         
       <% end %>
     </div>
@@ -283,7 +283,7 @@
               </tbody>
             </table>
             
-            <%= product_form.submit  t(:save_changes) %>
+            <%= product_form.submit  t(:save_changes), :class => "submission"  %>
             
           <% end %>
         </div>
