@@ -12,8 +12,6 @@ ldap: &ldap_settings
   host: 
   base: 
   port:
-  bind_dn: 
-  password: 
   encryption: 
 
 
