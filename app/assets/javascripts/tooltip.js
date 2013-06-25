@@ -19,6 +19,7 @@ $(document).ready(function(){
   $(".tooltip_trigger").popover({
     html: true,
     trigger: 'hover',
+    placement: 'top',
     content: function() {
       return $("#tooltip-content-" + tooltip_triggers.index(this)).html();
     }

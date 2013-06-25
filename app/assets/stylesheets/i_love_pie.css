@@ -129,7 +129,7 @@ div.chart_div_container{
 
 
 .tooltip {
-  visibility: hidden;
+  display: none;
 }
 
 .tooltip_trigger{
@@ -150,6 +150,7 @@ div.chart_div_container{
 
 .tooltip-table {
   max-width: none;
+  width: 100%;
 }
 
 .tooltip-table > tbody > tr:nth-child(odd){

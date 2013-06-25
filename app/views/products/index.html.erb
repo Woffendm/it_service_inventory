@@ -34,7 +34,7 @@
 <table class="table table-striped">
   <caption> <%= t(:all_products) %> </caption>
   <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %> </th>
+    <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
     <th> <%= t(:description) %> </th>
     <th class='variable-size'> <%= sort_column(t(:priority), request.fullpath, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
     <th> <%= sort_column(t(:product_state), request.fullpath, 'product_state', 'product_states.name', @order, @ascending) %> </th>

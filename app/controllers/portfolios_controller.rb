@@ -22,9 +22,9 @@ class PortfoliosController < ApplicationController
   
   # View of all portfolios
   def index
-    portfolio_names = filter_portfolios(params[:search])
-    portfolio_names = sort_results(params, portfolio_names) unless params[:order].blank?
-    @portfolio_names = portfolio_names.includes(:products, :products => :groups).uniq.order("portfolio_names.name", "products.name", "groups.name")
+    @portfolios = filter_portfolios(params[:search])
+    @portfolios = sort_results(params, @portfolios) unless params[:order].blank?
+    @portfolios = @portfolios.includes(:products, :products => :groups).order("portfolios.name, products.name, groups.name").uniq
   end
   
   
@@ -92,21 +92,21 @@ class PortfoliosController < ApplicationController
   private 
     # Filters the portfolios displayed on the index page based on paramaters provided
     def filter_portfolios(search)
-      return PortfolioName.joins(:products) if search.blank?
+      portfolios = Portfolio.where(true)
+      return portfolios if search.blank?
       @group = search[:group]
       @product = search[:product]
-      @portfolio_name = search[:portfolio_name]
+      @name = search[:name]
       @global = search[:global]
       search_array = []
-      search_array << "portfolios.group_id = #{@group}" unless @group.blank? 
-      search_array << "products.id = #{@product}" unless @product.blank? 
-      search_array << "portfolio_names.global = " + @global unless @global.blank? 
+      search_array << "product_groups.group_id = #{@group}" unless @group.blank? 
+      search_array << "product_groups.product_id = #{@product}" unless @product.blank? 
+      search_array << "portfolios.global = " + @global unless @global.blank? 
       search_string = search_array.join(" AND ")
-      portfolio_names = PortfolioName.joins(:portfolios, :products => :portfolios)
-      portfolio_names = portfolio_names.where(
-            "portfolio_names.name LIKE '%#{@portfolio_name}%'") unless @portfolio_name.blank?
-      portfolio_names = portfolio_names.where(search_string).uniq unless search_string.blank?
-      return portfolio_names
+      portfolios = portfolios.joins(:product_groups).uniq unless search_string.blank?
+      portfolios = portfolios.where(search_string) unless search_string.blank?
+      portfolios = portfolios.where("portfolios.name LIKE '%#{@name}%'") unless @name.blank?
+      return portfolios
     end
 
     

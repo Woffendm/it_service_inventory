@@ -9,7 +9,7 @@
 <fieldset class="light-border">
   <legend> <%= t(:filter_results) %> </legend>
   <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
-    <%= text_field_tag "search[portfolio_name]", @portfolio_name, 
+    <%= text_field_tag "search[name]", @name, 
                           :placeholder => t(:portfolio) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank =>   t(:all_groups),
@@ -26,47 +26,82 @@
 
 
 
-<% unless @portfolio_names.blank? %>
-  <% @portfolio_names.each_with_index do |portfolio_name, index| %>
-    <div class="half1">
-      <div class="accordion" id="accordion">
-        <div class="accordion-group">
-          <div class="accordion-header">
-            <a class="accordion-toggle" data-toggle="collapse"
-                     data-target="#collapse-<%=index%>"  href="#">
-              <%= portfolio_name.name %>
-            </a>
-          </div>
-          <div id="collapse-<%=index%>" class="accordion-body collapse">
-            <table class="table table-striped accordion-inner">
-              <thead>
-                <tr>
-                  <th> <%= t(:product) %> </th>
-                  <th> <%= t(:groups) %> </th>
-                </tr>
-              </thead>
-              <tbody>
-                <% portfolio_name.products.uniq.each do |product| %>
-                  <tr>
-                    <td> 
-                      <%= link_to product.name, product_path(product.id) %>
-                    </td>
-                    <td>
-                      <% product.groups.each do |group| %>
-                        <span class="thing3">
-                          <%= link_to group.name, group_path(group.id) %>
-                        </span>
-                      <% end %>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+<% unless @portfolios.blank? %>
+  <table class="table table-striped">
+    <caption> <%= t(:all_portfolios) %> </caption>
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
+      <th> <%= t(:products) %> </th>
+      <th> <%= t(:products) %> </th>
+    </thead>
+    <tbody>
+      <% @portfolios.each do |portfolio| %>
+        <% products = portfolio.products %>
+        <% products_1 = products[0..(products.length / 2 - 1)] %>
+        <% products_2 = products[(products.length / 2)..(products.length - 1)] %>        
+        <tr>
+          <td>
+            <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
+          </td>
+          <td>
+            <% products_1.each do |product| %>
+              <span class="tooltip_trigger">
+                <i class="icon-th-list"></i>
+              </span>
+              <div class="tooltip">
+                <table class="tooltip-table">
+                  <thead>
+                    <tr>
+                      <th> <%= t(:groups) %> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% product.groups.each do |group| %>
+                      <tr>
+                        <td> 
+                          <%= group.name %> 
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <%= link_to product.name, product_path(product.id) %>
+              <br/>
+            <% end %>
+          </td>
+          <td>
+            <% products_2.each do |product| %>
+              <span class="tooltip_trigger">
+                <i class="icon-th-list"></i>
+              </span>
+              <div class="tooltip">
+                <table class="tooltip-table">
+                  <thead>
+                    <tr>
+                      <th> <%= t(:groups) %> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% product.groups.each do |group| %>
+                      <tr>
+                        <td> 
+                          <%= group.name %> 
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <%= link_to product.name, product_path(product.id) %>
+              <br/>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+
+  </table>
 <% end %>
 
 
