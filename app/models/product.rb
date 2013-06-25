@@ -8,16 +8,14 @@ class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
                   :product_state, :employee_products_attributes, :product_services_attributes,
                   :product_groups_attributes, :product_source_attributes, :product_priority_id, 
-                  :product_priority, :portfolio_products, :portfolio_products_attributes
+                  :product_priority
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
   has_many :product_groups,     :dependent => :delete_all
   has_many :groups,             :through =>   :product_groups
+  has_many :portfolios,         :through =>   :product_groups
   has_many :product_services,   :dependent => :delete_all
   has_many :services,           :through =>   :product_services
-  has_many :portfolio_products, :dependent => :delete_all
-  has_many :portfolios,         :through =>   :portfolio_products
-  has_many :portfolio_names,    :through =>   :portfolio_products
   has_one  :product_source
   belongs_to :product_type
   belongs_to :product_state
@@ -28,7 +26,6 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :employee_products, :allow_destroy => true
   accepts_nested_attributes_for :product_services,  :allow_destroy => true
   accepts_nested_attributes_for :product_groups,    :allow_destroy => true
-  accepts_nested_attributes_for :portfolio_products, :allow_destroy => true
   
   
   
