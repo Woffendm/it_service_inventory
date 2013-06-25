@@ -1,27 +1,22 @@
 class PortfoliosController < ApplicationController
   before_filter :load_portfolio,  :only => [:edit, :update, :destroy]
-  before_filter :load_product,    :only => [:update]
   before_filter :load_all_years,  :only => [:edit]    
-  before_filter :load_group,      :only => [:new, :create]                            
   before_filter :load_groups,     :only => [:index]
   before_filter :load_products,   :only => [:index]
-  before_filter :load_portfolio_names, :only => [:new, :create]
+  before_filter :load_possible_groups, :only => [:edit, :update]
+  
   
   
   # View for editing a portfolio.
   def edit
-    @portfolio_products = @portfolio.portfolio_products.joins(:product).order(:name)
-    @product_allocations = []
-    @portfolio_products.each do |portfolio_product|
-      @product_allocations << portfolio_product.product.get_allocation_for_group(@group, @year, 
-                              @allocation_precision).to_s + " " + t(:fte)
-    end
+    @product_groups = @portfolio.product_groups.joins(:product).order("products.name")
     @possible_products = Product.order(:name) - @portfolio.products
   end
   
   
   # View of all portfolios
   def index
+    @new_portfolio = Portfolio.new
     @portfolios = filter_portfolios(params[:search])
     @portfolios = sort_results(params, @portfolios) unless params[:order].blank?
     @portfolios = @portfolios.includes(:products, :products => :groups).order("portfolios.name, products.name, groups.name").uniq
@@ -36,22 +31,14 @@ class PortfoliosController < ApplicationController
   
   # Creates new portfolio. 
   def create
-    @name = params[:name]
-    unless @name.blank?
-      @portfolio_name = PortfolioName.find_by_name(@name)
-      @portfolio_name = PortfolioName.create(:name => @name) if @portfolio_name.blank?
-      @portfolio = Portfolio.new(:group_id => params[:group_id], 
-                                 :portfolio_name_id => @portfolio_name.id)
-    else
-      @portfolio = Portfolio.new(params[:portfolio])
-    end
-    if @portfolio.save
+    new_portfolio = Portfolio.new(params[:portfolio])
+    if new_portfolio.save
       flash[:notice] = "Portfolio created!"
-      redirect_to edit_portfolio_path(@portfolio.id)
+      redirect_to edit_portfolio_path(new_portfolio.id)
       return
     else
-      flash[:error] = "Group already has a portfolio with this name"
-      render :new
+      flash[:error] = "Portfolio already exists"
+      redirect_to portfolios_path
     end
   end
   
@@ -69,17 +56,14 @@ class PortfoliosController < ApplicationController
   # If a new product is added, also adds it to the group's list of products if it is not already in 
   # it. 
   def update
-    unless @product.blank?
-      if @portfolio.portfolio_products.new(:product_id => @product.id, 
-          :portfolio_name_id => @portfolio.portfolio_name_id).save
+    new_pg = params[:product_group]
+    unless new_pg.blank? || new_pg[:product_id].blank? || new_pg[:group_id].blank?
+      if @portfolio.product_groups.new(params[:product_group]).save
         flash[:notice] = "Product added."
       else
         flash[:error] = "Product cannot be added"
         render :edit
         return
-      end
-      if ProductGroup.where(:product_id => @product.id, :group_id => @portfolio.group_id).blank?
-        @group.products << @product
       end
     end
     @portfolio.update_attributes(params[:portfolio])
@@ -118,14 +102,6 @@ class PortfoliosController < ApplicationController
     end
   
   
-    # Loads the group that the portfolio will belong to
-    def load_group
-      @group = params[:group_id]
-      @group = params[:portfolio][:group_id] if @group.blank?
-      @group = Group.find(@group)
-    end
-  
-  
     # Loads all groups in alphabetical order
     def load_groups
       @groups = Group.order(:name)
@@ -135,21 +111,14 @@ class PortfoliosController < ApplicationController
     # Loads the portfolio in question. Also loads its associated group
     def load_portfolio
       @portfolio = Portfolio.find(params[:id])
-      @group = Group.find(@portfolio.group_id)
     end
     
     
-    # Loads all global portfolio names
-    def load_portfolio_names
-      @portfolio_names = PortfolioName.global_portfolio_names - 
-         PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
-    end
-    
-    
-    # Loads the product being added
-    def load_product
-      unless params[:product].blank? || params[:product][:id].blank?
-        @product = Product.find(params[:product][:id])
+    def load_possible_groups
+      if can? :manage, :all
+        @possible_groups = Group.order(:name)
+      else
+        @possible_groups = @current_user.admin_groups
       end
     end
     

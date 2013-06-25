@@ -10,7 +10,7 @@ class Portfolio < ActiveRecord::Base
 
 
     # Returns all global portfolio names
-    def self.global_portfolio_names
-      return PortfolioName.where(:global => true).order(:name)
+    def self.global_portfolios
+      return Portfolio.where(:global => true).order(:name)
     end
 end

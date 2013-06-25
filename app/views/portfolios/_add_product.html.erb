@@ -1,0 +1,36 @@
+<% unless possible_products.blank? || possible_groups.blank? %>
+  
+  <a class="btn btn-small" data-toggle="modal" data-target="#add-product" href="#">
+    <i class="icon-plus"></i>
+    <%= t(:add) + t(:product) %>
+  </a>
+  
+  
+  
+  <div class="modal hide fade" id="add-product">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h4> <%= t(:add) + t(:product) %> </h4>
+    </div>
+    <%= fields_for "product_group" do |form|%>
+      <div class="modal-body form-inline">
+        <%= form.label :product_id, t(:name) %>
+        <%= form.select(:product_id, options_from_collection_for_select(
+                        possible_products, :id, :name),
+                        {:include_blank => t(:select) + t(:product)},
+                        {:class => "autocomplete large-select"}) %>
+        <br/>
+        <%= form.label :group_id, t(:name) %>
+        <%= form.select(:group_id, options_from_collection_for_select(
+                        possible_groups, :id, :name),
+                        {:include_blank => t(:select) + t(:group)},
+                        {:class => "autocomplete large-select"}) %>
+      </div>
+      <div class="modal-footer">
+        <a class="btn" data-dismiss="modal" aria-hidden="true"> <%= t(:cancel) %> </a>
+        <%= form.submit t(:add), :class => "btn btn-success " %>
+      </div>
+    <% end %>
+  </div>
+  
+<% end %>

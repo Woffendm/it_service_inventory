@@ -1,87 +1,97 @@
-<h2> 
-  <%= t(:edit) + t(:portfolio_colon) %> <%= @portfolio.name %> 
-  <%= link_to "#{content_tag :em, '', :class => ''}
-            #{t(:return_to)} #{t(:group)}".html_safe, edit_group_path(@portfolio.group_id) %>
-  <a  class="btn btn-danger pull-right" data-method="delete"
-      data-confirm="<%=t(:confirm_deletion)%>" href="<%=portfolio_path(@portfolio)%>">
-    <i class="icon-trash icon-white"></i>
-    <%= t(:delete) %>
-  </a>
-</h2>
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => t(:edit_colon), :object => @portfolio} %>
 
 
 <%= form_for @portfolio do |portfolio_form| %>
 
 
-  <% unless @possible_products.blank? %>
-    <div class="form-inline">
-      <fieldset class="light-border">
-        <legend><%= t(:add) + t(:product) %></legend>
-        <%= fields_for "product" do |form|%>
-          <%= form.label :id, t(:name) %>
-          <%= form.select(:id, options_from_collection_for_select(
-                          @possible_products, :id, :name),
-                          {:include_blank => t(:select) + t(:product)}, 
-                          {:class => "autocomplete large-select"}) %>
-          <%= form.submit  t(:add) %>
-        <% end %>
-      </fieldset>
-    </div>
-  <% end %>
-      
-      
+  <ul class="nav nav-tabs" id="my-tab">
+   <li>
+     <a href="#portfolio" id="portfolio_tab" data-toggle="tab" > 
+       <%= t(:portfolio) + t(:information) %>
+     </a>
+   </li>
+   <li class="active">
+     <a href="#products" id="products_tab" data-toggle="tab"> 
+       <%= t(:products)%> 
+     </a>
+   </li>
+ </ul>
 
-  <h3> Products in this portfolio </h3>
-  <div class="tabs-right">
-    <%= render  :partial => "/shared/all_year_select", 
-                  :locals => {:@year => @year, :@all_years => @all_years } %>
-    <div class="year-content">
-      <% if @portfolio_products.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
-      <% else %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th> <%= t(:product) %> </th>
-              <th class='variable-size'> <%= t(:priority) %> </th>
-              <th> <%= t(:product_state) %> </th>
-              <th> <%= t(:product_type) %> </th>
-              <th> <%= t(:allocation) %> </th>
-              <th> <%= t(:check_to_remove) %> </th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @portfolio_products.each_with_index do |portfolio_product, index| %>
-              <%= portfolio_form.fields_for "portfolio_products", portfolio_product do |form|%>
+
+
+  <div class="tab-content"> 
+    <div class="tab-pane" id="portfolio">
+      <h3> <%= t(:portfolio) + t(:information) %> </h3>
+      <div class="form-horizontal light-border">
+        <%= fields_for @portfolio do |form| %>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.label :name, t(:name) %>
+            </span>
+            <span class="controls">
+              <%= form.text_field :name %>
+            </span>
+          </div>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.submit  t(:save_changes) %>
+            </span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    
+    <div class="tab-pane active" id="products">
+      <h3> 
+        Products in this portfolio 
+        <%= render  :partial => "/portfolios/add_product", 
+                    :locals => {:possible_products => @possible_products,
+                                :possible_groups => @possible_groups} %>
+      </h3>
+      <div class="tabs-right">
+        <%= render  :partial => "/shared/all_year_select", 
+                      :locals => {:@year => @year, :@all_years => @all_years } %>
+        <div class="year-content">
+          <% if @product_groups.blank? %>
+            <p>
+              <%= t(:nothing_to_display) %>
+            </p>
+          <% else %>
+            <table class="table table-striped">
+              <thead>
                 <tr>
-                  <td> 
-                    <%= link_to portfolio_product.product.name, 
-                        product_path(portfolio_product.product_id) %>
-                  </td>
-                  <td class='variable-size'> 
-                    <%= portfolio_product.product.priority %>
-                  </td>
-                  <td > 
-                    <%= portfolio_product.product.state %>
-                  </td>
-                  <td> 
-                    <%= portfolio_product.product.type %>
-                  </td>
-                  <td> 
-                    <%= @product_allocations[index] %>
-                  </td>
-                  <td>
-                    <%= form.check_box :_destroy %>
-                  </td>
+                  <th> <%= t(:product) %> </th>
+                  <th> <%= t(:allocation) %> </th>
+                  <th> <%= t(:check_to_remove) %> </th>
                 </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
+              </thead>
+              <tbody>
+                <% @product_groups.each_with_index do |product_group, index| %>
+                  <%= portfolio_form.fields_for "product_groups", product_group do |form|%>
+                    <tr>
+                      <td> 
+                        <%= link_to product_group.product.name, 
+                            product_path(product_group.product_id) %>
+                      </td>
+                      <td> 
+                        
+                      </td>
+                      <td>
+                        <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
+                        <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
+                        <%= form.check_box :_destroy %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+          <% end %>          
+        </div>        
+      </div>
+      <%= portfolio_form.submit  t(:save_changes) %>
     </div>
   </div>
-  <%= portfolio_form.submit  t(:save_changes) %>
 <% end %>

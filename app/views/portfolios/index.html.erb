@@ -1,7 +1,8 @@
 <div class="view-header">
   <div class="view-header-inner">
     <h2> <%= t(:portfolios) %> </h2>
-   
+    <%= render  :partial => "/portfolios/new_portfolio", 
+                :locals => {:new_portfolio => @new_portfolio} %>
   </div>
 </div>
 
@@ -31,8 +32,7 @@
     <caption> <%= t(:all_portfolios) %> </caption>
     <thead>
       <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
-      <th> <%= t(:products) %> </th>
-      <th> <%= t(:products) %> </th>
+      <th colspan=2> <%= t(:products) %> </th>
     </thead>
     <tbody>
       <% @portfolios.each do |portfolio| %>

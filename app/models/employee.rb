@@ -51,6 +51,12 @@ class Employee < ActiveRecord::Base
   end
 
 
+  # Returns all groups where the user is an admin
+  def admin_groups
+    Group.joins(:employee_groups).where(:employee_groups => {:employee_id => self.id, :group_admin => true}).order(:name)
+  end
+
+
   # Returns an array of all an employee's employee allocation objects for a given year
   def get_service_allocations(year)
     self.employee_allocations.joins(:service).where(
