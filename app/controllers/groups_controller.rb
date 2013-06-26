@@ -8,7 +8,6 @@ class GroupsController < ApplicationController
                                                      :show, :update]  
   before_filter :load_all_years,           :only => [:show, :services, :edit]                                
   before_filter :load_portfolios,          :only => [:show, :edit]
-  before_filter :load_portfolio_names,     :only => [:edit]
   before_filter :load_possible_employees,  :only => [:edit]
   before_filter :load_existing_employees,  :only => [:edit]
   before_filter :load_services,            :only => [:show]
@@ -35,9 +34,9 @@ class GroupsController < ApplicationController
 
   # Page for viewing an existing group
   def show
-    @total_employees = @employees.length
-    @total_products = @products.length
-    @total_services = @services.length
+    @employees.length
+    @products.length
+    @services.length
     @total_product_allocation = @group.get_total_product_allocation(@year, @allocation_precision)
     @total_service_allocation = @group.get_total_service_allocation(@year, @allocation_precision)
   end
@@ -161,34 +160,11 @@ class GroupsController < ApplicationController
     end
     
     
-    # Loads all portfolio names not assigned to current group
-    def load_portfolio_names
-      @portfolio_names = PortfolioName.order(:name) - 
-          PortfolioName.joins(:portfolios).where(:portfolios => {:group_id => @group.id})
-    end
-    
-    
     # Loads all portfolios associated with the given group
     def load_portfolios
-      portfolios = @group.portfolios.joins(:portfolio_name).order(:name).includes(:products)
-      @portfolios = []
-      portfolios.each do |portfolio|
-        @portfolios << [portfolio, portfolio.products.order(:name)]
-      end
-      @portfolio_allocations = []
-      @portfolios.each do |portfolio|
-        product_allocations = []
-        portfolio[1].each do |product|
-          product_allocations << product.get_allocation_for_group(@group, @year, 
-                                  @allocation_precision).to_s + " " + t(:fte)
-        end
-        portfolio_allocation = 0.0
-        product_allocations.each do |product_allocation|
-          portfolio_allocation += product_allocation.to_f
-        end
-        @portfolio_allocations << ["#{portfolio_allocation.round(@allocation_precision)} " +
-            t(:fte), product_allocations]
-      end
+      #@portfolios = Portfolio.joins(:product_groups).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
+      #@portfolios = @group.portfolios.joins(:product_groups).where("product_groups.group_id = ?", @group.id).includes(:products).order("portfolios.name", "products.name").uniq
+      @portfolios = Portfolio.includes(:product_groups => :product).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
     end
     
     
@@ -200,14 +176,6 @@ class GroupsController < ApplicationController
           :employee_id => @employees.pluck("employees.id")}
           ).uniq.order(:name).paginate(:page => params[:products_page], 
           :per_page => session[:results_per_page])
-      @product_allocations = []
-      @products.each do |product|
-        @product_allocations << [product.get_allocation_for_group(@group, @year, 
-                                @allocation_precision).to_s + " " + t(:fte),
-                                product.employee_products.joins(:employee => :groups).where(
-                                :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
-                                "employees.last_name").includes(:employee)]
-      end
     end
     
     
@@ -215,13 +183,5 @@ class GroupsController < ApplicationController
     def load_services
       @services = @group.services(@year).paginate(:page =>   
             params[:services_page], :per_page => session[:results_per_page])
-      @service_allocations = []
-      @services.each do |service|
-        @service_allocations << [service.get_allocation_for_group(@group, @year, 
-                                @allocation_precision).to_s + " " + t(:fte), 
-                                service.employee_allocations.joins(:employee => :groups).where(
-                                :fiscal_year_id => @year.id, :groups => {:id => @group.id}).order(
-                                "employees.last_name").includes(:employee)]
-      end
     end
 end

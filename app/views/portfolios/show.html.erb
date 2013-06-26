@@ -129,6 +129,10 @@
     <div class="tab-pane" id="group-<%= index %>">
       <h3> 
         <%= group.name %>
+        <a href="<%= group_path(group.id) %>" class="btn btn-small">
+          <i class="icon-eye-open"></i>
+          <%= t(:show) %>
+        </a>
       </h3>
       <div class="tabs-right">
         <%= render  :partial => "/shared/all_year_select", 

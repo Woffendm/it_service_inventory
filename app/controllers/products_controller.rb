@@ -28,7 +28,7 @@ class ProductsController < ApplicationController
     if can? :manage, :all
       @groups = Group.order(:name)
     else
-      @groups = @current_user.groups.order(:name)
+      @groups = @current_user.admin_groups
     end
     @new_product = Product.new
     @products = filter_products(params[:search])
@@ -179,7 +179,7 @@ class ProductsController < ApplicationController
 
     # Loads all employees, groups, and services belonging to the product
     def load_associations
-      @product_groups = @product.product_groups.joins(:group).includes(:group).order("groups.name")
+      @product_groups = @product.product_groups.includes(:group).order("groups.name").uniq
       @product_services =
           @product.product_services.joins(:service).includes(:service).order("services.name")
       @employee_products = @product.employee_products.joins(:employee).where(

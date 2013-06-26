@@ -46,10 +46,9 @@ class PortfoliosController < ApplicationController
   
   # Destroys given portfolio and redirects to its parent group.
   def destroy
-    @group = Group.find(@portfolio.group_id)
     @portfolio.destroy
     flash[:notice] = t(:portfolio) + t(:deleted)
-    redirect_to edit_group_path(@group)
+    redirect_to portfolios_path
   end
   
   
@@ -82,11 +81,9 @@ class PortfoliosController < ApplicationController
       @group = search[:group]
       @product = search[:product]
       @name = search[:name]
-      @global = search[:global]
       search_array = []
       search_array << "product_groups.group_id = #{@group}" unless @group.blank? 
       search_array << "product_groups.product_id = #{@product}" unless @product.blank? 
-      search_array << "portfolios.global = " + @global unless @global.blank? 
       search_string = search_array.join(" AND ")
       portfolios = portfolios.joins(:product_groups).uniq unless search_string.blank?
       portfolios = portfolios.where(search_string) unless search_string.blank?
@@ -115,7 +112,8 @@ class PortfoliosController < ApplicationController
     end
     
     
-    
+    # Loads all groups that the current user can edit, along with any allocations that those 
+    # may have
     def load_possible_groups
       if can? :manage, :all
         @possible_groups = Group.order(:name)
@@ -126,7 +124,7 @@ class PortfoliosController < ApplicationController
     end
 
     
-    
+    # Loads all products
     def load_products
       @products = Product.order(:name)
     end
