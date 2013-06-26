@@ -1,0 +1,170 @@
+<%= render  :partial => "/shared/object_view_header", 
+            :locals => {:view => nil, :object => @portfolio} %>
+
+
+
+
+<table class="table table-striped overview">
+  <caption> <%= t(:overview) + t(:for) + @year.year.to_s %> </caption>
+  <tbody>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:products) %>
+        </div>
+        <%= @products.length %> 
+      </td>
+      <td>
+        <div class="overview-label">
+          <%= t(:total_allocation) %>
+        </div>
+        <%= @total_allocation.to_s + t(:fte) %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="overview-label">
+          <%= t(:groups) %>
+        </div>
+        <%= @groups.length %>
+      </td>
+      <td>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+<ul class="nav nav-tabs" id="my-tab">
+  <li class="active">
+    <a href="#products" id="products-tab" data-toggle="tab" > 
+      <%= t(:all_products) %>
+    </a>
+  </li>
+  <% @groups.each_with_index do |group, index| %>
+    <li>
+      <a href="#group-<%= index %>" id="group-tab-<%= index %>" data-toggle="tab"> 
+        <%= group.name %> 
+      </a>
+    </li>
+  <% end %>
+</ul>
+
+
+
+
+<div class="tab-content"> 
+  
+  <div class="tab-pane tabs-right active" id="products">
+    <h3> 
+      <%= t(:all_products) %>
+    </h3>
+    <%= render  :partial => "/shared/all_year_select", 
+                  :locals => {:@year => @year, :@all_years => @all_years } %>
+    <div class="year-content">
+      <% if @products.blank? %>
+        <p>
+          <%= t(:nothing_to_display) %>
+        </p>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> <%= t(:product) %> </th>
+              <th class='variable-size'> <%= t(:priority) %> </th>
+              <th> <%= t(:product_state) %> </th>
+              <th> <%= t(:product_type) %> </th>
+              <th> <%= t(:allocation) %> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each_with_index do |product, index| %>
+              <tr>
+                <td> 
+                  <%= render :partial => "/products/product_groups_tooltip", 
+                      :locals => {:product => product} %>
+                  <%= link_to product.name, product_path(product.id) %>
+                </td>
+                <td class='variable-size'> 
+                  <%= product.priority %>
+                </td>
+                <td > 
+                  <%= product.state %>
+                </td>
+                <td> 
+                  <%= product.type %>
+                </td>
+                <td>
+                  <%= product.get_total_allocation(@year, @allocation_precision) %>
+                </td>
+              </tr>
+            <% end %>
+            <tr> 
+              <td>
+                <%= t(:total_allocation) %>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>
+                <%= @portfolio.get_total_allocation(@year, @allocation_precision).to_s + t(:fte) %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination_footer">
+          <%= will_paginate @products, :param_name => :products_page %>
+          <%= render :partial => "/shared/results_per_page" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  
+  
+  
+  
+  <% @groups.each_with_index do |group, index| %>
+    <div class="tab-pane" id="group-<%= index %>">
+      <h3> 
+        <%= group.name %>
+      </h3>
+      <div class="tabs-right">
+        <%= render  :partial => "/shared/all_year_select", 
+                      :locals => {:@year => @year, :@all_years => @all_years } %>
+        <div class="year-content">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> <%= t(:product) %> </th>
+                <th> <%= t(:allocation) %> </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% group.products.each do |product| %>
+                  <tr>
+                    <td> 
+                      <%= link_to product.name, product_path(product.id) %>
+                    </td>
+                    <td> 
+                      <%= product.get_allocation_for_group(group, @year, @allocation_precision) %>
+                    </td>
+                  </tr>
+              <% end %>
+              <tr> 
+                <td>
+                  <%= t(:total_allocation) %>
+                </td>
+                <td>
+                  <%= @portfolio.get_allocation_for_group(group, @year, @allocation_precision).to_s + t(:fte) %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>        
+      </div>
+    </div>
+  <% end %>
+
+</div>

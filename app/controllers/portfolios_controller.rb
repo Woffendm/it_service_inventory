@@ -1,16 +1,14 @@
 class PortfoliosController < ApplicationController
-  before_filter :load_portfolio,  :only => [:edit, :update, :destroy]
-  before_filter :load_all_years,  :only => [:edit]    
+  before_filter :load_portfolio,  :only => [:edit, :update, :destroy, :show]
+  before_filter :load_all_years,  :only => [:edit, :update, :show]
   before_filter :load_groups,     :only => [:index]
-  before_filter :load_products,   :only => [:index]
+  before_filter :load_products,   :only => [:index, :edit, :update]
   before_filter :load_possible_groups, :only => [:edit, :update]
   
   
   
   # View for editing a portfolio.
   def edit
-    @product_groups = @portfolio.product_groups.joins(:product).order("products.name")
-    @possible_products = Product.order(:name) - @portfolio.products
   end
   
   
@@ -23,9 +21,12 @@ class PortfoliosController < ApplicationController
   end
   
   
-  # Page for creating a new portfolio
-  def new
-    @portfolio = Portfolio.new
+  # View a portfolio in detail
+  def show
+    @products = @portfolio.products.includes(:groups).order("products.name", "groups.name").uniq.paginate(:page => params[:products_page], 
+                :per_page => session[:results_per_page])
+    @total_allocation = @portfolio.get_total_allocation(@year, @allocation_precision)
+    @groups = Group.includes(:products).where(:product_groups => {:portfolio_id => @portfolio.id}).order("groups.name", "products.name").uniq
   end
   
   
@@ -56,14 +57,14 @@ class PortfoliosController < ApplicationController
   # If a new product is added, also adds it to the group's list of products if it is not already in 
   # it. 
   def update
-    new_pg = params[:product_group]
-    unless new_pg.blank? || new_pg[:product_id].blank? || new_pg[:group_id].blank?
-      if @portfolio.product_groups.new(params[:product_group]).save
-        flash[:notice] = "Product added."
-      else
-        flash[:error] = "Product cannot be added"
-        render :edit
-        return
+    unless params[:new_product_groups].blank?
+      params[:new_product_groups].to_a.each do |new_pg|
+        new_pg = new_pg.last
+        unless new_pg.blank? || new_pg["product_id"].blank? || new_pg["group_id"].blank?
+          if @portfolio.product_groups.new(new_pg).save
+            flash[:notice] = "Product added."
+          end
+        end
       end
     end
     @portfolio.update_attributes(params[:portfolio])
@@ -114,13 +115,16 @@ class PortfoliosController < ApplicationController
     end
     
     
+    
     def load_possible_groups
       if can? :manage, :all
         @possible_groups = Group.order(:name)
       else
         @possible_groups = @current_user.admin_groups
       end
+      @groups_with_product_groups = Group.where("groups.id IN (?)", @possible_groups.pluck(:id) ).includes(:product_groups => :product).where(:product_groups => {:portfolio_id => @portfolio.id}).order("groups.name", "products.name").uniq
     end
+
     
     
     def load_products

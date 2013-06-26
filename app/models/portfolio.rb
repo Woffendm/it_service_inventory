@@ -8,6 +8,25 @@ class Portfolio < ActiveRecord::Base
     validates_uniqueness_of :name
 
 
+    # Returns the group's total product allocation for the given portfolio
+    def get_allocation_for_group(group, year, allocation_precision)
+      total = 0.0
+      self.products.where("product_groups.group_id = ?", group.id).each do |product|
+        total += product.get_allocation_for_group(group, year, allocation_precision)
+      end
+      return total.round(allocation_precision)
+    end
+    
+    
+    # Returns a portfolio's total allocation
+    def get_total_allocation(year, allocation_precision)
+      total = 0.0
+      self.products.uniq.each do |product|
+        total += product.get_total_allocation(year, allocation_precision)
+      end
+      return total.round(allocation_precision)
+    end
+
 
     # Returns all global portfolio names
     def self.global_portfolios

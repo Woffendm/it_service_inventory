@@ -1,30 +1,25 @@
-<% unless possible_products.blank? || possible_groups.blank? %>
+<% unless possible_products.blank? || possible_group.blank? %>
   
-  <a class="btn btn-small" data-toggle="modal" data-target="#add-product" href="#">
+  <a class="btn btn-small" data-toggle="modal" data-target="#add-product-<%= index %>" href="#">
     <i class="icon-plus"></i>
     <%= t(:add) + t(:product) %>
   </a>
   
   
   
-  <div class="modal hide fade" id="add-product">
+  <div class="modal hide fade" id="add-product-<%= index %>">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4> <%= t(:add) + t(:product) %> </h4>
+      <h4> <%= t(:add) + t(:product) + t(:to) + possible_group.name %> </h4>
     </div>
-    <%= fields_for "product_group" do |form|%>
+    <%= fields_for "new_product_groups[#{index}]" do |form|%>
       <div class="modal-body form-inline">
         <%= form.label :product_id, t(:name) %>
         <%= form.select(:product_id, options_from_collection_for_select(
                         possible_products, :id, :name),
                         {:include_blank => t(:select) + t(:product)},
                         {:class => "autocomplete large-select"}) %>
-        <br/>
-        <%= form.label :group_id, t(:name) %>
-        <%= form.select(:group_id, options_from_collection_for_select(
-                        possible_groups, :id, :name),
-                        {:include_blank => t(:select) + t(:group)},
-                        {:class => "autocomplete large-select"}) %>
+        <%= form.hidden_field(:group_id, :value => possible_group.id) %>
       </div>
       <div class="modal-footer">
         <a class="btn" data-dismiss="modal" aria-hidden="true"> <%= t(:cancel) %> </a>

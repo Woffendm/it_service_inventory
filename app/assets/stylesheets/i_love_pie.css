@@ -826,6 +826,12 @@ input[type=submit] {
   margin-top: 10px;
 }
 
+
+
+.nav-tabs >li > a{
+  border-color: #ddd;
+}
+
 .tabs-right > .nav-tabs{
   margin-left: 0px;
 }

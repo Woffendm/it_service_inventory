@@ -1,0 +1,21 @@
+<span class="tooltip_trigger">
+  <i class="icon-th-list"></i>
+</span>
+<div class="tooltip">
+  <table class="tooltip-table">
+    <thead>
+      <tr>
+        <th> <%= t(:groups) %> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% product.groups.each do |group| %>
+        <tr>
+          <td> 
+            <%= group.name %> 
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

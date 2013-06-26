@@ -32,6 +32,13 @@ class Group < ActiveRecord::Base
   end
   
   
+  # Returns all products not in the given portfolio for the given group. Products should be an
+  # ordered array of products (preferable all of them)
+  def get_available_products_for_portfolio(products, portfolio)
+    products - Product.joins(:product_groups).where("product_groups.group_id = ? AND product_groups.portfolio_id = ?",  self.id, portfolio.id)
+  end
+  
+  
   # Returns the total the total product allocation for the group. This is defined as the sum of the 
   # total product allocations for every employee in the group 
   def get_total_product_allocation(year, allocation_precision)

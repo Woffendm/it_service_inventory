@@ -6,21 +6,24 @@
 
 
   <ul class="nav nav-tabs" id="my-tab">
-   <li>
-     <a href="#portfolio" id="portfolio_tab" data-toggle="tab" > 
-       <%= t(:portfolio) + t(:information) %>
-     </a>
-   </li>
-   <li class="active">
-     <a href="#products" id="products_tab" data-toggle="tab"> 
-       <%= t(:products)%> 
-     </a>
-   </li>
- </ul>
+    <li>
+      <a href="#portfolio" id="portfolio-tab" data-toggle="tab" > 
+        <%= t(:portfolio) + t(:information) %>
+      </a>
+    </li>
+    <% @possible_groups.each_with_index do |possible_group, index| %>
+      <li class="<%= 'active' if possible_group == @possible_groups.first %>">
+        <a href="#group-<%= index %>" id="group-tab-<%= index %>" data-toggle="tab"> 
+          <%= possible_group.name %> 
+        </a>
+      </li>
+    <% end %>
+  </ul>
 
 
 
   <div class="tab-content"> 
+    
     <div class="tab-pane" id="portfolio">
       <h3> <%= t(:portfolio) + t(:information) %> </h3>
       <div class="form-horizontal light-border">
@@ -43,55 +46,73 @@
     </div>
     
     
-    <div class="tab-pane active" id="products">
-      <h3> 
-        Products in this portfolio 
-        <%= render  :partial => "/portfolios/add_product", 
-                    :locals => {:possible_products => @possible_products,
-                                :possible_groups => @possible_groups} %>
-      </h3>
-      <div class="tabs-right">
-        <%= render  :partial => "/shared/all_year_select", 
-                      :locals => {:@year => @year, :@all_years => @all_years } %>
-        <div class="year-content">
-          <% if @product_groups.blank? %>
-            <p>
-              <%= t(:nothing_to_display) %>
-            </p>
-          <% else %>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th> <%= t(:product) %> </th>
-                  <th> <%= t(:allocation) %> </th>
-                  <th> <%= t(:check_to_remove) %> </th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @product_groups.each_with_index do |product_group, index| %>
-                  <%= portfolio_form.fields_for "product_groups", product_group do |form|%>
+    <% @possible_groups.each_with_index do |possible_group, index| %>
+      <div class="tab-pane <%= 'active' if possible_group == @possible_groups.first%>" id="group-<%= index %>">
+        <h3> 
+          <%= possible_group.name %>
+          <%= render  :partial => "/portfolios/add_product", 
+                      :locals => {:possible_products => possible_group.get_available_products_for_portfolio(@products, @portfolio),
+                                  :possible_group => possible_group,
+                                  :index => index} %>
+        </h3>
+        <% @groups_with_product_groups.each do |group| %>
+          <% if group.id == possible_group.id %>
+            <div class="tabs-right">
+              <%= render  :partial => "/shared/all_year_select", 
+                            :locals => {:@year => @year, :@all_years => @all_years } %>
+              <div class="year-content">
+                <table class="table table-striped">
+                  <thead>
                     <tr>
-                      <td> 
-                        <%= link_to product_group.product.name, 
-                            product_path(product_group.product_id) %>
-                      </td>
-                      <td> 
-                        
+                      <th> <%= t(:product) %> </th>
+                      <th> <%= t(:allocation) %> </th>
+                      <th> <%= t(:check_to_remove) %> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% group.product_groups.each do |product_group| %>
+                      <%= portfolio_form.fields_for "product_groups", product_group do |form|%>
+                        <tr>
+                          <td> 
+                            <%= link_to product_group.product.name, 
+                                product_path(product_group.product_id) %>
+                          </td>
+                          <td> 
+                            <%= product_group.product.get_allocation_for_group(group, @year, @allocation_precision) %>
+                          </td>
+                          <td>
+                            <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
+                            <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
+                            <%= form.check_box :_destroy %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    <% end %>
+                    <tr> 
+                      <td>
+                        <%= t(:total_allocation) %>
                       </td>
                       <td>
-                        <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
-                        <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
-                        <%= form.check_box :_destroy %>
+                        <%= @portfolio.get_allocation_for_group(group, @year, @allocation_precision).to_s + t(:fte) %>
                       </td>
+                      <td></td>
                     </tr>
-                  <% end %>
-                <% end %>
-              </tbody>
-            </table>
-          <% end %>          
-        </div>        
+                  </tbody>
+                </table>
+              </div>        
+            </div>
+            <%= portfolio_form.submit  t(:save_changes) %>
+          <% else %>
+            <% unless @groups_with_product_groups.index(possible_group) %>
+              <p>
+                <%= t(:nothing_to_display) %>
+              </p>
+              <% break %>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
-      <%= portfolio_form.submit  t(:save_changes) %>
-    </div>
+    <% end %>
+  
   </div>
 <% end %>
