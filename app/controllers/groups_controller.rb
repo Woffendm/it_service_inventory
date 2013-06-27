@@ -7,9 +7,9 @@ class GroupsController < ApplicationController
   before_filter :load_group,               :only => [:toggle_group_admin, :destroy, :edit,
                                                      :show, :update]  
   before_filter :load_all_years,           :only => [:show, :services, :edit]                                
-  before_filter :load_portfolios,          :only => [:show, :edit]
-  before_filter :load_possible_employees,  :only => [:edit]
-  before_filter :load_existing_employees,  :only => [:edit]
+  before_filter :load_portfolios,          :only => [:show, :edit, :update]
+  before_filter :load_possible_employees,  :only => [:edit, :update]
+  before_filter :load_existing_employees,  :only => [:edit, :update]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
   before_filter :load_employees_for_year,  :only => [:show]

@@ -11,11 +11,21 @@
         <%= t(:employees) %>
       </a>
     </li>
-    <li>
-      <a href="#portfolios" id="portfolios_tab" data-toggle="tab"> 
-        <%= t(:portfolios) %> 
-      </a>
-    </li>
+    <li class="dropdown">
+       <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+         <%= t(:portfolios) %>
+         <b class="caret"></b>
+       </a>
+       <ul class="dropdown-menu">
+         <% @portfolios.each_with_index do |portfolio, index| %>
+           <li>
+             <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
+               <%= portfolio.name %> 
+             </a>
+           </li>
+         <% end %>
+       </ul>
+     </li>
     <li>
       <a href="#group" id="group_tab" data-toggle="tab"> 
         <%= t(:group) + t(:information) %> 
@@ -32,115 +42,64 @@
           <%= form.label :name, t(:name) %>
           <%= form.text_field :name %>
         <% end %>
+        <br/>
+        <%= group_form.submit  t(:save_changes) %> 
       </div>
     </div>
+    
   
   
   
   
-  
-  
-    <div class="tab-pane" id="portfolios">
-      
-      <h3> 
-        <%= t(:existing_portfolios) %> 
-        <a class="btn btn-small" href="<%= new_portfolio_path + "?group_id=" + @group.id.to_s %>">
-          <i class="icon-plus"></i>
-          <%= "#{t(:add)} #{t(:portfolio)}" %>
-        </a>
-      </h3>
-      
-      
-      
-      <% if @portfolios.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
-      <% else %>
-        <div class="tabs-right">
-          <%= render  :partial => "/shared/all_year_select", 
+    <% @portfolios.each_with_index do |portfolio, index| %>
+      <div class="tab-pane tabs-right" id="portfolio-<%= index %>">
+        <h3> 
+          <%= portfolio.name %>
+          <a href="<%= portfolio_path(portfolio.id) %>" class="btn btn-small">
+            <i class="icon-eye-open"></i>
+            <%= t(:show) %>
+          </a>
+        </h3>
+        <%= render  :partial => "/shared/all_year_select", 
                       :locals => {:@year => @year, :@all_years => @all_years } %>
-          <div class="year-content">
-            <table class="table table-striped">
-              <thead>
+        <div class="year-content">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  <%= t(:product) %>
+                </th>
+                <th>
+                  <%= t(:allocation) %>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% portfolio.product_groups.each do |product_group| %>
+              <% product = product_group.product %>
                 <tr>
-                  <th>
-                    <%= t(:portfolio) %>
-                  </th>
-                  <th>
-                    <%= t(:allocation) %>
-                  </th>
+                  <td>
+                    <%= link_to product.name, product_path(product.id) %>
+                  </td>
+                  <td>
+                    <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  </td>
                 </tr>
-              </thead>
-            </table>
-            <div class="accordion" id="accordion">
-              <% @portfolios.each_with_index do |portfolio, index| %>
-                <div class="accordion-group">
-                  <table class="table">
-                    <tbody>
-                      <tr class="striped-<%=index%2%>">
-                        <td>
-                          <%= link_to portfolio[0].name, edit_portfolio_path(portfolio[0].id) %>
-                        </td>
-                        <td> 
-                          <% if @portfolio_allocations[index][0].to_f == 0 %>
-                            <%= "0 #{t(:fte)}" %>
-                          <% else %>
-                            <a class="accordion-toggle" data-toggle="collapse"
-                                data-target="#collapse-<%=index%>"  href="#">
-                              <%= @portfolio_allocations[index][0] %> 
-                            </a>
-                          <% end %>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div id="collapse-<%=index%>" class="accordion-body collapse">
-                    <div class="accordion-inner">
-                      <% unless portfolio[1].blank? %>
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th> <%= t(:product) %> </th>
-                              <th class='variable-size'> <%= t(:priority) %> </th>
-                              <th> <%= t(:product_state) %> </th>
-                              <th> <%= t(:product_type) %> </th>
-                              <th> <%= t(:allocation) %> </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <% portfolio[1].each_with_index do |product, product_index| %>
-                              <tr>
-                                <td> 
-                                  <%= link_to product.name, product_path(product.id) %>
-                                </td>
-                                <td class='variable-size'> 
-                                  <%= product.priority %>
-                                </td>
-                                <td > 
-                                  <%= product.state %>
-                                </td>
-                                <td> 
-                                  <%= product.type %>
-                                </td>
-                                <td>
-                                  <%= @portfolio_allocations[index][1][product_index] %>
-                                </td>
-                              </tr>
-                            <% end %>
-                          </tbody>
-                        </table>
-                      <% end %>
-                    </div>
-                  </div>
-                </div>
-              <% end %>      
-            </div>
-          </div>
+              <% end %>
+              <tr>
+                <td> 
+                  <%= t(:total_allocation) %>
+                </td>
+                <td>
+                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      <% end %>
-    </div>
-  
+        <%= group_form.submit  t(:save_changes) %> 
+      </div>
+    <% end %>
   
   
   
@@ -197,10 +156,9 @@
           <%= render :partial => "/shared/results_per_page" %>
         </div>
       <% end %>
+      <%= group_form.submit  t(:save_changes) %> 
     </div>
-  </div>
-  <%= group_form.submit  t(:save_changes) %> 
-  
+  </div>  
   
   
 <% end %>
