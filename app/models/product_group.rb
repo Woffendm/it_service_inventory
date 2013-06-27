@@ -21,6 +21,7 @@ class ProductGroup < ActiveRecord::Base
     if GroupPortfolio.where(:portfolio_id => self.portfolio_id, :group_id => self.group_id).blank?
       GroupPortfolio.create(:portfolio_id => self.portfolio_id, :group_id => self.group_id)
     end
+    return true
   end
   
   
@@ -29,5 +30,6 @@ class ProductGroup < ActiveRecord::Base
     if ProductPortfolio.where(:portfolio_id => self.portfolio_id, :product_id => self.product_id).blank?
       ProductPortfolio.create(:portfolio_id => self.portfolio_id, :product_id => self.product_id)
     end
+    return true
   end
 end

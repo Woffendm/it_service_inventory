@@ -78,9 +78,9 @@
           <%= label_tag t(:groups) %> 
         </span>
         <span class="controls">
-          <% unless @product_groups.blank? %>
-            <%= @product_groups.collect{|g| link_to g.group.name, 
-                  group_path(g.group_id)}.join(", &nbsp;").html_safe %>
+          <% unless @groups.blank? %>
+            <%= @groups.collect{|g| link_to g.name, 
+                  group_path(g.id)}.join(", &nbsp;").html_safe %>
           <% end %>
         </span>
       </div>

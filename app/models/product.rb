@@ -8,12 +8,13 @@ class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
                   :product_state, :employee_products_attributes, :product_services_attributes,
                   :product_groups_attributes, :product_source_attributes, :product_priority_id, 
-                  :product_priority
+                  :product_priority, :product_portfolios, :product_portfolios_attributes
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
   has_many :product_groups,     :dependent => :delete_all
   has_many :groups,             :through =>   :product_groups
-  has_many :portfolios,         :through =>   :product_groups
+  has_many :product_portfolios, :dependent => :delete_all
+  has_many :portfolios,         :through =>   :product_portfolios
   has_many :product_services,   :dependent => :delete_all
   has_many :services,           :through =>   :product_services
   has_one  :product_source
@@ -44,12 +45,14 @@ class Product < ActiveRecord::Base
     end
   end
   
+  
   # Returns the name of the product state if the product state isn't nil
   def priority
     unless self.product_priority.nil?
       return self.product_priority.name
     end
   end
+  
   
   # Returns an array of all an product's employee product objects for a given year
   def get_allocations_for_year(year)
@@ -88,6 +91,12 @@ class Product < ActiveRecord::Base
   # Returns an array of groups that the product does not currently have
   def get_available_groups
     Group.order(:name) - self.groups
+  end
+
+
+  # Returns all portfolios which this product does not currently belong to
+  def get_available_portfolios
+    Portfolio.order(:name) - self.portfolios
   end
 
 

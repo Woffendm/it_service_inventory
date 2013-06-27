@@ -47,8 +47,8 @@ class ProductsController < ApplicationController
   # Page for viewing a product in detail
   # Contains rest services for viewing product in json
   def show
-    @product = Product.find(params[:id])
-    @total_groups = @product.groups.length
+    @groups = @product.groups.order(:name).uniq
+    @total_groups = @groups.length
     @total_services = @product.services.length
     @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
     @total_allocation = @product.get_total_allocation(@year, @allocation_precision)
@@ -68,9 +68,6 @@ class ProductsController < ApplicationController
     authorize! :create, Product
     @product = Product.new(params[:product])
     if @product.save
-      unless params[:product_groups].blank? || params[:product_groups][:group_id].blank?
-        new_product_group = @product.product_groups.create(params[:product_groups])
-      end
       flash[:notice] = t(:product) + t(:created)
       redirect_to edit_product_path(@product.id)
       return
@@ -93,14 +90,37 @@ class ProductsController < ApplicationController
   def update
     authorize! :update, @product
     # If a new service was sent with the params, adds it to the product's list of services
-    unless params[:product_service].blank? || params[:product_service][:service_id].blank?
-      new_product_service = @product.product_services.new(params[:product_service])
-      new_product_service.save
+    add_service(params[:product_service])
+    # 
+    unless params[:new_product_groups].blank?
+      params[:new_product_groups].to_a.each do |new_pg|
+        new_pg = new_pg.last
+        unless new_pg.blank? || new_pg["group_id"].blank?
+          if @product.product_groups.new(new_pg).save
+            flash[:notice] = "Product added."
+          else
+            flash[:error] = "Cannot add group"
+            render :edit
+            return
+          end
+        end
+      end
     end
-    # If a new group was sent with the params, adds it to the product's list of group
-    unless params[:product_group].blank? || params[:product_group][:group_id].blank?
-      new_product_group = @product.product_groups.new(params[:product_group])
-      new_product_group.save
+    unless params[:new_product_portfolio].blank? || 
+           params[:new_product_portfolio][:portfolio_id].blank?
+      @product.portfolios << Portfolio.find(params[:new_product_portfolio][:portfolio_id])
+      flash[:notice] = t(:portfolio) + t(:added)
+    end
+    unless params[:new_portfolio].blank? || params[:new_portfolio][:name].blank?
+      new_portfolio = Portfolio.new(params[:new_portfolio])
+      if new_portfolio.save
+        @product.portfolios << new_portfolio
+        flash[:notice] = t(:portfolio) + t(:created)
+      else
+        flash[:error] = "Portfolio already exists"
+        render :edit
+        return
+      end
     end
     # If a new employee was sent with the params, adds them to the product
     unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank? ||
@@ -119,9 +139,67 @@ class ProductsController < ApplicationController
 
 
 
-# Loading methods
+
+
 
   private
+  
+  # Helper methods
+  
+    #
+    def add_group(new_product_groups)
+      new_product_groups.blank?
+        new_product_groups.to_a.each do |new_pg|
+          new_pg = new_pg.last
+          unless new_pg.blank? || new_pg["group_id"].blank?
+            if @product.product_groups.new(new_pg).save
+              flash[:notice] = "Group added."
+            else
+              flash[:error] = "Cannot add group"
+              render :edit
+              return
+            end
+          end
+        end
+      end
+    end
+    
+    
+    # Adds service to product
+    def add_service(product_service)
+      unless product_service.blank? || product_service[:service_id].blank?
+        new_product_service = @product.product_services.new(product_service)
+        if new_product_service.save
+          flash[:notice] = "Service added."
+        else
+          flash[:error] = "Cannot add service"
+          render :edit
+          return
+        end
+      end
+    end
+    
+  
+    # Removes product from selected portfolio
+    def remove_from_portfolio(remove_portfolios)
+      unless remove_portfolios.blank?
+        remove_portfolios.to_a.each do |portfolio|
+          portfolio = portfolio.last
+          unless portfolio.blank? || portfolio["portfolio_id"].blank?
+            ProductPortfolio.where(:portfolio_id => portfolio["portfolio_id"], :product_id => @product.id).first.destroy
+          end
+        end
+      end
+    end
+  
+  
+  
+  
+  
+  
+  
+  # Loading methods
+  
     # Filters the products displayed on the index page based on paramaters provided
     def filter_products(search)
       return Product.where(true) if search.blank?
@@ -179,7 +257,7 @@ class ProductsController < ApplicationController
 
     # Loads all employees, groups, and services belonging to the product
     def load_associations
-      @product_groups = @product.product_groups.includes(:group).order("groups.name").uniq
+      @portfolios = @product.portfolios.order(:name).uniq
       @product_services =
           @product.product_services.joins(:service).includes(:service).order("services.name")
       @employee_products = @product.employee_products.joins(:employee).where(
@@ -190,7 +268,7 @@ class ProductsController < ApplicationController
     # Loads all groups and services not assigned to the product, and all employees not assigned to 
     # the product for the given year
     def load_available_associations
-      @available_groups = @product.get_available_groups
+      @possible_portfolios = @product.get_available_portfolios
       @available_services = @product.get_available_services
       @available_employees = @product.get_available_employees(@year)
     end

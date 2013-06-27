@@ -17,5 +17,6 @@ class ProductPortfolio < ActiveRecord::Base
     ProductGroup.where(:product_id => self.product_id, :portfolio_id => self.portfolio_id).each do |pg|
       pg.destroy
     end
+    return true
   end
 end
