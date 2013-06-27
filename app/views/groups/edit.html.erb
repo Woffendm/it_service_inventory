@@ -12,20 +12,28 @@
       </a>
     </li>
     <li class="dropdown">
-       <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
-         <%= t(:portfolios) %>
-         <b class="caret"></b>
-       </a>
-       <ul class="dropdown-menu">
-         <% @portfolios.each_with_index do |portfolio, index| %>
-           <li>
-             <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
-               <%= portfolio.name %> 
-             </a>
-           </li>
-         <% end %>
-       </ul>
-     </li>
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+        <%= t(:portfolios) %>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <% unless @possible_portfolios.blank? %>
+          <li>
+            <a data-toggle="modal" data-target="#add-portfolio" href="#">
+              <i class="icon-plus"></i>
+              <%= "#{t(:add)} #{t(:portfolio)}" %>
+            </a>
+          </li>
+        <% end %>
+        <% @portfolios.each_with_index do |portfolio, index| %>
+          <li>
+            <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
+              <%= portfolio.name %> 
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </li>
     <li>
       <a href="#group" id="group_tab" data-toggle="tab"> 
         <%= t(:group) + t(:information) %> 
@@ -34,16 +42,38 @@
   </ul>
   
   
+  
+  
+  <%= render  :partial => "/groups/add_portfolio", 
+              :locals => {:possible_portfolios => @possible_portfolios,
+                          :group => @group} %>
+  
+  
+  
+  
+  
   <div class="tab-content">
       
     <div class="tab-pane" id="group"> 
-      <div class="form-inline light-border">
+      <h3>
+        <%= t(:group) + t(:information) %>
+      </h3>
+      <div class="form-horizontal light-border">
         <%= fields_for @group do |form| %>
-          <%= form.label :name, t(:name) %>
-          <%= form.text_field :name %>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.label :name, t(:name) %>
+            </span>
+            <span class="controls">
+              <%= form.text_field :name %>
+            </span>
+          </div>
+          <div class="control-group">
+            <span class="control-label">
+              <%= form.submit  t(:save_changes) %>
+            </span>
+          </div>
         <% end %>
-        <br/>
-        <%= group_form.submit  t(:save_changes) %> 
       </div>
     </div>
     
@@ -54,11 +84,11 @@
     <% @portfolios.each_with_index do |portfolio, index| %>
       <div class="tab-pane tabs-right" id="portfolio-<%= index %>">
         <h3> 
-          <%= portfolio.name %>
-          <a href="<%= portfolio_path(portfolio.id) %>" class="btn btn-small">
-            <i class="icon-eye-open"></i>
-            <%= t(:show) %>
-          </a>
+          <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
+          <%= render  :partial => "/groups/add_product", 
+                      :locals => {:possible_products => 
+                                  portfolio.possible_products_for_group(@group),
+                                  :group => @group, :portfolio => portfolio, :index => index} %>
         </h3>
         <%= render  :partial => "/shared/all_year_select", 
                       :locals => {:@year => @year, :@all_years => @all_years } %>
@@ -72,17 +102,28 @@
                 <th>
                   <%= t(:allocation) %>
                 </th>
+                <th> 
+                  <%= t(:check_to_remove) %>
+                </th>
               </tr>
             </thead>
             <tbody>
-              <% portfolio.product_groups.each do |product_group| %>
-              <% product = product_group.product %>
+              <% portfolio.product_groups_for_group(@group).each do |product_group| %>
+                <% product = product_group.product %>
                 <tr>
                   <td>
                     <%= link_to product.name, product_path(product.id) %>
                   </td>
                   <td>
                     <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  </td>
+                  <td>
+                    <%= group_form.fields_for "product_groups", product_group do |form|%>
+                      <%= form.hidden_field(:portfolio_id, :value => product_group.portfolio_id) %>
+                      <%= form.hidden_field(:id, :value => product_group.id) %>
+                      <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
+                      <%= form.check_box :_destroy %>
+                    <% end %>
                   </td>
                 </tr>
               <% end %>
@@ -93,6 +134,7 @@
                 <td>
                   <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
                 </td>
+                <td> </td>
               </tr>
             </tbody>
           </table>

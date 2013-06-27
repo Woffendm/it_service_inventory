@@ -227,11 +227,7 @@
   <% @portfolios.each_with_index do |portfolio, index| %>
     <div class="tab-pane tabs-right" id="portfolio-<%= index %>">
       <h3> 
-        <%= portfolio.name %>
-        <a href="<%= portfolio_path(portfolio.id) %>" class="btn btn-small">
-          <i class="icon-eye-open"></i>
-          <%= t(:show) %>
-        </a>
+        <%= link_to portfolio.name, portfolio_path(portfolio.id)%>
       </h3>
       <%= render  :partial => "/shared/all_year_select", 
                     :locals => {:@year => @year, :@all_years => @all_years } %>

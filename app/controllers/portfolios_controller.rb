@@ -59,7 +59,7 @@ class PortfoliosController < ApplicationController
     unless params[:new_product_groups].blank?
       params[:new_product_groups].to_a.each do |new_pg|
         new_pg = new_pg.last
-        unless new_pg.blank? || new_pg["product_id"].blank? || new_pg["group_id"].blank?
+        unless new_pg.blank? || new_pg["product_id"].blank?
           if @portfolio.product_groups.new(new_pg).save
             flash[:notice] = "Product added."
           end

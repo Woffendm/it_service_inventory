@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130624200834) do
+ActiveRecord::Schema.define(:version => 20130627175021) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -76,9 +76,8 @@ ActiveRecord::Schema.define(:version => 20130624200834) do
   end
 
   create_table "group_portfolios", :force => true do |t|
-    t.integer  "group_id"
     t.integer  "portfolio_id"
-    t.integer  "product_id"
+    t.integer  "group_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end

@@ -7,8 +7,9 @@ class GroupsController < ApplicationController
   before_filter :load_group,               :only => [:toggle_group_admin, :destroy, :edit,
                                                      :show, :update]  
   before_filter :load_all_years,           :only => [:show, :services, :edit]                                
-  before_filter :load_portfolios,          :only => [:show, :edit, :update]
+  before_filter :load_portfolios,          :only => [:edit, :update]
   before_filter :load_possible_employees,  :only => [:edit, :update]
+  before_filter :load_possible_portfolios, :only => [:edit, :update]
   before_filter :load_existing_employees,  :only => [:edit, :update]
   before_filter :load_services,            :only => [:show]
   before_filter :load_products,            :only => [:show]
@@ -34,9 +35,7 @@ class GroupsController < ApplicationController
 
   # Page for viewing an existing group
   def show
-    @employees.length
-    @products.length
-    @services.length
+    @portfolios = Portfolio.includes(:product_groups => :product).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
     @total_product_allocation = @group.get_total_product_allocation(@year, @allocation_precision)
     @total_service_allocation = @group.get_total_service_allocation(@year, @allocation_precision)
   end
@@ -85,7 +84,36 @@ class GroupsController < ApplicationController
       if @group.employee_groups.new(params[:employee_group]).save
         flash[:notice] = t(:employee) + t(:added)
       else
-        flash[:error] = t(:employee) + t(:add) + t(:fail)
+        flash[:error] = "Cannot add employee"
+        render :edit
+        return
+      end
+    end
+    unless params[:new_product_groups].blank?
+      params[:new_product_groups].to_a.each do |new_pg|
+        new_pg = new_pg.last
+        unless new_pg.blank? || new_pg["product_id"].blank?
+          if @group.product_groups.new(new_pg).save
+            flash[:notice] = "Product added."
+          else
+            flash[:error] = "Cannot add product"
+            render :edit
+            return
+          end
+        end
+      end
+    end
+    unless params[:new_group_portfolio].blank? || params[:new_group_portfolio][:portfolio_id].blank?
+      @group.portfolios << Portfolio.find(params[:new_group_portfolio][:portfolio_id])
+      flash[:notice] = t(:portfolio) + t(:added)
+    end
+    unless params[:new_portfolio].blank? || params[:new_portfolio][:name].blank?
+      new_portfolio = Portfolio.new(params[:new_portfolio])
+      if new_portfolio.save
+        @group.portfolios << new_portfolio
+        flash[:notice] = t(:portfolio) + t(:created)
+      else
+        flash[:error] = "Portfolio already exists"
         render :edit
         return
       end
@@ -162,9 +190,12 @@ class GroupsController < ApplicationController
     
     # Loads all portfolios associated with the given group
     def load_portfolios
-      #@portfolios = Portfolio.joins(:product_groups).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
-      #@portfolios = @group.portfolios.joins(:product_groups).where("product_groups.group_id = ?", @group.id).includes(:products).order("portfolios.name", "products.name").uniq
-      @portfolios = Portfolio.includes(:product_groups => :product).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
+      @portfolios = @group.portfolios.order(:name)
+    end
+    
+    
+    def load_possible_portfolios
+      @possible_portfolios = Portfolio.order(:name) - @portfolios
     end
     
     

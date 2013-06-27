@@ -200,7 +200,7 @@ a{
   font-weight: bold;
   padding: .1em .33em .2em .25em;
   width: 8%;
-  background-color: #888;
+  background-color: #D44513;
   border-radius: 3px 3px 3px 3px;
   color: #FFFFFF;
 }
@@ -215,40 +215,6 @@ a{
   padding-right: 17px;
 }
 
-h2 > a {
-  margin-left: 30px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-h3 > a {
-  margin-left: 15px;
-  font-size: 12px;
-  font-weight: normal;
-}
-
-.table {
-  margin-bottom: 0px;
-}
-
-.overview {
-  margin-bottom: 20px;
-}
-
-.overview caption{
-  margin-top: 5px;
-}
-
-.overview label {
-  display: inline;
-  font-weight: bold;
-}
-
-
-.overview-label {
-  display: inline-block;
-  width: 200px;
-}
 
 th.variable-size, td.variable-size {
   max-width: 50px;
@@ -333,56 +299,10 @@ th.variable-size, td.variable-size {
   max-height: 190px;
 }
 
-.whole{
-  
-}
-
-.half1, .half2{
-  width: 48%;
-  display: inline-block;
-  min-height: 30px;
-  vertical-align: top;
-}
-
-.half1{
-  margin:5px;
-}
-
-.half2{
-  margin-left: 2%;
-}
-
-.thing0{
-  font-weight: bold;
-  display: block;
-  width: 100%;
-  border-bottom: 1px solid black;
-  margin-bottom: 10px;
-}
-
-.thing1{
-  display: block;
-  margin-bottom: 5px;
-}
-
-.thing2{
-  display: inline-block;
-  width: 300px;
-}
-
-.thing3{
-  display: inline-block;
-  margin-right: 5px;
-  padding: 1px;
-}
 
 table.accordion-inner{
   border: 1px solid #E5E5E5;
   margin-bottom: 10px;
-}
-
-.whole > ul{
-  margin: 0px;
 }
 
 .accordion-header{
@@ -751,24 +671,51 @@ h2 {
 }
 
 h3, caption {
-  margin-top: 5px;
   font-size: 16px;
   border-bottom: 2px solid #555555;
   font-weight: bold;
   text-align: left;
+  line-height: 32px;
+  margin: 0px;
 }
 
-caption {
-  padding-bottom: 10px;
+
+h3 > a.btn, h2 > a.btn, caption > a.btn {
+  margin-left: 15px;
+  font-size: 12px;
+  font-weight: normal;
+  vertical-align: middle;
 }
+
+.table {
+  margin-bottom: 0px;
+}
+
+.overview {
+  margin-bottom: 35px;
+}
+
+
+.overview label {
+  display: inline;
+  font-weight: bold;
+}
+
+
+.overview-label {
+  display: inline-block;
+  width: 200px;
+}
+
+
+
+
 
 .popover {
   min-width: 200px;
   max-width: 375px; 
   word-wrap: break-word;
 }
-
-
 
 .modal-header {
   background-color: #D44413;
@@ -827,6 +774,17 @@ input[type=submit] {
 }
 
 
+
+.nav-tabs .open .dropdown-toggle, .nav-pills .open .dropdown-toggle, .nav > li.dropdown.open.active > a:hover, .nav > li.dropdown.open.active > a:focus {
+    background-color: #D44513;
+    border-color: #D44513;
+    color: #FFFFFF;
+}
+
+.nav.nav-tabs {
+    margin-bottom: 10px;
+    margin-top: 14px;
+}
 
 .nav-tabs >li > a{
   border-color: #ddd;
