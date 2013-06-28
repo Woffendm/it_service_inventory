@@ -1,11 +1,13 @@
 class OverhaulPortfolios < ActiveRecord::Migration
   def up
     add_column      :product_groups, :portfolio_id, :integer
-    PortfolioProduct.all.each do |pp|
-      pg = ProductGroup.where(:group_id => pp.portfolio.group_id, :product_id => pp.product_id).first unless pp.portfolio.blank?
-      unless pg.blank?
-        pg.portfolio_id = pp.portfolio_name_id
-        pg.save
+    if defined?(PortfolioProduct)
+      PortfolioProduct.all.each do |pp|
+        pg = ProductGroup.where(:group_id => pp.portfolio.group_id, :product_id => pp.product_id).first unless pp.portfolio.blank?
+        unless pg.blank?
+          pg.portfolio_id = pp.portfolio_name_id
+          pg.save
+        end
       end
     end
     drop_table      :portfolios
