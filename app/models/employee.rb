@@ -106,7 +106,7 @@ class Employee < ActiveRecord::Base
   def get_total_product_allocation(year, allocation_precision)
     total_allocation = 0.0
     self.employee_products.where(:fiscal_year_id =>year.id).each do |employee_product|
-      total_allocation += employee_product.allocation
+      total_allocation += employee_product.allocation unless employee_product.allocation.blank?
     end
     return total_allocation.round(allocation_precision)
   end

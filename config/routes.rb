@@ -9,7 +9,11 @@ Project1::Application.routes.draw do
   resources :product_priorities
 
 
-  resources :products
+  resources :products do
+    member do
+      post 'remove_from_portfolio'
+    end
+  end
 
 
   match '/404' => 'errors#page_not_found'

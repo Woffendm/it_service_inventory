@@ -93,9 +93,7 @@
       
       
       <% if @employee_groups.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped">
           <thead>
@@ -160,9 +158,7 @@
                     :locals => {:@year => @year, :@active_years => @active_years } %>
         <div class="tab-content year-content">
           <% if @service_allocations.blank? %>
-            <p>
-              <%= t(:nothing_to_display) %>
-            </p>
+            <%= render  :partial => "/shared/nothing_to_display" %>
           <% else %>
             <table class="table table-striped">
               <thead>
@@ -237,9 +233,7 @@
                     :locals => {:@year => @year, :@active_years => @active_years } %>
         <div class="tab-content year-content">
           <% if @product_allocations.blank? %>
-            <p>
-              <%= t(:nothing_to_display) %>
-            </p>
+            <%= render  :partial => "/shared/nothing_to_display" %>
           <% else %>
             <table class="table table-striped">
               <thead>

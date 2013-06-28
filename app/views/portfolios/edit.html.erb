@@ -104,9 +104,7 @@
             <%= portfolio_form.submit  t(:save_changes) %>
           <% else %>
             <% unless @groups_with_product_groups.index(possible_group) %>
-              <p>
-                <%= t(:nothing_to_display) %>
-              </p>
+              <%= render  :partial => "/shared/nothing_to_display" %>
               <% break %>
             <% end %>
           <% end %>

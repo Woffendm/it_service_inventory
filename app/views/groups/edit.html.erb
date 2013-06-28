@@ -153,9 +153,7 @@
                     :locals => {:possible_employees => @possible_employees} %>
       </h3> 
       <% if @existing_employees.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped">
           <thead>

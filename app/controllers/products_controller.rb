@@ -4,7 +4,7 @@
 # Copyright:
 
 class ProductsController < ApplicationController
-  before_filter :load_product,                      :only => [:destroy, :edit, :show, :update]
+  before_filter :load_product
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
   before_filter :load_all_years,                    :only => [:show]
@@ -86,48 +86,25 @@ class ProductsController < ApplicationController
   end
 
 
+  # Removes product from selected portfolio
+  def remove_from_portfolio
+    product_portfolio = ProductPortfolio.where(:portfolio_id => params[:portfolio_id], 
+                                               :product_id => @product.id).first
+    if product_portfolio && product_portfolio.destroy
+      flash[:notice] = "Portfolio removed"
+    end
+    redirect_to edit_product_path(@product.id)
+  end
+
+
   # Updates an existing product using info entered on the "edit" page
   def update
     authorize! :update, @product
-    # If a new service was sent with the params, adds it to the product's list of services
     add_service(params[:product_service])
-    # 
-    unless params[:new_product_groups].blank?
-      params[:new_product_groups].to_a.each do |new_pg|
-        new_pg = new_pg.last
-        unless new_pg.blank? || new_pg["group_id"].blank?
-          if @product.product_groups.new(new_pg).save
-            flash[:notice] = "Product added."
-          else
-            flash[:error] = "Cannot add group"
-            render :edit
-            return
-          end
-        end
-      end
-    end
-    unless params[:new_product_portfolio].blank? || 
-           params[:new_product_portfolio][:portfolio_id].blank?
-      @product.portfolios << Portfolio.find(params[:new_product_portfolio][:portfolio_id])
-      flash[:notice] = t(:portfolio) + t(:added)
-    end
-    unless params[:new_portfolio].blank? || params[:new_portfolio][:name].blank?
-      new_portfolio = Portfolio.new(params[:new_portfolio])
-      if new_portfolio.save
-        @product.portfolios << new_portfolio
-        flash[:notice] = t(:portfolio) + t(:created)
-      else
-        flash[:error] = "Portfolio already exists"
-        render :edit
-        return
-      end
-    end
-    # If a new employee was sent with the params, adds them to the product
-    unless params[:employee_product].blank? || params[:employee_product][:employee_id].blank? ||
-           params[:employee_product][:fiscal_year_id].blank?
-      new_employee_product = @product.employee_products.new(params[:employee_product])
-      new_employee_product.save
-    end
+    add_group(params[:new_product_groups])
+    add_portfolio(params[:new_product_portfolio])
+    add_employee_product(params[:employee_product])
+    new_portfolio(params[:new_portfolio])
     if @product.update_attributes(params[:product])
       flash[:notice] = t(:product) + t(:updated)      
       redirect_to edit_product_path(@product.id)
@@ -142,13 +119,25 @@ class ProductsController < ApplicationController
 
 
 
+
+
   private
   
   # Helper methods
   
-    #
+    # Adds new employee allocation to product
+    def add_employee_product(employee_product)
+      unless employee_product.blank? || employee_product[:employee_id].blank?
+        new_employee_product = @product.employee_products.new(params[:employee_product])
+        new_employee_product.save
+        flash[:notice] = "Employee allocated"
+      end
+    end
+  
+  
+    # Adds product to the specified group's portfolio
     def add_group(new_product_groups)
-      new_product_groups.blank?
+      unless new_product_groups.blank?
         new_product_groups.to_a.each do |new_pg|
           new_pg = new_pg.last
           unless new_pg.blank? || new_pg["group_id"].blank?
@@ -179,18 +168,32 @@ class ProductsController < ApplicationController
       end
     end
     
-  
-    # Removes product from selected portfolio
-    def remove_from_portfolio(remove_portfolios)
-      unless remove_portfolios.blank?
-        remove_portfolios.to_a.each do |portfolio|
-          portfolio = portfolio.last
-          unless portfolio.blank? || portfolio["portfolio_id"].blank?
-            ProductPortfolio.where(:portfolio_id => portfolio["portfolio_id"], :product_id => @product.id).first.destroy
-          end
+    
+    # Adds portfolio to product's list of portfolios
+    def add_portfolio(new_product_portfolio)
+      unless new_product_portfolio.blank? || new_product_portfolio[:portfolio_id].blank?
+        @product.portfolios << Portfolio.find(new_product_portfolio[:portfolio_id])
+        flash[:notice] = t(:portfolio) + t(:added)
+      end
+    end
+    
+    
+    # Creates a new portfolio
+    def new_portfolio(new_portfolio)
+      unless new_portfolio.blank? || new_portfolio[:name].blank?
+        portfolio = Portfolio.new(new_portfolio)
+        if portfolio.save
+          @product.portfolios << portfolio
+          flash[:notice] = t(:portfolio) + t(:created)
+        else
+          flash[:error] = "Portfolio already exists"
+          render :edit
+          return
         end
       end
     end
+    
+  
   
   
   

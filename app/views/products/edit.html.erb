@@ -144,6 +144,7 @@
   
   
     <% @portfolios.each_with_index do |portfolio, index| %>
+      <% product_groups = portfolio.product_groups_for_product(@product) %>
       <div class="tab-pane" id="portfolio-<%= index %>">
         <h3> 
           <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
@@ -151,38 +152,45 @@
                       :locals => {:possible_groups => 
                                   portfolio.possible_groups_for_product(@product),
                                   :product => @product, :portfolio => portfolio, :index => index} %>
+          <%= render  :partial => "/shared/remove_button", 
+                      :locals  => {:path => remove_from_portfolio_product_path +
+                                  "?portfolio_id=#{portfolio.id}"} %>
         </h3>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>
-                <%= t(:group) %>
-              </th>
-              <th> 
-                <%= t(:check_to_remove) %>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <% portfolio.product_groups_for_product(@product).each do |product_group| %>
-              <% group = product_group.group %>
+        <% if product_groups.blank? %>
+          <%= render  :partial => "/shared/nothing_to_display" %>
+        <% else %>
+          <table class="table table-striped">
+            <thead>
               <tr>
-                <td>
-                  <%= link_to group.name, group_path(group.id) %>
-                </td>
-                <td>
-                  <%= product_form.fields_for "product_groups", product_group do |form|%>
-                    <%= form.hidden_field(:portfolio_id, :value => product_group.portfolio_id) %>
-                    <%= form.hidden_field(:id, :value => product_group.id) %>
-                    <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
-                    <%= form.check_box :_destroy %>
-                  <% end %>
-                </td>
+                <th>
+                  <%= t(:group) %>
+                </th>
+                <th> 
+                  <%= t(:check_to_remove) %>
+                </th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <%= product_form.submit  t(:save_changes) %> 
+            </thead>
+            <tbody>
+              <% product_groups.each do |product_group| %>
+                <% group = product_group.group %>
+                <tr>
+                  <td>
+                    <%= link_to group.name, group_path(group.id) %>
+                  </td>
+                  <td>
+                    <%= product_form.fields_for "product_groups", product_group do |form|%>
+                      <%= form.hidden_field(:portfolio_id, :value => product_group.portfolio_id) %>
+                      <%= form.hidden_field(:id, :value => product_group.id) %>
+                      <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
+                      <%= form.check_box :_destroy %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= product_form.submit  t(:save_changes) %> 
+        <% end %>
       </div>
     <% end %>
       
@@ -193,18 +201,16 @@
   
     <div class="tab-pane" id="services">
       
-       <h3>
-         <%= t(:services) %>
-         <%= render  :partial => "/products/add_service", 
-                     :locals => {:available_services => @available_services} %>
-       </h3>
+      <h3>
+        <%= t(:services) %>
+        <%= render  :partial => "/products/add_service", 
+                    :locals => {:available_services => @available_services} %>
+      </h3>
   
   
-       <% if @product_services.blank? %>
-         <p>
-           <%= t(:nothing_to_display) %>
-         </p>
-       <% else %>
+      <% if @product_services.blank? %>
+        <%= render  :partial => "/shared/nothing_to_display" %>
+      <% else %>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -265,9 +271,7 @@
         
         <div class="tab-content year-content">
           <% if @employee_products.blank? %>
-            <p>
-              <%= t(:nothing_to_display) %>
-            </p>
+            <%= render  :partial => "/shared/nothing_to_display" %>
           <% else %>
             <table class="table table-striped">
               <thead>

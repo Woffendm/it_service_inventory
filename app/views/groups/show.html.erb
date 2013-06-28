@@ -94,9 +94,7 @@
                   :locals => {:@year => @year, :@all_years => @all_years } %>
       <div class="year-content">
         <% if @services.blank? %>
-          <p>
-            <%= t(:nothing_to_display) %>
-          </p>
+          <%= render  :partial => "/shared/nothing_to_display" %>
         <% else %>
           <table class="table table-striped">
             <thead>
@@ -135,9 +133,7 @@
                 :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
       <% if @employees.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped"> 
           <thead>
@@ -179,9 +175,7 @@
                   :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
       <% if @products.blank? %>
-        <p>
-          <%= t(:nothing_to_display) %>
-        </p>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped">
           <thead>
@@ -229,43 +223,48 @@
       <h3> 
         <%= link_to portfolio.name, portfolio_path(portfolio.id)%>
       </h3>
-      <%= render  :partial => "/shared/all_year_select", 
-                    :locals => {:@year => @year, :@all_years => @all_years } %>
-      <div class="year-content">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>
-                <%= t(:product) %>
-              </th>
-              <th>
-                <%= t(:allocation) %>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <% portfolio.product_groups.each do |product| %>
-            <% product = product.product %>
+      <% product_groups = portfolio.product_groups %>
+      <% if product_groups.blank? %>
+        <%= render  :partial => "/shared/nothing_to_display" %>
+      <% else %>
+        <%= render  :partial => "/shared/all_year_select", 
+                      :locals => {:@year => @year, :@all_years => @all_years } %>
+        <div class="year-content">
+          <table class="table table-striped">
+            <thead>
               <tr>
-                <td>
-                  <%= link_to product.name,product_path(product.id) %>
+                <th>
+                  <%= t(:product) %>
+                </th>
+                <th>
+                  <%= t(:allocation) %>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% product_groups.each do |product_group| %>
+              <% product = product_group.product %>
+                <tr>
+                  <td>
+                    <%= link_to product.name,product_path(product.id) %>
+                  </td>
+                  <td>
+                    <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td> 
+                  <%= t(:total_allocation) %>
                 </td>
                 <td>
-                  <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
                 </td>
               </tr>
-            <% end %>
-            <tr>
-              <td> 
-                <%= t(:total_allocation) %>
-              </td>
-              <td>
-                <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
     </div>
   <% end %>
       

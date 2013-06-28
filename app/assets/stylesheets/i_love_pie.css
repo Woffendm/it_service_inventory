@@ -842,7 +842,10 @@ a > i{
   margin-right: 3px;
 }
 
-
+.nothing-to-display {
+  padding: 15px;
+  text-align: left;
+}
 
 
 

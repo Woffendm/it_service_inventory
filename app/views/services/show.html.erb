@@ -89,7 +89,7 @@
                 :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="year-content">
       <% if @products.blank? %>
-        <%= t(:nothing_to_display) %>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped">
           <thead>
@@ -130,7 +130,7 @@
                 :locals => {:@year => @year, :@all_years => @all_years } %>
     <div class="tab-content year-content">
       <% if @employee_allocations.blank? %>
-        <%= t(:nothing_to_display) %>
+        <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <table class="table table-striped">
           <thead>

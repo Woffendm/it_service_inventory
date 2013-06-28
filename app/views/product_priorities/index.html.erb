@@ -10,9 +10,7 @@
 
 
 <% if @product_priorities.blank? %>
-  <p>
-    <%= t(:nothing_to_display) %>
-  </p>
+  <%= render  :partial => "/shared/nothing_to_display" %>
 <% else %>
   <table class="table table-striped">
     <thead>
