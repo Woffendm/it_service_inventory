@@ -19,7 +19,10 @@ $(document).ready(function(){
   $(".tooltip_trigger").popover({
     html: true,
     trigger: 'hover',
-    placement: 'top',
+    placement: function(tip, ele) {
+      var width = $(window).width();
+      return width >= 975 ? 'right' : ( width < 975 ? 'top' : 'right' );
+    },
     content: function() {
       return $("#tooltip-content-" + tooltip_triggers.index(this)).html();
     }
