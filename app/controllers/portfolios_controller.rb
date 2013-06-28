@@ -32,10 +32,10 @@ class PortfoliosController < ApplicationController
   
   # Creates new portfolio. 
   def create
-    new_portfolio = Portfolio.new(params[:portfolio])
-    if new_portfolio.save
+    @portfolio = Portfolio.new(params[:portfolio])
+    if @portfolio.save
       flash[:notice] = "Portfolio created!"
-      redirect_to edit_portfolio_path(new_portfolio.id)
+      redirect_to edit_portfolio_path(@portfolio.id)
       return
     else
       flash[:error] = "Portfolio already exists"

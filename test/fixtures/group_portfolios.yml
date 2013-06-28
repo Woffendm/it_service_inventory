@@ -1,9 +1,7 @@
 one:
-  product:    itsi
   group:      cws
   portfolio:  awesome_stuff
 
 two:
-  product:    dnc
   group:      cws
   portfolio:  lame_stuff

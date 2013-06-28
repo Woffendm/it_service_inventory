@@ -1,7 +1,5 @@
-one:
-  portfolio_name: awesome_stuff
-  group: cws 
+awesome_stuff:
+  name: awesome_stuff
 
-two:
-  portfolio_name: lame_stuff
-  group: dic
+lame_stuff:
+  name: lame_stuff

@@ -2,11 +2,10 @@ require 'test_helper'
 
 class PortfoliosControllerTest < ActionController::TestCase
   setup do
-    @portfolio = portfolios(:one)
+    @portfolio = portfolios(:awesome_stuff)
     session[:cas_user] = employees(:michael).uid
     session[:already_logged_in] = true
     RubyCAS::Filter.fake(session[:cas_user])
-    @portfolio_name = portfolio_names(:awesome_stuff)
   end
 
 
@@ -16,94 +15,70 @@ class PortfoliosControllerTest < ActionController::TestCase
   end
 
 
-  test "should get new" do
-    get :new, :group_id => groups(:dic).id
-    assert_response :success
-  end
-
-
   test "should get edit" do
-    get :edit, :id => @portfolio, :group_id => groups(:dic).id
+    get :edit, :id => @portfolio
     assert_response :success
   end
 
 
-  test "should create portfolio when given params of valid portfolio" do
-    @group = groups(:dic)
+  test "should create portfolio if name is unique" do
     assert_difference('Portfolio.count') do
-      post :create, :portfolio => { :portfolio_name_id => @portfolio_name.id,
-                                    :group_id => @group.id }
-    end
-    assert_redirected_to edit_portfolio_path(assigns(:portfolio))
-  end
-  
-  
-  test "should create portfolio when given existing portfolio name" do
-    assert_difference('Portfolio.count') do
-      post :create, :name => "awesome_stuff", :group_id => groups(:dic).id
-    end
-    assert_redirected_to edit_portfolio_path(assigns(:portfolio))
-  end
-  
-  
-  test "should create portfolio when given new portfolio name" do
-    assert_difference('Portfolio.count') do
-      post :create, :name => "new portfolio name", :group_id => groups(:dic).id
+      post :create, :portfolio => {:name => "unique name"}
     end
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
 
 
-  test "should not create portfolio when group already has portfolio with that name" do
+  test "should not create portfolio if name already taken" do
     assert_no_difference('Portfolio.count') do
-      post :create, :name => "awesome_stuff", :group_id => groups(:cws).id
+      post :create, :name => "awesome_stuff"
     end
-    assert_response :success
+    assert_redirected_to portfolios_path
   end
 
 
   test "should update portfolio if given valid portfolio" do
-    put :update, :id => @portfolio, :portfolio => { :portfolio_name_id =>
-        portfolio_names(:lame_stuff).id }
+    put :update, :id => @portfolio, :portfolio => { :name => "new name" }
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
 
 
-  test "should add product to portfolio if not already in portfolio" do
+  test "should add product to portfolio for given group if not already in portfolio" do
     assert_difference('@portfolio.products.count', 1) do
-      put :update, :id => @portfolio, :product => {:id => products(:dnc)}
+      put :update, :id => @portfolio, :new_product_groups => {"1" => {:product_id => products(:dnc).id, :group_id => groups(:dic).id}}
     end
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
   end
   
   
-  test "should add product to group's list of products if not already in it when added to portfolio" do
+  test "should not add product to portfolio for given group if already in portfolio" do
+    assert_no_difference('@portfolio.products.count') do
+      put :update, :id => @portfolio, :new_product_groups => {"1" => {:product_id => products(:itsi).id, :group_id => groups(:cws).id}}
+    end
+    assert_redirected_to edit_portfolio_path(assigns(:portfolio))
+  end
+  
+  
+  test "should add portfolio to group's list of portfolios if not already in it when new product_group is created" do
     @product = Product.create(:name => "new product")
-    assert_difference('@portfolio.group.products.count', 1) do
-      put :update, :id => @portfolio, :product => {:id => @product.id}
+    assert_difference('@portfolio.groups.count', 1) do
+      put :update, :id => @portfolio, :new_product_groups => {"1" => {:product_id => products(:dnc).id, :group_id => groups(:dic).id}}
     end
     assert_redirected_to edit_portfolio_path(assigns(:portfolio))
-  end
-  
-  
-  test "should not add product to portfolio if already in portfolio" do
-    put :update, :id => @portfolio, :product => {:id => products(:itsi)}
-    assert_response :success
   end
 
 
   test "should filter portfolios by name" do
     get :index, :search => {:name => "awesome"}
-    assert_not_nil assigns(:portfolio_names)
-    assert_equal @portfolio_name, assigns(:portfolio_names).first
+    assert_not_nil assigns(:portfolios)
+    assert_equal @portfolio, assigns(:portfolios).first
   end
 
 
   test "should destroy portfolio" do
-    group = @portfolio.group
     assert_difference('Portfolio.count', -1) do
       delete :destroy, :id => @portfolio
     end
-    assert_redirected_to edit_group_path(group)
+    assert_redirected_to portfolios_path
   end
 end

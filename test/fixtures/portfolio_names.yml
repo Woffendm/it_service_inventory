@@ -1,7 +1,0 @@
-awesome_stuff:
-  name: awesome_stuff
-  global: true 
-
-lame_stuff:
-  name: lame_stuff
-  global: false
