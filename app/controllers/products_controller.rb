@@ -4,7 +4,7 @@
 # Copyright:
 
 class ProductsController < ApplicationController
-  before_filter :load_product
+  before_filter :load_product,                      :except => [:index, :create]
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
   before_filter :load_all_years,                    :only => [:show]
