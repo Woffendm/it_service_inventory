@@ -25,11 +25,7 @@ class ProductsController < ApplicationController
   # Page for viewing all products at a glance. 
   # Contains rest services for viewing products in json
   def index
-    if can? :manage, :all
-      @groups = Group.order(:name)
-    else
-      @groups = @current_user.admin_groups
-    end
+    @groups = Group.order(:name)
     @new_product = Product.new
     @products = filter_products(params[:search])
     @products = sort_results(params, @products)

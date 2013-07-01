@@ -5,21 +5,20 @@
     <%= employee.get_total_service_allocation(@year, @allocation_precision).to_s + " " + t(:fte) %>
   </div>
   <div class="tooltip">
-    <table class="tooltip-table">
+    <table class="table tooltip-table">
       <thead>
         <tr>
-          <th class="tooltip_first_column"> <%= t(:service) %> </th>
-          <th class="tooltip_last_column"> <%= t(:allocation) %> </th>
+          <th> <%= t(:service) %> </th>
+          <th> <%= t(:allocation) %> </th>
         </tr>
       </thead>
       <tbody>
         <% @allocations.each do |service_allocation| %>
           <tr>
-            <td style="<%=max_width_by_string(service_allocation.name)%>"
-              class="tooltip_first_column"> 
+            <td> 
               <%= service_allocation.name %> 
             </td>
-            <td class="tooltip_last_column">
+            <td>
               <%= service_allocation.rounded_allocation(@allocation_precision) %> 
             </td>
           </tr>

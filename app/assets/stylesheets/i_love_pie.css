@@ -75,7 +75,8 @@ div.field_with_errors {
 
 th, td {
   overflow: hidden;
-  width: 125px;
+  min-width: 90px;
+  max-width: 135px;
 }
 
 tbody {
@@ -117,55 +118,6 @@ div.chart_div_container{
   content: url("../assets/information.png");
 }
 */
-.information{
-  display: inline;
-  cursor: pointer; 
-  position: relative;
-  background: url("../assets/information.png") 0px no-repeat;
-  top: 1px;
-  padding-right: 1.5em;
-  margin-right: 3.5em;
-}
-
-
-.tooltip {
-  display: none;
-}
-
-.tooltip_trigger{
-  min-width: 10px;
-  cursor: help;
-  display: inline;
-}
-
-.tooltip_paragraph, .tooltip_li{
-  font-weight: normal;
-  margin: 5px;
-  line-height: 150%;
-}
-
-.tooltip > ul{
-  text-align: left;
-}
-
-.tooltip-table {
-  max-width: none;
-  width: 100%;
-}
-
-.tooltip-table > tbody > tr:nth-child(odd){
-  background-color: #333;
-}
-
-.tooltip-table > thead {
-  border-bottom: 1px solid #eee;
-}
-
-.tooltip_last_column{
-  width: 1em;
-}
-
-
 
 
 
@@ -216,11 +168,7 @@ a{
 }
 
 
-th.variable-size, td.variable-size {
-  max-width: 50px;
-  min-width: 30px;
-  width: 1px;
-}
+
 
 .accordion-title{
   display: inline-block;
@@ -711,11 +659,64 @@ h3 > a.btn, h2 > a.btn, caption > a.btn {
 
 
 
+.information{
+  display: inline;
+  cursor: pointer; 
+  position: relative;
+  background: url("../assets/information.png") 0px no-repeat;
+  top: 1px;
+  padding-right: 1.5em;
+  margin-right: 3.5em;
+}
+
+.tooltip {
+  display: none;
+}
+
+.tooltip_trigger{
+  min-width: 10px;
+  cursor: help;
+  display: inline;
+}
+
+.tooltip_paragraph, .tooltip_li{
+  font-weight: normal;
+  margin: 5px;
+  line-height: 150%;
+}
+
+.tooltip > ul{
+  text-align: left;
+}
+
+.tooltip-table {
+  max-width: none;
+  width: 100%;
+}
+
+.tooltip-table > tbody > tr:nth-child(odd){
+  background-color: #333;
+}
+
+.tooltip-table > thead {
+  border-bottom: 1px solid #eee;
+}
+
+.tooltip_last_column{
+  width: 1em;
+}
+
 .popover {
   min-width: 200px;
   max-width: 375px; 
   word-wrap: break-word;
 }
+
+.tooltip-table td{
+  width: auto;
+  min-width: 125px;
+}
+
 
 .modal-header {
   background-color: #D44413;
