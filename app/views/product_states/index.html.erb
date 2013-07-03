@@ -25,8 +25,8 @@
                         :locals => {:product_state => product_state, :index => index } %>
           </td>
           <td> 
-            <%= link_to t(:delete), product_state_path(product_state.id), :method => :delete, 
-                        :confirm => t(:confirm_deletion), :class => "btn btn-danger btn-small" %>
+            <%= render  :partial => "/shared/delete_button", 
+                        :locals  => {:path => url_for(product_state)} %>
           </td>
         </tr>  
       <% end %>

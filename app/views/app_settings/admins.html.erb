@@ -22,9 +22,9 @@
           <td> <%= admin.full_name %> </td>
           <td>
             <% if admin != @current_user %>
-              <%= link_to t(:remove), remove_admin_app_settings_path + "?employee=#{admin.id}", 
-                  :method => :post, :confirm => t(:confirm_removal), 
-                  :class => "btn btn-danger btn-small" %>
+              <%= render  :partial => "/shared/remove_button", 
+                          :locals  => {:path => remove_admin_app_settings_path +
+                          "?employee=#{admin.id}"} %>
             <% end %>
           </td>
         </tr>

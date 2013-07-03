@@ -81,14 +81,18 @@ class EmployeesController < ApplicationController
   def toggle_active
     referring_page = request.referer
     authorize! :destroy, @employee
-    if @employee.active
-      @employee.active = false
-      flash[:notice] = t(:employee) + "Deactivated"
+    if @employee != @current_user
+      if @employee.active
+        @employee.active = false
+        flash[:notice] = t(:employee) + "Deactivated"
+      else
+        @employee.active = true
+        flash[:notice] = t(:employee) + "Activated"
+      end
+      @employee.save
     else
-      @employee.active = true
-      flash[:notice] = t(:employee) + "Activated"
+      flash[:error] = t(:cannot_delete_self)
     end
-    @employee.save
     unless referring_page.blank?
       redirect_to referring_page
     else

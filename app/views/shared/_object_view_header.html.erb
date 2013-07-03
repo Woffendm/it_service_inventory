@@ -90,11 +90,7 @@
             </a>
           <% end %>
         <% end %>
-        <a class="btn btn-danger btn-small" data-method="delete" 
-            data-confirm="<%= t(:confirm_deletion) %>" href="<%= url_for(object) %>">
-          <i class="icon-trash icon-white"></i>
-          <%= t(:delete) %>
-        </a>
+        <%= render  :partial => "/shared/delete_button", :locals  => {:path => url_for(object)} %>
       <% end %>
     </div>
     
