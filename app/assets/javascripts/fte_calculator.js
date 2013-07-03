@@ -13,7 +13,7 @@ $(document).ready(function(){
   var selectBoxes = $(".calculator_select");
   var hoursPerMonth = $('#hours_per_month');
   var hoursPerWeek = $('#hours_per_week');
-  var useThisNumber = $('#use_this_number');
+  var useThisNumber = $('.use_this_number');
   var TABKEY = 9;
 
 
@@ -52,22 +52,21 @@ $(document).ready(function(){
     }
   });
 
-
-  // Sets the selected value in the corresponding select box to the calculated value. Fires the 
-  // 'change' event for the select box.
-  useThisNumber.on('click', function() {
-    $(".calculator_select").trigger("keyup");
-  });
   
   
   // Sets the selected value in the corresponding select box to the calculated value. Fires the 
-  // 'change' event for the select box.
+  // 'change' event for the proper allocation series.
   useThisNumber.on('click', function() {
-      fteResult = Math.round(fteResult*Math.pow(10,allocationPrecision)) /
-                  Math.pow(10,allocationPrecision);
-      correspondingSelectBox.value = fteResult;
-      $(".new-allocation-1, .new-allocation-2").trigger("keyup");
-      $("#fte_calculator").modal("toggle");
+    fteResult = Math.round(fteResult*Math.pow(10,allocationPrecision)) /
+                Math.pow(10,allocationPrecision);
+    correspondingSelectBox.value = fteResult; 
+    var classList = correspondingSelectBox.classList;
+    for (var i = 0; i < classList.length; i++) {
+      if(classList[i].indexOf("allocation") != -1) {
+        $("." + classList[i]).trigger("keyup");
+      }
+    }
+    $("#fte_calculator").modal("toggle");
   });
 });
 

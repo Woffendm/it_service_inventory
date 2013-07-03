@@ -17,6 +17,9 @@ $(document).ready(function(){
   var total2 = $('#total-2');
   
   
+  //var noOverAllocation1 = (typeof noOverAllocation1 === 'undefined') ? "yep" : noOverAllocation1;
+  //var noOverAllocation2 = (typeof noOverAllocation2 === 'undefined') ? "yep" : noOverAllocation2;
+  
   
   
   // Triggers the change event for the allocation select boxes whenever a remove allocation checkbox 
@@ -67,9 +70,7 @@ function calculateAllocation(allocationSet, removeSet, total, newAllocation, noO
   var submissionButtons = $('.submission');
   var totalAllocation = 0;
   var count = 0;
-  if(null == noOverAllocation) {
-    noOverAllocation = true;
-  }
+
 
   
   // Gets total of all allocations on page that aren't marked for deletion

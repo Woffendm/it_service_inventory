@@ -750,12 +750,12 @@ input, textarea, .uneditable-input{
   width: 200px;
 }
 
-input, select, textarea {
+input[type=text], select, textarea {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   min-height: 2em;
-  width: 200px
+  max-width: 200px
 }
 
 input[type=submit] {
