@@ -8,7 +8,7 @@ class Service < ActiveRecord::Base
   has_many :employee_allocations, :dependent  => :delete_all
   has_many :employees,            :through    => :employee_allocations
   has_many :product_services,     :dependent  => :delete_all
-  has_many :products,             :through    => :product_services
+  has_many :products,             :through => :product_services
   validates_presence_of   :name
   validates_uniqueness_of :name
 

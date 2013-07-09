@@ -7,44 +7,54 @@
 
 
   <ul class="nav nav-tabs" id="my-tab">
-   <li>
-     <a href="#product" id="product_tab" data-toggle="tab" > 
-       <%= t(:product) + t(:information) %>
-     </a>
-   </li>
-   <li class="dropdown">
-     <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
-       <%= t(:portfolios) %>
-       <b class="caret"></b>
-     </a>
-     <ul class="dropdown-menu">
-       <% unless @possible_portfolios.blank? %>
-         <li>
-           <a data-toggle="modal" data-target="#add-portfolio" href="#">
-             <i class="icon-plus"></i>
-             <%= "#{t(:add)} #{t(:portfolio)}" %>
-           </a>
-         </li>
-       <% end %>
-       <% @portfolios.each_with_index do |portfolio, index| %>
-         <li>
-           <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
-             <%= portfolio.name %> 
-           </a>
-         </li>
-       <% end %>
-     </ul>
-   </li>
-   <li>
-     <a href="#services" id="services_tab" data-toggle="tab"> 
-       <%= t(:services) %> 
-     </a>
-   </li>
-   <li class="active">
-     <a href="#allocations" id="allocations_tab" data-toggle="tab"> 
-       <%= t(:employee) + t(:allocations) %> 
-     </a>
-   </li>
+    <li>
+      <a href="#product" id="product_tab" data-toggle="tab" > 
+        <%= t(:product) + t(:information) %>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+        <%= t(:portfolios) %>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <% unless @possible_portfolios.blank? %>
+          <li>
+            <a data-toggle="modal" data-target="#add-portfolio" href="#">
+              <i class="icon-plus"></i>
+              <%= "#{t(:add)} #{t(:portfolio)}" %>
+            </a>
+          </li>
+        <% end %>
+        <% @portfolios.each_with_index do |portfolio, index| %>
+          <li>
+            <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
+              <%= portfolio.name %> 
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+    <li>
+      <a href="#services" id="services_tab" data-toggle="tab"> 
+        <%= t(:services) %> 
+      </a>
+    </li>
+    <li class="active">
+      <a href="#allocations" id="allocations_tab" data-toggle="tab"> 
+        <%= t(:employee) + t(:allocations) %> 
+      </a>
+    </li>
+    <li>
+      <a href="#dependencies" id="dependencies_tab" data-toggle="tab" > 
+        <%= t(:dependencies) %>
+      </a>
+    </li>
+    <li>
+      <a href="#dependents" id="dependents_tab" data-toggle="tab" > 
+        <%= t(:dependents) %>
+      </a>
+    </li>
   </ul>
   
   
@@ -207,7 +217,6 @@
                     :locals => {:available_services => @available_services} %>
       </h3>
   
-  
       <% if @product_services.blank? %>
         <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
@@ -255,15 +264,11 @@
                     :locals => {:available_employees => @available_employees, :year => @year} %>
       </h3>
       
-      
-      
       <div class="alert alert-block alert-error fade in javascript-notice hidden over-allocation">  
         <a class="close" data-dismiss="alert" href="#">&times;</a>
         <h4> <%= t(:error) %> </h4>
-        <p><%= t(:over_allocated) %> </p>
+        <p>  <%= t(:over_allocated) %> </p>
       </div>
-      
-      
       
       <div class="tabbable tabs-right">
         <%= render  :partial => "/shared/active_year_select", 
@@ -320,8 +325,42 @@
         </div>
       </div>
     </div>
-  </div>
     
+    
+    
+    
+    <div class="tab-pane" id="dependencies">
+      <h3> 
+        <%= t(:dependencies) %> 
+        <%= render  :partial => "/products/add_product", 
+                    :locals => {:products => @available_dependencies,
+                                :title => "dependency",
+                                :form_name => "new_dependency"} %>
+      </h3>
+      <%= render  :partial => "/products/edit_products_table", 
+                  :locals => {:products => @dependencies,
+                              :path => remove_dependency_product_path} %>
+    </div>
+    
+    
+    
+    
+    <div class="tab-pane" id="dependents">
+      <h3> 
+        <%= t(:dependents) %> 
+        <%= render  :partial => "/products/add_product", 
+                    :locals => {:products => @available_dependents,
+                                :title => "dependent",
+                                :form_name => "new_dependent"} %>
+      </h3>
+      <%= render  :partial => "/products/edit_products_table", 
+                  :locals => {:products => @dependents,
+                              :path => remove_dependent_product_path} %>
+    </div>
+
+
+
+  </div>
 <% end %>
 
 

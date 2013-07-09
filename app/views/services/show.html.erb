@@ -10,13 +10,13 @@
         <div class="overview-label">
           <%= t(:groups) %>
         </div>
-        <%= @total_groups %> 
+        <%= @groups.length %> 
       </td>
       <td>
         <div class="overview-label">
           <%= t(:employees) %>
         </div>
-        <%= @total_employees %>
+        <%= @employee_allocations.length %>
       </td>
     </tr>
     <tr>
@@ -24,7 +24,7 @@
         <div class="overview-label">
           <%= t(:products) %>
         </div>
-        <%= @total_products %> 
+        <%= @products.length %> 
       </td>
       <td>
         <div class="overview-label">
@@ -85,42 +85,11 @@
 
 
   <div class="tab-pane tabs-right active" id="products">
-    <%= render  :partial => "/shared/all_year_select", 
-                :locals => {:@year => @year, :@all_years => @all_years } %>
-    <div class="year-content">
-      <% if @products.blank? %>
-        <%= render  :partial => "/shared/nothing_to_display" %>
-      <% else %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th> <%= t(:product) %> </th>
-              <th class='variable-size'> <%= t(:priority) %> </th>
-              <th> <%= t(:product_state) %> </th>
-              <th> <%= t(:product_type) %> </th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @products.each do |product| %>
-              <tr>
-                <td> 
-                  <%= link_to product.name, product_path(product.id) %>
-                </td>
-                <td class='variable-size'> 
-                  <%= product.priority %>
-                </td>
-                <td> 
-                  <%= product.state %>
-                </td>
-                <td > 
-                  <%= product.type %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      <% end %>
-    </div>
+    <%= render  :partial => "/products/products_table", 
+                :locals => {:year => @year, 
+                            :all_years => @all_years, 
+                            :products => @products,
+                            :allocation_precision => @allocation_precision } %>
   </div>
 
 

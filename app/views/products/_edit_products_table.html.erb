@@ -1,0 +1,37 @@
+<% if products.blank? %>
+  <%= render  :partial => "/shared/nothing_to_display" %>
+<% else %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th> <%= t(:product) %> </th>
+        <th> <%= t(:priority) %> </th>
+        <th> <%= t(:state) %> </th>
+        <th> <%= t(:type) %> </th>
+        <th> </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% products.each do |product| %>
+        <tr>
+          <td> 
+            <%= link_to product.name, product_path(product.id) %>
+          </td>
+          <td> 
+            <%= product.priority %>
+          </td>
+          <td> 
+            <%= product.state %>
+          </td>
+          <td>
+            <%= product.type %>
+          </td>
+          <td> 
+            <%= render  :partial => "/shared/remove_button", 
+                        :locals  => {:path => path + "?product_id=#{product.id}"} %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

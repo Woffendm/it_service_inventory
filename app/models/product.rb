@@ -7,7 +7,7 @@
 class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
                   :product_state, :employee_products_attributes, :product_services_attributes,
-                  :product_groups_attributes, :product_source_attributes, :product_priority_id, 
+                  :product_groups_attributes, :product_priority_id, 
                   :product_priority, :product_portfolios, :product_portfolios_attributes
   has_many :employee_products,  :dependent => :delete_all
   has_many :employees,          :through =>   :employee_products
@@ -17,7 +17,14 @@ class Product < ActiveRecord::Base
   has_many :portfolios,         :through =>   :product_portfolios
   has_many :product_services,   :dependent => :delete_all
   has_many :services,           :through =>   :product_services
-  has_one  :product_source
+  has_and_belongs_to_many :dependents, 
+      :class_name => "Product", 
+      :foreign_key => :dependency_id,   
+      :association_foreign_key => :dependent_id 
+  has_and_belongs_to_many :dependencies, 
+      :class_name => "Product", 
+      :foreign_key => :dependent_id,
+      :association_foreign_key => :dependency_id
   belongs_to :product_type
   belongs_to :product_state
   belongs_to :product_priority

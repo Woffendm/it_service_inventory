@@ -1,49 +1,53 @@
-<thead>
-  <th>  <%= sort_column(t(:name), products_path, 'name', @order, @ascending) %> </th>
-  <th> <%= t(:description) %> </th>
-  <th> <%= t(:product_state) %> </th>
-  <th> <%= sort_column(t(:product_type), products_path, 'product_type_id', @order, @ascending) %> </th>
-  <th> </th>
-</thead>
-<tbody>
-  <% products.each do |product| %>
-    <tr>
-      <td>
-        <% if product.url && !product.url.blank? %>
-          <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
-                      :target => '_blank' %>
-        <% else %>
-          <span class="blank-icon"></span>
+<%= render  :partial => "/shared/all_year_select", 
+            :locals => {:@year => year, :@all_years => all_years } %>
+<div class="year-content">
+  <% if products.blank? %>
+    <%= render  :partial => "/shared/nothing_to_display" %>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th> <%= t(:product) %> </th>
+          <th> <%= t(:priority) %> </th>
+          <th> <%= t(:product_state) %> </th>
+          <th> <%= t(:product_type) %> </th>
+          <th> <%= t(:allocation) %> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.each_with_index do |product, index| %>
+          <tr>
+            <td> 
+              <%= link_to product.name, product_path(product.id) %>
+            </td>
+            <td> 
+              <%= product.priority %>
+            </td>
+            <td > 
+              <%= product.state %>
+            </td>
+            <td> 
+              <%= product.type %>
+            </td>
+            <td>
+              <%= product.get_total_allocation(year, allocation_precision) %>
+            </td>
+          </tr>
         <% end %>
-        <%= link_to product.name, product_path(product.id) %>
-      </td>
-      <td>
-        <% unless product.description.blank? %>
-          <div class="tooltip_trigger">
-            <%= product.description.truncate(20) %>
-          </div>
-          <div class="tooltip tooltip_paragraph"
-               style="<%=max_width_by_word(product.description)%>">
-            <%= simple_format product.description %>
-          </div>
+        <% if defined? total_allocation %>
+          <tr>
+            <td> <%= t(:total_allocation) %> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> <%= total_allocation.to_s + t(:fte) %> </td>
+          </tr>
         <% end %>
-      </td>
-      <td>
-        <% if product.product_state %>
-          <%= product.product_state.name %>
-        <% end %>
-      </td>
-      <td>
-        <% if product.product_type %>
-          <%= product.product_type.name %>
-        <% end %>
-      </td>
-      <td>
-        <% if can? :destroy, product %>
-          <%= link_to t(:delete), product_path(product.id), :method => :delete, :confirm =>
-                      t(:confirm_deletion) %>
-        <% end %>
-      </td>
-    </tr>
+      </tbody>
+    </table>
+    <div class="pagination_footer">
+      <%= will_paginate products, :param_name => :dependents_page %>
+      <%= render :partial => "/shared/results_per_page" %>
+    </div>
   <% end %>
-</tbody>
+</div>

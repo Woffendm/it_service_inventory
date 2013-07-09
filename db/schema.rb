@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627221430) do
+ActiveRecord::Schema.define(:version => 20130708191338) do
 
   create_table "app_settings", :force => true do |t|
     t.string   "code"
@@ -123,21 +123,6 @@ ActiveRecord::Schema.define(:version => 20130627221430) do
     t.datetime "updated_at", :null => false
   end
 
-  create_table "product_source_types", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "product_sources", :force => true do |t|
-    t.string   "title"
-    t.string   "url"
-    t.integer  "product_id"
-    t.integer  "product_source_type_id"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
   create_table "product_states", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -161,6 +146,13 @@ ActiveRecord::Schema.define(:version => 20130627221430) do
     t.integer  "product_state_id"
     t.integer  "product_type_id"
     t.integer  "product_priority_id"
+  end
+
+  create_table "products_products", :force => true do |t|
+    t.integer  "dependent_id"
+    t.integer  "dependency_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "services", :force => true do |t|

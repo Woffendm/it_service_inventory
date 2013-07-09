@@ -12,6 +12,8 @@ Project1::Application.routes.draw do
   resources :products do
     member do
       post 'remove_from_portfolio'
+      post 'remove_dependency'
+      post 'remove_dependent'
     end
   end
 

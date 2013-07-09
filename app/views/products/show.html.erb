@@ -2,6 +2,8 @@
             :locals => {:view => nil, :object => @product} %>
 
 
+
+
 <table class="table table-striped overview">
   <caption> <%= t(:overview) + " for #{@year.year}"%> </caption>
   <tbody>
@@ -10,13 +12,13 @@
         <div class="overview-label">
           <%= t(:groups) %>
         </div>
-        <%= @total_groups %> 
+        <%= @groups.length %> 
       </td>
       <td>
         <div class="overview-label">
           <%= t(:employees) %>
         </div>
-        <%= @total_employees %>
+        <%= @employee_products.length %>
       </td>
     </tr>
     <tr>
@@ -24,7 +26,7 @@
         <div class="overview-label">
           <%= t(:services) %>
         </div> 
-        <%= @total_services %> 
+        <%= @product_services.length %> 
       </td>
       <td>
         <div class="overview-label">
@@ -48,6 +50,8 @@
 
 
 
+
+
 <ul class="nav nav-tabs" id="my-tab">
   <li>
     <a href="#product_information" id="product_information_tab" data-toggle="tab"> 
@@ -64,7 +68,19 @@
       <%= t(:services) %>
     </a>
   </li>
+  <li>
+    <a href="#dependencies" id="dependencies_tab" data-toggle="tab" > 
+      <%= t(:dependencies) %>
+    </a>
+  </li>
+  <li>
+    <a href="#dependents" id="dependents_tab" data-toggle="tab" > 
+      <%= t(:dependents) %>
+    </a>
+  </li>
 </ul>
+
+
 
 
 
@@ -136,6 +152,8 @@
 
 
 
+
+
   <div class="tab-pane tabs-right" id="services">
     <%= render  :partial => "/shared/all_year_select", 
                 :locals => {:@year => @year, :@all_years => @all_years } %>
@@ -166,6 +184,8 @@
 
 
 
+
+
   <div class="tab-pane tabs-right active" id="employees">
     <%= render  :partial => "/shared/all_year_select", 
                 :locals => {:@year => @year, :@all_years => @all_years } %>
@@ -187,7 +207,7 @@
                   <%= link_to employee_product.employee.full_name,
                       employee_path(employee_product.employee_id) %>
                 </td>
-                <td > 
+                <td> 
                   <%= "#{employee_product.rounded_allocation(@allocation_precision)} " + t(:fte) %>
                 </td>
               </tr>
@@ -197,6 +217,31 @@
       <% end %>
     </div>
   </div>
+  
+  
+  
+  
+  
+  <div class="tab-pane tabs-right" id="dependencies">
+    <%= render  :partial => "/products/products_table", 
+                :locals => {:year => @year, 
+                            :all_years => @all_years, 
+                            :products => @dependencies,
+                            :allocation_precision => @allocation_precision } %>
+  </div>
+  
+  
+  
+  
+  
+  <div class="tab-pane tabs-right" id="dependents">
+    <%= render  :partial => "/products/products_table", 
+                :locals => {:year => @year, 
+                            :all_years => @all_years, 
+                            :products => @dependents,
+                            :allocation_precision => @allocation_precision } %>
+  </div>
+  
 </div>
 
 

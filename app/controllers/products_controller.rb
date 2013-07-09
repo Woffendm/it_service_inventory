@@ -5,6 +5,7 @@
 
 class ProductsController < ApplicationController
   before_filter :load_product,                      :except => [:index, :create]
+  before_filter :authorize_update,                  :except => [:create, :show, :index]
   before_filter :load_application_settings,         :only => [:edit, :show, :update]
   before_filter :load_active_years,                 :only => [:edit, :update]
   before_filter :load_all_years,                    :only => [:show]
@@ -18,7 +19,6 @@ class ProductsController < ApplicationController
   
   # Page for editing an existing product
   def edit
-    authorize! :update, @product
   end
 
 
@@ -43,10 +43,13 @@ class ProductsController < ApplicationController
   # Page for viewing a product in detail
   # Contains rest services for viewing product in json
   def show
+    @dependencies = @product.dependencies.order(:name).paginate(
+        :page => params[:dependencies_page], 
+        :per_page => session[:results_per_page])
+    @dependents = @product.dependents.order(:name).paginate(
+        :page => params[:dependents_page], 
+        :per_page => session[:results_per_page])
     @groups = @product.groups.order(:name).uniq
-    @total_groups = @groups.length
-    @total_services = @product.services.length
-    @total_employees = @product.employee_products.where(:fiscal_year_id => @year.id).length
     @total_allocation = @product.get_total_allocation(@year, @allocation_precision)
     respond_to do |format|
       format.html
@@ -82,6 +85,24 @@ class ProductsController < ApplicationController
   end
 
 
+  # Removes product dependency
+  def remove_dependency
+    to_remove = Product.find(params[:product_id])
+    @product.dependencies.delete to_remove
+    flash[:notice] = "Dependency removed"
+    redirect_to edit_product_path(@product.id)
+  end
+  
+  
+  # Removes product dependent
+  def removed_dependent
+    to_remove = Product.find(params[:product_id])
+    @product.dependents.delete to_remove
+    flash[:notice] = "Dependency removed"
+    redirect_to edit_product_path(@product.id)
+  end
+
+
   # Removes product from selected portfolio
   def remove_from_portfolio
     product_portfolio = ProductPortfolio.where(:portfolio_id => params[:portfolio_id], 
@@ -95,7 +116,8 @@ class ProductsController < ApplicationController
 
   # Updates an existing product using info entered on the "edit" page
   def update
-    authorize! :update, @product
+    add_dependent(params[:new_dependent])
+    add_dependency(params[:new_dependency])
     add_service(params[:product_service])
     add_group(params[:new_product_groups])
     add_portfolio(params[:new_product_portfolio])
@@ -118,8 +140,29 @@ class ProductsController < ApplicationController
 
 
   private
-  
   # Helper methods
+  
+    # Ensures that the current user is authorized to update the product
+    def authorize_update
+      authorize! :update, @product
+    end
+  
+  
+    # Adds new dependency to product (something it depends on)
+    def add_dependency(dependency)
+      unless dependency.blank? || dependency[:product_id].blank?
+        @product.dependencies << Product.find(dependency[:product_id])
+      end
+    end
+    
+    
+    # Adds new dependent to product (something that depends on the product)
+    def add_dependent(dependent)
+      unless dependent.blank? || dependent[:product_id].blank?
+        @product.dependents << Product.find(dependent[:product_id])
+      end    
+    end
+  
   
     # Adds new employee allocation to product
     def add_employee_product(employee_product)
@@ -244,7 +287,6 @@ class ProductsController < ApplicationController
       @product_states = ProductState.order(:name)
       @product_types = ProductType.order(:name)
       @product_priorities = ProductPriority.order(:name)
-      @product_source_types = ProductSourceType.all
     end
 
 
@@ -256,6 +298,8 @@ class ProductsController < ApplicationController
 
     # Loads all employees, groups, and services belonging to the product
     def load_associations
+      @dependencies = @product.dependencies.order(:name)
+      @dependents = @product.dependents.order(:name)
       @portfolios = @product.portfolios.order(:name).uniq
       @product_services =
           @product.product_services.joins(:service).includes(:service).order("services.name")
@@ -270,6 +314,8 @@ class ProductsController < ApplicationController
       @possible_portfolios = @product.get_available_portfolios
       @available_services = @product.get_available_services
       @available_employees = @product.get_available_employees(@year)
+      @available_dependencies = Product.order(:name) - @product.dependencies - [@product]
+      @available_dependents = Product.order(:name) - @product.dependents - [@product]
     end
 
 

@@ -29,9 +29,9 @@ class ServicesController < ApplicationController
   
   
   def show
-    @total_employees = @employee_allocations.length
-    @total_groups = @groups.length
-    @total_products = @service.product_services.length
+    @products = @products.paginate(
+        :page => params[:dependents_page], 
+        :per_page => session[:results_per_page])
     @total_allocation = @service.get_total_allocation(@year, @allocation_precision)
   end
 
