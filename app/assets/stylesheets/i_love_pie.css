@@ -1,5 +1,48 @@
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .form-horizontal .control-group {
     margin-bottom: 3px;
 }
@@ -83,9 +126,6 @@ tbody {
   border-bottom: none;
 }
 
-select {
-  width: 200px;
-}
 
 
 div.chart_div_container{
@@ -386,9 +426,6 @@ table.accordion-inner{
 
 
 
-
-
-
 .form-horizontal .control-label{
   margin-right: 90px;
 }
@@ -396,13 +433,6 @@ table.accordion-inner{
 .form-horizontal .controls {
   margin-left: 0px;
 }
-
-
-
-
-
-
-
 
 
 
@@ -755,7 +785,7 @@ input[type=text], select, textarea {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   min-height: 2em;
-  max-width: 200px
+  max-width: 200px;
 }
 
 input[type=submit] {
@@ -848,9 +878,19 @@ a > i{
   text-align: left;
 }
 
+[class*="span"] {
+  margin-left: 5px;
+}
 
+.filter input, .filter select, .filter .autocomplete{
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
 
-
+.filter {
+  margin-right: 10px;
+}
 
 
 
@@ -1103,6 +1143,10 @@ a > i{
 
 
 @media (max-width: 979px) {
+  .filter input[type=text], .filter select, .filter .autocomplete {
+    width: 160px;
+    max-width: 160px;
+  }
 
   .navbar-inner {
     height: auto;
@@ -1140,6 +1184,4 @@ a > i{
     padding: 0px;
   }
 }
-
-
 

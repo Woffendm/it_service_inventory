@@ -8,8 +8,9 @@
 
 
 
-<fieldset class="light-border">
-  <legend> <%= t(:filter_results) %> </legend>
+<div class="span3 filter">
+  <div class="nav nav-list affix-top">
+  <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => t(:product) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
@@ -27,62 +28,51 @@
                           :selected => @product_type}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
-</fieldset>
+</div>
+</div>
 
 
-
-<table class="table table-striped">
-  <caption> <%= t(:all_products) %> </caption>
-  <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
-    <th> <%= t(:description) %> </th>
-    <th class='variable-size'> <%= sort_column(t(:priority), request.fullpath, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
-    <th> <%= sort_column(t(:product_state), request.fullpath, 'product_state', 'product_states.name', @order, @ascending) %> </th>
-    <th> <%= sort_column(t(:product_type), request.fullpath, 'product_type', 'product_types.name', @order, @ascending) %> </th>
-  </thead>
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td>
-          <% if product.url && !product.url.blank? %>
-            <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
-                        :target => '_blank' %>
-          <% else %>
-            <span class="blank-icon"></span>
-          <% end %>
-          <%= link_to product.name, product_path(product.id) %>
-        </td>
-        <td>
-          <% unless product.description.blank? %>
-            <div class="tooltip_trigger">
-              <%= product.description.truncate(20) %>
-            </div>
-            <div class="tooltip tooltip_paragraph"
-                 style="<%=max_width_by_word(product.description)%>">
-              <%= simple_format product.description %>
-            </div>
-          <% end %>
-        </td>
-        <td class='variable-size'>
-          <%= product.priority %>
-        </td>
-        <td>
-          <%= product.state %>
-        </td>
-        <td>
-          <%= product.type %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-
-</table>
-
-
-
-<div class="pagination_footer">
-  <%= will_paginate @products, :param_name => :products_page %>
-  <%= render :partial => "/shared/results_per_page" %>
+<div class="span9">
+  <table class="table table-striped">
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
+      <th class='variable-size'> <%= sort_column(t(:priority), request.fullpath, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
+      <th> <%= sort_column(t(:product_state), request.fullpath, 'product_state', 'product_states.name', @order, @ascending) %> </th>
+      <th> <%= sort_column(t(:product_type), request.fullpath, 'product_type', 'product_types.name', @order, @ascending) %> </th>
+    </thead>
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td>
+            <% if product.url && !product.url.blank? %>
+              <%= link_to "#{content_tag :em, '', :class => 'icon-globe'}".html_safe, product.url,
+                          :target => '_blank' %>
+            <% else %>
+              <span class="blank-icon"></span>
+            <% end %>
+            <%= link_to product.name, product_path(product.id) %>
+          </td>
+          <td class='variable-size'>
+            <%= product.priority %>
+          </td>
+          <td>
+            <%= product.state %>
+          </td>
+          <td>
+            <%= product.type %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  
+  </table>
+  
+  
+  
+  <div class="pagination_footer">
+    <%= will_paginate @products, :param_name => :products_page %>
+    <%= render :partial => "/shared/results_per_page" %>
+  </div>
 </div>
 
 
