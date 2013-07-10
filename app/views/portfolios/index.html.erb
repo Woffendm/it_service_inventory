@@ -18,8 +18,10 @@
     <%= collection_select(:search, :product, @products, :id, :name, 
                          {:include_blank =>   t(:all_products),
                           :selected => @product}, {:class => "autocomplete large-select"}) %>
-    <%= submit_tag t(:search), :class => "btn" %>
-    <%= link_to t(:clear), portfolios_path, :class => "btn" %>
+    <div class="btn-group">
+      <%= submit_tag t(:search), :class => "btn" %>
+      <%= link_to t(:clear), portfolios_path, :class => "btn" %>
+    </div>
   <% end %>
 </div>
 
@@ -65,6 +67,12 @@
       </tbody>
     </table>
   <% end %>
+  
+  
+  <div class="pagination_footer">
+    <%= will_paginate @employees %>
+    <%= render :partial => "/shared/results_per_page" %>
+  </div>
 </div>
 
 

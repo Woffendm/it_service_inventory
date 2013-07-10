@@ -18,6 +18,8 @@ class PortfoliosController < ApplicationController
     @portfolios = filter_portfolios(params[:search])
     @portfolios = sort_results(params, @portfolios) unless params[:order].blank?
     @portfolios = @portfolios.includes(:products, :products => :groups).order("portfolios.name, products.name, groups.name").uniq
+    @portfolios = @portfolios.paginate(:page => params[:page], 
+                                     :per_page => session[:results_per_page])
   end
   
   

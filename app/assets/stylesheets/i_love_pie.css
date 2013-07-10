@@ -839,6 +839,17 @@ a > i{
   margin-left: 5px;
 }
 
+.filter {
+ border: 1px dotted #DDDDDD;
+ padding-left: 15px;
+ padding-bottom: 5px;
+ padding-top: 5px;
+}
+
+.filter h5{
+  margin: 5px 0;
+}
+
 .filter input, .filter select, .filter .autocomplete, .filter .btn{
   display: inline-block;
   margin-right: 10px;
