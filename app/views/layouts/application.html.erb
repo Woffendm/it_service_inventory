@@ -17,8 +17,8 @@
   <%= stylesheet_link_tag "select2" %>
   <%= stylesheet_link_tag "fte_calculator" %>
   <%= stylesheet_link_tag "i_love_pie" %>
-  <%= stylesheet_link_tag "full_screen" %>
-  <%= stylesheet_link_tag "filter_left" %>
+  <%= stylesheet_link_tag "full_screen"  if @full_screen == "true" %>
+  <%= stylesheet_link_tag "filter_left" if @filter_position == "Left" %>
   
   <!-- The following line will load an additional "theme" stylesheet for the application later on.
        Currently however, there are no themes and thus it is commented out for the time being. -->

@@ -15,7 +15,8 @@
     <%= collection_select(:search, :group, @groups, :id, :name, 
                          {:include_blank => t(:all_groups), :selected => @group}, 
                          {:class => "autocomplete large-select"}) %>
-    <%= submit_tag t(:search) %>
+    <%= submit_tag t(:search), :class => "btn" %>
+    <%= link_to t(:clear), services_path, :class => "btn" %>
   <% end %>
 </div>
 

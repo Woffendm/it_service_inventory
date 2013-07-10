@@ -9,9 +9,7 @@
   float: left;
 }
 
-.filter input, .filter select, .filter .autocomplete{
-  display: block;
-}
+
 
 
 
@@ -26,9 +24,5 @@
   .filtered-table{
     width: 100%;
     clear: both;
-  }
-
-  .filter input, .filter select, .filter .autocomplete{
-    display: inline-block;
   }
 }

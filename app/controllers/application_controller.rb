@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
   before_filter :check_for_api_key
   before_filter  RubyCAS::Filter
   before_filter :get_current_user, :except =>[:logout]
-  before_filter :load_logo
+  before_filter :load_layout_settings
   before_filter :load_current_fiscal_year
   before_filter :load_allocation_precision
   before_filter :set_user_language
@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
       @current_user = Employee.find_by_uid(uid) unless uid.blank?
       if @current_user.blank?
         # Creates new user
-        if AppSetting.open_login && uid
+        if AppSetting.open_login == "true" && uid
           new_employee = Employee.ldap_create(uid)
           if new_employee && new_employee.save
             @current_user = new_employee
@@ -96,16 +96,21 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    
+    
+
 
     # Loads the logo's url specified in the app settings.
-    def load_logo
+    def load_layout_settings
       @logo = AppSetting.logo
+      @theme = AppSetting.theme
+      @full_screen = AppSetting.full_screen
+      @filter_position = AppSetting.filter_position
     end
 
 
     # Loads the active theme.
     def load_theme
-      @theme = AppSetting.theme
     end
     
     

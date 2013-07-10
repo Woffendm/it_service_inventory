@@ -25,7 +25,8 @@
     <%= select(:search, :active, [[t(:active), true], [t(:inactive), false]],
                          {:include_blank => "#{t(:active)} / #{t(:inactive)}",
                           :selected => @active}) if can? :destroy, Employee %>
-    <%= submit_tag t(:search) %>
+    <%= submit_tag t(:search), :class => "btn" %>
+    <%= link_to t(:clear), employees_path, :class => "btn" %>
   <% end %>
 </div>
 

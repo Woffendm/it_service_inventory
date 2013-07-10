@@ -839,15 +839,15 @@ a > i{
   margin-left: 5px;
 }
 
-.filter input, .filter select, .filter .autocomplete{
+.filter input, .filter select, .filter .autocomplete, .filter .btn{
   display: inline-block;
   margin-right: 10px;
   margin-bottom: 5px;
 }
 
-
-
-
+.btn{
+  padding: 2px 12px;
+}
 
 
 

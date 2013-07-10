@@ -18,7 +18,8 @@
     <%= collection_select(:search, :product, @products, :id, :name, 
                          {:include_blank =>   t(:all_products),
                           :selected => @product}, {:class => "autocomplete large-select"}) %>
-    <%= submit_tag t(:search) %>
+    <%= submit_tag t(:search), :class => "btn" %>
+    <%= link_to t(:clear), portfolios_path, :class => "btn" %>
   <% end %>
 </div>
 

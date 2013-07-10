@@ -65,12 +65,14 @@ en:
   existing_employees:           "Existing Employees"
   existing_administrators:      "Site Administrators"
   fail:                         "Fail "
+  filter_position:              "Filter position " 
   first_name:                   "First Name" 
   fiscal_year:                  "Fiscal Year"
   fiscal_years:                 " Fiscal Years"
   for:                          "for "
   fte:                          " FTE"
   fte_hours_per_week:           "FTE hours per week "
+  full_screen:                  "Full screen "
   full_time_employees:          "Full-Time Equivalents"
   global:                       "Global"
   group:                        "Group "
@@ -170,6 +172,7 @@ en:
   click_to_hide:                " Click to Hide"
   click_to_manage:              " Click to Manage"
   click_to_view:                " Click to View"
+  clear:                        "Clear "
   close:                        "Close "
   create:                       "Create "
   created:                      "Created"
@@ -226,9 +229,13 @@ en:
   # Application Settings
   allocation_precision_info:    "Sets precision for employee allocations. Default is 0.1"
   
+  filter_position_info:         "Determines the position of filters on desktop-sized devices."
+  
   fiscal_year_info:             "Determines the default fiscal year."
   
   fte_hours_per_week_info:      "Sets how many hours full-time employees work per week. Default is 40"
+  
+  full_screen_info:                  "Determines whether the application will use the screen's full width on desktop-sized devices."
   
   logo_info:                    "Determines what image is displayed to the left of the application's title. The URL must be to an external image (http://.../pie.jpg)."
   

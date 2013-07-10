@@ -5,5 +5,7 @@ AppSetting.seed_once(:code,
   {:code => "rest_api_key",         :value => "default"},
   {:code => "theme",                :value => ""},
   {:code => "logo",                 :value => ""},
-  {:code => "open_login",           :value => true}
+  {:code => "open_login",           :value => "true"},
+  {:code => "full_screen",          :value => "true"},
+  {:code => "filter_position",      :value => "Left"}
 )

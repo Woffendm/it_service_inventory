@@ -36,6 +36,22 @@
   
   <div class="control-group">
     <span class="control-label">
+      <%= label_tag :app_setting_filter_position, t(:filter_position) %>
+    </span>
+    <span class="controls">
+      <%= select(:app_setting, :filter_position, [[t(:left), "Left"], [t(:top), "Top"]],
+                {:selected => @filter_position} ) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <%= t(:filter_position_info) %> 
+    </span>
+  </div>
+  
+  
+  
+  <div class="control-group">
+    <span class="control-label">
       <%= label_tag :app_setting_fte_hours_per_week, t(:fte_hours_per_week) %>
     </span>
     <span class="controls">
@@ -44,6 +60,22 @@
     </span>
     <span class="tooltip">
       <%= t(:fte_hours_per_week_info) %> 
+    </span>
+  </div>
+  
+  
+  
+  <div class="control-group">
+    <span class="control-label">
+      <%= label_tag :app_setting_full_screen, t(:full_screen) %>
+    </span>
+    <span class="controls">
+      <%= select(:app_setting, :full_screen, [[t(:enabled), true], [t(:disabled), false]],
+                {:selected => @full_screen} ) %>
+      <span class="tooltip_trigger information"> &nbsp; </span>
+    </span>
+    <span class="tooltip">
+      <%= t(:full_screen_info) %> 
     </span>
   </div>
   

@@ -22,6 +22,10 @@ class AppSetting < ActiveRecord::Base
       unless value.blank? || value.index("http")
         errors.add(:value, "Must be a valid external URL")
       end
+    elsif code == "filter_position" 
+      unless value == "Left" || value == "Top"
+        errors.add(:value, "Must be Left or Top")
+      end
     end
   end
 
@@ -56,6 +60,19 @@ class AppSetting < ActiveRecord::Base
   # or one within the project. For images within the project, some guessing may be required.
   def self.logo
     return AppSetting.find_by_code("logo").value
+  end
+  
+  
+  # Returns where the application's filters should be placed relative to their associated tables 
+  # when viewed on a computer
+  def self.filter_position
+    return AppSetting.find_by_code("filter_position").value
+  end
+  
+  
+  # Returns whether ITSI should be full screen or centered when viewed on a computer. 
+  def self.full_screen
+    return AppSetting.find_by_code("full_screen").value
   end
   
   
