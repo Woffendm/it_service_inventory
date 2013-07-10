@@ -8,8 +8,8 @@
 
 
 
-<fieldset class="light-border">
-  <legend> <%= t(:filter_results) %> </legend>
+<div class="filter">
+  <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(services_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => t(:service) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
@@ -17,40 +17,40 @@
                          {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
-</fieldset>
+</div>
 
-
-<table class="table table-striped">
-  <caption> <%= t(:all_services) %> </caption>
-  <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
-    <th> <%= t(:description) %> </th>
-  </thead>
-  <tbody>
-    <% @services.each do |service| %>
-      <tr class="<%= cycle('odd', 'even') %>">
-        <td>
-           <%= link_to service.name, service_path(service.id) %>
-        </td>
-        <td>  
-          <% unless service.description.blank? %> 
-            <div class="tooltip_trigger">
-              <%= service.description.truncate(20) %> 
-            </div>
-            <div class="tooltip tooltip_paragraph">
-              <%= simple_format service.description %>
-            </div>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-
-<div class="pagination_footer">
-  <%= will_paginate @services %>
-  <%= render :partial => "/shared/results_per_page" %>
+<div class="filtered-table">
+  <table class="table table-striped">
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
+      <th> <%= t(:description) %> </th>
+    </thead>
+    <tbody>
+      <% @services.each do |service| %>
+        <tr class="<%= cycle('odd', 'even') %>">
+          <td>
+             <%= link_to service.name, service_path(service.id) %>
+          </td>
+          <td>  
+            <% unless service.description.blank? %> 
+              <div class="tooltip_trigger">
+                <%= service.description.truncate(20) %> 
+              </div>
+              <div class="tooltip tooltip_paragraph">
+                <%= simple_format service.description %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  
+  <div class="pagination_footer">
+    <%= will_paginate @services %>
+    <%= render :partial => "/shared/results_per_page" %>
+  </div>
 </div>
 
 

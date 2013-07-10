@@ -8,36 +8,39 @@
 
 
 
-<fieldset class="light-border">
-  <legend> <%= t(:filter_results) %> </legend>
+<div class="filter">
+  <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(groups_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => t(:group) + t(:name) %>
     <%= submit_tag t(:search) %>
   <% end %>
-</fieldset>
+</div>
 
 
-<table class="table table-striped">
-  <caption> <%= t(:all_groups) %> </caption>
-  <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
-    <th> <%= t(:total_employees) %> </th>
-  </thead>
-  <tbody>
-    <% unless @groups.blank? %>
-      <% @groups.each do |group| %>
-        <tr class="<%= cycle('odd', 'even') %>">
-          <td> 
-            <%= link_to group.name, group_path(group.id) %>
-          </td>
-          <td> 
-            <%= group.employees.length.to_s %>
-          </td>
-        </tr>  
+
+<div class="filtered-table">
+  <table class="table table-striped">
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'name', @order, @ascending) %>  </th>
+      <th> <%= t(:total_employees) %> </th>
+    </thead>
+    <tbody>
+      <% unless @groups.blank? %>
+        <% @groups.each do |group| %>
+          <tr class="<%= cycle('odd', 'even') %>">
+            <td> 
+              <%= link_to group.name, group_path(group.id) %>
+            </td>
+            <td> 
+              <%= group.employees.length.to_s %>
+            </td>
+          </tr>  
+        <% end %>
       <% end %>
-    <% end %>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>
+
 
 
 <script type="text/javascript">

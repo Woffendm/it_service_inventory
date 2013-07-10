@@ -8,8 +8,7 @@
 
 
 
-<div class="span3 filter">
-  <div class="nav nav-list affix-top">
+<div class="filter">
   <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(products_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => t(:product) + t(:name) %>
@@ -29,13 +28,16 @@
     <%= submit_tag t(:search) %>
   <% end %>
 </div>
-</div>
 
 
-<div class="span9">
+
+<div class="filtered-table">
   <table class="table table-striped">
     <thead>
       <th> <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %> </th>
+      <th>
+        <%= t(:description) %>
+      </th>
       <th class='variable-size'> <%= sort_column(t(:priority), request.fullpath, 'product_priority', 'product_priorities.name', @order, @ascending) %> </th>
       <th> <%= sort_column(t(:product_state), request.fullpath, 'product_state', 'product_states.name', @order, @ascending) %> </th>
       <th> <%= sort_column(t(:product_type), request.fullpath, 'product_type', 'product_types.name', @order, @ascending) %> </th>
@@ -52,6 +54,16 @@
             <% end %>
             <%= link_to product.name, product_path(product.id) %>
           </td>
+          <td>
+            <% unless product.description.blank? %> 
+              <div class="tooltip_trigger">
+                <%= product.description.truncate(20) %> 
+              </div>
+              <div class="tooltip">
+                <%= simple_format product.description %>
+              </div>
+            <% end %>
+          </td>
           <td class='variable-size'>
             <%= product.priority %>
           </td>
@@ -64,7 +76,6 @@
         </tr>
       <% end %>
     </tbody>
-  
   </table>
   
   

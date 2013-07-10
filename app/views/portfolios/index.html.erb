@@ -7,8 +7,8 @@
 </div>
 
 
-<fieldset class="light-border">
-  <legend> <%= t(:filter_results) %> </legend>
+<div class="filter">
+  <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(portfolios_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, 
                           :placeholder => t(:portfolio) + t(:name) %>
@@ -20,51 +20,51 @@
                           :selected => @product}, {:class => "autocomplete large-select"}) %>
     <%= submit_tag t(:search) %>
   <% end %>
-</fieldset>
+</div>
 
 
-
-<% unless @portfolios.blank? %>
-  <table class="table table-striped">
-    <caption> <%= t(:all_portfolios) %> </caption>
-    <thead>
-      <th> 
-        <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %>
-      </th>
-      <th colspan=2> 
-        <%= t(:products) %>
-      </th>
-    </thead>
-    <tbody>
-      <% @portfolios.each do |portfolio| %>
-        <% products = portfolio.products %>
-        <% products_1 = products[0..(products.length / 2 - 1)] %>
-        <% products_2 = products[(products.length / 2)..(products.length - 1)] %>        
-        <tr>
-          <td>
-            <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
-          </td>
-          <td>
-            <% products_1.each do |product| %>
-              <%= render :partial => "/products/product_groups_tooltip", 
-                  :locals => {:product => product} %>
-              <%= link_to product.name, product_path(product.id) %>
-              <br/>
-            <% end %>
-          </td>
-          <td>
-            <% products_2.each do |product| %>
-              <%= render :partial => "/products/product_groups_tooltip", 
-                  :locals => {:product => product} %>
-              <%= link_to product.name, product_path(product.id) %>
-              <br/>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<div class="filtered-table">
+  <% unless @portfolios.blank? %>
+    <table class="table table-striped">
+      <thead>
+        <th> 
+          <%= sort_column(t(:name), request.fullpath, nil, 'portfolios.name', @order, @ascending) %>
+        </th>
+        <th colspan=2> 
+          <%= t(:products) %>
+        </th>
+      </thead>
+      <tbody>
+        <% @portfolios.each do |portfolio| %>
+          <% products = portfolio.products %>
+          <% products_1 = products[0..(products.length / 2 - 1)] %>
+          <% products_2 = products[(products.length / 2)..(products.length - 1)] %>        
+          <tr>
+            <td>
+              <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
+            </td>
+            <td>
+              <% products_1.each do |product| %>
+                <%= render :partial => "/products/product_groups_tooltip", 
+                    :locals => {:product => product} %>
+                <%= link_to product.name, product_path(product.id) %>
+                <br/>
+              <% end %>
+            </td>
+            <td>
+              <% products_2.each do |product| %>
+                <%= render :partial => "/products/product_groups_tooltip", 
+                    :locals => {:product => product} %>
+                <%= link_to product.name, product_path(product.id) %>
+                <br/>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
 
 
 <script type="text/javascript">

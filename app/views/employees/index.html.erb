@@ -11,8 +11,9 @@
 </div>
 
 
-<fieldset class="light-border">
-  <legend> <%= t(:filter_results) %> </legend>
+
+<div class="filter">
+  <h5> <%= t(:filter_results) %> </h5>
   <%= form_tag(employees_path, :method => "get", :class => "form-inline") do %>
     <%= text_field_tag "search[name]", @name, :placeholder => t(:employee) + t(:name) %>
     <%= collection_select(:search, :group, @groups, :id, :name, 
@@ -26,59 +27,61 @@
                           :selected => @active}) if can? :destroy, Employee %>
     <%= submit_tag t(:search) %>
   <% end %>
-</fieldset>
-
-
-
-<table class="table table-striped">
-  <caption> <%= t(:all_employees) %></caption>
-  <thead>
-    <th> <%= sort_column(t(:name), request.fullpath, nil, 'last_name', @order, @ascending) %> </th>
-    <th> <%= t(:notes) %> </th>
-    <th> <%= t(:total_allocation) %> </th>
-  </thead>
-  <tbody>
-    <% @employees.each do |employee| %>
-      <tr>
-        <td> 
-          <% unless employee.email.blank? %>
-            <span class="tooltip_trigger">
-              <i class="icon-envelope"></i>
-            </span>
-            <div class="tooltip">
-              <p class="tooltip_paragraph"> <%= employee.email %> </p>
-            </div>
-          <% else %>
-            <span class="blank-icon"></span>
-          <% end %>
-          <span class="before_icon">
-            <%= link_to employee.full_name, employee_path(employee.id) %>
-          </span>
-        </td>
-        <td>  
-          <% unless employee.notes.blank? %> 
-            <div class="tooltip_trigger">
-              <%= employee.notes.truncate(20) %> 
-            </div>
-            <div class="tooltip">
-              <%= simple_format employee.notes %>
-            </div>
-          <% end %>
-        </td>
-        <td>
-          <%= render  :partial => "/shared/employee_services_and_allocations", 
-                      :locals => {:employee => employee} %>
-        </td>
-      </tr> 
-    <% end %>
-  </tbody>
-</table>
-
-
-<div class="pagination_footer">
-  <%= will_paginate @employees %>
-  <%= render :partial => "/shared/results_per_page" %>
 </div>
+
+
+
+<div class="filtered-table">
+  <table class="table table-striped">
+    <thead>
+      <th> <%= sort_column(t(:name), request.fullpath, nil, 'last_name', @order, @ascending) %> </th>
+      <th> <%= t(:notes) %> </th>
+      <th> <%= t(:total_allocation) %> </th>
+    </thead>
+    <tbody>
+      <% @employees.each do |employee| %>
+        <tr>
+          <td> 
+            <% unless employee.email.blank? %>
+              <span class="tooltip_trigger">
+                <i class="icon-envelope"></i>
+              </span>
+              <div class="tooltip">
+                <p class="tooltip_paragraph"> <%= employee.email %> </p>
+              </div>
+            <% else %>
+              <span class="blank-icon"></span>
+            <% end %>
+            <span class="before_icon">
+              <%= link_to employee.full_name, employee_path(employee.id) %>
+            </span>
+          </td>
+          <td>  
+            <% unless employee.notes.blank? %> 
+              <div class="tooltip_trigger">
+                <%= employee.notes.truncate(20) %> 
+              </div>
+              <div class="tooltip">
+                <%= simple_format employee.notes %>
+              </div>
+            <% end %>
+          </td>
+          <td>
+            <%= render  :partial => "/shared/employee_services_and_allocations", 
+                        :locals => {:employee => employee} %>
+          </td>
+        </tr> 
+      <% end %>
+    </tbody>
+  </table>
+  
+  
+  <div class="pagination_footer">
+    <%= will_paginate @employees %>
+    <%= render :partial => "/shared/results_per_page" %>
+  </div>
+</div>
+
 
 
 <script type="text/javascript">

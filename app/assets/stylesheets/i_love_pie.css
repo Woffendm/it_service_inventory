@@ -1,48 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .form-horizontal .control-group {
     margin-bottom: 3px;
 }
@@ -888,9 +845,15 @@ a > i{
   margin-bottom: 5px;
 }
 
-.filter {
-  margin-right: 10px;
-}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1144,8 +1107,8 @@ a > i{
 
 @media (max-width: 979px) {
   .filter input[type=text], .filter select, .filter .autocomplete {
-    width: 160px;
-    max-width: 160px;
+    width: 170px;
+    max-width: 170px;
   }
 
   .navbar-inner {

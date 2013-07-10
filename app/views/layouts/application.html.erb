@@ -17,6 +17,9 @@
   <%= stylesheet_link_tag "select2" %>
   <%= stylesheet_link_tag "fte_calculator" %>
   <%= stylesheet_link_tag "i_love_pie" %>
+  <%= stylesheet_link_tag "full_screen" %>
+  <%= stylesheet_link_tag "filter_left" %>
+  
   <!-- The following line will load an additional "theme" stylesheet for the application later on.
        Currently however, there are no themes and thus it is commented out for the time being. -->
   <!-- <%# stylesheet_link_tag @current_theme %> -->
@@ -166,10 +169,8 @@
           </div>
         <% end %>
       </div>
-      <div class="row">
-        <div id="content">
-          <%= yield %>
-        </div>
+      <div class="row" id="content">
+        <%= yield %>
       </div>
     </div>
     
