@@ -27,3 +27,16 @@ five:
 six:
   value: true
   code: open_login
+  
+seven:
+  value: true
+  code: full_screen
+    
+    
+eight:
+  value: Left
+  code: filter_position
+  
+nine:
+  value: 
+  code: theme

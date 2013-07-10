@@ -15,7 +15,7 @@ class AppSetting < ActiveRecord::Base
         errors.add(:value, "Not a positive integer")
       end
     elsif code == "fte_hours_per_week" 
-      unless (value.to_f > 0) && (value.to_f. <= 168)
+      unless (value.to_f > 0) && (value.to_f <= 168)
         errors.add(:value, "Must be between 0 and 168")
       end
     elsif code == "logo" 

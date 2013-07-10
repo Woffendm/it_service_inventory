@@ -40,14 +40,14 @@ class AppSettingsControllerTest < ActionController::TestCase
 
   test "should update app settings if valid" do
     post :update_settings, :app_setting => {"current_fiscal_year" => "2014",
-       "allocation_precision" => 3, "rest_api_key" => "testa", "fte_hours_per_week" => 39.0}
+       "allocation_precision" => 3, "rest_api_key" => "testa", "fte_hours_per_week" => 39.0, "open_login" => "true", "logo_url" => "", "full_screen" => "true", "filter_position" => "Left"}
     assert_redirected_to app_settings_path
   end
   
   
   test "should not update app settings if invalid" do
     post :update_settings, :app_setting => {"current_fiscal_year" => "invalid",
-       "allocation_precision" => "invalid", "fte_hours_per_week" => "invalid"}
+       "allocation_precision" => "invalid", "rest_api_key" => "invalid", "fte_hours_per_week" => "invalid", "open_login" => "invalid", "logo_url" => "invalid", "full_screen" => "invalid", "filter_position" => "invalid"}
     assert_response :success
   end
 end
