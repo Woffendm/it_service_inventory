@@ -410,7 +410,7 @@ body{
 
 .two-navs #page-header{
   min-height: 81px;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
 }
 
 #page-content{
@@ -894,7 +894,7 @@ a > i{
 }
 
 .navbar-inner {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #000;
 }
 
 #nav2 a{
