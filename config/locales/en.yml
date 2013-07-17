@@ -49,7 +49,7 @@ en:
   dependency:                   "Dependency "
   dependencies:                 "Dependencies "
   dependent:                    "Dependent "
-  dependents:                   "Dependents "
+  dependents:                   "Required By "
   description:                  "Description"
   disabled:                     "Disabled"
   email:                        "Email"

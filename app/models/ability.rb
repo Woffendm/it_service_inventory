@@ -31,23 +31,22 @@ class Ability
       if user.site_admin
         can :manage, :all
       else
-        admin_groups = Group.joins(:employee_groups).where(
-                      :employee_groups => {:employee_id => user.id, :group_admin => true}
-                      ).includes(:portfolios, :products, :employees => :employee_groups)
+        admin_groups = user.admin_groups
         unless admin_groups.blank? 
           can :update, Group, :id => admin_groups.pluck(:id)
           can :create, Employee
-          can :create, Portfolio
+          can [:create, :update], Portfolio
           can [:create, :update], Product
           can [:create, :update], Service
           admin_groups.each do |group|
             # Employees
-            can :update, Employee, :id => group.employees.pluck(:id)
             group.employees.each do |employee|
-              can :destroy, Employee, :id => employee.id if employee.employee_groups.length < 2
+              can [:destroy, :update], Employee, :id => employee.id if employee.groups.length < 2
             end
             # Portfolios
-            can [:update, :destroy], Portfolio, :id => group.portfolios.pluck(:id)
+            group.portfolios.each do |portfolio|
+              can :destroy, Portfolio, :id => portfolio.id if portfolio.groups.length < 2
+            end
           end
           # Products
           can :destroy, Product, :id => Product.where("id not in (?)",
@@ -55,6 +54,12 @@ class Ability
           # Services
           can :destroy, Service, :id => Service.where("id not in (?)",
                                         Service.joins(:employee_allocations).pluck(:id)).pluck(:id)
+          # Unassigned Employees
+          can :destroy, Employee, :id => Employee.where("id not in (?)",
+                                         Employee.joins(:groups).pluck(:id)).pluck(:id)
+          # Unassigned Portfolios
+          can :destroy, Portfolio, :id => Portfolio.where("id not in (?)",
+                                          Portfolio.joins(:groups).pluck(:id)).pluck(:id)
         end
         # Regular users can only edit themselves if they are active.
         if user.active

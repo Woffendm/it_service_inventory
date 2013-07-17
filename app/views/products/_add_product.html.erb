@@ -1,12 +1,12 @@
 <% unless products.blank? %>
 
-  <a class="btn btn-small" data-toggle="modal" data-target="#add-<%= title %>" href="#">
+  <a class="btn btn-small" data-toggle="modal" data-target="#<%= form_name %>" href="#">
     <i class="icon-plus"></i>
     <%= t(:add) + t(title) %>
   </a>
   
   
-  <div class="modal hide fade" id="add-<%= title %>">
+  <div class="modal hide fade" id="<%= form_name %>">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h4> <%= t(:add) + t(title) %> </h4>

@@ -334,7 +334,7 @@
         <%= t(:dependencies) %> 
         <%= render  :partial => "/products/add_product", 
                     :locals => {:products => @available_dependencies,
-                                :title => "dependency",
+                                :title => "product",
                                 :form_name => "new_dependency"} %>
       </h3>
       <%= render  :partial => "/products/edit_products_table", 
@@ -350,7 +350,7 @@
         <%= t(:dependents) %> 
         <%= render  :partial => "/products/add_product", 
                     :locals => {:products => @available_dependents,
-                                :title => "dependent",
+                                :title => "product",
                                 :form_name => "new_dependent"} %>
       </h3>
       <%= render  :partial => "/products/edit_products_table", 
