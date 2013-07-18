@@ -12,6 +12,11 @@
         <%= t(:product) + t(:information) %>
       </a>
     </li>
+    <li>
+      <a href="#groups" id="groups_tab" data-toggle="tab"> 
+        <%= t(:groups) %> 
+      </a>
+    </li>
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
         <%= t(:portfolios) %>
@@ -154,7 +159,7 @@
   
   
     <% @portfolios.each_with_index do |portfolio, index| %>
-      <% product_groups = portfolio.product_groups_for_product(@product) %>
+      <% product_group_portfolios = portfolio.product_group_portfolios_for_product(@product) %>
       <div class="tab-pane" id="portfolio-<%= index %>">
         <h3> 
           <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
@@ -166,7 +171,7 @@
                       :locals  => {:path => remove_from_portfolio_product_path +
                                   "?portfolio_id=#{portfolio.id}"} %>
         </h3>
-        <% if product_groups.blank? %>
+        <% if product_group_portfolios.blank? %>
           <%= render  :partial => "/shared/nothing_to_display" %>
         <% else %>
           <table class="table table-striped">
@@ -181,17 +186,17 @@
               </tr>
             </thead>
             <tbody>
-              <% product_groups.each do |product_group| %>
-                <% group = product_group.group %>
+              <% product_group_portfolios.each do |product_group_portfolio| %>
+                <% group = product_group_portfolio.group %>
                 <tr>
                   <td>
                     <%= link_to group.name, group_path(group.id) %>
                   </td>
                   <td>
-                    <%= product_form.fields_for "product_groups", product_group do |form|%>
-                      <%= form.hidden_field(:portfolio_id, :value => product_group.portfolio_id) %>
-                      <%= form.hidden_field(:id, :value => product_group.id) %>
-                      <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
+                    <%= product_form.fields_for "product_group_portfolios", product_group_portfolio do |form|%>
+                      <%= form.hidden_field(:portfolio_id, :value => product_group_portfolio.portfolio_id) %>
+                      <%= form.hidden_field(:id, :value => product_group_portfolio.id) %>
+                      <%= form.hidden_field(:group_id, :value => product_group_portfolio.group_id) %>
                       <%= form.check_box :_destroy %>
                     <% end %>
                   </td>
@@ -204,6 +209,55 @@
       </div>
     <% end %>
       
+  
+  
+  
+  
+  
+  
+    <div class="tab-pane" id="groups">
+      
+      <h3>
+        <%= t(:groups) %>
+        <%= render  :partial => "/shared/add_group", 
+                    :locals => {:groups => @available_groups,
+                                :title => "group",
+                                :form_name => "new_product_group"} %>
+      </h3>
+  
+      <% if @product_groups.blank? %>
+        <%= render  :partial => "/shared/nothing_to_display" %>
+      <% else %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th> <%= t(:group) %> </th>
+              <th> <%= t(:check_to_remove) %> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @product_groups.each do |product_group| %>
+              <%= product_form.fields_for "product_groups", product_group do |form|%>
+                <tr>
+                  <td>
+                    <%= link_to product_group.group.name, 
+                        service_path(product_group.group_id) %>                
+                  </td>
+                  <td>
+                    <%= form.check_box :_destroy %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+        
+        <%= product_form.submit  t(:save_changes), :class => "submission"  %>
+        
+      <% end %>
+    </div>
+  
+  
   
   
   

@@ -123,6 +123,7 @@ class ProductsController < ApplicationController
     add_portfolio(params[:new_product_portfolio])
     add_employee_product(params[:employee_product])
     new_portfolio(params[:new_portfolio])
+    new_product_group(params[:new_product_group])
     if @product.update_attributes(params[:product])
       flash[:notice] = t(:product) + t(:updated)      
       redirect_to edit_product_path(@product.id)
@@ -232,6 +233,19 @@ class ProductsController < ApplicationController
       end
     end
     
+    
+    
+    def new_product_group(product_group)
+      unless product_group.blank? || product_group[:group_id].blank?
+        if @product.product_groups.new(product_group).save
+          flash[:notice] = t(:group) + t(:added)
+        else
+          flash[:error] = "Cannot add group"
+          render :edit
+          return
+        end
+      end
+    end
   
   
   
@@ -301,8 +315,8 @@ class ProductsController < ApplicationController
       @dependencies = @product.dependencies.order(:name)
       @dependents = @product.dependents.order(:name)
       @portfolios = @product.portfolios.order(:name).uniq
-      @product_services =
-          @product.product_services.joins(:service).includes(:service).order("services.name")
+      @product_groups = @product.product_groups.includes(:group).order("groups.name")
+      @product_services = @product.product_services.includes(:service).order("services.name")
       @employee_products = @product.employee_products.joins(:employee).where(
           :fiscal_year_id => @year.id).includes(:employee).order(:last_name, :first_name)
     end
@@ -312,6 +326,7 @@ class ProductsController < ApplicationController
     # the product for the given year
     def load_available_associations
       @possible_portfolios = @product.get_available_portfolios
+      @available_groups = @product.get_available_groups
       @available_services = @product.get_available_services
       @available_employees = @product.get_available_employees(@year)
       @available_dependencies = Product.order(:name) - @product.dependencies - [@product]

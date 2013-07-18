@@ -219,7 +219,7 @@
       <%= render  :partial => "/shared/all_year_select", 
                     :locals => {:@year => @year, :@all_years => @all_years } %>
       <div class="year-content">
-        <% if @products.blank? %>
+        <% if @product_groups.blank? %>
           <%= render  :partial => "/shared/nothing_to_display" %>
         <% else %>
           <table class="table table-striped">
@@ -237,8 +237,8 @@
               </tr>
             </thead>
             <tbody>
-              <% portfolio.product_group_portfolios_for_group(@group).each do |product_group_portfolio| %>
-                <% product = product_group_portfolio.product %>
+              <% @product_groups.each do |product_group| %>
+                <% product = product_group.product %>
                 <tr>
                   <td>
                     <%= link_to product.name, product_path(product.id) %>
@@ -247,10 +247,9 @@
                     <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
                   </td>
                   <td>
-                    <%= group_form.fields_for "product_group_portfolios", product_group_portfolio do |form|%>
-                      <%= form.hidden_field(:portfolio_id, :value => product_group_portfolio.portfolio_id) %>
-                      <%= form.hidden_field(:id, :value => product_group_portfolio.id) %>
-                      <%= form.hidden_field(:product_id, :value => product_group_portfolio.product_id) %>
+                    <%= group_form.fields_for "product_groups", product_group do |form|%>
+                      <%= form.hidden_field(:id, :value => product_group.id) %>
+                      <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
                       <%= form.check_box :_destroy %>
                     <% end %>
                   </td>
@@ -261,7 +260,7 @@
                   <%= t(:total_allocation) %>
                 </td>
                 <td>
-                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision).to_s + t(:fte) %>
+                  <%= @group.get_total_product_allocation(@year, @allocation_precision).to_s + t(:fte) %>
                 </td>
                 <td> </td>
               </tr>

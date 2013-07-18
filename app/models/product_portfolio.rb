@@ -17,8 +17,8 @@ class ProductPortfolio < ActiveRecord::Base
   
   # Removes all ProductGroupPortfolios associated with this GroupPortfolio's product and portfolio
   def remove_associated_product_group_portfolios
-    ProductGroupPortfolio.where(:product_id => self.product_id, :portfolio_id => self.portfolio_id).each do |pg|
-      pg.destroy
+    ProductGroupPortfolio.where(:product_id => self.product_id, :portfolio_id => self.portfolio_id).each do |pgp|
+      pgp.destroy
     end
     return true
   end
