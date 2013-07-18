@@ -39,15 +39,14 @@
       </thead>
       <tbody>
         <% @portfolios.each do |portfolio| %>
-          <% products = portfolio.products %>
-          <% products_1 = products[0..(products.length / 2 - 1)] %>
-          <% products_2 = products[(products.length / 2)..(products.length - 1)] %>        
+          <% products = portfolio.products %>      
           <tr>
             <td>
               <%= link_to portfolio.name, portfolio_path(portfolio.id) %>
             </td>
             <td>
-              <% products_1.each do |product| %>
+              <% products.each_with_index do |product, index| %>
+                <% next unless index % 2 == 0 %>
                 <%= render :partial => "/products/product_groups_tooltip", 
                     :locals => {:product => product} %>
                 <%= link_to product.name, product_path(product.id) %>
@@ -55,7 +54,8 @@
               <% end %>
             </td>
             <td>
-              <% products_2.each do |product| %>
+              <% products.each_with_index do |product, index| %>
+                <% next if index % 2 == 0 %>
                 <%= render :partial => "/products/product_groups_tooltip", 
                     :locals => {:product => product} %>
                 <%= link_to product.name, product_path(product.id) %>
