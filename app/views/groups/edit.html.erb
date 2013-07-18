@@ -11,6 +11,11 @@
         <%= t(:employees) %>
       </a>
     </li>
+    <li>
+      <a href="#products" id="products_tab" data-toggle="tab"> 
+        <%= t(:products) %> 
+      </a>
+    </li>
     <li class="dropdown">
       <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
         <%= t(:portfolios) %>
@@ -107,8 +112,8 @@
               </tr>
             </thead>
             <tbody>
-              <% portfolio.product_groups_for_group(@group).each do |product_group| %>
-                <% product = product_group.product %>
+              <% portfolio.product_group_portfolios_for_group(@group).each do |product_group_portfolio| %>
+                <% product = product_group_portfolio.product %>
                 <tr>
                   <td>
                     <%= link_to product.name, product_path(product.id) %>
@@ -117,10 +122,10 @@
                     <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
                   </td>
                   <td>
-                    <%= group_form.fields_for "product_groups", product_group do |form|%>
-                      <%= form.hidden_field(:portfolio_id, :value => product_group.portfolio_id) %>
-                      <%= form.hidden_field(:id, :value => product_group.id) %>
-                      <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
+                    <%= group_form.fields_for "product_group_portfolios", product_group_portfolio do |form|%>
+                      <%= form.hidden_field(:portfolio_id, :value => product_group_portfolio.portfolio_id) %>
+                      <%= form.hidden_field(:id, :value => product_group_portfolio.id) %>
+                      <%= form.hidden_field(:product_id, :value => product_group_portfolio.product_id) %>
                       <%= form.check_box :_destroy %>
                     <% end %>
                   </td>
@@ -131,7 +136,7 @@
                   <%= t(:total_allocation) %>
                 </td>
                 <td>
-                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision).to_s + t(:fte) %>
                 </td>
                 <td> </td>
               </tr>
@@ -197,7 +202,79 @@
       <% end %>
       <%= group_form.submit  t(:save_changes) %> 
     </div>
+    
+    
+    
+    
+    
+    
+    <div class="tab-pane tabs-right" id="products">
+      <h3> 
+        <%= t(:products) %>
+        <%= render  :partial => "/products/add_product", 
+                    :locals => {:products => @available_products,
+                                :title => "product",
+                                :form_name => "new_product_group"} %>
+      </h3>
+      <%= render  :partial => "/shared/all_year_select", 
+                    :locals => {:@year => @year, :@all_years => @all_years } %>
+      <div class="year-content">
+        <% if @products.blank? %>
+          <%= render  :partial => "/shared/nothing_to_display" %>
+        <% else %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>
+                  <%= t(:product) %>
+                </th>
+                <th>
+                  <%= t(:allocation) %>
+                </th>
+                <th> 
+                  <%= t(:check_to_remove) %>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <% portfolio.product_group_portfolios_for_group(@group).each do |product_group_portfolio| %>
+                <% product = product_group_portfolio.product %>
+                <tr>
+                  <td>
+                    <%= link_to product.name, product_path(product.id) %>
+                  </td>
+                  <td>
+                    <%= product.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  </td>
+                  <td>
+                    <%= group_form.fields_for "product_group_portfolios", product_group_portfolio do |form|%>
+                      <%= form.hidden_field(:portfolio_id, :value => product_group_portfolio.portfolio_id) %>
+                      <%= form.hidden_field(:id, :value => product_group_portfolio.id) %>
+                      <%= form.hidden_field(:product_id, :value => product_group_portfolio.product_id) %>
+                      <%= form.check_box :_destroy %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <td> 
+                  <%= t(:total_allocation) %>
+                </td>
+                <td>
+                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision).to_s + t(:fte) %>
+                </td>
+                <td> </td>
+              </tr>
+            </tbody>
+          </table>
+        <% end %>
+      </div>
+      <%= group_form.submit  t(:save_changes) %> 
+    </div>
+    
+    
+    
+    
+    
   </div>  
-  
-  
 <% end %>

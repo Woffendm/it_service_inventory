@@ -93,15 +93,16 @@
                 </tr>
               </thead>
               <tbody>
-                <% group.products.each do |product| %>
-                    <tr>
-                      <td> 
-                        <%= link_to product.name, product_path(product.id) %>
-                      </td>
-                      <td> 
-                        <%= product.get_allocation_for_group(group, @year, @allocation_precision) %>
-                      </td>
-                    </tr>
+                <% group.product_group_portfolios.each do |pgp| %>
+                  <% product = pgp.product %>
+                  <tr>
+                    <td> 
+                      <%= link_to product.name, product_path(product.id) %>
+                    </td>
+                    <td> 
+                      <%= product.get_allocation_for_group(group, @year, @allocation_precision) %>
+                    </td>
+                  </tr>
                 <% end %>
                 <tr> 
                   <td>

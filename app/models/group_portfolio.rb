@@ -9,12 +9,12 @@ class GroupPortfolio < ActiveRecord::Base
   belongs_to :portfolio
   validates_presence_of   :portfolio_id, :group_id
   validates_uniqueness_of :group_id, :scope => :portfolio_id
-  before_destroy :remove_associated_product_groups
+  before_destroy :remove_associated_product_group_portfolios
   
   
-  # Removes all ProductGroups associated with this GroupPortfolio's group and portfolio
-  def remove_associated_product_groups
-    ProductGroup.where(:group_id => self.group_id, :portfolio_id => self.portfolio_id).each do |pg|
+  # Removes all ProductGroupPortfolios associated with this GroupPortfolio's group and portfolio
+  def remove_associated_product_group_portfolios
+    ProductGroupPortfolio.where(:group_id => self.group_id, :portfolio_id => self.portfolio_id).each do |pg|
       pg.destroy
     end
     return true

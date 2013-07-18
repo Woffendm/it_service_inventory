@@ -6,17 +6,33 @@
 
 class Product < ActiveRecord::Base
   attr_accessible :name, :description, :url, :product_type_id, :product_type, :product_state_id, 
-                  :product_state, :employee_products_attributes, :product_services_attributes,
-                  :product_groups_attributes, :product_priority_id, 
-                  :product_priority, :product_portfolios, :product_portfolios_attributes
-  has_many :employee_products,  :dependent => :delete_all
-  has_many :employees,          :through =>   :employee_products
-  has_many :product_groups,     :dependent => :delete_all
-  has_many :groups,             :through =>   :product_groups
-  has_many :product_portfolios, :dependent => :delete_all
-  has_many :portfolios,         :through =>   :product_portfolios
-  has_many :product_services,   :dependent => :delete_all
-  has_many :services,           :through =>   :product_services
+                  :employee_products_attributes, :product_services_attributes,
+                  :product_group_portfolios_attributes, :product_priority_id, 
+                  :product_portfolios_attributes, :product_groups_attributes
+
+
+  has_many  :employee_products,  
+            :dependent => :delete_all
+  has_many  :product_group_portfolios,     
+            :dependent => :delete_all
+  has_many  :product_groups,     
+            :dependent => :delete_all
+  has_many  :product_portfolios, 
+            :dependent => :delete_all
+  has_many  :product_services,   
+            :dependent => :delete_all
+            
+            
+  has_many  :employees,          
+            :through => :employee_products
+  has_many  :groups,             
+            :through => :product_groups
+  has_many  :portfolios,   
+            :through => :product_portfolios
+  has_many  :services,   
+            :through => :product_services
+
+
   has_and_belongs_to_many :dependents, 
       :class_name => "Product", 
       :foreign_key => :dependency_id,   
@@ -25,15 +41,27 @@ class Product < ActiveRecord::Base
       :class_name => "Product", 
       :foreign_key => :dependent_id,
       :association_foreign_key => :dependency_id
+      
+      
   belongs_to :product_type
   belongs_to :product_state
   belongs_to :product_priority
+  
+  
   before_validation :smart_add_url_protocol
   validates_presence_of   :name
   validates_uniqueness_of :name
-  accepts_nested_attributes_for :employee_products, :allow_destroy => true
-  accepts_nested_attributes_for :product_services,  :allow_destroy => true
-  accepts_nested_attributes_for :product_groups,    :allow_destroy => true
+  
+  
+  accepts_nested_attributes_for :employee_products, 
+      :allow_destroy => true
+  accepts_nested_attributes_for :product_services,  
+      :allow_destroy => true
+  accepts_nested_attributes_for :product_group_portfolios,    
+      :allow_destroy => true
+  accepts_nested_attributes_for :product_groups,    
+      :allow_destroy => true
+  
   
   
   

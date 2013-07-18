@@ -12,7 +12,7 @@ class GroupsController < ApplicationController
   before_filter :load_possible_portfolios, :only => [:edit, :update]
   before_filter :load_existing_employees,  :only => [:edit, :update]
   before_filter :load_services,            :only => [:show]
-  before_filter :load_products,            :only => [:show]
+  before_filter :load_product_groups,      :only => [:edit, :update]
   before_filter :load_employees_for_year,  :only => [:show]
   before_filter :authorize_update,         :only => [:edit, :update]
                                             
@@ -35,7 +35,14 @@ class GroupsController < ApplicationController
 
   # Page for viewing an existing group
   def show
-    @portfolios = Portfolio.includes(:product_groups => :product).where(:product_groups => {:group_id => @group.id}).includes(:products).order("portfolios.name", "products.name").uniq
+    @products = @group.products.joins(:employee_products).where(
+        :employee_products => {:fiscal_year_id => @year.id, 
+        :employee_id => @employees.pluck("employees.id")}
+        ).uniq.order(:name).paginate(:page => params[:products_page], 
+        :per_page => session[:results_per_page])
+    @portfolios = Portfolio.includes(:product_group_portfolios =>
+        :product).where(:product_group_portfolios => {
+        :group_id => @group.id}).order("portfolios.name", "products.name").uniq
     @total_product_allocation = @group.get_total_product_allocation(@year, @allocation_precision)
     @total_service_allocation = @group.get_total_service_allocation(@year, @allocation_precision)
   end
@@ -89,11 +96,11 @@ class GroupsController < ApplicationController
         return
       end
     end
-    unless params[:new_product_groups].blank?
-      params[:new_product_groups].to_a.each do |new_pg|
+    unless params[:new_product_group_portfolios].blank?
+      params[:new_product_group_portfolios].to_a.each do |new_pg|
         new_pg = new_pg.last
         unless new_pg.blank? || new_pg["product_id"].blank?
-          if @group.product_groups.new(new_pg).save
+          if @group.product_group_portfolios.new(new_pg).save
             flash[:notice] = "Product added."
           else
             flash[:error] = "Cannot add product"
@@ -200,13 +207,11 @@ class GroupsController < ApplicationController
     
     
     # Loads all products allocated to the group for the given fiscal year.
-    def load_products
-      @employees = @group.employees unless @employees
-      @products = @group.products.joins(:employee_products).where(
-          :employee_products => {:fiscal_year_id => @year.id, 
-          :employee_id => @employees.pluck("employees.id")}
-          ).uniq.order(:name).paginate(:page => params[:products_page], 
-          :per_page => session[:results_per_page])
+    def load_product_groups
+      @product_groups = @group.product_groups.includes(:product).order("products.name")
+      @available_products = Product.where("id not in (?)", @product_groups.pluck(:product_id))
+      @product_groups = @product_groups.paginate(:page =>   
+            params[:products_page], :per_page => session[:results_per_page])
     end
     
     

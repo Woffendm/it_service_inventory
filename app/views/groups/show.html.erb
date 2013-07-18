@@ -212,7 +212,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td> <%= @total_product_allocation %> </td>
+              <td> <%= @total_product_allocation.to_s + t(:fte) %> </td>
             </tr>
           </tbody>
         </table>
@@ -230,8 +230,8 @@
       <h3> 
         <%= link_to portfolio.name, portfolio_path(portfolio.id)%>
       </h3>
-      <% product_groups = portfolio.product_groups %>
-      <% if product_groups.blank? %>
+      <% product_group_portfolios = portfolio.product_group_portfolios %>
+      <% if product_group_portfolios.blank? %>
         <%= render  :partial => "/shared/nothing_to_display" %>
       <% else %>
         <%= render  :partial => "/shared/all_year_select", 
@@ -249,8 +249,8 @@
               </tr>
             </thead>
             <tbody>
-              <% product_groups.each do |product_group| %>
-              <% product = product_group.product %>
+              <% product_group_portfolios.each do |product_group_portfolio| %>
+              <% product = product_group_portfolio.product %>
                 <tr>
                   <td>
                     <%= link_to product.name,product_path(product.id) %>
@@ -265,7 +265,7 @@
                   <%= t(:total_allocation) %>
                 </td>
                 <td>
-                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision) %>
+                  <%= portfolio.get_allocation_for_group(@group, @year, @allocation_precision).to_s + t(:fte) %>
                 </td>
               </tr>
             </tbody>

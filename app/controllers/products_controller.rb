@@ -119,7 +119,7 @@ class ProductsController < ApplicationController
     add_dependent(params[:new_dependent])
     add_dependency(params[:new_dependency])
     add_service(params[:product_service])
-    add_group(params[:new_product_groups])
+    add_group(params[:new_product_group_portfolios])
     add_portfolio(params[:new_product_portfolio])
     add_employee_product(params[:employee_product])
     new_portfolio(params[:new_portfolio])
@@ -175,12 +175,12 @@ class ProductsController < ApplicationController
   
   
     # Adds product to the specified group's portfolio
-    def add_group(new_product_groups)
-      unless new_product_groups.blank?
-        new_product_groups.to_a.each do |new_pg|
+    def add_group(new_product_group_portfolios)
+      unless new_product_group_portfolios.blank?
+        new_product_group_portfolios.to_a.each do |new_pg|
           new_pg = new_pg.last
           unless new_pg.blank? || new_pg["group_id"].blank?
-            if @product.product_groups.new(new_pg).save
+            if @product.product_group_portfolios.new(new_pg).save
               flash[:notice] = "Group added."
             else
               flash[:error] = "Cannot add group"
@@ -258,7 +258,7 @@ class ProductsController < ApplicationController
       @search_array << "product_priority_id = #{@product_priority}" unless @product_priority.blank? 
       @search_string = @search_array.join(" AND ")
       @products = Product.where(@search_string)
-      @products = @products.joins(:groups).where("product_groups.group_id" => @group).uniq unless @group.blank?
+      @products = @products.joins(:groups).where("product_group_portfolios.group_id" => @group).uniq unless @group.blank?
       return @products
     end
     

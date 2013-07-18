@@ -5,20 +5,42 @@
 # Copyright:
 
 class Group < ActiveRecord::Base
-  attr_accessible :employees, :name, :employee_groups, :employee_groups_attributes,
-                  :group_portfolios, :group_portfolios_attributes, :product_groups,
-                  :product_groups_attributes
-  has_many :employee_groups,  :dependent  => :delete_all
-  has_many :employees,        :through    => :employee_groups
-  has_many :product_groups,   :dependent  => :delete_all
-  has_many :products,         :through    => :product_groups
-  has_many :group_portfolios, :dependent  => :delete_all
-  has_many :portfolios,       :through    => :group_portfolios
-  accepts_nested_attributes_for :group_portfolios,  :allow_destroy => true
-  accepts_nested_attributes_for :product_groups,    :allow_destroy => true
-  accepts_nested_attributes_for :employee_groups,   :allow_destroy => true
+  attr_accessible :employees, :name, :employee_groups_attributes,
+                  :group_portfolios_attributes, :product_groups_attributes,
+                  :product_group_portfolios_attributes
+
+
+  has_many :employee_groups,
+           :dependent  => :delete_all
+  has_many :product_groups,
+           :dependent  => :delete_all
+  has_many :product_group_portfolios,
+           :dependent  => :delete_all
+  has_many :group_portfolios,
+           :dependent  => :delete_all
+  
+  
+  has_many :employees,
+           :through    => :employee_groups
+  has_many :portfolios,
+           :through    => :group_portfolios
+  has_many :products,
+           :through    => :product_groups
+  
+  
+  accepts_nested_attributes_for :group_portfolios,
+      :allow_destroy => true
+  accepts_nested_attributes_for :product_groups,    
+      :allow_destroy => true
+  accepts_nested_attributes_for :product_group_portfolios,
+      :allow_destroy => true
+  accepts_nested_attributes_for :employee_groups,
+      :allow_destroy => true
+      
+      
   validates_presence_of   :name
   validates_uniqueness_of :name
+  
   
   
   # Adds the given employee to the group
@@ -38,7 +60,7 @@ class Group < ActiveRecord::Base
   # Returns all products not in the given portfolio for the given group. Products should be an
   # ordered array of products (preferable all of them)
   def get_available_products_for_portfolio(products, portfolio)
-    products - Product.joins(:product_groups).where("product_groups.group_id = ? AND product_groups.portfolio_id = ?",  self.id, portfolio.id)
+    products - Product.joins(:product_group_portfolios).where("product_group_portfolios.group_id = ? AND product_group_portfolios.portfolio_id = ?",  self.id, portfolio.id)
   end
   
   

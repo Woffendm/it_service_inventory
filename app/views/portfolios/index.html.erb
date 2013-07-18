@@ -48,7 +48,7 @@
             </td>
             <td>
               <% products_1.each do |product| %>
-                <%= render :partial => "/products/product_groups_tooltip", 
+                <%= render :partial => "/products/product_group_portfolios_tooltip", 
                     :locals => {:product => product} %>
                 <%= link_to product.name, product_path(product.id) %>
                 <br/>
@@ -56,7 +56,7 @@
             </td>
             <td>
               <% products_2.each do |product| %>
-                <%= render :partial => "/products/product_groups_tooltip", 
+                <%= render :partial => "/products/product_group_portfolios_tooltip", 
                     :locals => {:product => product} %>
                 <%= link_to product.name, product_path(product.id) %>
                 <br/>

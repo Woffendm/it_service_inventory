@@ -55,7 +55,7 @@
                                   :possible_group => possible_group,
                                   :index => index} %>
         </h3>
-        <% @groups_with_product_groups.each do |group| %>
+        <% @groups_with_product_group_portfolios.each do |group| %>
           <% if group.id == possible_group.id %>
             <div class="tabs-right">
               <%= render  :partial => "/shared/all_year_select", 
@@ -70,19 +70,19 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% group.product_groups.each do |product_group| %>
-                      <%= portfolio_form.fields_for "product_groups", product_group do |form|%>
+                    <% group.product_group_portfolios.each do |product_group_portfolio| %>
+                      <%= portfolio_form.fields_for "product_group_portfolios", product_group_portfolio do |form|%>
                         <tr>
                           <td> 
-                            <%= link_to product_group.product.name, 
-                                product_path(product_group.product_id) %>
+                            <%= link_to product_group_portfolio.product.name, 
+                                product_path(product_group_portfolio.product_id) %>
                           </td>
                           <td> 
-                            <%= product_group.product.get_allocation_for_group(group, @year, @allocation_precision) %>
+                            <%= product_group_portfolio.product.get_allocation_for_group(group, @year, @allocation_precision) %>
                           </td>
                           <td>
-                            <%= form.hidden_field(:group_id, :value => product_group.group_id) %>
-                            <%= form.hidden_field(:product_id, :value => product_group.product_id) %>
+                            <%= form.hidden_field(:group_id, :value => product_group_portfolio.group_id) %>
+                            <%= form.hidden_field(:product_id, :value => product_group_portfolio.product_id) %>
                             <%= form.check_box :_destroy %>
                           </td>
                         </tr>
@@ -103,7 +103,7 @@
             </div>
             <%= portfolio_form.submit  t(:save_changes) %>
           <% else %>
-            <% unless @groups_with_product_groups.index(possible_group) %>
+            <% unless @groups_with_product_group_portfolios.index(possible_group) %>
               <%= render  :partial => "/shared/nothing_to_display" %>
               <% break %>
             <% end %>

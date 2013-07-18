@@ -12,7 +12,7 @@
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
       <h4> <%= t(:add) + t(:product) %> </h4>
     </div>
-    <%= fields_for "new_product_groups[#{index}]" do |form|%>
+    <%= fields_for "new_product_group_portfolios[#{index}]" do |form|%>
       <div class="modal-body form-inline">
         <%= form.label :product_id, t(:product) %>
         <%= form.select(:product_id, options_from_collection_for_select(
