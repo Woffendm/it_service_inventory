@@ -67,6 +67,9 @@ class ProductsController < ApplicationController
     authorize! :create, Product
     @product = Product.new(params[:product])
     if @product.save
+      unless params[:product_groups].blank? || params[:product_groups][:group_id].blank?
+        new_product_group = @product.product_groups.create(params[:product_groups])
+      end
       flash[:notice] = t(:product) + t(:created)
       redirect_to edit_product_path(@product.id)
       return
@@ -118,19 +121,23 @@ class ProductsController < ApplicationController
   def update
     add_dependent(params[:new_dependent])
     add_dependency(params[:new_dependency])
-    add_service(params[:product_service])
-    add_group(params[:new_product_group_portfolios])
-    add_portfolio(params[:new_product_portfolio])
-    add_employee_product(params[:employee_product])
+    new_product_service(params[:product_service])
+    new_product_group_portfolio(params[:new_product_group_portfolios])
+    new_product_portfolio(params[:new_product_portfolio])
+    new_employee_product(params[:employee_product])
     new_portfolio(params[:new_portfolio])
     new_product_group(params[:new_product_group])
     if @product.update_attributes(params[:product])
       flash[:notice] = t(:product) + t(:updated)      
-      redirect_to edit_product_path(@product.id)
-      return
+    else
+      flash[:error] = t(:product) + t(:needs_a_name)
+      @error = true
     end
-    flash[:error] = "Product needs a name."
-    render :edit
+    if @error.blank?
+      redirect_to edit_product_path(@product.id)
+    else
+      render :edit
+    end
   end
 
 
@@ -166,7 +173,7 @@ class ProductsController < ApplicationController
   
   
     # Adds new employee allocation to product
-    def add_employee_product(employee_product)
+    def new_employee_product(employee_product)
       unless employee_product.blank? || employee_product[:employee_id].blank?
         new_employee_product = @product.employee_products.new(params[:employee_product])
         new_employee_product.save
@@ -176,7 +183,7 @@ class ProductsController < ApplicationController
   
   
     # Adds product to the specified group's portfolio
-    def add_group(new_product_group_portfolios)
+    def new_product_group_portfolio(new_product_group_portfolios)
       unless new_product_group_portfolios.blank?
         new_product_group_portfolios.to_a.each do |new_pg|
           new_pg = new_pg.last
@@ -185,8 +192,7 @@ class ProductsController < ApplicationController
               flash[:notice] = "Group added."
             else
               flash[:error] = "Cannot add group"
-              render :edit
-              return
+              @error = true
             end
           end
         end
@@ -195,22 +201,21 @@ class ProductsController < ApplicationController
     
     
     # Adds service to product
-    def add_service(product_service)
+    def new_product_service(product_service)
       unless product_service.blank? || product_service[:service_id].blank?
         new_product_service = @product.product_services.new(product_service)
         if new_product_service.save
           flash[:notice] = "Service added."
         else
           flash[:error] = "Cannot add service"
-          render :edit
-          return
+          @error = true
         end
       end
     end
     
     
     # Adds portfolio to product's list of portfolios
-    def add_portfolio(new_product_portfolio)
+    def new_product_portfolio(new_product_portfolio)
       unless new_product_portfolio.blank? || new_product_portfolio[:portfolio_id].blank?
         @product.portfolios << Portfolio.find(new_product_portfolio[:portfolio_id])
         flash[:notice] = t(:portfolio) + t(:added)
@@ -227,8 +232,7 @@ class ProductsController < ApplicationController
           flash[:notice] = t(:portfolio) + t(:created)
         else
           flash[:error] = "Portfolio already exists"
-          render :edit
-          return
+          @error = true
         end
       end
     end
@@ -241,8 +245,7 @@ class ProductsController < ApplicationController
           flash[:notice] = t(:group) + t(:added)
         else
           flash[:error] = "Cannot add group"
-          render :edit
-          return
+          @error = true
         end
       end
     end

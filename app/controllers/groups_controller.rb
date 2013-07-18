@@ -93,11 +93,15 @@ class GroupsController < ApplicationController
     new_portfolio(params[:new_portfolio])
     if @group.update_attributes(params[:group])
       flash[:notice] = t(:group) + t(:updated)
-      redirect_to edit_group_path(@group.id) 
-      return
+    else
+      flash[:error] = t(:group) + t(:needs_a_name)
+      @error = true
     end
-    flash[:error] = t(:group) + t(:needs_a_name)
-    render :edit
+    if @error.blank?
+      redirect_to edit_group_path(@group.id) 
+    else
+      render :edit
+    end
   end
 
 
@@ -119,8 +123,7 @@ class GroupsController < ApplicationController
           flash[:notice] = t(:employee) + t(:added)
         else
           flash[:error] = "Cannot add employee"
-          render :edit
-          return
+          @error = true
         end
       end
     end
@@ -133,8 +136,7 @@ class GroupsController < ApplicationController
           flash[notice] = t(:portfolio) + t(:added)
         else
           flash[:error] = "Cannot add portfolio"
-          render :edit
-          return
+          @error = true
         end
       end
     end
@@ -149,8 +151,7 @@ class GroupsController < ApplicationController
           flash[:notice] = t(:portfolio) + t(:created)
         else
           flash[:error] = "Portfolio already exists"
-          render :edit
-          return
+          @error = true
         end
       end
     end
@@ -163,8 +164,7 @@ class GroupsController < ApplicationController
           flash[:notice] = t(:product) + t(:added)
         else
           flash[:error] = "Cannot add product"
-          render :edit
-          return
+          @error = true
         end
       end
     end
@@ -180,8 +180,7 @@ class GroupsController < ApplicationController
               flash[:notice] = "Product added."
             else
               flash[:error] = "Cannot add product"
-              render :edit
-              return
+              @error = true
             end
           end
         end
