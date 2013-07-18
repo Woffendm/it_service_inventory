@@ -47,6 +47,8 @@ class Employee < ActiveRecord::Base
     new_employee.osu_id = employee_information[:osuuid][0]
     new_employee.uid = uid
     new_employee.email = employee_information[:mail][0].downcase unless employee_information[:mail].blank?
+    # Makes them a site admin if they are the first user
+    new_employee.site_admin = true if Employee.all.blank? 
     return new_employee
   end
 
