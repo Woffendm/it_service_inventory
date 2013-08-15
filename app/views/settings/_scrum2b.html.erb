@@ -15,7 +15,7 @@
         return;
       }
       if (!new_column_made) {
-        new_column_form.html("<br/>");
+        new_column_form.html("");
       }
     });
         
@@ -25,17 +25,35 @@
       new_column_made = true;
     });
     
+    
+    $(".column").click(function(e) {
+      $("#" + this.id).html("");
+    });
   });
 </script>
 
 
+
+
+
 <% all_issue_statuses = IssueStatus.sorted %>
 <% custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% board_columns = [] %>
+
+<% board_columns = @settings["board_columns"].to_a %>
+<%# board_columns.map! { |pair| [pair.first, pair.second["position"].to_f] } %>
+<% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
+
+
 <% new_column = nil %>
 <% while new_column.blank? %>
   <% tmp = rand(100) %>
   <% new_column = tmp if @settings["board_columns"][tmp].blank? %>
 <% end %>
+
+
+
+
 
 
 <h3>
@@ -69,25 +87,36 @@
 
 
 
-<% @settings["board_columns"].each do |board_column| %>
-  <p>
+
+
+
+<% board_columns.each_with_index do |board_column, index| %>
+
+
+    <%= button_tag("Delete", :type => :button, :class => "delete_column contextual") %>  
+  
+  
+  <p class="column" id="column_<%= index %>">
     <%= content_tag(:label, "Name" )%>
     <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
     
     <br/>
     
     <%= content_tag(:label, "Position" )%>
-    <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..@settings["board_columns"].length, :selected => board_column.last["position"].to_f.to_i)) %>
+    <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
     
     <br/>
   
     <%= content_tag(:label, "Statuses" )%>
     <% all_issue_statuses.each do |status| %>
-      <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, @settings["board_columns"][board_column.first] && @settings["board_columns"][board_column.first]["statuses"] && @settings["board_columns"][board_column.first]["statuses"].include?(status.id.to_s) %>
+      <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
       <%= status.name %>
       <br/>	
     <% end %>
     <br/>
+    <h4>
+      &nbsp; 
+    </h4>
   </p>
 <% end %>
 
