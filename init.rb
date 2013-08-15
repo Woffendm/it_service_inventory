@@ -12,20 +12,20 @@ Redmine::Plugin.register :scrum2b do
 
   settings :default => {
        'board_columns' => {
-         'not_started'=> {
-           'position' => '0', 'statuses' => {}
+         '0'=> {
+           'position' => '1', 'name' => 'Not Started', 'statuses' => {}
          }, 
-         'in_progress' => {
-           'position' => '1', 'statuses' => {}
+         '1' => {
+           'position' => '2', 'name' => 'In Progress', 'statuses' => {}
          }, 
-         'code_review' => {
-           'position' => '2', 'statuses' => {}
+         '2' => {
+           'position' => '3', 'name' => 'Code Review', 'statuses' => {}
          }, 
-         'resolved' => {
-           'position' => '3', 'statuses' => {}
+         '3' => {
+           'position' => '4', 'name' => 'Resolved', 'statuses' => {}
          }, 
-         'blocked' => {
-           'position' => '4', 'statuses' => {}
+         '4' => {
+           'position' => '5', 'name' => 'Blocked', 'statuses' => {}
          } 
        }, 
        'use_version_for_sprint' => 'true',
