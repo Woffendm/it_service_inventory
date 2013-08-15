@@ -2,65 +2,114 @@
 <script type="text/javascript">
   $(document).ready(function(){  
     var confirm_msg = "<%= l(:text_are_you_sure) %>";
+    var new_column_form = $("#new_column");
+    var new_column_made = false;
+    
+    
+    new_column_form.hide();
+    
+    
     $("input[type='submit']").click(function(e){
       if (!confirm(confirm_msg)) {
         e.preventDefault();
+        return;
+      }
+      if (!new_column_made) {
+        new_column_form.html("<br/>");
       }
     });
+        
+    
+    $("#new_column_button").click(function(e) {
+      new_column_form.show();
+      new_column_made = true;
+    });
+    
   });
 </script>
 
 
 <% all_issue_statuses = IssueStatus.sorted %>
 <% custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% new_column = nil %>
+<% while new_column.blank? %>
+  <% tmp = rand(100) %>
+  <% new_column = tmp if @settings["board_columns"][tmp].blank? %>
+<% end %>
 
 
-<div id="scrum2b">
-  <h3>
-    Board Columns
-  </h3>
+<h3>
+  Board Columns 
+  <%= button_tag("New Column", :type => :button, :id => "new_column_button") %>  
+</h3>
+
+
+
+<div id="new_column">
+  <p>
+    <%= content_tag(:label, "Name" )%>
+    <%= text_field_tag("settings[board_columns][#{new_column}][name]") %>
+    
+    <br/>
+    
+    <%= content_tag(:label, "Position" )%>
+    <%= select_tag("settings[board_columns][#{new_column}][position]", options_for_select(1..(@settings["board_columns"].length + 1))) %>
+    
+    <br/>
   
-    <% @settings["board_columns"].each do |board_column| %>
-      <div>
-        <%= content_tag(:label, "Name" )%>
-        <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
-        
-        <br/>
-        
-        <%= content_tag(:label, "Position" )%>
-        <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..@settings["board_columns"].length, :selected => board_column.last["position"].to_f.to_i)) %>
-        
-        <br/>
-      
-        <%= content_tag(:label, "Statuses" )%>
-        <% all_issue_statuses.each do |status| %>
-          <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, @settings["board_columns"][board_column.first] && @settings["board_columns"][board_column.first]["statuses"] && @settings["board_columns"][board_column.first]["statuses"].include?(status.id.to_s) %>
-          <%= status.name %>
-          <br/>	
-        <% end %>
-        <br/>
-      </div>
+    <%= content_tag(:label, "Statuses" )%>
+    <% all_issue_statuses.each do |status| %>
+      <%= check_box_tag "settings[board_columns][#{new_column}][statuses][#{status.id}]" %>
+      <%= status.name %>
+      <br/>	
     <% end %>
-  
-  
-  
-  <h3>
-    Sprint Sorting
-  </h3>
-  
-  
-  <p>
-    <%= content_tag(:label, "Use project version")%>
-    <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
+    <br/>
   </p>
-  <p>
-    <%= content_tag(:label, "Use custom field")%>
-    <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
-  </p>
-  
-  <p>
-    <%= content_tag(:label, "Sprint custom field")%>
-    <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
-  </p>
-
 </div>
+
+
+
+<% @settings["board_columns"].each do |board_column| %>
+  <p>
+    <%= content_tag(:label, "Name" )%>
+    <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
+    
+    <br/>
+    
+    <%= content_tag(:label, "Position" )%>
+    <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..@settings["board_columns"].length, :selected => board_column.last["position"].to_f.to_i)) %>
+    
+    <br/>
+  
+    <%= content_tag(:label, "Statuses" )%>
+    <% all_issue_statuses.each do |status| %>
+      <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, @settings["board_columns"][board_column.first] && @settings["board_columns"][board_column.first]["statuses"] && @settings["board_columns"][board_column.first]["statuses"].include?(status.id.to_s) %>
+      <%= status.name %>
+      <br/>	
+    <% end %>
+    <br/>
+  </p>
+<% end %>
+
+
+
+
+
+
+<h3>
+  Sprint Sorting
+</h3>
+
+<p>
+  <%= content_tag(:label, "Use project version")%>
+  <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
+</p>
+<p>
+  <%= content_tag(:label, "Use custom field")%>
+  <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
+</p>
+
+<p>
+  <%= content_tag(:label, "Sprint custom field")%>
+  <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
+</p>
