@@ -26,8 +26,8 @@
     });
     
     
-    $(".column").click(function(e) {
-      $("#" + this.id).html("");
+    $(".delete_column").click(function(e) {
+      $($(this).attr("parent_id")).html("");
     });
   });
 </script>
@@ -41,7 +41,6 @@
 <% board_columns = [] %>
 
 <% board_columns = @settings["board_columns"].to_a %>
-<%# board_columns.map! { |pair| [pair.first, pair.second["position"].to_f] } %>
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
 
 
@@ -54,6 +53,31 @@
 
 
 
+
+<h3>
+  Sprint Sorting
+</h3>
+
+<p>
+  <%= content_tag(:label, "Use project version")%>
+  <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
+</p>
+<p>
+  <%= content_tag(:label, "Use custom field")%>
+  <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
+</p>
+
+<p>
+  <%= content_tag(:label, "Sprint custom field")%>
+  <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
+</p>
+
+
+<h4>
+  &nbsp; 
+</h4>
+
+<br/>
 
 
 <h3>
@@ -81,8 +105,11 @@
       <%= status.name %>
       <br/>	
     <% end %>
-    <br/>
   </p>
+  
+  <h4>
+    &nbsp; 
+  </h4>
 </div>
 
 
@@ -91,54 +118,36 @@
 
 
 <% board_columns.each_with_index do |board_column, index| %>
-
-
-    <%= button_tag("Delete", :type => :button, :class => "delete_column contextual") %>  
-  
-  
-  <p class="column" id="column_<%= index %>">
-    <%= content_tag(:label, "Name" )%>
-    <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
+  <div id="column_<%= index %>" >
+    <p>
+      <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_#{ index }") %>  
+            
+      <%= content_tag(:label, "Name" )%>
+      <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
+      
+      <br/>
+      
+      <%= content_tag(:label, "Position" )%>
+      <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
+      
+      <br/>
     
-    <br/>
+      <%= content_tag(:label, "Statuses" )%>
+      <% all_issue_statuses.each do |status| %>
+        <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
+        <%= status.name %>
+        <br/>	
+      <% end %>
+    </p>
     
-    <%= content_tag(:label, "Position" )%>
-    <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
     
-    <br/>
-  
-    <%= content_tag(:label, "Statuses" )%>
-    <% all_issue_statuses.each do |status| %>
-      <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
-      <%= status.name %>
-      <br/>	
+    <% unless board_column == board_columns.last %>
+      <h4>
+        &nbsp; 
+      </h4>
     <% end %>
-    <br/>
-    <h4>
-      &nbsp; 
-    </h4>
-  </p>
+  </div>
 <% end %>
 
 
 
-
-
-
-<h3>
-  Sprint Sorting
-</h3>
-
-<p>
-  <%= content_tag(:label, "Use project version")%>
-  <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
-</p>
-<p>
-  <%= content_tag(:label, "Use custom field")%>
-  <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
-</p>
-
-<p>
-  <%= content_tag(:label, "Sprint custom field")%>
-  <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
-</p>
