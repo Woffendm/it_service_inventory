@@ -52,7 +52,7 @@
       </div>
 
 
-      <div id="new_columns">
+      <div id="new_columns" class="hidden">
       </div>
 
 
@@ -141,9 +141,6 @@
     var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
     var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
 
-    template.hide();
-    new_columns.hide();
-
 
     $("input[type='submit']").click(function(e){
       if (!confirm(confirm_msg)) {
@@ -158,12 +155,11 @@
       new_columns.show();
       new_columns.prepend(template.html());
       $("#column_-1").attr("id", "column_" + new_column_id);
-      $("#delete_-1").attr("parent_id", "#column_" + new_column_id);
-      $("#delete_-1").attr("id", "delete_" + new_column_id);
-      $("#settings_board_columns_-1_name").attr("id", "settings_board_columns_" + new_column_id + "_name");
-      $("#settings_board_columns_-1_position").attr("id", "settings_board_columns_" + new_column_id + "_position");
+      $("#delete_-1").attr("parent_id", "#column_" + new_column_id).attr("id", "delete_" + new_column_id);
+      $("#settings_board_columns_-1_name").attr("name", "settings[board_columns][" + new_column_id + "][name]").attr("id", "settings_board_columns_" + new_column_id + "_name");
+      $("#settings_board_columns_-1_position").attr("name", "settings[board_columns][" + new_column_id + "][position]").attr("id", "settings_board_columns_" + new_column_id + "_position");
       $.each(issue_ids, function(index, value) {
-        $("#settings_board_columns_-1_statuses_" + value).attr("id", "settings_board_columns_" + new_column_id + "_statuses_" + value);
+        $("#settings_board_columns_-1_statuses_" + value).attr("name", "settings[board_columns][" + new_column_id + "][statuses][" + value + "]").attr("id", "settings_board_columns_" + new_column_id + "_statuses_" + value);
       });
       new_column_id += 1;
       delete_column = $(".delete_column");
