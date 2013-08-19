@@ -9,6 +9,7 @@
 
 <% board_columns = @settings["board_columns"].to_a %>
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
+<% using_version = @settings["use_version_for_sprint"] == "true" %>
 
 
 
@@ -27,14 +28,14 @@
 
       <p>
         <%= content_tag(:label, "Use project version")%>
-        <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "true", using_version) %>
       </p>
       <p>
         <%= content_tag(:label, "Use custom field")%>
-        <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "false", !using_version) %>
       </p>
 
-      <p>
+      <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
         <%= content_tag(:label, "Sprint custom field")%>
         <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
       </p>
@@ -56,7 +57,7 @@
 
 
       <% board_columns.each_with_index do |board_column, index| %>
-        <div class=<%= "subsection" unless board_column == board_columns.last %>
+        <div class="<%= 'subsection' unless board_column == board_columns.last %>"
         id="column_<%= index %>" >
           <p>
             <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_#{ index }") %>  
@@ -84,7 +85,7 @@
 
 
 
-      <div id="template">
+      <div id="template" class="hidden">
         <div class="subsection" id="column_-1">
           <p>
             <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_-1", :id => "delete_-1") %>  
@@ -130,10 +131,13 @@
 <!-- confirmation popup -->
 <script type="text/javascript">
   $(document).ready(function(){  
+    
+    
     var confirm_msg = "<%= l(:text_are_you_sure) %>";
     var new_columns = $("#new_columns");
     var delete_column = $(".delete_column");
     var template = $("#template");
+    var custom_field_select = $("#custom_field_select");
     var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
     var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
 
@@ -169,22 +173,20 @@
     delete_column.live("click", function(e) {
       $($(this).attr("parent_id")).remove();
     });
+    
+    
+    $("#settings_use_version_for_sprint_false").click(function(e) {
+      custom_field_select.show();
+    });
+    
+    
+    $("#settings_use_version_for_sprint_true").click(function(e) {
+      custom_field_select.hide();
+    });
+    
+    
   });
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
