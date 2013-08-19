@@ -1,0 +1,10 @@
+.section_header {
+  border-bottom: 2px dotted #BBBBBB;
+  margin-bottom: 10px;
+}
+
+.subsection {
+  border-bottom: 1px dotted #BBBBBB;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}

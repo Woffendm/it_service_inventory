@@ -1,38 +1,5 @@
-<!-- confirmation popup -->
-<script type="text/javascript">
-  $(document).ready(function(){  
-    var confirm_msg = "<%= l(:text_are_you_sure) %>";
-    var new_column_form = $("#new_column");
-    var new_column_made = false;
-    
-    
-    new_column_form.hide();
-    
-    
-    $("input[type='submit']").click(function(e){
-      if (!confirm(confirm_msg)) {
-        e.preventDefault();
-        return;
-      }
-      if (!new_column_made) {
-        new_column_form.html("");
-      }
-    });
-        
-    
-    $("#new_column_button").click(function(e) {
-      new_column_form.show();
-      new_column_made = true;
-    });
-    
-    
-    $(".delete_column").click(function(e) {
-      $($(this).attr("parent_id")).html("");
-    });
-  });
-</script>
 
-
+<%= stylesheet_link_tag 'scrum2b', :plugin => 'scrum2b' %>
 
 
 
@@ -44,110 +11,183 @@
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
 
 
-<% new_column = nil %>
-<% while new_column.blank? %>
-  <% tmp = rand(100) %>
-  <% new_column = tmp if @settings["board_columns"][tmp].blank? %>
-<% end %>
 
 
 
+  <!-- Commented out because this view is rendered in redmine's /settings/plugin.html.erb, and the div starts there 
+    <div class="box tabular">
+  -->
+
+      <div class="section_header">
+        <h3>
+          Sprint Sorting
+        </h3>
+      </div>
 
 
-<h3>
-  Sprint Sorting
-</h3>
+      <p>
+        <%= content_tag(:label, "Use project version")%>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
+      </p>
+      <p>
+        <%= content_tag(:label, "Use custom field")%>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
+      </p>
 
-<p>
-  <%= content_tag(:label, "Use project version")%>
-  <%= radio_button_tag("settings[use_version_for_sprint]", "true", @settings["use_version_for_sprint"]) %>
-</p>
-<p>
-  <%= content_tag(:label, "Use custom field")%>
-  <%= radio_button_tag("settings[use_version_for_sprint]", "false", @settings["use_version_for_sprint"]) %>
-</p>
+      <p>
+        <%= content_tag(:label, "Sprint custom field")%>
+        <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
+      </p>
 
-<p>
-  <%= content_tag(:label, "Sprint custom field")%>
-  <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
-</p>
+    </div>
 
 
-<h4>
-  &nbsp; 
-</h4>
-
-<br/>
-
-
-<h3>
-  Board Columns 
-  <%= button_tag("New Column", :type => :button, :id => "new_column_button") %>  
-</h3>
+    <div class="box tabular">
+      <div class="section_header">
+        <h3>
+          Board Columns 
+          <%= button_tag("New Column", :type => :button, :id => "new_column_button") %>  
+        </h3>
+      </div>
 
 
-
-<div id="new_column">
-  <p>
-    <%= content_tag(:label, "Name" )%>
-    <%= text_field_tag("settings[board_columns][#{new_column}][name]") %>
-    
-    <br/>
-    
-    <%= content_tag(:label, "Position" )%>
-    <%= select_tag("settings[board_columns][#{new_column}][position]", options_for_select(1..(@settings["board_columns"].length + 1))) %>
-    
-    <br/>
-  
-    <%= content_tag(:label, "Statuses" )%>
-    <% all_issue_statuses.each do |status| %>
-      <%= check_box_tag "settings[board_columns][#{new_column}][statuses][#{status.id}]" %>
-      <%= status.name %>
-      <br/>	
-    <% end %>
-  </p>
-  
-  <h4>
-    &nbsp; 
-  </h4>
-</div>
+      <div id="new_columns">
+      </div>
 
 
+      <% board_columns.each_with_index do |board_column, index| %>
+        <div class=<%= "subsection" unless board_column == board_columns.last %>
+        id="column_<%= index %>" >
+          <p>
+            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_#{ index }") %>  
 
+            <%= content_tag(:label, "Name" )%>
+            <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
 
+            <br/>
 
+            <%= content_tag(:label, "Position" )%>
+            <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
 
-<% board_columns.each_with_index do |board_column, index| %>
-  <div id="column_<%= index %>" >
-    <p>
-      <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_#{ index }") %>  
-            
-      <%= content_tag(:label, "Name" )%>
-      <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
-      
-      <br/>
-      
-      <%= content_tag(:label, "Position" )%>
-      <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
-      
-      <br/>
-    
-      <%= content_tag(:label, "Statuses" )%>
-      <% all_issue_statuses.each do |status| %>
-        <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
-        <%= status.name %>
-        <br/>	
+            <br/>
+
+            <%= content_tag(:label, "Statuses" )%>
+            <% all_issue_statuses.each do |status| %>
+              <span>
+                <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
+                <%= status.name %>
+              </span>
+            <% end %>
+          </p>
+        </div>
       <% end %>
-    </p>
-    
-    
-    <% unless board_column == board_columns.last %>
-      <h4>
-        &nbsp; 
-      </h4>
-    <% end %>
-  </div>
-<% end %>
+
+
+
+      <div id="template">
+        <div class="subsection" id="column_-1">
+          <p>
+            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_-1", :id => "delete_-1") %>  
+
+            <%= content_tag(:label, "Name" )%>
+            <%= text_field_tag("settings[board_columns][-1][name]") %>
+
+            <br/>
+
+            <%= content_tag(:label, "Position" )%>
+            <%= select_tag("settings[board_columns][-1][position]", options_for_select(1..(@settings["board_columns"].length + 1))) %>
+
+            <br/>
+
+            <%= content_tag(:label, "Statuses" )%>
+            <% all_issue_statuses.each do |status| %>
+              <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
+              <%= status.name %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+
+
+  <!-- Commented out because this view is rendered in redmine's /settings/plugin.html.erb, and the div ends there 
+    </div>
+  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- confirmation popup -->
+<script type="text/javascript">
+  $(document).ready(function(){  
+    var confirm_msg = "<%= l(:text_are_you_sure) %>";
+    var new_columns = $("#new_columns");
+    var delete_column = $(".delete_column");
+    var template = $("#template");
+    var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
+    var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
+
+    template.hide();
+    new_columns.hide();
+
+
+    $("input[type='submit']").click(function(e){
+      if (!confirm(confirm_msg)) {
+        e.preventDefault();
+        return;
+      }
+      template.remove();
+    });
+
+
+    $("#new_column_button").click(function(e) {
+      new_columns.show();
+      new_columns.prepend(template.html());
+      $("#column_-1").attr("id", "column_" + new_column_id);
+      $("#delete_-1").attr("parent_id", "#column_" + new_column_id);
+      $("#delete_-1").attr("id", "delete_" + new_column_id);
+      $("#settings_board_columns_-1_name").attr("id", "settings_board_columns_" + new_column_id + "_name");
+      $("#settings_board_columns_-1_position").attr("id", "settings_board_columns_" + new_column_id + "_position");
+      $.each(issue_ids, function(index, value) {
+        $("#settings_board_columns_-1_statuses_" + value).attr("id", "settings_board_columns_" + new_column_id + "_statuses_" + value);
+      });
+      new_column_id += 1;
+      delete_column = $(".delete_column");
+    });
+
+
+    delete_column.live("click", function(e) {
+      $($(this).attr("parent_id")).remove();
+    });
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
