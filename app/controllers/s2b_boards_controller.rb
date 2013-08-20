@@ -1,31 +1,39 @@
 class S2bBoardsController < ApplicationController
   unloadable
   before_filter :find_project, :only => [:index, :update, :update_status, :update_progress, :create,
-                                         :close_on_board, :filter_issues_onboard, :opened_versions_list, :closed_versions_list]
-  before_filter :set_status_settings
-  before_filter :check_before_board, :only => [:index, :close_on_board, :filter_issues_onboard, :update, :create]
+                                         :close_on_board, :filter_issues_onboard,
+                                         :opened_versions_list, :closed_versions_list]
+  before_filter :load_settings
+  before_filter :check_before_board, :only => [:index, :close_on_board, :filter_issues_onboard,
+                                               :update, :create]
   skip_before_filter :verify_authenticity_token
 
   self.allow_forgery_protection = false
-  
-  DEFAULT_STATUS_IDS = {}
-  STATUS_IDS = {'status_no_start' => [], 'status_inprogress' => [], 
-                'status_completed' => [], 'status_closed' => []}
+ 
+ 
  
   def index
-    @max_position_issue = @project.issues.maximum(:s2b_position).to_i+1
+    @max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
     @issue_no_position = @project.issues.where(:s2b_position => nil)
     @issue_no_position.each do |issue|
       issue.update_attribute(:s2b_position,@max_position_issue)
       @max_position_issue += 1
     end
     session[:view_issue] = "board"
-    @list_versions_open = opened_versions_list
-    @list_versions_closed = closed_versions_list
-    @new_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_no_start']).order(:s2b_position)
-    @started_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_inprogress']).order(:s2b_position)
-    @completed_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_completed']).order(:s2b_position)     
+    
+    if @use_version_for_sprint
+      @list_versions_open = opened_versions_list
+      @list_versions_closed = closed_versions_list
+    else
+      @custom_field_values = CustomField.find(@custom_field_id).possible_values
+    end
+    
+    @board_columns.each do |board_column|
+      board_column.merge!({:issues => @project.issues.where(session[:conditions]).where("status_id IN (?)", board_column[:status_ids])}) 
+    end
   end
+  
+  
   
   def update_status
     @issue = @project.issues.find(params[:issue_id])
@@ -40,12 +48,16 @@ class S2bBoardsController < ApplicationController
     end
   end
   
+  
+  
   def update_progress
     @issue = @project.issues.find(params[:issue_id])
     @issue.update_attribute(:done_ratio, params[:done_ratio])
     render :json => {:result => "success", :new => "Success to update the progress",
                      :new_ratio => params[:done_ratio]}
   end
+  
+  
   
   def close_on_board
     array_id= Array.new
@@ -66,6 +78,8 @@ class S2bBoardsController < ApplicationController
       }
     end
   end
+  
+
 
   def update
     @id_version  = params[:select_version]
@@ -91,6 +105,8 @@ class S2bBoardsController < ApplicationController
     end
   end
   
+  
+  
   def create
     @sort_issue = @project.issues.where("status_id IN (?)", STATUS_IDS['status_no_start'])    
     @issue = Issue.new(:subject => params[:subject], :description => params[:description], :tracker_id => params[:tracker],
@@ -110,6 +126,8 @@ class S2bBoardsController < ApplicationController
       render :json => {:result => "failure", :message => @issue.errors.full_messages}
     end
   end
+  
+  
   
   def filter_issues_onboard
     session[:params_select_version_onboard] = params[:select_version]
@@ -138,55 +156,82 @@ class S2bBoardsController < ApplicationController
     end
   end
   
+  
+  
   private
+  
   
   def opened_versions_list
     find_project unless @project
     return Version.where(status:"open").where(project_id: [@project.id,@project.parent_id])
   end
   
+  
+  
   def closed_versions_list 
     find_project unless @project
     return Version.where(status:"closed").where(project_id: [@project.id,@project.parent_id])
   end
+  
+  
   
   def find_project
     # @project variable must be set before calling the authorize filter
     project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
     @project = Project.find(project_id)
   end
+  
+  
+  
   def check_before_board
     @issue = Issue.new
     @priority = IssuePriority.all
     @tracker = Tracker.all
-    @status = IssueStatus.where("id IN (?)" , DEFAULT_STATUS_IDS['status_no_start'])
-    @sprints = @project.versions.where(:status => "open")
+    @status = IssueStatus.sorted
+    if @use_version_for_sprint
+      @sprints = @project.versions.where(:status => "open")
+    else
+      @sprints = CustomField.find(@custom_field_id).possible_values
+    end
     @project =  Project.find(params[:project_id])
     @member = @project.assignable_users
     @id_member = @member.collect{|id_member| id_member.id}    
   end
   
-  def set_status_settings
+
+
+
+
+  # Reminds user to configure plugin if it hasn't already been configured. 
+  def load_settings
     @plugin = Redmine::Plugin.find("scrum2b")
     @settings = Setting["plugin_#{@plugin.id}"]   
-    # Loop to set default of settings items
-    need_to_resetting = false
-    STATUS_IDS.keys.each do |column_name|
-      @settings[column_name].keys.each { |setting| 
-        STATUS_IDS[column_name].push(setting) 
-      } if @settings[column_name]
-      
-      if STATUS_IDS[column_name].empty?
-        need_to_resetting = true;
-      else
-        DEFAULT_STATUS_IDS[column_name] = STATUS_IDS[column_name].first
-      end
-    end
-     
-    if need_to_resetting
-      flash[:notice] = "The system has not been setup to use Scrum2B Tool. Please contact to Administrator " + 
-                       "or go to the Settings page of the plugin: <a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+    board_columns = @settings["board_columns"]
+    @board_columns = []
+    if board_columns.blank?
+      flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
+          " Please contact to Administrator or go to the Settings page of the plugin: " + 
+          "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
       redirect_to "/projects/#{@project.to_param}"
+      return
+    else
+      board_columns.each do |board_column|
+        if board_column.last["statuses"].blank?
+          flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
+              "' has no associated statuses. Please contact an Administrator " + 
+              "or go to the Settings page of the plugin: " + 
+              "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+          redirect_to "/projects/#{@project.to_param}"
+          return
+        else
+          @board_columns << {:name => board_column.last["name"], :status_ids => board_column.last["statuses"].keys}
+        end
+      end 
     end
+    
+    @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
+    @custom_field_id = @settings["custom_field_id"]
   end
+  
+  
 end

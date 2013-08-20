@@ -17,7 +17,9 @@ class S2bListsController < ApplicationController
                           :completed => 5,
                           :closed => 6,
                           :all => 7}
-                          
+
+
+
   def index
     @select_issue_options = SELECT_ISSUE_OPTIONS
     @list_versions_open = opened_versions_list
@@ -25,6 +27,7 @@ class S2bListsController < ApplicationController
     @id_member = @project.assignable_users.collect{|id_member| id_member.id}
     @list_versions = @project.versions.all
   end
+  
   
   
   def sort
@@ -74,6 +77,8 @@ class S2bListsController < ApplicationController
     end
   end
   
+  
+  
   def change_sprint
     array_id= Array.new
     array_id = params[:issue_id]
@@ -84,6 +89,8 @@ class S2bListsController < ApplicationController
     end
     filter_issues_onlist
   end
+  
+  
   
   def filter_issues_onlist
     @sort_versions = {}
@@ -136,6 +143,8 @@ class S2bListsController < ApplicationController
     end
   end
   
+  
+  
   def close_on_list
     array_id= Array.new
     array_id = params[:issue_id]
@@ -147,17 +156,24 @@ class S2bListsController < ApplicationController
     filter_issues_onlist   
   end
   
+  
+  
   private
+  
   
   def opened_versions_list
     find_project unless @project
     return Version.where(status:"open").where(project_id: [@project.id,@project.parent_id])
   end
   
+  
+  
   def closed_versions_list 
     find_project unless @project
     return Version.where(status:"closed").where(project_id: [@project.id,@project.parent_id])
   end
+  
+  
   
   def find_project
     # @project variable must be set before calling the authorize filter
@@ -165,26 +181,30 @@ class S2bListsController < ApplicationController
     @project = Project.find(project_id)
   end
   
+  
+  
+  # Reminds user to configure plugin if it hasn't already been configured. 
   def set_status_settings
     @plugin = Redmine::Plugin.find("scrum2b")
-    @settings = Setting["plugin_#{@plugin.id}"]
-    
-    # Loop to set default of settings items
+    @settings = Setting["plugin_#{@plugin.id}"]   
     need_to_resetting = false
-    STATUS_IDS.keys.each do |column_name|
-      @settings[column_name].keys.each { |setting| 
-        STATUS_IDS[column_name].push(setting) 
-      } if @settings[column_name]
-      
-      if STATUS_IDS[column_name].empty?
-        need_to_resetting = true;
-      else
-        DEFAULT_STATUS_IDS[column_name] = STATUS_IDS[column_name].first
-      end
+    board_columns = @settings["board_columns"]
+    
+    if board_columns.blank?
+      need_to_resetting = true
+    else
+      board_columns.each do |board_column|
+        if board_column.last["statuses"].blank?
+          flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + "' has no associated statuses. Please contact an Administrator " + 
+                           "or go to the Settings page of the plugin: <a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+          redirect_to "/projects/#{@project.to_param}"
+          return
+        end
+      end 
     end
      
     if need_to_resetting
-      flash[:notice] = "The system has not been setup to use Scrum2B Tool. Please contact to Administrator " + 
+      flash[:error] = "The system has not been setup to use Scrum2B Tool. Please contact to Administrator " + 
                        "or go to the Settings page of the plugin: <a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
       redirect_to "/projects/#{@project.to_param}"
     end

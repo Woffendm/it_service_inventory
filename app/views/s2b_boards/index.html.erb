@@ -1,8 +1,17 @@
-<%= render :partial => "/shared/plugin_header", :locals => {:is_board => true, :member => @member, :list_versions_open => @list_versions_open, :list_versions_closed => @list_versions_closed} %>
+<%= render :partial => "/shared/plugin_header", :locals => {:is_board => true, 
+      :member => @member, :list_versions_open => @list_versions_open, 
+      :list_versions_closed => @list_versions_closed, 
+      :custom_field_values => @custom_field_values, 
+      :use_version_for_sprint => @use_version_for_sprint} %>
+
 <div class="container-fluid">
-  <%= render :partial => "screen_board", :locals => { :id_member =>@id_member ,:new_issues => @new_issues ,:started_issues => @started_issues ,:completed_issues => @completed_issues,:issue => @issue,
-                                                      :tracker => @tracker , :priority => @priority,:member => @member,:status => @status,:sprints => @sprints} %>
+  <%= render :partial => "screen_board", :locals => { :id_member =>@id_member , 
+      :board_columns => @board_columns, :issue => @issue, :tracker => @tracker , 
+      :priority => @priority,:member => @member,:status => @status,:sprints => @sprints,
+      :use_version_for_sprint => @use_version_for_sprint} %>
 </div>
+
+
 <script>
   jQuery(function() {
     $("#completed").find(".icon_close_issue").show();
