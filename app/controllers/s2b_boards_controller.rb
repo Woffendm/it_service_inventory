@@ -22,10 +22,9 @@ class S2bBoardsController < ApplicationController
     session[:view_issue] = "board"
     
     if @use_version_for_sprint
-      @list_versions_open = opened_versions_list
-      @list_versions_closed = closed_versions_list
+      @sprints = Version.where(project_id: [@project.id, @project.parent_id])
     else
-      @custom_field_values = CustomField.find(@custom_field_id).possible_values
+      @sprints = CustomField.find(@custom_field_id).possible_values
     end
     
     @board_columns.each do |board_column|

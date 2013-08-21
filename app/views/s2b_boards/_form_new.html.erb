@@ -1,38 +1,40 @@
+
+
 <div class="editing clearfix" id="edit_issue_<%= issue.id %>" value="<%= issue.id %>">
-  <p><input class="span12 value_content" id="new_subject_<%= issue.id%>" type="text" value="<%= issue.subject %>"></p>
-  <textarea class="span12 value_content" id="new_description_<%= issue.id%>" style="height: 150px;margin-top:0"><%= issue.description %></textarea></p>
+  <%= text_field_tag("new_subject_#{issue.id}", issue.subject, :class => "span12 value_content") %>
+  <%= text_area_tag("new_description_#{issue.id}", issue.description, :class => "span12 value_content") %>
   
-  <div  class="span12" style="margin:0 0 5px 0;">
+  <div  class="span12">
     <div class="span6">
-      <p id="p_tracker_<%= issue.id%>"><span class="span5" style="font-size: 11px"><%= l(:label_tracker)%></span>
-      <select class="span7 value_content" id="new_tracker_<%= issue.id%>">
-        <% @tracker.each do |tracker|%>
-            <option value="<%= tracker.id %>" <%= "selected" if tracker.id == issue.tracker_id %>><%= tracker.name %></option>
-        <% end %>
-      </select></p>
+      <p id="p_tracker_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_tracker)%>
+        </span>
+        <%= select_tag("new_tracker_#{issue.id}", options_from_collection_for_select(@tracker, :id, :name, :selected => issue.tracker_id), :class => "span7 value_content") %>
+      </p>
       
-      <p id="p_status_<%= issue.id%>"><span class="span5"><%= l(:label_head_issue_status)%> </span>
-      <select class="span7 value_content" id="new_status_<%= issue.id%>">
-        <% @status.each do |status|%>
-            <option value="<%= status.id %>" <%= "selected" if status.id == issue.status_id %>><%= status.name %></option>
-        <% end %>
-      </select></p>
+      <p id="p_status_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_head_issue_status)%> 
+        </span>
+        <%= select_tag("new_status_#{issue.id}", options_from_collection_for_select(@status, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
+      </p>
       
-      <p id="p_priority_<%= issue.id%>"><span class="span5"><%= l(:label_priority)%> </span>
-      <select class="span7 value_content" id="new_priority_<%= issue.id%>">
-        <% @priority.each do |priority|%>
-            <option value="<%= priority.id %>" <%= "selected" if priority.id == issue.priority_id %>><%= priority.name %></option>
-        <% end %>
-      </select></p>
+      <p id="p_priority_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_priority)%> 
+        </span>
+        <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(@priority, :id, :name, :selected => issue.priority_id), :class => "span7 value_content") %>
+      </p>
       
-      <p id="p_assignee_<%= issue.id%>"><span class="span5"><%= l(:label_head_issue_assignee)%> </span>
-      <select class="span7 value_content" id="new_assignee_<%= issue.id%>">
-        <option></option>
-        <option value="<%= User.current.id %>" <%= "selected" if issue.assigned_to_id == User.current.id %>><%= l(:label_me)%></option>
-        <% @member.each do |assignee|%>
-            <option value="<%= assignee.id %>"  <%= "selected" if assignee.id == issue.assigned_to_id %>><%= assignee.name %></option>
-        <% end %>
-      </select></p>
+      <p id="p_assignee_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_head_issue_assignee)%> 
+        </span>
+        <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(@member, :id, :name, :selected => issue.assigned_to_id), :class => "span7 value_content", :include_blank => true) %>
+      </p>
+      
+      
       <p><span class="span5"><%= l(:label_start_date)%></span>
       <input class="span7 value_content"  id="new_date_start_<%= issue.id %>"  value="<%= format_date(issue.start_date)%>"></p>
     </div>
@@ -42,7 +44,7 @@
       <select class="span7 value_content" id="new_sprint_<%= issue.id%>">
         <option></option>
         <% @sprints.each do |sprint|%>
-            <option value="<%= sprint.id %>"  <%= "selected" if sprint.id == issue.fixed_version_id %>><%= sprint.name %></option>
+            <option value="<%= 1 %>"  <%= "selected" if 1 == issue.fixed_version_id %>><%= "cake" %></option>
         <% end %>
       </select></p>
       <p id="p_time_<%= issue.id%>"><span class="span5" style="text-align:justify; white-space: nowrap;"><%= l(:label_head_issue_est_time)%> </span>
