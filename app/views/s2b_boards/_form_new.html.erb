@@ -20,13 +20,6 @@
         <%= select_tag("new_status_#{issue.id}", options_from_collection_for_select(@status, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
       </p>
       
-      <p id="p_priority_<%= issue.id%>">
-        <span class="span5">
-          <%= l(:label_priority)%> 
-        </span>
-        <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(@priority, :id, :name, :selected => issue.priority_id), :class => "span7 value_content") %>
-      </p>
-      
       <p id="p_assignee_<%= issue.id%>">
         <span class="span5">
           <%= l(:label_head_issue_assignee)%> 
@@ -39,17 +32,29 @@
           <%= l(:label_sprint)%> 
         </span>
         <% if @use_version_for_sprint %>
-          <%= select_tag("new_sprint_#{issue.id}", options_from_collection_for_select(@sprints, :id, :name, :selected => issue.fixed_version_id), :class => "span7 value_content", :include_blank => true) %>
+          <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
+              @sprints, :id, :name, :selected => issue.fixed_version_id), 
+              :class => "span7 value_content", :include_blank => true) %>
+           <%= select_tag("new_custom_value_#{issue.id}", nil, :class => "hidden", :include_blank => true) %>
         <% else %>
           <% selected = nil %>
-          <% issue.custom_field_values.each do |cfv| %>
-            <% if cfv.custom_field.id.to_s == @custom_field_id %>
-              <% selected = cfv.value %>
+          <% issue.custom_values.each do |cv| %>
+            <% if cv.custom_field_id.to_s == @custom_field_id %>
+              <% selected = cv.value %>
               <% break %>
             <% end %>
           <% end %>
-          <%= select_tag("new_sprint_#{issue.id}", options_for_select(@sprints, :selected => selected), :class => "span7 value_content", :include_blank => true) %>
+          <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, :selected => selected), :class => "span7 value_content", :include_blank => true) %>
+          <%= select_tag("new_version_#{issue.id}", nil, :class => "hidden", :include_blank => true) %>
+          
         <% end %>
+      </p>
+      
+      <p id="p_time_<%= issue.id%>">
+        <span class="span5" style="text-align:justify; white-space: nowrap;">
+          <%= l(:label_head_issue_est_time)%> 
+        </span>
+        <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, :class => "span7 input-mini value_content") %>
       </p>
     </div>
     
@@ -62,11 +67,11 @@
     
     <div class="span6">
       
-      <p id="p_time_<%= issue.id%>">
-        <span class="span5" style="text-align:justify; white-space: nowrap;">
-          <%= l(:label_head_issue_est_time)%> 
+      <p id="p_priority_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_priority)%> 
         </span>
-        <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, :class => "span7 input-mini value_content") %>
+        <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(@priority, :id, :name, :selected => issue.priority_id), :class => "span7 value_content") %>
       </p>
       
       <p>

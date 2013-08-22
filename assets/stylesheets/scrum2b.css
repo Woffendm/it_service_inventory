@@ -12,3 +12,7 @@
 .hidden {
   display: none;
 }
+
+.float_right {
+  float: right;
+}
