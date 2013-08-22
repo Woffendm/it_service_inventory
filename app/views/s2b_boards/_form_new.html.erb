@@ -34,27 +34,60 @@
         <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(@member, :id, :name, :selected => issue.assigned_to_id), :class => "span7 value_content", :include_blank => true) %>
       </p>
       
-      
-      <p><span class="span5"><%= l(:label_start_date)%></span>
-      <input class="span7 value_content"  id="new_date_start_<%= issue.id %>"  value="<%= format_date(issue.start_date)%>"></p>
+      <p id="p_sprint_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_sprint)%> 
+        </span>
+        <% if @use_version_for_sprint %>
+          <%= select_tag("new_sprint_#{issue.id}", options_from_collection_for_select(@sprints, :id, :name, :selected => issue.fixed_version_id), :class => "span7 value_content", :include_blank => true) %>
+        <% else %>
+          <% selected = nil %>
+          <% issue.custom_field_values.each do |cfv| %>
+            <% if cfv.custom_field.id.to_s == @custom_field_id %>
+              <% selected = cfv.value %>
+              <% break %>
+            <% end %>
+          <% end %>
+          <%= select_tag("new_sprint_#{issue.id}", options_for_select(@sprints, :selected => selected), :class => "span7 value_content", :include_blank => true) %>
+        <% end %>
+      </p>
     </div>
     
+    
+    
+    
+    
+    
+    
+    
     <div class="span6">
-      <p id="p_sprint_<%= issue.id%>"><span class="span5"><%= l(:label_sprint)%> </span>
-      <select class="span7 value_content" id="new_sprint_<%= issue.id%>">
-        <option></option>
-        <% @sprints.each do |sprint|%>
-            <option value="<%= 1 %>"  <%= "selected" if 1 == issue.fixed_version_id %>><%= "cake" %></option>
-        <% end %>
-      </select></p>
-      <p id="p_time_<%= issue.id%>"><span class="span5" style="text-align:justify; white-space: nowrap;"><%= l(:label_head_issue_est_time)%> </span>
-      <input class="span7 input-mini value_content"  id="new_time_<%= issue.id%>" value="<%= issue.estimated_hours %>" style="text"/></p>
       
-      <p><span class="span5" ><%= l(:label_end_date)%></span>
-      <input class="span7 value_content"  id="new_date_end_<%= issue.id %>" value="<%= format_date(issue.due_date)%>"/></p>
+      <p id="p_time_<%= issue.id%>">
+        <span class="span5" style="text-align:justify; white-space: nowrap;">
+          <%= l(:label_head_issue_est_time)%> 
+        </span>
+        <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, :class => "span7 input-mini value_content") %>
+      </p>
+      
+      <p>
+        <span class="span5">
+          <%= l(:label_start_date)%>
+        </span>
+        <input class="span7 value_content"  id="new_date_start_<%= issue.id %>"  value="<%= format_date(issue.start_date)%>">
+      </p>
+      
+      <p>
+        <span class="span5" >
+          <%= l(:label_end_date)%>
+        </span>
+        <input class="span7 value_content"  id="new_date_end_<%= issue.id %>" value="<%= format_date(issue.due_date)%>"/>
+      </p>
 
     </div>
   </div>
+  
+  
+  
   <div class="submit_new_issue span12" value = "<%= issue.id %>">
     <button type="button" class="submit_issue btn-mini btn-primary">
       <%= l(:label_board_edit_btn_submit)%>

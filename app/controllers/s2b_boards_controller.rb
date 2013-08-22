@@ -24,11 +24,12 @@ class S2bBoardsController < ApplicationController
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
     else
-      @sprints = CustomField.find(@custom_field_id).possible_values
+      @sprints = @custom_field.possible_values
     end
     
     @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.where(session[:conditions]).where("status_id IN (?)", board_column[:status_ids])}) 
+      board_column.merge!({:issues => @project.issues.where("status_id IN (?)", board_column[:status_ids])}) 
+      # RE ADD .where(session[:conditions])
     end
   end
   
@@ -131,7 +132,8 @@ class S2bBoardsController < ApplicationController
   def filter_issues_onboard
     session[:params_select_version_onboard] = params[:select_version]
     session[:params_select_member] = params[:select_member]
-    session[:conditions] = ["(1=1)"]
+    session[:params_custom_field_value] = params[:custom_field_value]
+    session[:conditions] = ["true"]
     if session[:params_select_version_onboard] && session[:params_select_version_onboard] != "all"
       session[:conditions][0] += " AND fixed_version_id = ? "
       session[:conditions] << session[:params_select_version_onboard]
@@ -190,7 +192,7 @@ class S2bBoardsController < ApplicationController
     if @use_version_for_sprint
       @sprints = @project.versions.where(:status => "open")
     else
-      @sprints = CustomField.find(@custom_field_id).possible_values
+      @sprints = @custom_field.possible_values
     end
     @project =  Project.find(params[:project_id])
     @member = @project.assignable_users
@@ -229,7 +231,7 @@ class S2bBoardsController < ApplicationController
     end
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
-    @custom_field_id = @settings["custom_field_id"]
+    @custom_field = CustomField.find(@settings["custom_field_id"])
   end
   
   

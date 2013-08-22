@@ -24,7 +24,7 @@
 
 
 <% if is_board %>
-  <%= render :partial => "/shared/filter_board", :locals => {:is_board => is_board, :use_version_for_sprint => use_version_for_sprint, :sprints => sprints} %>
+  <%= render :partial => "/shared/filter_board", :locals => {:is_board => is_board} %>
 <% else %>
   <%= render :partial => "/shared/filter_list", :locals => { :list_version => @list_versions} %>
 <% end %>
