@@ -8,7 +8,7 @@
         <%= board_column[:name] %>
       </p>
       
-      <% if index == 0 && (@has_permission) %>
+      <% if index == 0 && @has_permission %>
         <p class="new_issue ">
           <img src="/plugin_assets/scrum2b/images/Add.ico" title="<%= board_column[:name] %>" class="icon_new_issue icon">
         </p>

@@ -305,3 +305,31 @@ img.icon{
   .float_right {
     float: right;
   }
+  
+  .float_left {
+    float: left;
+  }
+  
+.issue_show {
+  float: left;
+  font-size: 13px;
+  width: 100%;
+}
+
+.percent {
+  border:0;
+  font-weight: bold;
+  float: right;
+  margin-bottom: 0;
+  font-size: 13px;
+  width: 25px;
+  padding: 0px;
+  cursor: default;
+}
+
+
+.estimated {
+  float: left;
+  font-size: 12px;
+  margin-top: 5px;
+}

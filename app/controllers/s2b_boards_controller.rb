@@ -117,7 +117,7 @@ class S2bBoardsController < ApplicationController
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
     cv = CustomValue.new
     cv.customized_type = "Issue"
-    cv.value = "cake"
+    cv.value = params[:custom_value]
     cv.custom_field_id = @custom_field.id
     cv.save
     if @issue.save && @issue.custom_values << cv
