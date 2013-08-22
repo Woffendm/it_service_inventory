@@ -115,9 +115,12 @@ class S2bBoardsController < ApplicationController
         :start_date => params[:date_start], :due_date => params[:date_end], 
         :estimated_hours => params[:time], :author_id => params[:author],
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
-    if @issue.save && @issue.custom_values << CustomValue.create(:customized_type => "Issue",
-        :customized_id => @issue.id, :value => params[:custom_value])
-      # The above line doesn't work. The value is ALWAYS set to the custom field default value
+    cv = CustomValue.new
+    cv.customized_type = "Issue"
+    cv.value = "cake"
+    cv.custom_field_id = @custom_field.id
+    cv.save
+    if @issue.save && @issue.custom_values << cv
       @sort_issue.each do |issue|
         issue.update_attribute(:s2b_position, issue.s2b_position.to_i + 1)
       end
