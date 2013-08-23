@@ -1,5 +1,6 @@
 # English strings go here for Rails i18n
 en:
+  
   label_scrum2b: "Scrum2B"
   label_scrum2b_board: "Scrum Board"
   label_scrum2b_list: "Sprint Backlogs"
@@ -41,13 +42,13 @@ en:
   label_board_issue_new_issue: "New Issue"
   label_board_edit_btn_submit: "Submit"
   label_board_edit_btn_cancel: "Cancel"
-  label_readmore: "Readmore"
+  label_readmore: "Read more"
   label_hide: "Hide"
   
   label_tracker: "Tracker"
   label_priority: "Priority"
   label_start_date: "Start"
-  label_end_date: "End"
+  label_due_date: "Due"
   label_sprint: "Sprint"
   label_me: "<< Me >>"
   

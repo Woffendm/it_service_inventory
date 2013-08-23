@@ -85,8 +85,12 @@ margin:10px 0 0 0;
 		margin:-8px 0 0 0;
 	}
 	.description {
-     margin:-5px 0 0 0;
-	}
+    border-top: 1px solid #339BB9;
+    padding: 3px;
+    margin: 0 0 5px 0;
+    overflow: hidden;
+    font-size: 13px;
+  }
 	.description p {
 		margin: 0;
 		text-overflow: ellipsis;
@@ -103,13 +107,7 @@ margin:10px 0 0 0;
 	.submit_edit_issue {
 
 	}
-	 .div_description {
-    border-top: 1px solid #339BB9;
-    padding: 3px;
-    margin: 0 0 5px 0;
-    overflow: hidden;
-    font-size: 13px;
-  }
+
 	.readmore {
 		text-decoration: none;
 		font-size: 12px;
@@ -322,14 +320,31 @@ img.icon{
   float: right;
   margin-bottom: 0;
   font-size: 13px;
-  width: 25px;
+  width: 15px;
   padding: 0px;
   cursor: default;
+  background: transparent;
+}
+
+.center {
+  text-align: center;
+}
+
+.slider_footer {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.dates p{
+  margin-bottom: 0px;
+}
+
+.ui-slider-horizontal {
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 
-.estimated {
-  float: left;
-  font-size: 12px;
-  margin-top: 5px;
+.input-append input[class*="span"], .input-append .uneditable-input[class*="span"], .input-prepend input[class*="span"], .input-prepend .uneditable-input[class*="span"], .row-fluid input[class*="span"], .row-fluid select[class*="span"], .row-fluid textarea[class*="span"], .row-fluid .uneditable-input[class*="span"], .row-fluid .input-prepend [class*="span"], .row-fluid .input-append [class*="span"] {
+    margin-bottom: 5px;
 }

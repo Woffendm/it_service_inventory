@@ -2,55 +2,70 @@
   <p class="id">    
     #<%= link_to issue.id,:controller => 'issues', :action => 'show', :id => issue.id %>
   </p>
+  
   <% if @has_permission %>
     <p class="icon_close_issue">
       <i class="icon-remove" title="<%= l(:label_board_issue_text_close_issue) %>" id="close_<%= issue.id %>" alt="close_issue"></i>
     </p>  
+    
     <p class="icon_edit_issue">
       <i class="icon-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
     </p>  
   <% end %>
+  
   <div class="subject" >
     <p class="no_edit subject_issue" id="subject_<%= issue.id %>">
       <%= issue.subject %>
     </p>
   </div>
+  
   <div class="assignee clearfix">
-    <i class="icon-arrow-right float_left"></i>
     <% if issue.assigned_to %>
       <div class="no_edit float_left" id="assignee_<%= issue.id %>">
+        <i class="icon-arrow-right float_left"></i>
         <%= link_to issue.assigned_to, :controller => 'users', :action => 'show', 
             :id => issue.assigned_to.id %>
       </div>
     <% end %>
-    <div id="date_<%= issue.id %>" class="float_right">
-      <% if issue.due_date %>
-        <p class="float_right" id="end_date_<%= issue.id %>">
-          <%= issue.due_date %></p>
-        <i class="icon-arrow-right" class="float_right"></i>
-      <% else%>
-        <% if issue.fixed_version && issue.fixed_version.effective_date != nil %>
-          <p class="float_right" id="end_date_<%= issue.id %>">
-            <%= issue.fixed_version.effective_date %>(v)
-          </p>
-          <i class="icon-arrow-right" class="float_right"></i>
-        <% end %>
-      <% end %>
+    
+    <div id="date_<%= issue.id %>" class="float_right dates">
       <% unless issue.start_date.blank? %>
-        <p class="float_right" id="start_date_<%= issue.id %>">
-          <%= issue.start_date %>
+        <p id="start_date_<%= issue.id %>">
+          <%= l(:field_start_date) %>:
+          <%= format_date(issue.start_date) %>
         </p>
+      <% end %>
+      
+      <% if issue.due_date %>
+        <p id="end_date_<%= issue.id %>">
+          <%= l(:field_due_date) %>:
+          <span class="float_right">
+            <%= format_date(issue.due_date) %>
+          </span>
+        </p>
+      <% else %>
+        <% if issue.fixed_version && issue.fixed_version.effective_date != nil %>
+          <p id="end_date_<%= issue.id %>">
+            <%= l(:field_due_date) %>:
+            <span class="float_right">
+              <%= format_date(issue.fixed_version.effective_date) %>(v)
+            </span>
+          </p>
+        <% end %>
       <% end %>
     </div>
   </div>
+  
   
   <% unless issue.description.blank? %>
     <div class="description">
       <% if issue.description.to_s.length >= 100 %>
         <div class="div_description description_hide" id="description_hide_<%= issue.id %>">
-          <%= raw(issue.description.truncate(100, :separator => ' ').html_safe.gsub(/\n/, " <br/> ")) %>
+          <%= raw(issue.description.truncate(100, 
+              :separator => ' ').html_safe.gsub(/\n/, " <br/> ")) %>
         </div>
-        <div class="div_description description_readmore hidden" id="description_readmore_<%= issue.id %>">
+        <div class="div_description description_readmore hidden" 
+            id="description_readmore_<%= issue.id %>">
           <%= raw(issue.description.to_s.html_safe.gsub(/\n/, " <br/>")) %>
         </div>
         <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
@@ -66,25 +81,42 @@
       <% end %>
     </div>
   <% end %>
+  
+  
   <% if @has_permission %>
-    <div class="slider-horizontal" id="slider<%= issue.id%>" value="<%= issue.done_ratio%>"></div>
-    <p class="percent"> % </p>
-    <input type="button" id="amount<%= issue.id%>" class="percent" />
+    <div class="slider-horizontal" id="slider<%= issue.id %>" value="<%= issue.done_ratio %>"></div>
   <% else %>
-    <div class="progressbar" value="<%= issue.done_ratio%>" id="progress<%= issue.id%>"></div>
-    <p class="percent">
-      <%= issue.done_ratio %>%
-    </p>
+    <div class="progressbar" value="<%= issue.done_ratio %>" id="progress<%= issue.id %>"></div>
   <% end %>
   
-  <p class="estimated float_left">
-    <%= l(:label_board_issue_time) %>
-    <span id="est_<%= issue.id %>"> 
-      <%= issue.estimated_hours %>
-    </span>
-  </p>
-  <p class="sprint" style="font-size: 11px;text-align:center; margin-top: 10px">
-    <%= link_to issue.fixed_version,:controller => 'versions', :action => 'show', :id => issue.fixed_version_id if issue.fixed_version_id %>
-  </p>
+  
+  <div class="slider_footer">
+    <div class="float_right">
+      <% if @has_permission %>
+        <p class="percent"> % </p>
+        <input type="button" id="amount<%= issue.id %>" class="percent" />
+      <% else %>
+        <p class="percent">
+          <%= issue.done_ratio %> %
+        </p>
+      <% end %>
+    </div>
+    
+    <p class="float_left">
+      <%= l(:label_board_issue_time) %>
+      <span id="est_<%= issue.id %>"> 
+        <%= issue.estimated_hours %>
+      </span>
+    </p>
+    
+    <p class="center">
+      <% if @use_version_for_sprint %>
+        <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
+            :id => issue.fixed_version_id if issue.fixed_version_id %>
+      <% else %>
+        <%= issue.custom_values.find_by_custom_field_id(@custom_field.id) %>
+      <% end %>
+    </p>
+  </div>
 </div>
   

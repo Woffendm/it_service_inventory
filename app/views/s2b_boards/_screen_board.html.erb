@@ -3,7 +3,7 @@
   
   <% board_columns.each_with_index do |board_column, index| %>
   
-    <div class="board span<%= (12 / board_columns.length.to_f).ceil %>" id="column_<%= index %>">
+    <div class="board span<%= (12 / board_columns.length.to_f).floor %>" id="column_<%= index %>">
       <p class="status">
         <%= board_column[:name] %>
       </p>

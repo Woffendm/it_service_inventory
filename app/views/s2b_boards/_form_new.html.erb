@@ -7,6 +7,15 @@
   
   <div  class="span12">
     <div class="span6">
+      <p id="p_priority_<%= issue.id%>">
+        <span class="span5">
+          <%= l(:label_priority) %> 
+        </span>
+        <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
+            @priority, :id, :name, :selected => issue.priority_id),
+            :class => "span7 value_content") %>
+      </p>
+      
       <p id="p_tracker_<%= issue.id%>">
         <span class="span5">
           <%= l(:label_tracker)%>
@@ -58,13 +67,7 @@
         <% end %>
       </p>
       
-      <p id="p_time_<%= issue.id%>">
-        <span class="span5" style="text-align:justify; white-space: nowrap;">
-          <%= l(:label_head_issue_est_time)%> 
-        </span>
-        <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, 
-            :class => "span7 input-mini value_content") %>
-      </p>
+
     </div>
     
     
@@ -76,27 +79,26 @@
     
     <div class="span6">
       
-      <p id="p_priority_<%= issue.id%>">
-        <span class="span5">
-          <%= l(:label_priority)%> 
+      <p id="p_time_<%= issue.id%>">
+        <span class="span5" style="text-align:justify; white-space: nowrap;">
+          <%= l(:label_head_issue_est_time)%> 
         </span>
-        <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
-            @priority, :id, :name, :selected => issue.priority_id),
-            :class => "span7 value_content") %>
+        <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, 
+            :class => "span7 input-mini value_content") %>
       </p>
       
       <p>
         <span class="span5">
-          <%= l(:label_start_date)%>
+          <%= l(:label_start_date) %>
         </span>
-        <input class="span7 value_content"  id="new_date_start_<%= issue.id %>"  value="<%= format_date(issue.start_date)%>">
+        <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, :class => "span7 value_content") %>
       </p>
       
       <p>
         <span class="span5" >
-          <%= l(:label_end_date)%>
+          <%= l(:label_due_date) %>
         </span>
-        <input class="span7 value_content"  id="new_date_end_<%= issue.id %>" value="<%= format_date(issue.due_date)%>"/>
+        <%= text_field_tag("new_date_end_#{ issue.id }", issue.due_date, :class => "span7 value_content") %>
       </p>
 
     </div>

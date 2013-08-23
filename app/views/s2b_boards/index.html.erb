@@ -208,11 +208,17 @@
        return false;
   
       });
-      $( "#date_start_").datepicker();
-      $( "#date_end_").datepicker();
-      $( "#ate_start_").datepicker("option", "dateFormat", "yy-mm-dd");
-      $( "#date_end_").datepicker("option", "dateFormat", "yy-mm-dd");
-      
+      var start_date = $( "#date_start_");
+      var end_date = $( "#date_end_");
+      start_date.datepicker({
+          defaultDate: start_date.attr("value"),
+          dateFormat: "yy-mm-dd"
+      });
+      end_date.datepicker({
+          defaultDate: end_date.attr("value"),
+          dateFormat: "yy-mm-dd"
+      });
+
       $(".icon_new_issue").click(function(){
         $("#edit_issue_").show();
         $("#edit_issue_").addClass("board_issue");
@@ -226,10 +232,16 @@
       $("#p_sprint_" + id).hide(); 
     }
     function editDate(id){
-      $("#new_date_start_" + id).datepicker();
-      $("#new_date_end_" + id).datepicker();
-      $("#new_date_start_" + id).datepicker("option", "dateFormat", "yy-mm-dd");
-      $("#new_date_end_" + id).datepicker("option", "dateFormat", "yy-mm-dd");  
+      var start_date = $( "#new_date_start_" + id);
+      var end_date = $( "#new_date_end_" + id);
+      start_date.datepicker({
+          defaultDate: start_date.attr("value"),
+          dateFormat: "yy-mm-dd"
+      });
+      end_date.datepicker({
+          defaultDate: end_date.attr("value"),
+          dateFormat: "yy-mm-dd"
+      });
     }
     
     function makeSlider(id, slide_value) {
