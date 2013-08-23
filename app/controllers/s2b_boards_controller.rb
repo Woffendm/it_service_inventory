@@ -28,8 +28,10 @@ class S2bBoardsController < ApplicationController
     end
     
     @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.includes(:tracker, :fixed_version, {:custom_values => :custom_field}, {:project => :issue_custom_fields}).where("status_id IN (?)", board_column[:status_ids]).order(:s2b_position)}) 
-      # RE ADD .where(session[:conditions])
+      board_column.merge!({:issues => @project.issues.includes(:tracker, :fixed_version,
+          {:custom_values => :custom_field}, {:project => :issue_custom_fields}).where(
+          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).order(
+          :s2b_position)}) 
     end
   end
   
@@ -42,7 +44,8 @@ class S2bBoardsController < ApplicationController
     return unless @issue && !new_status.blank?
     new_status = new_status.to_f.to_i
     new_status = IssueStatus.find(@board_columns[new_status][:status_ids].first)
-    @issue.update_attributes(:done_ratio => new_status.default_done_ratio, :status_id => new_status.id)
+    @issue.update_attributes(:done_ratio => new_status.default_done_ratio, 
+        :status_id => new_status.id)
     
     # idk what this does. only done if was in "completed" column
     #  render :json => {:status => "completed", :done_ratio => 100 }
@@ -69,7 +72,10 @@ class S2bBoardsController < ApplicationController
     end
     respond_to do |format|
       format.js {
-        @return_content = render_to_string(:partial => "/s2b_boards/screen_board", :locals => {:id_member => @id_member, :project => @project, :tracker => @tracker, :priority => @priority,:member => @member, :issue => @issue, :status => @status, :sprints => @sprints })
+        @return_content = render_to_string(:partial => "/s2b_boards/screen_board", 
+            :locals => {:id_member => @id_member, :project => @project, :tracker => @tracker,
+            :priority => @priority,:member => @member, :issue => @issue, :status => @status,
+            :sprints => @sprints })
       }
     end
   end
@@ -139,27 +145,36 @@ class S2bBoardsController < ApplicationController
   def filter_issues_onboard
     session[:params_select_version_onboard] = params[:select_version]
     session[:params_select_member] = params[:select_member]
-    session[:params_custom_field_value] = params[:custom_field_value]
+    session[:params_custom_value] = params[:select_custom_value]
     session[:conditions] = ["true"]
-    if session[:params_select_version_onboard] && session[:params_select_version_onboard] != "all"
+    unless session[:params_select_version_onboard].blank? || session[:params_select_version_onboard] == "undefined"
       session[:conditions][0] += " AND fixed_version_id = ? "
       session[:conditions] << session[:params_select_version_onboard]
     end
-    if session[:params_select_member] && session[:params_select_member] == "me"
-      session[:conditions][0] += " AND assigned_to_id = ?"
-      session[:conditions] << User.current.id
-    elsif session[:params_select_member] && session[:params_select_member] != "all" && session[:params_select_member].to_i != 0
+    unless session[:params_select_member].blank?
       session[:conditions][0] += " AND assigned_to_id = ?"
       session[:conditions] << session[:params_select_member].to_i
     end
-    @new_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_no_start']).order(:s2b_position)
-    @started_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_inprogress']).order(:s2b_position)
-    @completed_issues = @project.issues.where(session[:conditions]).where("status_id IN (?)" , STATUS_IDS['status_completed']).order(:s2b_position)
+    unless session[:params_custom_value].blank? || session[:params_custom_value] == "undefined"
+      session[:conditions][0] += " AND custom_values.value = ?"
+      session[:conditions] << session[:params_custom_value].to_i
+      session[:conditions][0] += " AND custom_values.custom_field_id = ?"
+      session[:conditions] << @custom_field.id
+    end
+    
+    @board_columns.each do |board_column|
+      board_column.merge!({:issues => @project.issues.includes(:tracker, :fixed_version,
+          {:custom_values => :custom_field}, {:project => :issue_custom_fields}).where(
+          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).order(
+          :s2b_position)}) 
+    end
+    
     respond_to do |format|
       format.js {
-        @return_content = render_to_string(:partial => "/s2b_boards/screen_board",:locals => {:id_member => @id_member , :completed_issues => @completed_issues,:project => @project,:new_issues => @new_issues ,
-                                                                                                  :started_issues => @started_issues,:tracker => @tracker , :priority => @priority,:member => @member,
-                                                                                                  :issue => @issue,:status => @status,:sprints => @sprints })
+        @return_content = render_to_string(:partial => "/s2b_boards/screen_board", 
+            :locals => {:id_member => @id_member, :project => @project, :tracker => @tracker,
+            :priority => @priority, :member => @member, :issue => @issue, :status => @status,
+            :sprints => @sprints, :board_columns => @board_columns })
       }
     end
   end
@@ -240,6 +255,12 @@ class S2bBoardsController < ApplicationController
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
     @custom_field = CustomField.find(@settings["custom_field_id"])
+    
+    if @use_version_for_sprint
+      session[:params_custom_value] = nil
+    else
+      session[:params_select_version_onboard] = nil
+    end
   end
   
   

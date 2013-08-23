@@ -29,13 +29,14 @@
     });
     $("#btn_filter_issues_on_board").live("click",function(){
       var select_version = $("#select_version_onboard").val()
+      var select_custom_value = $("#select_custom_value_onboard").val()
       var select_member = $("#select_member").val()
       var project_id = <%= @project.id %>
       var url_ajax = 'filter_issues_onboard'
       $.ajax({
         url : url_ajax,
         type : "POST",
-        data : 'select_version=' + select_version + '&select_member=' + select_member + '&project_id=' + project_id,
+        data : 'select_version=' + select_version + '&select_member=' + select_member + '&project_id=' + project_id + '&select_custom_value=' + select_custom_value,
         dataType : "script",
         success : function() {}
       });

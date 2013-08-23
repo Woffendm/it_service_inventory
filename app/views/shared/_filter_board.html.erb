@@ -6,9 +6,15 @@
     <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
     
     <% if @use_version_for_sprint %>
-      <%= select_tag("select_version", options_from_collection_for_select(@sprints, :id, :name, :selected => session[:params_select_version_onboard].to_i), {:id => "select_version_onboard", :prompt => "All Sprints"}) %>
+      <%= select_tag("select_version", options_from_collection_for_select(@sprints, :id, 
+          :name, :selected => session[:params_select_version_onboard].to_i), 
+          {:id => "select_version_onboard", :prompt => "All Sprints"}) %>
+      <%= select_tag("select_custom_value", nil, :class => "hidden", :include_blank => true) %>
     <% else %>
-      <%= select_tag("select_custom_field_value", options_for_select(@sprints, :selected => session[:params_custom_field_value]), {:id => "select_custom_field_value_onboard", :prompt => "All Sprints"}) %>
+      <%= select_tag("select_custom_value", options_for_select(@sprints, 
+          :selected => session[:params_custom_value]), {:id => "select_custom_value_onboard",
+          :prompt => "All Sprints"}) %>
+      <%= select_tag("select_version", nil, :class => "hidden", :include_blank => true) %>
     <% end %>
   </span>
   
