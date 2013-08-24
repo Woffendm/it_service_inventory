@@ -28,10 +28,10 @@ class S2bBoardsController < ApplicationController
     end
     
     @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.includes(:tracker, :fixed_version,
-          {:custom_values => :custom_field}, {:project => :issue_custom_fields}).where(
-          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).order(
-          :s2b_position)}) 
+      board_column.merge!({:issues => @project.issues.eager_load(:assigned_to, :tracker,
+          :fixed_version, :custom_values, {:project => :issue_custom_fields}).where(
+          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).where(
+          :custom_values => {:custom_field_id => @custom_field.id}).order(:s2b_position)}) 
     end
   end
   
@@ -46,6 +46,17 @@ class S2bBoardsController < ApplicationController
     new_status = IssueStatus.find(@board_columns[new_status][:status_ids].first)
     @issue.update_attributes(:done_ratio => new_status.default_done_ratio, 
         :status_id => new_status.id)
+        
+    
+    if @issue.valid? 
+      data  = render_to_string(:partial => "/s2b_boards/show_issue", 
+                               :locals => {:issue => @issue})
+      render :json => {:result => "update_success", :message => "Success to update the message",
+                       :content => data}
+    else
+      render :json => {:result => "failure", :message => @issue.errors.full_messages,
+                       :content => data}
+    end
     
     # idk what this does. only done if was in "completed" column
     #  render :json => {:status => "completed", :done_ratio => 100 }
@@ -119,7 +130,7 @@ class S2bBoardsController < ApplicationController
         :status_id => params[:status], :assigned_to_id => params[:assignee],
         :priority_id => params[:priority], :fixed_version_id => params[:version], 
         :start_date => params[:date_start], :due_date => params[:date_end], 
-        :estimated_hours => params[:time], :author_id => params[:author],
+        :estimated_hours => params[:time], :author_id => User.current.id,
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
     cv = CustomValue.new
     cv.customized_type = "Issue"
@@ -163,8 +174,9 @@ class S2bBoardsController < ApplicationController
     end
     
     @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.includes(:tracker, :fixed_version,
-          {:custom_values => :custom_field}, {:project => :issue_custom_fields}).where(
+      board_column.merge!({:issues => @project.issues.includes(:assigned_to, :tracker,
+          :fixed_version, {:custom_values => :custom_field}, 
+          {:project => :issue_custom_fields}).where(
           "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).order(
           :s2b_position)}) 
     end

@@ -14,7 +14,7 @@
         </p>
       <% end %>
       
-      <div class="connectedSortable" id ="<% if @has_permission %>column_content_<%= index %><% else %>column_content_<%= index %>_nomember<% end %>" value="status_no_start">
+      <div class="connectedSortable" status="<%= index %>">
         <%= render :partial => "form_new", :locals => { :issue => issue}  if index == 0 %>
         <% board_column[:issues].each do |issue|%>
           <li id ="<%= issue.id %>">

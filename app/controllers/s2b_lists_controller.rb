@@ -2,21 +2,11 @@ class S2bListsController < ApplicationController
   unloadable
   before_filter :find_project, :only => [:index, :change_sprint, :close_on_list, :sort,
                                          :filter_issues_onlist]
-  before_filter :set_status_settings 
+  before_filter :load_settings 
   before_filter :filter_issues_onlist, :only => [:index]
   skip_before_filter :verify_authenticity_token
   self.allow_forgery_protection = false
   
-  DEFAULT_STATUS_IDS = {}
-  STATUS_IDS = {'status_no_start' => [], 'status_inprogress' => [], 
-                       'status_completed' => [], 'status_closed' => []}
-  SELECT_ISSUE_OPTIONS = {:all_working => 1,
-                          :my => 2, 
-                          :my_completed => 3, 
-                          :new => 4, 
-                          :completed => 5,
-                          :closed => 6,
-                          :all => 7}
 
 
 
@@ -184,29 +174,41 @@ class S2bListsController < ApplicationController
   
   
   # Reminds user to configure plugin if it hasn't already been configured. 
-  def set_status_settings
+  def load_settings
     @plugin = Redmine::Plugin.find("scrum2b")
     @settings = Setting["plugin_#{@plugin.id}"]   
-    need_to_resetting = false
     board_columns = @settings["board_columns"]
-    
+    @board_columns = []
     if board_columns.blank?
-      need_to_resetting = true
+      flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
+          " Please contact to Administrator or go to the Settings page of the plugin: " + 
+          "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+      redirect_to "/projects/#{@project.to_param}"
+      return
     else
       board_columns.each do |board_column|
         if board_column.last["statuses"].blank?
-          flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + "' has no associated statuses. Please contact an Administrator " + 
-                           "or go to the Settings page of the plugin: <a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+          flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
+              "' has no associated statuses. Please contact an Administrator " + 
+              "or go to the Settings page of the plugin: " + 
+              "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
           redirect_to "/projects/#{@project.to_param}"
           return
+        else
+          @board_columns << {:name => board_column.last["name"], :status_ids => board_column.last["statuses"].keys}
         end
       end 
     end
-     
-    if need_to_resetting
-      flash[:error] = "The system has not been setup to use Scrum2B Tool. Please contact to Administrator " + 
-                       "or go to the Settings page of the plugin: <a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
-      redirect_to "/projects/#{@project.to_param}"
+    
+    @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
+    @custom_field = CustomField.find(@settings["custom_field_id"])
+    
+    if @use_version_for_sprint
+      session[:params_custom_value] = nil
+    else
+      session[:params_select_version_onboard] = nil
     end
   end
+  
+  
 end

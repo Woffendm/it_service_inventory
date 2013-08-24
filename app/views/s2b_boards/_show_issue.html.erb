@@ -114,7 +114,7 @@
         <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
             :id => issue.fixed_version_id if issue.fixed_version_id %>
       <% else %>
-        <%= issue.custom_values.find_by_custom_field_id(@custom_field.id) %>
+        <%# issue.custom_values.find_by_custom_field_id(@custom_field.id) %>
       <% end %>
     </p>
   </div>
