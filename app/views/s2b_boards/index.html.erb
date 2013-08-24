@@ -11,7 +11,7 @@
 
 
 <script>
-  jQuery(function() {
+  $(document).ready(function(){  
     $("#completed").find(".icon_close_issue").show();
     $(".icon_close_issue").live("click",function(){
       var issue_id = $(this).parent().attr("value")

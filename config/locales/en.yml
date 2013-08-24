@@ -34,7 +34,8 @@ en:
   label_board_status_new: "New Issues"
   label_board_status_inprogress: "In Progress"
   label_board_status_completed: "Completed"
-  
+
+  label_board_issue_text_new_issue: "New Issue"
   label_board_issue_text_close_issue: "Close Issue"
   label_board_issue_text_edit_issue: "Edit Issue"
   label_board_issue_time: "Est Time:"
