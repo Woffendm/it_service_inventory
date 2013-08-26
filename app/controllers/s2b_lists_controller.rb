@@ -11,11 +11,15 @@ class S2bListsController < ApplicationController
 
 
   def index
-    @select_issue_options = SELECT_ISSUE_OPTIONS
-    @list_versions_open = opened_versions_list
-    @list_versions_closed = closed_versions_list 
+    @member = @project.assignable_users
     @id_member = @project.assignable_users.collect{|id_member| id_member.id}
-    @list_versions = @project.versions.all
+    @issue_statuses = IssueStatus.sorted
+    if @use_version_for_sprint
+      @sprints = Version.where(project_id: [@project.id, @project.parent_id])
+    else
+      @sprints = @custom_field.possible_values
+    end
+    @has_permission = true if !User.current.anonymous? && @id_member.include?(User.current.id) || User.current.admin
   end
   
   
@@ -76,56 +80,71 @@ class S2bListsController < ApplicationController
   
   
   
-  def filter_issues_onlist
-    @sort_versions = {}
-      if session[:view_issue].nil? || session[:view_issue] == "board" && (params[:switch_screens] || "").blank?
-        redirect_to :controller => "s2b_boards", :action => "index" ,:project_id =>  params[:project_id]
-        return
-      end
-    session[:view_issue] = "list"
-    session[:param_select_version]  = (params[:select_version] || "version_working")
-    session[:param_select_issues] = params[:select_issue].to_i if params[:select_issue]
+  
+  def filter_issues_onlist    
+    if session[:view_issue].blank? || session[:view_issue] == "board" && 
+        params[:switch_screens].blank?
+      redirect_to :controller => "s2b_boards", :action => "index", 
+          :project_id => params[:project_id]
+      return
+    end
     
-    if session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:new]
-      all_backlog_status = STATUS_IDS['status_no_start'].dup
-    elsif session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:completed] || session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:my_completed]
-      all_backlog_status = STATUS_IDS['status_completed'].dup
-    elsif session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:closed] 
-      all_backlog_status = STATUS_IDS['status_closed'].dup
-    elsif !session[:param_select_issues] || session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:all_working]
-      all_backlog_status = STATUS_IDS['status_no_start'].dup
-      all_backlog_status.push(STATUS_IDS['status_inprogress'].dup)
-      all_backlog_status.push(STATUS_IDS['status_completed'].dup)
-    else 
-      all_backlog_status = STATUS_IDS['status_no_start'].dup
-      all_backlog_status.push(STATUS_IDS['status_inprogress'].dup)
-      all_backlog_status.push(STATUS_IDS['status_completed'].dup)
-      all_backlog_status.push(STATUS_IDS['status_closed'].dup)
-    end
-    @issues = Issue.where(status_id: all_backlog_status.to_a).order("status_id, s2b_position DESC")
-    # Filter my issues 
-    if session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:my] || session[:param_select_issues] == SELECT_ISSUE_OPTIONS[:my_completed]
-        @issues = @issues.where(:assigned_to_id => User.current.id)
-    end
-    if session[:param_select_version] && session[:param_select_version] == "all"
-      versions = @project.versions.order("created_on")
-    elsif session[:param_select_version] && session[:param_select_version] != "version_working" && session[:param_select_version] != "all"
-      versions = Version.where(:id => session[:param_select_version]).order("created_on")
+    
+    session[:view_issue] = "list"
+    session[:param_select_issue] = params[:select_issue].to_i unless params[:select_issue].blank?
+    
+    
+    if session[:param_select_issue].blank?
+      all_backlog_statuses = IssueStatus.sorted.pluck(:id)
     else
-      versions = @project.versions.where("status NOT IN (?)","closed").order("created_on")
+      all_backlog_statuses = [session[:param_select_issue]]
     end
-    versions.each do |version|
-      @sort_versions[version] = @issues.where(fixed_version_id: version)
+    issue_ids =  Issue.where(:status_id => all_backlog_statuses.to_a).order(
+        "status_id, s2b_position DESC").pluck(:id)
+    @issue_backlogs = @project.issues.where(:fixed_version_id => nil).where(
+        "id IN (?)", issue_ids).order("status_id, s2b_position")
+    
+    
+    @sorted_issues = []
+    if @use_version_for_sprint
+      session[:param_select_version]  = params[:select_version]
+      if session[:param_select_version].blank?
+        versions = @project.versions.order("created_on")
+      else
+        versions = @project.versions.where(:id => session[:param_select_version]
+            ).order("created_on")
+      end
+      versions.each do |version|
+        @sorted_versions << {:name => version.name, :issues => @issues.where(
+            :fixed_version_id => version)}
+      end
+    else
+      session[:param_select_custom_value]  = params[:select_custom_value]
+      if session[:param_select_custom_value].blank?
+        custom_values = @custom_field.possible_values
+      else
+        custom_values = [session[:param_select_custom_value]]
+      end
+      custom_values.each do |cv|
+        issues =  @project.issues.eager_load(:assigned_to,
+            :tracker, :fixed_version, :custom_values, {:project => :issue_custom_fields}).where(
+            :custom_values => {:custom_field_id => @custom_field.id, :value => cv}
+            ).order(:s2b_position)
+        @sorted_issues << {:name => cv, :issues => issues}
+      end
     end
-    id_issues = @issues.collect{|id_issue| id_issue.id}
-    @issue_backlogs = @project.issues.where(:fixed_version_id => nil).where("id IN (?)",id_issues).order("status_id, s2b_position")
+    
+    
     respond_to do |format|
       format.js {
-        @return_content = render_to_string(:partial => "/s2b_lists/screen_list",:locals => {:sort_versions => @sort_versions,:issues_backlog => @issues_backlog})
+        @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
+            :locals => {:sorted_issues => @sorted_issues, :issue_backlogs => @issue_backlogs})
       }
       format.html {}
     end
   end
+  
+  
   
   
   
@@ -199,8 +218,10 @@ class S2bListsController < ApplicationController
     
     if @use_version_for_sprint
       session[:params_custom_value] = nil
+      session[:param_select_custom_value] = nil
     else
       session[:params_select_version_onboard] = nil
+      session[:param_select_version] = nil
     end
   end
   

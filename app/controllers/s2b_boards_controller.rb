@@ -16,7 +16,7 @@ class S2bBoardsController < ApplicationController
     @max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
     @issue_no_position = @project.issues.where(:s2b_position => nil)
     @issue_no_position.each do |issue|
-      issue.update_attribute(:s2b_position,@max_position_issue)
+      issue.update_attribute(:s2b_position, @max_position_issue)
       @max_position_issue += 1
     end
     session[:view_issue] = "board"
