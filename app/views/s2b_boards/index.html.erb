@@ -27,6 +27,8 @@
       });
       return false;
     });
+    
+    
     $("#btn_filter_issues_on_board").live("click",function(){
       var select_version = $("#select_version_onboard").val()
       var select_custom_value = $("#select_custom_value_onboard").val()
@@ -38,55 +40,61 @@
         type : "POST",
         data : 'select_version=' + select_version + '&select_member=' + select_member + '&project_id=' + project_id + '&select_custom_value=' + select_custom_value,
         dataType : "script",
-        success : function() {}
+        success : function() {
+          setup_sortable_columns();
+        }
       });
       return false;
     });
     
     
-    var sortable_columns = $(".connectedSortable");
-    sortable_columns.sortable({
-      scroll: true, scrollSensitivity: 100, scrollSpeed: 100,
-      connectWith: ".connectedSortable",
-      sort: function(){
-        $(this).find(".ui-sortable-helper").addClass("check");
-      },
-      receive: function(){
-        var status = sortable_columns.index(this);
-        var project_id = <%= @project.id %>;
-        var url_ajax = 'update_status';
-        var issue_id = $(this).find(".check").attr("id");
-        $.ajax({
-          url : url_ajax,
-          type : "POST",
-          data : 'issue_id=' + issue_id + '&project_id=' + project_id + '&status=' + status,
-          dataType : "json",
-          success : function(res) {
-            if (res.status == "completed"){
-              makeSlider(issue_id,res.done_ratio);
+    function setup_sortable_columns() {
+      var sortable_columns = $(".connectedSortable");
+      sortable_columns.sortable({
+        scroll: true, scrollSensitivity: 100, scrollSpeed: 100,
+        connectWith: ".connectedSortable",
+        sort: function(){
+          $(this).find(".ui-sortable-helper").addClass("check");
+        },
+        receive: function(){
+          var status = sortable_columns.index(this);
+          var project_id = <%= @project.id %>;
+          var url_ajax = 'update_status';
+          var issue_id = $(this).find(".check").attr("id");
+          $.ajax({
+            url : url_ajax,
+            type : "POST",
+            data : 'issue_id=' + issue_id + '&project_id=' + project_id + '&status=' + status,
+            dataType : "json",
+            success : function(res) {
+              if (res.status == "completed"){
+                makeSlider(issue_id,res.done_ratio);
+              }
             }
-          }
-        });
-      },
-      stop: function() {
-        var issue_id = $(".check").attr("id");
-        var url_sort = "<%= lists_sort_path %>";
-        var project_id = <%= @project.id %>;
-        var id_next = $(".check").next().attr("id");
-        var id_prev = $(".check").prev().attr("id");
-        var old_status = $(this).attr("value");
-        var new_status = $(".check").parent().attr("value");
-        $(".check").removeClass("check");
-        console.debug(id_prev);
-        $.ajax({
-          url : url_sort,
-          type : "POST",
-          data : 'issue_id=' + issue_id +'&id_prev=' + id_prev + '&project_id=' + project_id + '&id_next=' + id_next + '&new_status=' + new_status + '&old_status=' + old_status,
-          dataType : "text",
-          success : function(){}
-        });
-      }
-    });
+          });
+        },
+        stop: function() {
+          var issue_id = $(".check").attr("id");
+          var url_sort = "<%= lists_sort_path %>";
+          var project_id = <%= @project.id %>;
+          var id_next = $(".check").next().attr("id");
+          var id_prev = $(".check").prev().attr("id");
+          var old_status = $(this).attr("value");
+          var new_status = $(".check").parent().attr("value");
+          $(".check").removeClass("check");
+          console.debug(id_prev);
+          $.ajax({
+            url : url_sort,
+            type : "POST",
+            data : 'issue_id=' + issue_id +'&id_prev=' + id_prev + '&project_id=' + project_id + '&id_next=' + id_next + '&new_status=' + new_status + '&old_status=' + old_status,
+            dataType : "text",
+            success : function(){}
+          });
+        }
+      });
+    };
+    
+    setup_sortable_columns();
     
     
     $(".slider-horizontal").each(function() {

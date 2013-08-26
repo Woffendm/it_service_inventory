@@ -114,7 +114,7 @@
         <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
             :id => issue.fixed_version_id if issue.fixed_version_id %>
       <% else %>
-        <%= issue.custom_values.first.value %>
+        <%= issue.custom_values.last.value %>
       <% end %>
     </p>
   </div>
