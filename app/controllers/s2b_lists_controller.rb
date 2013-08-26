@@ -91,23 +91,16 @@ class S2bListsController < ApplicationController
     
     
     session[:view_issue] = "list"
-    session[:param_select_issue] = params[:select_issue].to_i unless params[:select_issue].blank?
-    
-    
-    if session[:param_select_issue].blank?
-      all_backlog_statuses = IssueStatus.sorted.pluck(:id)
-    else
-      all_backlog_statuses = [session[:param_select_issue]]
-    end
-    issue_ids =  Issue.where(:status_id => all_backlog_statuses.to_a).order(
-        "status_id, s2b_position DESC").pluck(:id)
-    @issue_backlogs = @project.issues.where(:fixed_version_id => nil).where(
-        "id IN (?)", issue_ids).order("status_id, s2b_position")
+    session[:param_select_issue] = params[:select_issue]
+    @issue_backlogs = @project.issues.eager_load(:custom_values, :status, :assigned_to)
+    @issue_backlogs = @issue_backlogs.where(:status_id => session[:param_select_issue]) unless
+        session[:param_select_issue].blank?
     
     
     @sorted_issues = []
     if @use_version_for_sprint
       session[:param_select_version]  = params[:select_version]
+      @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
       if session[:param_select_version].blank?
         versions = @project.versions.order("created_on")
       else
@@ -120,6 +113,8 @@ class S2bListsController < ApplicationController
       end
     else
       session[:param_select_custom_value]  = params[:select_custom_value]
+      issue_ids_with_custom_field = @project.issues.joins(:custom_values).where("custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL", @custom_field.id).pluck(:id)
+      @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       if session[:param_select_custom_value].blank?
         custom_values = @custom_field.possible_values
       else
@@ -134,6 +129,8 @@ class S2bListsController < ApplicationController
       end
     end
     
+    @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
+    @issue_backlogs = @issue_backlogs.order("status_id, s2b_position")
     
     respond_to do |format|
       format.js {

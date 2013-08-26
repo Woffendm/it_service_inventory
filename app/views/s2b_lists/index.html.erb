@@ -1,6 +1,7 @@
 <%= render :partial => "/shared/plugin_header", :locals => {:is_board => false} %>
 <div class="container-fluid" id="div_screen_list">
-  <%= render :partial => "screen_list", :locals => {:sort_versions => @sort_versions,:issues_backlog => @issues_backlog} %>
+  <%= render :partial => "screen_list", :locals => {:sorted_issues => @sorted_issues, 
+      :issue_backlogs => @issue_backlogs} %>
 </div>
 <script>
   jQuery(function() {

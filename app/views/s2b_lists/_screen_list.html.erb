@@ -4,22 +4,37 @@
       <th id="check_all">
         <i class="icon-check" title="Check all"></i>
       </th>
-      <th>#</th>
-      <th><%= l(:label_head_issue_status)%></th>
-      <th><%= l(:label_head_issue_subject)%></th>
-      <th><%= l(:label_head_issue_assignee)%></th>
-      <th><%= l(:label_head_issue_updated)%></th>
-      <th><%= l(:label_head_issue_est_time)%></th>
-      <th><%= l(:label_head_issue_done)%></th>
+      <th> 
+        # 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_priority) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_status) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_subject) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_assignee) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_updated) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_est_time) %> 
+      </th>
+      <th> 
+        <%= l(:label_head_issue_done) %> 
+      </th>
     </tr>
   </thead>
 
   <tbody>
-    <% if @sort_versions %>
-      <%= render :partial => "version", :locals =>{:sort_versions => @sort_versions}  %>
+    <% if @sorted_issues %>
+      <%= render :partial => "version", :locals =>{:sorted_issues => @sorted_issues}  %>
     <% end %>
-    <% if !params[:select_version] || params[:select_version] && params[:select_version] == 'all' ||  params[:select_version] == 'version_working' || params[:select_version] == 'backlog'%>
-      <%= render :partial => "backlog", :locals =>{:issues_backlog => @issue_backlogs }%>
-    <% end %>
+    <%= render :partial => "backlog", :locals =>{:issue_backlogs => @issue_backlogs }%>
   </tbody>
 </table>

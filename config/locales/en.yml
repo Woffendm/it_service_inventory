@@ -19,6 +19,7 @@ en:
   label_btn_submit_selected: "Filter"
   label_group_closed_sprin: "Closed Sprint"
   
+  label_head_issue_priority: "Priority"
   label_head_issue_status: "Status"
   label_head_issue_subject: "Subject"
   label_head_issue_assignee: "Assignee"
@@ -28,6 +29,8 @@ en:
   
   
   label_version_backlog: "Backlog"
+  label_version_no_sprint: "No Sprint"
+  
 
   label_select_all_member: "All Member"
   label_select_me: "Me"
