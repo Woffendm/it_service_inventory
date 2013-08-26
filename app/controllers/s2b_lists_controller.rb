@@ -13,7 +13,7 @@ class S2bListsController < ApplicationController
   def index
     @member = @project.assignable_users
     @id_member = @project.assignable_users.collect{|id_member| id_member.id}
-    @issue_statuses = IssueStatus.sorted
+    @issue_statuses = IssueStatus.sorted.where(:is_closed => false)
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
     else
@@ -67,19 +67,6 @@ class S2bListsController < ApplicationController
   
   
   
-  def change_sprint
-    array_id= Array.new
-    array_id = params[:issue_id]
-    int_array = array_id.split(',').collect(&:to_i)
-    issues = @project.issues.where(:id => int_array)
-    issues.each do |issue|
-      issue.update_attribute(:fixed_version_id,params[:new_sprint])
-    end
-    filter_issues_onlist
-  end
-  
-  
-  
   
   def filter_issues_onlist    
     if session[:view_issue].blank? || session[:view_issue] == "board" && 
@@ -89,13 +76,11 @@ class S2bListsController < ApplicationController
       return
     end
     
-    
     session[:view_issue] = "list"
     session[:param_select_issue] = params[:select_issue]
     @issue_backlogs = @project.issues.eager_load(:custom_values, :status, :assigned_to)
     @issue_backlogs = @issue_backlogs.where(:status_id => session[:param_select_issue]) unless
         session[:param_select_issue].blank?
-    
     
     @sorted_issues = []
     if @use_version_for_sprint
@@ -108,12 +93,18 @@ class S2bListsController < ApplicationController
             ).order("created_on")
       end
       versions.each do |version|
-        @sorted_versions << {:name => version.name, :issues => @issues.where(
-            :fixed_version_id => version)}
+        issues = @project.issues.eager_load(:assigned_to, :status, :tracker, 
+            :fixed_version,).where(:fixed_version_id => version, 
+            :issue_statuses => {:is_closed => false})
+        issues = issues.where(:status_id => session[:param_select_issue]) unless
+            session[:param_select_issue].blank?
+        @sorted_issues << {:name => version.name, :issues => issues.order(:s2b_position)}
       end
     else
       session[:param_select_custom_value]  = params[:select_custom_value]
-      issue_ids_with_custom_field = @project.issues.joins(:custom_values).where("custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL", @custom_field.id).pluck(:id)
+      issue_ids_with_custom_field = @project.issues.joins(:custom_values).where(
+          "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
+           @custom_field.id).pluck(:id)
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       if session[:param_select_custom_value].blank?
         custom_values = @custom_field.possible_values
@@ -121,11 +112,13 @@ class S2bListsController < ApplicationController
         custom_values = [session[:param_select_custom_value]]
       end
       custom_values.each do |cv|
-        issues =  @project.issues.eager_load(:assigned_to,
-            :tracker, :fixed_version, :custom_values, {:project => :issue_custom_fields}).where(
-            :custom_values => {:custom_field_id => @custom_field.id, :value => cv}
-            ).order(:s2b_position)
-        @sorted_issues << {:name => cv, :issues => issues}
+        issues =  @project.issues.eager_load(:assigned_to, :status, :tracker, :fixed_version,
+            :custom_values, {:project => :issue_custom_fields}).where(
+            :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
+            :issue_statuses => {:is_closed => false})
+        issues = issues.where(:status_id => session[:param_select_issue]) unless
+            session[:param_select_issue].blank?
+        @sorted_issues << {:name => cv, :issues => issues.order(:s2b_position)}
       end
     end
     
@@ -142,19 +135,6 @@ class S2bListsController < ApplicationController
   end
   
   
-  
-  
-  
-  def close_on_list
-    array_id= Array.new
-    array_id = params[:issue_id]
-    int_array = array_id.split(',').collect(&:to_i)
-    issues = @project.issues.where(:id => int_array)
-    issues.each do |issue|
-      issue.update_attribute(:status_id,DEFAULT_STATUS_IDS['status_closed'])
-    end
-    filter_issues_onlist   
-  end
   
   
   

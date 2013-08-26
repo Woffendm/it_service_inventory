@@ -1,4 +1,6 @@
 <div class="container-fluid filter">
+  
+  <span class="float_right">
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
         :id => "btn_filter_issues_onlist" %>
     <%= select_tag :select_issue, options_from_collection_for_select(@issue_statuses, :id, :name),
@@ -6,7 +8,8 @@
         :prompt => "All Statuses" %>
     
     
-    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
+    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name,
+        :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
     
     <% if @use_version_for_sprint %>
       <%= select_tag("select_version", options_from_collection_for_select(@sprints, :id, 
@@ -17,31 +20,6 @@
           :selected => session[:params_select_custom_value]), {:id => "select_custom_value_onlist",
           :prompt => "All Sprints"}) %>
     <% end %>
-    
-
-  <% if @has_permission %>
-    <button class="btn btn-danger" id="btn_close_issue_list">
-      <%= l(:label_close_all_issues)%>
-    </button>
-    <button class="btn btn-primary" id="btn_change_sprint_issues">
-      <%= l(:label_change_sprint)%>
-    </button>
-    <div id="div_change_sprint">
-      <% if @use_version_for_sprint %>
-        <%= select_tag("change_sprint", options_from_collection_for_select(@sprints, :id, 
-            :name, :selected => session[:params_select_version].to_i), 
-            {:id => "select_version_onlist", :prompt => "All Sprints"}) %>
-      <% else %>
-        <%= select_tag("change_sprint", options_for_select(@sprints, 
-            :selected => session[:params_select_custom_value]), 
-            {:id => "select_custom_value_onlist", :prompt => "All Sprints"}) %>
-      <% end %>
-      <button class="btn btn-primary" id="btn_move_issues">
-        <%= l(:label_move_issues)%>
-      </button>
-      <button class="btn btn-danger" id="cancel_move_issue">
-        <%= l(:label_board_edit_btn_cancel)%>
-      </button>
-    </div>  
-  <% end %>
+  </span>
+  
 </div>

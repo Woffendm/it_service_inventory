@@ -3,53 +3,10 @@
   <%= render :partial => "screen_list", :locals => {:sorted_issues => @sorted_issues, 
       :issue_backlogs => @issue_backlogs} %>
 </div>
+
+
 <script>
   jQuery(function() {
-    $("#check_all").toggle(function(){
-      $("#table_issues tr td input:checkbox" ).attr( 'checked','checked');
-		},function(){
-		  $("#table_issues tr td input:checkbox").removeAttr('checked');
-		});
-		
-		$("#btn_change_sprint_issues").click(function(){
-		  $(this).hide();
-		  $("#btn_close_issue_list").hide();
-		  $("#div_change_sprint").show();
-		  return false;
-		});
-		
-		$("#cancel_move_issue").click(function(){
-       $("#div_change_sprint").hide();
-       $("#btn_close_issue_list").show();
-      $("#btn_change_sprint_issues").show();
-      $("#table_issues tr td input:checkbox").removeAttr('checked');
-      return false;
-    });
-    
-		$("#btn_move_issues").live("click",function(){
-      var issue_id = [];
-      $('input[name="check"]').each(function() {
-        if(this.checked==true) issue_id.push($(this).val());
-      });
-      if (issue_id.length === 0){
-        alert("<%= l(:label_error_select_issues)%>");
-        return false;
-        }
-      else{
-        var new_sprint = $("#change_sprint").val();
-        var project_id = <%= @project.id %>
-        var url_ajax = 'change_sprint'
-        $.ajax({
-        url : url_ajax,
-        type : "POST",
-        data : 'issue_id=' + issue_id + '&project_id='+project_id + '&new_sprint=' + new_sprint,
-        dataType : "script",
-        success : function() {
-          }
-        });
-       }
-      
-    });
     
   $("#btn_filter_issues_onlist").live("click",function(){
       var select_version = $("#select_version_onlist").val()
@@ -61,44 +18,25 @@
         type : "POST",
         data : 'select_version=' + select_version + '&select_issue=' + select_issue + '&project_id=' + project_id,
         dataType : "script",
-        success : function() {}
+        success : function() {
+          $(".progressbar").each(function() {
+            var id = parseInt($(this).attr("id"))
+            $("#"+id).progressbar({
+              value:parseInt($(this).attr("value"))
+            });
+          });
+        }
       });
       return false;
     });
      
-  $("#btn_close_issue_list").live("click",function(){
-  	var issue_id = [];
-  	$('input[name="check"]').each(function() {
-    	if(this.checked==true) issue_id.push($(this).val());
+  $(".progressbar").each(function() {
+    var id = parseInt($(this).attr("id"))
+    $("#"+id).progressbar({
+      value:parseInt($(this).attr("value"))
     });
-  	if (issue_id.length === 0){
-    	alert("<%= l(:label_error_select_issues)%>");
-    	return false;
-  	}else{
-  	   if (confirm('<%= l(:label_sure_to_close_issues)%>')) {
-         var project_id = <%= @project.id %>
-         var url_ajax = 'close_on_list'
-         $.ajax({
-           url : url_ajax,
-           type : "POST",
-           data : 'issue_id=' + issue_id + '&project_id='+project_id,
-           dataType : "script",
-           success : function() {            
-             }
-          });
-       }
-       else{
-         $("#table_issues tr td input:checkbox").removeAttr('checked');
-       }
-  	}
-	});
-	$(".progressbar").each(function() {
-		var id = parseInt($(this).attr("id"))
-		$("#"+id).progressbar({
-			value:parseInt($(this).attr("value"))
-		});
-	});
-	
+  });
+  
 });
 </script>
 
