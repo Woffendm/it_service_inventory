@@ -78,9 +78,13 @@ class S2bListsController < ApplicationController
     
     session[:view_issue] = "list"
     session[:param_select_issue] = params[:select_issue]
+    session[:param_select_member] = params[:select_member]
+    
     @issue_backlogs = @project.issues.eager_load(:custom_values, :status, :assigned_to)
     @issue_backlogs = @issue_backlogs.where(:status_id => session[:param_select_issue]) unless
         session[:param_select_issue].blank?
+    @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:param_select_member]) unless
+        session[:param_select_member].blank?
     
     @sorted_issues = []
     if @use_version_for_sprint
@@ -98,6 +102,8 @@ class S2bListsController < ApplicationController
             :issue_statuses => {:is_closed => false})
         issues = issues.where(:status_id => session[:param_select_issue]) unless
             session[:param_select_issue].blank?
+        issues = issues.where(:assigned_to_id => session[:param_select_member]) unless
+            session[:param_select_member].blank?
         @sorted_issues << {:name => version.name, :issues => issues.order(:s2b_position)}
       end
     else
@@ -118,6 +124,8 @@ class S2bListsController < ApplicationController
             :issue_statuses => {:is_closed => false})
         issues = issues.where(:status_id => session[:param_select_issue]) unless
             session[:param_select_issue].blank?
+        issues = issues.where(:assigned_to_id => session[:param_select_member]) unless
+            session[:param_select_member].blank?
         @sorted_issues << {:name => cv, :issues => issues.order(:s2b_position)}
       end
     end

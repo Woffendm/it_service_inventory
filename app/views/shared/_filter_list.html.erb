@@ -3,23 +3,20 @@
   <span class="float_right">
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
         :id => "btn_filter_issues_onlist" %>
-    <%= select_tag :select_issue, options_from_collection_for_select(@issue_statuses, :id, :name),
-        :selected => session[:param_select_issue].to_i, :id => "select_type_issue_onlist", 
-        :prompt => "All Statuses" %>
     
-    
-    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name,
+    <%= select_tag("select_member_onlist", options_from_collection_for_select(@member, :id, :name,
         :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
     
     <% if @use_version_for_sprint %>
-      <%= select_tag("select_version", options_from_collection_for_select(@sprints, :id, 
-          :name, :selected => session[:params_select_version].to_i), 
-          {:id => "select_version_onlist", :prompt => "All Sprints"}) %>
+      <%= select_tag("select_version_onlist", options_from_collection_for_select(@sprints, :id, 
+          :name, :selected => session[:params_select_version].to_i), {:prompt => "All Sprints"}) %>
     <% else %>
-      <%= select_tag("select_custom_value", options_for_select(@sprints, 
-          :selected => session[:params_select_custom_value]), {:id => "select_custom_value_onlist",
-          :prompt => "All Sprints"}) %>
+      <%= select_tag("select_custom_value_onlist", options_for_select(@sprints, 
+          :selected => session[:params_select_custom_value]), {:prompt => "All Sprints"}) %>
     <% end %>
+    
+    <%= select_tag "select_issue_onlist", options_from_collection_for_select(@issue_statuses, 
+        :id, :name), :selected => session[:param_select_issue].to_i, :prompt => "All Statuses" %>
   </span>
   
 </div>
