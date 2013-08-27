@@ -10,7 +10,8 @@
 <% board_columns = @settings["board_columns"].to_a %>
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
 <% using_version = @settings["use_version_for_sprint"] == "true" %>
-
+<% number_of_columns = 0 %>
+<% number_of_columns = board_columns.length unless board_columns.blank? %>
 
 
 
@@ -37,7 +38,9 @@
 
       <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
         <%= content_tag(:label, "Sprint custom field")%>
-        <%= select_tag("settings[custom_field_id]", options_from_collection_for_select(custom_fields, :id, :name, {:selected => @settings["custom_field_id"]})) %>
+        <%= select_tag("settings[custom_field_id]",
+            options_from_collection_for_select(custom_fields, :id, :name, 
+            {:selected => @settings["custom_field_id"]})) %>
       </p>
 
     </div>
@@ -60,22 +63,28 @@
         <div class="<%= 'subsection' unless board_column == board_columns.last %>"
         id="column_<%= index %>" >
           <p>
-            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_#{ index }") %>  
+            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
+                :parent_id => "#column_#{ index }") %>  
 
             <%= content_tag(:label, "Name" )%>
-            <%= text_field_tag("settings[board_columns][#{board_column.first}][name]", board_column.last["name"]) %>
+            <%= text_field_tag("settings[board_columns][#{board_column.first}][name]",
+                board_column.last["name"]) %>
 
             <br/>
 
             <%= content_tag(:label, "Position" )%>
-            <%= select_tag("settings[board_columns][#{board_column.first}][position]", options_for_select(1..board_columns.length, :selected => (index + 1))) %>
+            <%= select_tag("settings[board_columns][#{board_column.first}][position]",
+                options_for_select(1..number_of_columns, :selected => (index + 1))) %>
 
             <br/>
 
             <%= content_tag(:label, "Statuses" )%>
             <% all_issue_statuses.each do |status| %>
               <span>
-                <%= check_box_tag "settings[board_columns][#{board_column.first}][statuses][#{status.id}]", status.name, board_column.last["statuses"] && board_column.last["statuses"].include?(status.id.to_s) %>
+                <%= check_box_tag(
+                    "settings[board_columns][#{board_column.first}][statuses][#{status.id}]",
+                    status.name, board_column.last["statuses"] &&
+                    board_column.last["statuses"].include?(status.id.to_s)) %>
                 <%= status.name %>
               </span>
             <% end %>
@@ -88,7 +97,8 @@
       <div id="template" class="hidden">
         <div class="subsection" id="column_-1">
           <p>
-            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual", :parent_id => "#column_-1", :id => "delete_-1") %>  
+            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
+                :parent_id => "#column_-1", :id => "delete_-1") %>  
 
             <%= content_tag(:label, "Name" )%>
             <%= text_field_tag("settings[board_columns][-1][name]") %>
@@ -96,8 +106,8 @@
             <br/>
 
             <%= content_tag(:label, "Position" )%>
-            <%= select_tag("settings[board_columns][-1][position]", options_for_select(1..(@settings["board_columns"].length + 1))) %>
-
+            <%= select_tag("settings[board_columns][-1][position]",
+                options_for_select(1..(number_of_columns + 1))) %>
             <br/>
 
             <%= content_tag(:label, "Statuses" )%>
