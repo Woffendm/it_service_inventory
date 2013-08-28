@@ -61,12 +61,12 @@
     <div class="description">
       <% if issue.description.to_s.length >= 100 %>
         <div class="div_description description_hide" id="description_hide_<%= issue.id %>">
-          <%= raw(issue.description.truncate(100, 
-              :separator => ' ').html_safe.gsub(/\n/, " <br/> ")) %>
+          <%= simple_format(h(issue.description.truncate(100, 
+              :separator => ' '))) %>
         </div>
         <div class="div_description description_readmore hidden" 
             id="description_readmore_<%= issue.id %>">
-          <%= raw(issue.description.to_s.html_safe.gsub(/\n/, " <br/>")) %>
+          <%= simple_format(h(issue.description)) %>
         </div>
         <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
           <%= l(:label_hide) %>
@@ -76,7 +76,7 @@
         </a>
       <% else %>
         <div class="no_edit div_description description_hide" id="description_hide_<%= issue.id %>">
-          <%= raw(issue.description.to_s.html_safe.gsub(/\n/, " <br/>")) %>
+          <%= simple_format(h(issue.description)) %>
         </div>
       <% end %>
     </div>

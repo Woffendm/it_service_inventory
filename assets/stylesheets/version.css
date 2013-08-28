@@ -91,11 +91,6 @@ margin:10px 0 0 0;
     overflow: hidden;
     font-size: 13px;
   }
-	.description p {
-		margin: 0;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
 
 	.connectedSortable {
 		margin-top: 25px;

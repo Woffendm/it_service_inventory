@@ -110,7 +110,7 @@ class S2bListsController < ApplicationController
       session[:param_select_custom_value]  = params[:select_custom_value]
       issue_ids_with_custom_field = @project.issues.joins(:custom_values).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
-           @custom_field.id).pluck(:id)
+           @custom_field.id).pluck("issues.id")
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       if session[:param_select_custom_value].blank?
         custom_values = @custom_field.possible_values
