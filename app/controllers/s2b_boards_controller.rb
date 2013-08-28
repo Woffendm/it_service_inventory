@@ -6,8 +6,8 @@ class S2bBoardsController < ApplicationController
   before_filter :load_settings
   before_filter :check_before_board, :only => [:index, :close_on_board, :filter_issues_onboard,
                                                :update, :create]
+  
   skip_before_filter :verify_authenticity_token
-
   self.allow_forgery_protection = false
  
  
@@ -26,13 +26,8 @@ class S2bBoardsController < ApplicationController
     else
       @sprints = @custom_field.possible_values
     end
-    
-    @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.eager_load(:assigned_to, :tracker,
-          :fixed_version, :custom_values, {:project => :issue_custom_fields}).where(
-          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).where(
-          :custom_values => {:custom_field_id => @custom_field.id}).order(:s2b_position)}) 
-    end
+    params[:select_custom_value] = @current_sprint
+    filter_issues(params)
   end
   
   
@@ -150,36 +145,10 @@ class S2bBoardsController < ApplicationController
       render :json => {:result => "failure", :message => @issue.errors.full_messages}
     end
   end
-  
-  
+    
   
   def filter_issues_onboard
-    session[:params_select_version_onboard] = params[:select_version]
-    session[:params_select_member] = params[:select_member]
-    session[:params_custom_value] = params[:select_custom_value]
-    session[:conditions] = ["true"]
-    unless session[:params_select_version_onboard].blank? || session[:params_select_version_onboard] == "undefined"
-      session[:conditions][0] += " AND fixed_version_id = ? "
-      session[:conditions] << session[:params_select_version_onboard]
-    end
-    unless session[:params_select_member].blank?
-      session[:conditions][0] += " AND assigned_to_id = ?"
-      session[:conditions] << session[:params_select_member].to_i
-    end
-    unless session[:params_custom_value].blank? || session[:params_custom_value] == "undefined"
-      session[:conditions][0] += " AND custom_values.value = ?"
-      session[:conditions] << session[:params_custom_value].to_i
-      session[:conditions][0] += " AND custom_values.custom_field_id = ?"
-      session[:conditions] << @custom_field.id
-    end
-    
-    @board_columns.each do |board_column|
-      board_column.merge!({:issues => @project.issues.includes(:assigned_to, :tracker,
-          :fixed_version, {:custom_values => :custom_field}, 
-          {:project => :issue_custom_fields}).where(
-          "status_id IN (?)", board_column[:status_ids]).where(session[:conditions]).order(
-          :s2b_position)}) 
-    end
+    filter_issues(params)
     
     respond_to do |format|
       format.js {
@@ -194,20 +163,6 @@ class S2bBoardsController < ApplicationController
   
   
   private
-  
-  
-  def opened_versions_list
-    find_project unless @project
-    return Version.where(status:"open").where(project_id: [@project.id,@project.parent_id])
-  end
-  
-  
-  
-  def closed_versions_list 
-    find_project unless @project
-    return Version.where(status:"closed").where(project_id: [@project.id,@project.parent_id])
-  end
-  
   
   
   def find_project
@@ -235,6 +190,39 @@ class S2bBoardsController < ApplicationController
   end
   
 
+
+  def filter_issues(params)
+    session[:params_select_version_onboard] = params[:select_version]
+    session[:params_select_member] = params[:select_member]
+    session[:params_select_custom_value] = params[:select_custom_value]
+    session[:conditions] = ["true"]
+    unless session[:params_select_version_onboard].blank? || session[:params_select_version_onboard] == "undefined"
+      session[:conditions][0] += " AND fixed_version_id = ? "
+      session[:conditions] << session[:params_select_version_onboard]
+    end
+    unless session[:params_select_member].blank?
+      session[:conditions][0] += " AND assigned_to_id = ?"
+      session[:conditions] << session[:params_select_member].to_i
+    end
+    unless session[:params_select_custom_value].blank? || session[:params_select_custom_value] == "undefined"
+      session[:conditions][0] += " AND custom_values.value = ?"
+      session[:conditions] << session[:params_select_custom_value]
+      session[:conditions][0] += " AND custom_values.custom_field_id = ?"
+      session[:conditions] << @custom_field.id
+    end
+    
+    
+    @board_columns.each do |board_column|
+      issues = @project.issues.eager_load(:assigned_to, :tracker, :fixed_version).where(
+          "status_id IN (?)", board_column[:status_ids])
+      unless @use_version_for_sprint
+        issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
+            :custom_values => {:custom_field_id => @custom_field.id}) 
+      end
+      issues = issues.where(session[:conditions])
+      board_column.merge!({:issues => issues.order(:s2b_position)}) 
+    end
+  end
 
 
 
@@ -266,10 +254,11 @@ class S2bBoardsController < ApplicationController
     end
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
-    @custom_field = CustomField.find(@settings["custom_field_id"])
+    @custom_field = CustomField.find(@settings["custom_field_id"]) unless @use_version_for_sprint
+    @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      session[:params_custom_value] = nil
+      session[:params_select_custom_value] = nil
     else
       session[:params_select_version_onboard] = nil
     end

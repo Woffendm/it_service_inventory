@@ -36,13 +36,7 @@ html[xmlns] .clearfix {
 	background: #e4e4e4;
 	color: #0044CC;
 }
-select#select_version_onboard,#select_version_onlist {
-	float: right;
-	margin: 0 5px 0;
-}
-select#select_member ,#select_type_issue_onlist{
-	float: right;
-}
+
 .btn_submit {
 	float: right;
 	margin: 0 0 0 5px;
@@ -301,6 +295,10 @@ img.icon{
   
   .float_left {
     float: left;
+  }
+  
+  .checkbox_group {
+    display: inline-block;
   }
   
 .issue_show {

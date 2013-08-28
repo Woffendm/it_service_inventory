@@ -29,7 +29,8 @@ Redmine::Plugin.register :scrum2b do
          } 
        }, 
        'use_version_for_sprint' => 'true',
-       'custom_field_id' => '' 
+       'custom_field_id' => '',
+       'current_sprint' => '' 
      }, :partial => 'settings/scrum2b'
   
   project_module :scrum2b do

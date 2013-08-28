@@ -77,62 +77,60 @@ class S2bListsController < ApplicationController
     end
     
     session[:view_issue] = "list"
-    session[:param_select_issue] = params[:select_issue]
-    session[:param_select_member] = params[:select_member]
+    session[:params_select_issue] = params[:select_issue]
+    session[:params_select_member] = params[:select_member]
     
     @issue_backlogs = @project.issues.eager_load(:custom_values, :status, :assigned_to)
-    @issue_backlogs = @issue_backlogs.where(:status_id => session[:param_select_issue]) unless
-        session[:param_select_issue].blank?
-    @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:param_select_member]) unless
-        session[:param_select_member].blank?
+    @issue_backlogs = @issue_backlogs.where(:status_id => session[:params_select_issue]) unless session[:params_select_issue].blank?
+    @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:params_select_member]) unless session[:params_select_member].blank?
     
     @sorted_issues = []
     if @use_version_for_sprint
-      session[:param_select_version]  = params[:select_version]
+      session[:params_select_version]  = params[:select_version]
       @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
-      if session[:param_select_version].blank?
+      if session[:params_select_version].blank?
         versions = @project.versions.order("created_on")
       else
-        versions = @project.versions.where(:id => session[:param_select_version]
+        versions = @project.versions.where(:id => session[:params_select_version]
             ).order("created_on")
       end
       versions.each do |version|
         issues = @project.issues.eager_load(:assigned_to, :status, :tracker, 
             :fixed_version,).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(:status_id => session[:param_select_issue]) unless
-            session[:param_select_issue].blank?
-        issues = issues.where(:assigned_to_id => session[:param_select_member]) unless
-            session[:param_select_member].blank?
+        issues = issues.where(:status_id => session[:params_select_issue]) unless
+            session[:params_select_issue].blank?
+        issues = issues.where(:assigned_to_id => session[:params_select_member]) unless
+            session[:params_select_member].blank?
         @sorted_issues << {:name => version.name, :issues => issues.order(:s2b_position)}
       end
     else
-      session[:param_select_custom_value]  = params[:select_custom_value]
+      session[:params_select_custom_value]  = params[:select_custom_value]
       issue_ids_with_custom_field = @project.issues.joins(:custom_values).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
            @custom_field.id).pluck("issues.id")
-      @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
-      if session[:param_select_custom_value].blank?
+      #@issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
+      if session[:params_select_custom_value].blank?
         custom_values = @custom_field.possible_values
       else
-        custom_values = [session[:param_select_custom_value]]
+        custom_values = [session[:params_select_custom_value]]
       end
       custom_values.each do |cv|
         issues =  @project.issues.eager_load(:assigned_to, :status, :tracker, :fixed_version,
             :custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(:status_id => session[:param_select_issue]) unless
-            session[:param_select_issue].blank?
-        issues = issues.where(:assigned_to_id => session[:param_select_member]) unless
-            session[:param_select_member].blank?
+        issues = issues.where(:status_id => session[:params_select_issue]) unless
+            session[:params_select_issue].blank?
+        issues = issues.where(:assigned_to_id => session[:params_select_member]) unless
+            session[:params_select_member].blank?
         @sorted_issues << {:name => cv, :issues => issues.order(:s2b_position)}
       end
     end
     
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
     @issue_backlogs = @issue_backlogs.order("status_id, s2b_position")
-    
+    #@issue_backlogs = [@project.issues.last]
     respond_to do |format|
       format.js {
         @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
@@ -140,28 +138,13 @@ class S2bListsController < ApplicationController
       }
       format.html {}
     end
-  end
+  end  
   
   
   
   
   
-  private
-  
-  
-  def opened_versions_list
-    find_project unless @project
-    return Version.where(status:"open").where(project_id: [@project.id,@project.parent_id])
-  end
-  
-  
-  
-  def closed_versions_list 
-    find_project unless @project
-    return Version.where(status:"closed").where(project_id: [@project.id,@project.parent_id])
-  end
-  
-  
+  private  
   
   def find_project
     # @project variable must be set before calling the authorize filter
@@ -199,14 +182,15 @@ class S2bListsController < ApplicationController
     end
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
-    @custom_field = CustomField.find(@settings["custom_field_id"])
+    @custom_field = CustomField.find(@settings["custom_field_id"]) unless @use_version_for_sprint
+    @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
       session[:params_custom_value] = nil
-      session[:param_select_custom_value] = nil
+      session[:params_select_custom_value] = nil
     else
       session[:params_select_version_onboard] = nil
-      session[:param_select_version] = nil
+      session[:params_select_version] = nil
     end
   end
   

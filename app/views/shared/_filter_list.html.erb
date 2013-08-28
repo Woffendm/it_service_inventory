@@ -4,9 +4,6 @@
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
         :id => "btn_filter_issues_onlist" %>
     
-    <%= select_tag("select_member_onlist", options_from_collection_for_select(@member, :id, :name,
-        :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
-    
     <% if @use_version_for_sprint %>
       <%= select_tag("select_version_onlist", options_from_collection_for_select(@sprints, :id, 
           :name, :selected => session[:params_select_version].to_i), {:prompt => "All Sprints"}) %>
@@ -15,8 +12,12 @@
           :selected => session[:params_select_custom_value]), {:prompt => "All Sprints"}) %>
     <% end %>
     
+    <%= select_tag("select_member_onlist", options_from_collection_for_select(@member, :id, :name,
+        :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
+    
     <%= select_tag "select_issue_onlist", options_from_collection_for_select(@issue_statuses, 
-        :id, :name), :selected => session[:param_select_issue].to_i, :prompt => "All Statuses" %>
+        :id, :name), :selected => session[:params_select_issue].to_i, :prompt => "All Statuses" %>
   </span>
   
+  <%= session.inspect %>
 </div>

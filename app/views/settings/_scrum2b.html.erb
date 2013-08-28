@@ -1,5 +1,5 @@
 
-<%= stylesheet_link_tag 'scrum2b', :plugin => 'scrum2b' %>
+<%= stylesheet_link_tag 'version', :plugin => 'scrum2b' %>
 
 
 
@@ -40,7 +40,19 @@
         <%= content_tag(:label, "Sprint custom field")%>
         <%= select_tag("settings[custom_field_id]",
             options_from_collection_for_select(custom_fields, :id, :name, 
-            {:selected => @settings["custom_field_id"]})) %>
+            {:selected => @settings["custom_field_id"]}), :prompt => "Select custom field") %>
+      </p>
+      
+      <p id="current_sprint_select" class='<%= "hidden" if using_version ||
+          @settings["custom_field_id"].blank? %>'>
+        <%= content_tag(:label, "Current sprint")%>
+        <% custom_fields.each do |custom_field| %>
+          <%= select_tag("settings[current_sprint]",
+              options_for_select(custom_field.possible_values, 
+              {:selected => @settings["current_sprint"]}), :prompt => "Select current sprint", 
+              :id => "current_sprint_select_#{custom_field.id}", 
+              :class => "#{'hidden' unless custom_field.id.to_s == @settings["custom_field_id"]} sprint_select") %>
+        <% end %>
       </p>
 
     </div>
@@ -80,7 +92,7 @@
 
             <%= content_tag(:label, "Statuses" )%>
             <% all_issue_statuses.each do |status| %>
-              <span>
+              <span class="checkbox_group">
                 <%= check_box_tag(
                     "settings[board_columns][#{board_column.first}][statuses][#{status.id}]",
                     status.name, board_column.last["statuses"] &&
@@ -112,8 +124,10 @@
 
             <%= content_tag(:label, "Statuses" )%>
             <% all_issue_statuses.each do |status| %>
-              <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
-              <%= status.name %>
+              <span class="checkbox_group">
+                <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
+                <%= status.name %>
+              </span>
             <% end %>
           </p>
         </div>
@@ -148,6 +162,9 @@
     var delete_column = $(".delete_column");
     var template = $("#template");
     var custom_field_select = $("#custom_field_select");
+    var current_sprint_select = $("#current_sprint_select");
+    var sprint_selects = $(".sprint_select");
+    
     var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
     var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
 
@@ -158,6 +175,12 @@
         return;
       }
       template.remove();
+      $.each(sprint_selects, function(index, select_box) {
+        var select_box = $(select_box);
+        if(!select_box.is(":visible")) {
+          select_box.remove();
+        }
+      });
     });
 
 
@@ -183,11 +206,26 @@
     
     $("#settings_use_version_for_sprint_false").click(function(e) {
       custom_field_select.show();
+      current_sprint_select.show();
+      
     });
     
     
     $("#settings_use_version_for_sprint_true").click(function(e) {
       custom_field_select.hide();
+      current_sprint_select.hide();
+    });
+    
+    
+    custom_field_select.change(function(e) {
+      sprint_selects.hide();
+      if(e.target.value != "") {
+        $("#current_sprint_select_" + e.target.value).show();
+        current_sprint_select.show();
+      }
+      else {
+        current_sprint_select.hide();
+      }
     });
     
     
