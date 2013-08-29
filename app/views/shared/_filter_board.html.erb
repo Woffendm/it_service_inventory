@@ -3,8 +3,6 @@
   <span class="float_right">
     <%=  button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", :id => "btn_filter_issues_on_board" %>
     
-    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
-    
     <% if @use_version_for_sprint %>
       <%= select_tag("select_version", options_from_collection_for_select(@sprints, :id, 
           :name, :selected => session[:params_select_version_onboard].to_i), 
@@ -13,6 +11,8 @@
       <%= select_tag("select_custom_value", options_for_select(@sprints, 
           :selected => session[:params_select_custom_value]), :id => "select_custom_value_onboard") %>
     <% end %>
+    
+    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
   </span>
   
 </div>

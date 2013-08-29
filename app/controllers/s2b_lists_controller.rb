@@ -109,7 +109,8 @@ class S2bListsController < ApplicationController
       issue_ids_with_custom_field = @project.issues.joins(:custom_values).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
            @custom_field.id).pluck("issues.id")
-      #@issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
+      issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
+      @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       if session[:params_select_custom_value].blank?
         custom_values = @custom_field.possible_values
       else
@@ -130,7 +131,6 @@ class S2bListsController < ApplicationController
     
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
     @issue_backlogs = @issue_backlogs.order("status_id, s2b_position")
-    #@issue_backlogs = [@project.issues.last]
     respond_to do |format|
       format.js {
         @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
@@ -186,10 +186,8 @@ class S2bListsController < ApplicationController
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      session[:params_custom_value] = nil
       session[:params_select_custom_value] = nil
     else
-      session[:params_select_version_onboard] = nil
       session[:params_select_version] = nil
     end
   end
