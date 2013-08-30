@@ -26,7 +26,7 @@ class S2bBoardsController < ApplicationController
     else
       @sprints = @custom_field.possible_values
     end
-    params[:select_custom_value] = @current_sprint
+    params[:custom_values] = @current_sprint
     filter_issues(params)
   end
   
@@ -89,7 +89,7 @@ class S2bBoardsController < ApplicationController
 
 
   def update
-    @id_version  = params[:select_version]
+    @id_version  = params[:version_ids]
     @issue = @project.issues.find(params[:id_issue])
     @issue.update_attributes(
         :subject => params[:subject], 
@@ -192,21 +192,21 @@ class S2bBoardsController < ApplicationController
 
 
   def filter_issues(params)
-    session[:params_select_version_onboard] = params[:select_version]
-    session[:params_select_member] = params[:select_member]
-    session[:params_select_custom_value] = params[:select_custom_value]
+    session[:params_version_ids] = params[:version_ids]
+    session[:params_member_ids] = params[:member_ids]
+    session[:params_custom_values] = params[:custom_values]
     session[:conditions] = ["true"]
-    unless session[:params_select_version_onboard].blank? || session[:params_select_version_onboard] == "undefined"
+    unless session[:params_version_ids].blank? || session[:params_version_ids] == "undefined"
       session[:conditions][0] += " AND fixed_version_id = ? "
-      session[:conditions] << session[:params_select_version_onboard]
+      session[:conditions] << session[:params_version_ids]
     end
-    unless session[:params_select_member].blank?
+    unless session[:params_member_ids].blank?
       session[:conditions][0] += " AND assigned_to_id = ?"
-      session[:conditions] << session[:params_select_member].to_i
+      session[:conditions] << session[:params_member_ids].to_i
     end
-    unless session[:params_select_custom_value].blank? || session[:params_select_custom_value] == "undefined"
+    unless session[:params_custom_values].blank? || session[:params_custom_values] == "undefined"
       session[:conditions][0] += " AND custom_values.value = ?"
-      session[:conditions] << session[:params_select_custom_value]
+      session[:conditions] << session[:params_custom_values]
       session[:conditions][0] += " AND custom_values.custom_field_id = ?"
       session[:conditions] << @custom_field.id
     end
@@ -258,9 +258,9 @@ class S2bBoardsController < ApplicationController
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      session[:params_select_custom_value] = nil
+      session[:params_custom_values] = nil
     else
-      session[:params_select_version_onboard] = nil
+      session[:params_version_ids] = nil
     end
   end
   

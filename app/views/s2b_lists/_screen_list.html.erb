@@ -13,6 +13,11 @@
       <th> 
         <%= l(:label_head_issue_status) %> 
       </th>
+      <% unless @use_version_for_sprint %>
+        <th> 
+          <%= l(:label_head_issue_project) %> 
+        </th>
+      <% end %>
       <th> 
         <%= l(:label_head_issue_subject) %> 
       </th>

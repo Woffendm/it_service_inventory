@@ -5,18 +5,21 @@
         :id => "btn_filter_issues_onlist" %>
     
     <% if @use_version_for_sprint %>
-      <%= select_tag("select_version_onlist", options_from_collection_for_select(@sprints, :id, 
-          :name, :selected => session[:params_select_version].to_i), {:prompt => "All Sprints"}) %>
+      <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, 
+          :name, :selected => session[:params_version_ids]), {:prompt => "All Sprints"}) %>
     <% else %>
-      <%= select_tag("select_custom_value_onlist", options_for_select(@sprints, 
-          :selected => session[:params_select_custom_value]), {:prompt => "All Sprints"}) %>
+      <%= select_tag("custom_values", options_for_select(@sprints, 
+          :selected => session[:params_custom_values]), {:prompt => "All Sprints"}) %>
     <% end %>
     
-    <%= select_tag("select_member_onlist", options_from_collection_for_select(@member, :id, :name,
-        :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
+    <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
+        :selected => session[:params_project_ids]), :prompt => "All Projects") %>
     
-    <%= select_tag "select_issue_onlist", options_from_collection_for_select(@issue_statuses, 
-        :id, :name), :selected => session[:params_select_issue].to_i, :prompt => "All Statuses" %>
+    <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
+        :selected => session[:params_member_ids]), :prompt => "All Members") %>
+    
+    <%= select_tag "statuses", options_from_collection_for_select(@issue_statuses, 
+        :id, :name), :selected => session[:params_status_ids], :prompt => "All Statuses" %>
   </span>
   
 </div>

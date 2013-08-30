@@ -11,15 +11,19 @@ class S2bListsController < ApplicationController
 
 
   def index
-    @member = @project.assignable_users
-    @id_member = @project.assignable_users.collect{|id_member| id_member.id}
     @issue_statuses = IssueStatus.sorted.where(:is_closed => false)
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
+      @members = @project.assignable_users
     else
       @sprints = @custom_field.possible_values
+      @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
+          {:id => @custom_field.id}).order("projects.name")
+      @members = User.where(:id => Member.where(:project_id => @projects.pluck(:id)
+          ).pluck(:user_id).uniq).order(:firstname)
+      
     end
-    @has_permission = true if !User.current.anonymous? && @id_member.include?(User.current.id) || User.current.admin
+    @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
   
@@ -77,60 +81,68 @@ class S2bListsController < ApplicationController
     end
     
     session[:view_issue] = "list"
-    session[:params_select_issue] = params[:select_issue]
-    session[:params_select_member] = params[:select_member]
+    # REMEMBER TO REMOVE THE [ ] WHEN YOU CHANGE THEM TO MULTIPLE SELECTS!
+    session[:params_project_ids] = ((params[:project_ids] unless params[:project_ids].blank?) || (params[:project_id] unless params[:project_id].blank?)).to_a
+    session[:params_status_ids] = params[:status_ids]
+    session[:params_member_ids] = params[:member_ids]
+    session[:params_project_ids] = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if session[:params_project_ids].blank?
     
-    @issue_backlogs = @project.issues.eager_load(:custom_values, :status, :assigned_to)
-    @issue_backlogs = @issue_backlogs.where(:status_id => session[:params_select_issue]) unless session[:params_select_issue].blank?
-    @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:params_select_member]) unless session[:params_select_member].blank?
+    @issue_backlogs = Issue.eager_load(:custom_values, :status, :assigned_to, :project)
+    @issue_backlogs = @issue_backlogs.where(:project_id => session[:params_project_ids])
+    @issue_backlogs = @issue_backlogs.where(:status_id => session[:params_status_ids]) unless session[:params_status_ids].blank?
+    @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:params_member_ids]) unless session[:params_member_ids].blank?
     
     @sorted_issues = []
     if @use_version_for_sprint
-      session[:params_select_version]  = params[:select_version]
+      session[:params_version_ids]  = params[:version_ids]
       @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
-      if session[:params_select_version].blank?
+      if session[:params_version_ids].blank?
         versions = @project.versions.order("created_on")
       else
-        versions = @project.versions.where(:id => session[:params_select_version]
+        versions = @project.versions.where(:id => session[:params_version_ids]
             ).order("created_on")
       end
       versions.each do |version|
         issues = @project.issues.eager_load(:assigned_to, :status, :tracker, 
             :fixed_version,).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(:status_id => session[:params_select_issue]) unless
-            session[:params_select_issue].blank?
-        issues = issues.where(:assigned_to_id => session[:params_select_member]) unless
-            session[:params_select_member].blank?
-        @sorted_issues << {:name => version.name, :issues => issues.order(:s2b_position)}
+        issues = issues.where(:status_id => session[:params_status_ids]) unless
+            session[:params_status_ids].blank?
+        issues = issues.where(:assigned_to_id => session[:params_member_ids]) unless
+            session[:params_member_ids].blank?
+        @sorted_issues << {:name => version.name, :issues => issues.order(
+            "status_id, s2b_position")}
       end
     else
-      session[:params_select_custom_value]  = params[:select_custom_value]
-      issue_ids_with_custom_field = @project.issues.joins(:custom_values).where(
+      session[:params_custom_values] = params[:custom_values]
+      issue_ids_with_custom_field = Issue.joins(:custom_values).where(
+          :project_id => session[:params_project_ids]).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
-           @custom_field.id).pluck("issues.id")
+          @custom_field.id).pluck("issues.id")
       issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
-      if session[:params_select_custom_value].blank?
+      if session[:params_custom_values].blank?
         custom_values = @custom_field.possible_values
       else
-        custom_values = [session[:params_select_custom_value]]
+        custom_values = [session[:params_custom_values]]
       end
       custom_values.each do |cv|
-        issues =  @project.issues.eager_load(:assigned_to, :status, :tracker, :fixed_version,
+        issues =  Issue.eager_load(:assigned_to, :status, :tracker, :fixed_version,
             :custom_values, {:project => :issue_custom_fields}).where(
+            :project_id => session[:params_project_ids]).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(:status_id => session[:params_select_issue]) unless
-            session[:params_select_issue].blank?
-        issues = issues.where(:assigned_to_id => session[:params_select_member]) unless
-            session[:params_select_member].blank?
-        @sorted_issues << {:name => cv, :issues => issues.order(:s2b_position)}
+        issues = issues.where(:status_id => session[:params_status_ids]) unless
+            session[:params_status_ids].blank?
+        issues = issues.where(:assigned_to_id => session[:params_member_ids]) unless
+            session[:params_member_ids].blank?
+        @sorted_issues << {:name => cv, :issues => issues.order("status_id, projects.name,
+            s2b_position")}
       end
     end
     
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
-    @issue_backlogs = @issue_backlogs.order("status_id, s2b_position")
+    @issue_backlogs = @issue_backlogs.order("status_id, projects.name, s2b_position")
     respond_to do |format|
       format.js {
         @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
@@ -147,9 +159,11 @@ class S2bListsController < ApplicationController
   private  
   
   def find_project
-    # @project variable must be set before calling the authorize filter
-    project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
-    @project = Project.find(project_id)
+    if @use_version_for_sprint
+      # @project variable must be set before calling the authorize filter
+      project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
+      @project = Project.find(project_id)
+    end
   end
   
   
@@ -186,9 +200,9 @@ class S2bListsController < ApplicationController
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      session[:params_select_custom_value] = nil
+      session[:params_custom_values] = nil
     else
-      session[:params_select_version] = nil
+      session[:params_version_ids] = nil
     end
   end
   

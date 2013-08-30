@@ -26,6 +26,8 @@ en:
   label_head_issue_updated: "Updated"
   label_head_issue_est_time: "Est Time"
   label_head_issue_done: "% Done"
+  label_head_issue_project: "Project"
+  
   
   
   label_version_backlog: "Backlog"

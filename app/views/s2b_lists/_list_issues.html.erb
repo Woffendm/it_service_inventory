@@ -8,6 +8,11 @@
 <td>
   <%= issue.status %>
 </td>
+<% unless @use_version_for_sprint %>
+<td>
+  <%= issue.project.name.truncate(30) %>
+</td>
+<% end %>
 <td>
   <%= link_to issue.subject.truncate(100), :controller => 'issues', :action => 'show', 
       :id => issue.id %>
