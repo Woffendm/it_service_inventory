@@ -82,7 +82,7 @@ class S2bListsController < ApplicationController
     
     session[:view_issue] = "list"
     # REMEMBER TO REMOVE THE [ ] WHEN YOU CHANGE THEM TO MULTIPLE SELECTS!
-    session[:params_project_ids] = ((params[:project_ids] unless params[:project_ids].blank?) || (params[:project_id] unless params[:project_id].blank?)).to_a
+    session[:params_project_ids] = ((params[:project_ids] unless params[:project_ids].blank?) || ([Project.find(params[:project_id]).id] unless params[:project_id].blank?)).to_a
     session[:params_status_ids] = params[:status_ids]
     session[:params_member_ids] = params[:member_ids]
     session[:params_project_ids] = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if session[:params_project_ids].blank?
@@ -159,11 +159,9 @@ class S2bListsController < ApplicationController
   private  
   
   def find_project
-    if @use_version_for_sprint
-      # @project variable must be set before calling the authorize filter
-      project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
-      @project = Project.find(project_id)
-    end
+    # @project variable must be set before calling the authorize filter
+    project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
+    @project = Project.find(project_id) unless project_id.blank?
   end
   
   
