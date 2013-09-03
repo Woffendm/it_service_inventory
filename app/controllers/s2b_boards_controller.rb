@@ -1,8 +1,6 @@
 class S2bBoardsController < ApplicationController
   unloadable
-  before_filter :find_project, :only => [:index, :update, :update_status, :update_progress, :create,
-                                         :close_on_board, :filter_issues_onboard,
-                                         :opened_versions_list, :closed_versions_list]
+  before_filter :find_project
   before_filter :load_settings
   before_filter :check_before_board, :only => [:index, :close_on_board, :filter_issues_onboard,
                                                :update, :create]
@@ -13,19 +11,20 @@ class S2bBoardsController < ApplicationController
  
  
   def index
-    @max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
-    @issue_no_position = @project.issues.where(:s2b_position => nil)
-    @issue_no_position.each do |issue|
-      issue.update_attribute(:s2b_position, @max_position_issue)
-      @max_position_issue += 1
+    if @use_version_for_sprints
+      max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
+      issue_no_position = @project.issues.where(:s2b_position => nil)
+    else
+      max_position_issue = Issue.where(:project_id => @projects.pluck(:id)).maximum(
+          :s2b_position).to_i + 1
+      issue_no_position = Issue.where(:project_id => @projects.pluck(:id), :s2b_position => nil)
+    end
+    unless issue_no_position.blank?
+      issue_no_position.each_with_index do |issue, index|
+        issue.update_attribute(:s2b_position, max_position_issue + index)
+      end
     end
     session[:view_issue] = "board"
-    
-    if @use_version_for_sprint
-      @sprints = Version.where(project_id: [@project.id, @project.parent_id])
-    else
-      @sprints = @custom_field.possible_values
-    end
     params[:custom_values] = @current_sprint
     filter_issues(params)
   end
@@ -34,7 +33,7 @@ class S2bBoardsController < ApplicationController
   
   # Had to get rid of 'done ratio' stuff
   def update_status
-    @issue = @project.issues.find(params[:issue_id])
+    @issue = Issue.find(params[:issue_id])
     new_status = params[:status]
     return unless @issue && !new_status.blank?
     new_status = new_status.to_f.to_i
@@ -65,32 +64,12 @@ class S2bBoardsController < ApplicationController
     render :json => {:result => "success", :new => "Success to update the progress",
                      :new_ratio => params[:done_ratio]}
   end
-  
-  
-  
-  # IDK if this should even stay here. Isn't the update status sufficient?
-  def close_on_board
-    array_id = params[:issue_id]
-    @int_array = array_id.split(',').collect(&:to_i)
-    @issues = @project.issues.where(:id => @int_array)
-    @issues.each do |issues|
-      issues.update_attribute(:status_id, DEFAULT_STATUS_IDS['status_closed'])
-    end
-    respond_to do |format|
-      format.js {
-        @return_content = render_to_string(:partial => "/s2b_boards/screen_board", 
-            :locals => {:id_member => @id_member, :project => @project, :tracker => @tracker,
-            :priority => @priority,:member => @member, :issue => @issue, :status => @status,
-            :sprints => @sprints })
-      }
-    end
-  end
-  
+
 
 
   def update
     @id_version  = params[:version_ids]
-    @issue = @project.issues.find(params[:id_issue])
+    @issue = Issue.find(params[:id_issue])
     @issue.update_attributes(
         :subject => params[:subject], 
         :assigned_to_id => params[:assignee],
@@ -102,11 +81,11 @@ class S2bBoardsController < ApplicationController
     )
     if @issue.valid? 
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
-                               :locals => {:issue => @issue, :id_member => @id_member})
+                               :locals => {:issue => @issue})
       edit  = render_to_string(:partial => "/s2b_boards/form_new", 
-                               :locals => {:issue => @issue, :tracker => @tracker, 
-                               :member => @member, :id_member => @id_member,
-                               :status => @status, :priority => @priority, :sprint => @sprint})
+                               :locals => {:issue => @issue, :trackers => @trackers, 
+                               :member => @members,
+                               :statuses => @statuses, :priorities => @priorities, :sprints => @sprints})
       render :json => {:result => "edit_success", :message => "Success to update the message",
                        :content => data, :edit_content => edit }
     else
@@ -137,8 +116,8 @@ class S2bBoardsController < ApplicationController
         issue.update_attribute(:s2b_position, issue.s2b_position.to_i + 1)
       end
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
-          :issue => @issue, :tracker => @tracker, :member => @member, :id_member => @id_member,
-          :status => @status, :priority => @priority, :sprint => @sprint})
+          :issue => @issue, :trackers => @trackers, :members => @members,
+          :statuses => @statuses, :priorities => @priorities, :sprints => @sprints})
       render :json => {:result => "create_success", :message => "Success to create the issue",
           :content => data, :id => @issue.id}
     else
@@ -153,8 +132,8 @@ class S2bBoardsController < ApplicationController
     respond_to do |format|
       format.js {
         @return_content = render_to_string(:partial => "/s2b_boards/screen_board", 
-            :locals => {:id_member => @id_member, :project => @project, :tracker => @tracker,
-            :priority => @priority, :member => @member, :issue => @issue, :status => @status,
+            :locals => { :projects => @projects, :trackers => @trackers,
+            :priorities => @priorities, :members => @members, :issue => @issue, :statuses => @statuses,
             :sprints => @sprints, :board_columns => @board_columns })
       }
     end
@@ -168,25 +147,28 @@ class S2bBoardsController < ApplicationController
   def find_project
     # @project variable must be set before calling the authorize filter
     project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
-    @project = Project.find(project_id)
+    @project = Project.find(project_id) unless project_id.blank?
   end
   
   
   
   def check_before_board
     @issue = Issue.new
-    @priority = IssuePriority.all
-    @tracker = Tracker.all
-    @status = IssueStatus.sorted
+    @priorities = IssuePriority.all
+    @trackers = Tracker.all
+    @statuses = IssueStatus.sorted
     if @use_version_for_sprint
-      @sprints = @project.versions.where(:status => "open")
+      @projects = @project.order(:name)
+      @members = @project.assignable_users
+      @sprints = Version.where(project_id: [@project.id, @project.parent_id])
     else
+      @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
+          {:id => @custom_field.id}).order("projects.name")
+      @members = User.where(:id => Member.where(:project_id => @projects.pluck(:id)
+          ).pluck(:user_id).uniq).order(:firstname)
       @sprints = @custom_field.possible_values
     end
-    @project =  Project.find(params[:project_id])
-    @member = @project.assignable_users
-    @id_member = @member.collect{|id_member| id_member.id}    
-    @has_permission = true if !User.current.anonymous? && @id_member.include?(User.current.id) || User.current.admin
+    @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
 
@@ -213,11 +195,15 @@ class S2bBoardsController < ApplicationController
     
     
     @board_columns.each do |board_column|
-      issues = @project.issues.eager_load(:assigned_to, :tracker, :fixed_version).where(
-          "status_id IN (?)", board_column[:status_ids])
-      unless @use_version_for_sprint
+      if @use_version_for_sprint
+        issues = @project.issues.eager_load(:assigned_to, :tracker, :fixed_version).where(
+            "status_id IN (?)", board_column[:status_ids])
+      else
+        issues = Issue.where(:project_id => @projects.pluck(:id)).eager_load(
+            :assigned_to, :tracker, :fixed_version).where(
+            "status_id IN (?)", board_column[:status_ids])
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
-            :custom_values => {:custom_field_id => @custom_field.id}) 
+            :custom_values => {:custom_field_id => @custom_field.id})         
       end
       issues = issues.where(session[:conditions])
       board_column.merge!({:issues => issues.order(:s2b_position)}) 

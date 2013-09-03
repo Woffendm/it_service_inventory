@@ -24,9 +24,6 @@
 
 
 
-<% if is_board %>
-  <%= render :partial => "/shared/filter_board", :locals => {:is_board => is_board} %>
-<% else %>
-  <%= render :partial => "/shared/filter_list", :locals => { :list_version => @list_versions} %>
-<% end %>
+<%= render :partial => "/shared/filter_list" %>
+
 

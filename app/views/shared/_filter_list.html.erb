@@ -2,7 +2,7 @@
   
   <span class="float_right">
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
-        :id => "btn_filter_issues_onlist" %>
+        :id => "btn_filter" %>
     
     <% if @use_version_for_sprint %>
       <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, 
@@ -18,7 +18,7 @@
     <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
         :selected => session[:params_member_ids]), :prompt => "All Members") %>
     
-    <%= select_tag "statuses", options_from_collection_for_select(@issue_statuses, 
+    <%= select_tag "statuses", options_from_collection_for_select(@statuses, 
         :id, :name), :selected => session[:params_status_ids], :prompt => "All Statuses" %>
   </span>
     

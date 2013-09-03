@@ -1,7 +1,6 @@
 class S2bListsController < ApplicationController
   unloadable
-  before_filter :find_project, :only => [:index, :change_sprint, :close_on_list, :sort,
-                                         :filter_issues_onlist]
+  before_filter :find_project
   before_filter :load_settings 
   before_filter :filter_issues_onlist, :only => [:index]
   skip_before_filter :verify_authenticity_token
@@ -11,7 +10,7 @@ class S2bListsController < ApplicationController
 
 
   def index
-    @issue_statuses = IssueStatus.sorted.where(:is_closed => false)
+    @statuses = IssueStatus.sorted.where(:is_closed => false)
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
       @members = @project.assignable_users

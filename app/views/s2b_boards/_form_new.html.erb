@@ -6,42 +6,42 @@
       :class => "span12 value_content") %>
   
   <div  class="span12">
-      <p id="p_priority_<%= issue.id%>">
+      <p id="p_priority_<%= issue.id %>">
         <span class="span5">
           <%= l(:label_priority) %> 
         </span>
         <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
-            @priority, :id, :name, :selected => issue.priority_id),
+            @priorities, :id, :name, :selected => issue.priority_id),
             :class => "span7 value_content") %>
       </p>
       
-      <p id="p_tracker_<%= issue.id%>">
+      <p id="p_tracker_<%= issue.id %>">
         <span class="span5">
           <%= l(:label_tracker)%>
         </span>
         <%= select_tag("new_tracker_#{issue.id}", options_from_collection_for_select(
-            @tracker, :id, :name, :selected => issue.tracker_id), 
+            @trackers, :id, :name, :selected => issue.tracker_id), 
             :class => "span7 value_content") %>
       </p>
       
-      <p id="p_status_<%= issue.id%>">
+      <p id="p_status_<%= issue.id %>">
         <span class="span5">
           <%= l(:label_head_issue_status)%> 
         </span>
         <%= select_tag("new_status_#{issue.id}", options_from_collection_for_select(
-            @status, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
+            @statuses, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
       </p>
       
-      <p id="p_assignee_<%= issue.id%>">
+      <p id="p_assignee_<%= issue.id %>">
         <span class="span5">
           <%= l(:label_head_issue_assignee)%> 
         </span>
         <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(
-            @member, :id, :name, :selected => issue.assigned_to_id), 
+            @members, :id, :name, :selected => issue.assigned_to_id), 
             :class => "span7 value_content", :include_blank => true) %>
       </p>
       
-      <p id="p_sprint_<%= issue.id%>">
+      <p id="p_sprint_<%= issue.id %>">
         <span class="span5">
           <%= l(:label_sprint)%> 
         </span>
@@ -66,7 +66,7 @@
         <% end %>
       </p>
       
-      <p id="p_time_<%= issue.id%>">
+      <p id="p_time_<%= issue.id %>">
         <span class="span5" style="text-align:justify; white-space: nowrap;">
           <%= l(:label_head_issue_est_time)%> 
         </span>
