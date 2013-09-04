@@ -53,7 +53,7 @@
             dataType : "json",
             success : function(res) {
               if (res.status == "completed"){
-                makeSlider(issue_id,res.done_ratio);
+                makeSlider(issue_id, res.done_ratio);
               }
             }
           });
@@ -63,14 +63,11 @@
           var url_sort = "<%= lists_sort_path %>";
           var id_next = $(".check").next().attr("id");
           var id_prev = $(".check").prev().attr("id");
-          var old_status = $(this).attr("value");
-          var new_status = $(".check").parent().attr("value");
           $(".check").removeClass("check");
-          console.debug(id_prev);
           $.ajax({
             url : url_sort,
             type : "POST",
-            data : 'issue_id=' + issue_id +'&id_prev=' + id_prev + '&id_next=' + id_next + '&new_status=' + new_status + '&old_status=' + old_status,
+            data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next,
             dataType : "text",
             success : function(){}
           });
@@ -152,7 +149,6 @@
         dataType : "json",
         success : function(data) {
           if(data.result == "edit_success") {
-            console.debug("get value :" + data.edit_content);
             $("#show_issue_" + id_issue).replaceWith(data.content).show();
             makeSlider(id_issue, slide_value);
             $("#edit_issue_" + id_issue).replaceWith(data.edit_content).hide();

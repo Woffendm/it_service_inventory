@@ -28,22 +28,30 @@ class S2bListsController < ApplicationController
   
   
   def sort
-    @issue = @project.issues.find(params[:issue_id])
+    @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status)
+    unless @use_version_for_sprints
+      @issues_in_column = @issues_in_column.eager_load(:custom_values, {
+          :project => :issue_custom_fields})
+      @issues_in_column = @issues_in_column.where(:custom_values => {:custom_field_id => @custom_field.id})
+    end
+    @issue = Issue.find(params[:issue_id])
     @status_ids = [-1]
     @board_columns.each do |board_column|
       @status_ids = board_column[:status_ids]
       break if @status_ids.index(@issue.status_id.to_s)
     end
-    @issues_in_column = @project.issues.where("status_id IN (?)", @status_ids).order(:s2b_position)
-    @max_position = @issues_in_column.last.s2b_position
+    
+    @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
+    @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
+    @max_position = @issues_in_column.last.s2b_position unless @issues_in_column.blank?
     
     if params[:id_next].to_i != 0
-      next_issue = @project.issues.find(params[:id_next].to_i) 
+      next_issue = Issue.find(params[:id_next].to_i) 
       @next_position = next_issue.s2b_position
     end
     
     if params[:id_prev].to_i != 0
-      prev_issue = @project.issues.find(params[:id_prev].to_i)
+      prev_issue = Issue.find(params[:id_prev].to_i)
       @prev_position = prev_issue.s2b_position
     end
     
@@ -57,7 +65,7 @@ class S2bListsController < ApplicationController
       end
       @issue.update_attribute(:s2b_position, 1)
     else 
-      @issues_in_column = @project.issues.where("status_id IN (?) AND s2b_position >= ? ", @status_ids, @next_position)
+      @issues_in_column = @issues_in_column.where("s2b_position >= ? ", @next_position)
       @issues_in_column.each do |issue|
         issue.update_attribute(:s2b_position,issue.s2b_position + 1) unless issue.id == @issue.id
       end

@@ -34,13 +34,10 @@ class S2bBoardsController < ApplicationController
   # Had to get rid of 'done ratio' stuff
   def update_status
     @issue = Issue.find(params[:issue_id])
-    new_status = params[:status]
-    return unless @issue && !new_status.blank?
-    new_status = new_status.to_f.to_i
-    new_status = IssueStatus.find(@board_columns[new_status][:status_ids].first)
-    @issue.update_attributes(:done_ratio => new_status.default_done_ratio, 
-        :status_id => new_status.id)
-        
+    return if @issue.blank? || params[:status].blank?
+    new_status = params[:status].to_f.to_i
+    new_status = @board_columns[new_status][:status_ids].first.to_i
+    @issue.update_attributes(:status_id => new_status)
     
     if @issue.valid? 
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
@@ -51,9 +48,6 @@ class S2bBoardsController < ApplicationController
       render :json => {:result => "failure", :message => @issue.errors.full_messages,
                        :content => data}
     end
-    
-    # idk what this does. only done if was in "completed" column
-    #  render :json => {:status => "completed", :done_ratio => 100 }
   end
   
   
@@ -97,10 +91,10 @@ class S2bBoardsController < ApplicationController
   
   
   def create
-    r = params[:custom_value]
-    @sort_issue = @project.issues.where("status_id IN (?)", @board_columns.first[:status_ids])    
+    @sort_issue = Issue.where(:project_id => @projects.pluck(:id)).where(
+        "status_id IN (?)", @board_columns.first[:status_ids])    
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
-        :tracker_id => params[:tracker], :project_id => params[:project_id], 
+        :tracker_id => params[:tracker], :project_id => params[:project], 
         :status_id => params[:status], :assigned_to_id => params[:assignee],
         :priority_id => params[:priority], :fixed_version_id => params[:version], 
         :start_date => params[:date_start], :due_date => params[:date_end], 
@@ -210,8 +204,7 @@ class S2bBoardsController < ApplicationController
         issues = @project.issues.eager_load(:assigned_to, :tracker, :fixed_version).where(
             "status_id IN (?)", board_column[:status_ids])
       else
-        issues = Issue.where(:project_id => @projects.pluck(:id)).eager_load(
-            :assigned_to, :tracker, :fixed_version, :status).where(
+        issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status).where(
             "status_id IN (?)", board_column[:status_ids])
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id})         
