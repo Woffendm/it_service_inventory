@@ -19,14 +19,15 @@
       var custom_values = $("#custom_values").val();
       var member_ids = $("#members").val();
       var project_ids = $("#projects").val();
-      var url_ajax = '<%= boards_filter_issues_onboard_path &>'
+      var url_ajax = '<%= boards_filter_issues_onboard_path %>'
       $.ajax({
         url : url_ajax,
         type : "POST",
-        data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&custom_value=' + custom_values + '&status_ids=' + status_ids,
+        data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&custom_values=' + custom_values + '&status_ids=' + status_ids,
         dataType : "script",
         success : function() {
           setup_sortable_columns();
+          setup_progress_bars();
         }
       });
       return false;
@@ -75,23 +76,28 @@
           });
         }
       });
-    };
+    }
     
     setup_sortable_columns();
     
+    function setup_progress_bars() {
+      $(".slider-horizontal").each(function() {
+        var id = parseInt($(this).parent().attr("value"));
+        var slide_value = $(this).attr("value");
+        makeSlider(id, slide_value);
+      });
+      
+      
+      $(".progressbar").each(function() {
+        var id = parseInt($(this).parent().attr("value"))
+        $("#progress"+id).progressbar({
+          value:parseInt($(this).attr("value"))
+         });
+      });
+    }
     
-    $(".slider-horizontal").each(function() {
-      var id = parseInt($(this).parent().attr("value"));
-      var slide_value = $(this).attr("value");
-      makeSlider(id, slide_value);
-    });
+    setup_progress_bars();
     
-    $(".progressbar").each(function() {
-      var id = parseInt($(this).parent().attr("value"))
-      $("#progress"+id).progressbar({
-        value:parseInt($(this).attr("value"))
-       });
-    });
     $(".icon_edit_issue").live("click", function(){
       var id_issue = parseInt($(this).parent().attr("value"))
       $(".icon_edit_issue").show();
@@ -104,6 +110,8 @@
       $("#show_issue_" + id_issue).hide();
       $(".hide").hide();
     });
+    
+    
     $(".cancel_issue").live("click", function(){
       var id_issue = parseInt($(this).parent().attr("value"))
       $("#completed").find("#close_" + id_issue).show();
@@ -116,6 +124,7 @@
       $("#edit_issue_").hide();
     });
    
+   
     $(".submit_issue").live("click", function(){
       var id_issue = $(this).parent().attr("value");
       if(id_issue != "" ){
@@ -125,6 +134,7 @@
       }
       var subject = $("#new_subject_"+id_issue).val();
       var description = $("#new_description_"+id_issue).val();
+      var project = $("#new_project_"+id_issue).val();
       var tracker = $("#new_tracker_"+id_issue).val();
       var status = $("#new_status_"+id_issue).val();
       var priority = $("#new_priority_"+id_issue).val();
@@ -138,7 +148,7 @@
       $.ajax({
         url : url_ajax,
         type : "POST",
-        data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end,
+        data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
         dataType : "json",
         success : function(data) {
           if(data.result == "edit_success") {
@@ -173,6 +183,7 @@
       }      
     })
     
+    
     $(".readmore").live("click", function(){
       var id = $(this).attr("value");
       $(this).hide();
@@ -182,6 +193,8 @@
        return false;
   
     });
+    
+    
     $(".hide").live("click", function() {
       var id = $(this).attr("value");
       $(this).hide();
@@ -208,12 +221,16 @@
       });
       
     }); 
+    
+    
     function form_edit(id){
       $("#p_status_" + id).hide();
       $("#p_priority_" + id).hide();
       $("#p_tracker_" + id).hide();
       $("#p_sprint_" + id).hide(); 
     }
+    
+    
     function editDate(id){
       var start_date = $( "#new_date_start_" + id);
       var end_date = $( "#new_date_end_" + id);
@@ -226,6 +243,7 @@
           dateFormat: "yy-mm-dd"
       });
     }
+    
     
     function makeSlider(id, slide_value) {
       $("#slider" + id ).slider({

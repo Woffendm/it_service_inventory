@@ -177,14 +177,25 @@ class S2bBoardsController < ApplicationController
     session[:params_version_ids] = params[:version_ids]
     session[:params_member_ids] = params[:member_ids]
     session[:params_custom_values] = params[:custom_values]
+    session[:params_project_ids] = params[:project_ids]
+    session[:params_status_ids] = params[:status_ids]
+    
     session[:conditions] = ["true"]
     unless session[:params_version_ids].blank? || session[:params_version_ids] == "undefined"
-      session[:conditions][0] += " AND fixed_version_id = ? "
+      session[:conditions][0] += " AND issues.fixed_version_id = ? "
       session[:conditions] << session[:params_version_ids]
     end
+    unless session[:params_project_ids].blank? || session[:params_project_ids] == "undefined"
+      session[:conditions][0] += " AND issues.project_id = ? "
+      session[:conditions] << session[:params_project_ids]
+    end
     unless session[:params_member_ids].blank?
-      session[:conditions][0] += " AND assigned_to_id = ?"
+      session[:conditions][0] += " AND issues.assigned_to_id = ?"
       session[:conditions] << session[:params_member_ids].to_i
+    end
+    unless session[:params_status_ids].blank?
+      session[:conditions][0] += " AND issues.status_id = ?"
+      session[:conditions] << session[:params_status_ids].to_i
     end
     unless session[:params_custom_values].blank? || session[:params_custom_values] == "undefined"
       session[:conditions][0] += " AND custom_values.value = ?"
@@ -200,7 +211,7 @@ class S2bBoardsController < ApplicationController
             "status_id IN (?)", board_column[:status_ids])
       else
         issues = Issue.where(:project_id => @projects.pluck(:id)).eager_load(
-            :assigned_to, :tracker, :fixed_version).where(
+            :assigned_to, :tracker, :fixed_version, :status).where(
             "status_id IN (?)", board_column[:status_ids])
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id})         

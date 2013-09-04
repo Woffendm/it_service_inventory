@@ -125,13 +125,10 @@ margin:10px 0 0 0;
 	border: 1px solid #628db6;
 }
 .board_issue .id {
-	float: left;
 	font-weight: bold;
-	margin-right: 10px;
+	margin: 0;
 }
-.board_issue .subject p.subject_issue{
-	margin-left: 10px;
-	margin-right: 50px;
+.subject, .subject_issue{
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -186,11 +183,7 @@ img.icon{
 .no_edit {
 		position: relative;
 	}
-	.icon_edit_issue {
-		float: right;
-		margin-right: 5px;
-		cursor: pointer;
-	}
+
 	.text_edit {
 		position: absolute;
 		padding: 2px 3px;
@@ -344,4 +337,9 @@ img.icon{
 
 .input-append input[class*="span"], .input-append .uneditable-input[class*="span"], .input-prepend input[class*="span"], .input-prepend .uneditable-input[class*="span"], .row-fluid input[class*="span"], .row-fluid select[class*="span"], .row-fluid textarea[class*="span"], .row-fluid .uneditable-input[class*="span"], .row-fluid .input-prepend [class*="span"], .row-fluid .input-append [class*="span"] {
     margin-bottom: 5px;
+}
+
+
+.clearfix {
+  width: 97%;
 }
