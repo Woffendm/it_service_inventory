@@ -1,17 +1,47 @@
-<% @sorted_issues.each do |issue_group|%>
+<% @sorted_issues.each_with_index do |issue_group, index| %>
   <% unless issue_group[:issues].blank? %>
-    <tr class="version_row">
-      <% if @use_version_for_sprint %>
-        <td colspan="9">
-      <% else %>
-        <td colspan="10">
-      <% end %>
+    <tr class="version_row" index="<%= index %>">
+      <td>
         <%= issue_group[:name] %>
       </td>
+
+      <td>
+      </td>
+
+      <td>
+      </td>
+
+      <td>
+      </td>
+
+      <% unless @use_version_for_sprint %>
+        <td>
+        </td>
+      <% end %>
+
+      <td>
+      </td>
+
+      <td>
+      </td>
+
+      <td>
+        <%= l(:label_total) %>
+        <span id="total_hours_<%= index %>"> </span>
+      </td>
+
+      <% if @show_progress_bars %>
+        <td>
+        </td>
+      <% end %>
     </tr>
+    
+    
+    
+    
     <% issue_group[:issues].each do |issue|%>
       <tr class="issue_row">
-        <%= render :partial => "list_issues", :locals => {:issue => issue} %>
+        <%= render :partial => "list_issues", :locals => {:issue => issue, :index => index} %>
       </tr>
     <% end %>
   <% end %>

@@ -53,9 +53,9 @@ class S2bBoardsController < ApplicationController
   
   
   def update_progress
-    @issue = @project.issues.find(params[:issue_id])
+    @issue = Issue.find(params[:issue_id])
     @issue.update_attribute(:done_ratio, params[:done_ratio])
-    render :json => {:result => "success", :new => "Success to update the progress",
+    render :json => {:result => "success", :new => "Issue progress updated",
                      :new_ratio => params[:done_ratio]}
   end
 
@@ -244,6 +244,7 @@ class S2bBoardsController < ApplicationController
     end
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
+    @show_progress_bars = @settings["show_progress_bars"] == "true"
     @custom_field = CustomField.find(@settings["custom_field_id"]) unless @use_version_for_sprint
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     

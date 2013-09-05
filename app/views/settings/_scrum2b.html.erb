@@ -26,18 +26,17 @@
         </h3>
       </div>
 
-
       <p>
-        <%= content_tag(:label, "Use project version")%>
+        <%= content_tag(:label, "Use project version") %>
         <%= radio_button_tag("settings[use_version_for_sprint]", "true", using_version) %>
       </p>
       <p>
-        <%= content_tag(:label, "Use custom field")%>
+        <%= content_tag(:label, "Use custom field") %>
         <%= radio_button_tag("settings[use_version_for_sprint]", "false", !using_version) %>
       </p>
 
       <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
-        <%= content_tag(:label, "Sprint custom field")%>
+        <%= content_tag(:label, "Sprint custom field") %>
         <%= select_tag("settings[custom_field_id]",
             options_from_collection_for_select(custom_fields, :id, :name, 
             {:selected => @settings["custom_field_id"]}), :prompt => "Select custom field") %>
@@ -45,7 +44,7 @@
       
       <p id="current_sprint_select" class='<%= "hidden" if using_version ||
           @settings["custom_field_id"].blank? %>'>
-        <%= content_tag(:label, "Current sprint")%>
+        <%= content_tag(:label, "Current sprint") %>
         <% custom_fields.each do |custom_field| %>
           <%= select_tag("settings[current_sprint]",
               options_for_select(custom_field.possible_values, 
@@ -58,6 +57,8 @@
     </div>
 
 
+
+
     <div class="box tabular">
       <div class="section_header">
         <h3>
@@ -66,10 +67,8 @@
         </h3>
       </div>
 
-
       <div id="new_columns" class="hidden">
       </div>
-
 
       <% board_columns.each_with_index do |board_column, index| %>
         <div class="<%= 'subsection' unless board_column == board_columns.last %>"
@@ -78,19 +77,19 @@
             <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
                 :parent_id => "#column_#{ index }") %>  
 
-            <%= content_tag(:label, "Name" )%>
+            <%= content_tag(:label, "Name" ) %>
             <%= text_field_tag("settings[board_columns][#{board_column.first}][name]",
                 board_column.last["name"]) %>
 
             <br/>
 
-            <%= content_tag(:label, "Position" )%>
+            <%= content_tag(:label, "Position" ) %>
             <%= select_tag("settings[board_columns][#{board_column.first}][position]",
                 options_for_select(1..number_of_columns, :selected => (index + 1))) %>
 
             <br/>
 
-            <%= content_tag(:label, "Statuses" )%>
+            <%= content_tag(:label, "Statuses" ) %>
             <% all_issue_statuses.each do |status| %>
               <span class="checkbox_group">
                 <%= check_box_tag(
@@ -112,17 +111,17 @@
             <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
                 :parent_id => "#column_-1", :id => "delete_-1") %>  
 
-            <%= content_tag(:label, "Name" )%>
+            <%= content_tag(:label, "Name" ) %>
             <%= text_field_tag("settings[board_columns][-1][name]") %>
 
             <br/>
 
-            <%= content_tag(:label, "Position" )%>
+            <%= content_tag(:label, "Position" ) %>
             <%= select_tag("settings[board_columns][-1][position]",
                 options_for_select(1..(number_of_columns + 1))) %>
             <br/>
 
-            <%= content_tag(:label, "Statuses" )%>
+            <%= content_tag(:label, "Statuses" ) %>
             <% all_issue_statuses.each do |status| %>
               <span class="checkbox_group">
                 <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
@@ -132,7 +131,24 @@
           </p>
         </div>
       </div>
+    </div>
 
+
+
+
+    <div class="box tabular">
+    
+      <div class="section_header">
+        <h3>
+          Other Settings
+        </h3>
+      </div>
+    
+      <p>
+        <%= content_tag(:label, "Show progress bars") %>
+        <%= check_box_tag("settings[show_progress_bars]", "true", 
+            @settings["show_progress_bars"] == 'true') %>
+      </p>
 
   <!-- Commented out because this view is rendered in redmine's /settings/plugin.html.erb, and the div ends there 
     </div>

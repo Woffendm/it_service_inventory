@@ -5,18 +5,6 @@ p.issues {
 	margin-top: 0;
 	float: left;
 }
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
-
-.clearfix {
-	display: inline-block;
-}
 
 html[xmlns] .clearfix {
 	display: block;
@@ -80,6 +68,8 @@ margin: 0 0 10px 0;
 	}
 	.description {
     border-top: 1px solid #339BB9;
+    border-bottom: 1px solid #339BB9;
+    
     padding: 3px;
     margin: 0 0 5px 0;
     overflow: hidden;
@@ -342,4 +332,5 @@ img.icon{
 
 .clearfix {
   width: 97%;
+  margin-bottom: 5px;
 }

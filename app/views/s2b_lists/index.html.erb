@@ -8,37 +8,56 @@
 <script>
   jQuery(function() {
     
-  $("#btn_filter").live("click",function(){
-      var version_ids = $("#versions").val() || "";
-      var status_ids = $("#statuses").val() || "";
-      var custom_values = $("#custom_values").val() || "";
-      var member_ids = $("#members").val() || "";
-      var project_ids = $("#projects").val() || "";
-      var url_ajax = '<%= lists_filter_issues_onlist_path %>';
-      $.ajax({
-        url : url_ajax,
-        type : "POST",
-        data : 'version_ids=' + version_ids + '&status_ids=' + status_ids + '&custom_values=' +
-            custom_values + '&member_ids=' + member_ids + '&project_ids=' + project_ids,
-        dataType : "script",
-        success : function() {
-          $(".progressbar").each(function() {
-            var id = parseInt($(this).attr("id"));
-            $("#"+id).progressbar({
-              value:parseInt($(this).attr("value"))
-            });
-          });
+  $("#btn_filter").live("click", function(){
+    var version_ids = $("#versions").val() || "";
+    var status_ids = $("#statuses").val() || "";
+    var custom_values = $("#custom_values").val() || "";
+    var member_ids = $("#members").val() || "";
+    var project_ids = $("#projects").val() || "";
+    var url_ajax = '<%= lists_filter_issues_onlist_path %>';
+    $.ajax({
+      url : url_ajax,
+      type : "POST",
+      data : 'version_ids=' + version_ids + '&status_ids=' + status_ids + '&custom_values=' +
+          custom_values + '&member_ids=' + member_ids + '&project_ids=' + project_ids,
+      dataType : "script",
+      success : function() {
+        calculate_time();
+        draw_progress_bars();
+      }
+    });
+    return false;
+  });
+  
+  
+  function draw_progress_bars() {
+    $(".progressbar").each(function() {
+      var id = parseInt($(this).attr("id"));
+      $("#"+id).progressbar({
+        value:parseInt($(this).attr("value"))
+      });
+    });
+  }
+  
+  
+  function calculate_time() {
+    $(".version_row").each(function() {
+      var index = $(this).attr("index");
+      var total = 0;
+      var total_hours_div = $("#total_hours_" + index);
+      var estimated_hours = $(".estimated_hours_" + index);
+      estimated_hours.each(function() {
+        var estimation = Number($(this).html());
+        if(estimation) {
+          total += estimation;
         }
       });
-      return false;
+      total_hours_div.html(total);
     });
-     
-  $(".progressbar").each(function() {
-    var id = parseInt($(this).attr("id"));
-    $("#"+id).progressbar({
-      value:parseInt($(this).attr("value"))
-    });
-  });
+  }
+  
+  draw_progress_bars();
+  calculate_time();
   
 });
 </script>

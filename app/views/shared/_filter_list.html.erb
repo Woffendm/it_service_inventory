@@ -23,8 +23,10 @@
         :selected => session[:params_status_ids], "data-placeholder" => "All Statuses", 
         :class => "chosen-select", :multiple => true %>
         
-    <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
+    <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary", 
         :id => "btn_filter" %>
+        
+    <%= button_tag l(:label_btn_clear), :class => "btn", :id => "btn_clear" %>
   </span>
     
 </div>

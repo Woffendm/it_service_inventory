@@ -17,6 +17,7 @@ en:
   label_select_all_versions: "All Sprints"
   label_select_backlog: "Backlog" 
   label_btn_submit_selected: "Filter"
+  label_btn_clear: "Clear"
   label_group_closed_sprin: "Closed Sprint"
   
   label_head_issue_priority: "Priority"
@@ -50,6 +51,7 @@ en:
   label_board_edit_btn_cancel: "Cancel"
   label_readmore: "Read more"
   label_hide: "Hide"
+  label_total: "Total: "
   
   label_tracker: "Tracker"
   label_priority: "Priority"

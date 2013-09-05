@@ -20,7 +20,6 @@ class S2bListsController < ApplicationController
           {:id => @custom_field.id}).order("projects.name")
       @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
-      
     end
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
@@ -151,10 +150,12 @@ class S2bListsController < ApplicationController
     
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
     @issue_backlogs = @issue_backlogs.order("status_id, projects.name, s2b_position")
+    
+    @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
     respond_to do |format|
       format.js {
         @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
-            :locals => {:sorted_issues => @sorted_issues, :issue_backlogs => @issue_backlogs})
+            :locals => {:sorted_issues => @sorted_issues})
       }
       format.html {}
     end
@@ -202,6 +203,7 @@ class S2bListsController < ApplicationController
     end
     
     @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
+    @show_progress_bars = @settings["show_progress_bars"] == "true"
     @custom_field = CustomField.find(@settings["custom_field_id"]) unless @use_version_for_sprint
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     

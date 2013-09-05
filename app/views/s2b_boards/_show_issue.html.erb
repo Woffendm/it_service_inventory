@@ -87,10 +87,12 @@
   <% end %>
   
   
-  <% if @has_permission %>
-    <div class="slider-horizontal" id="slider<%= issue.id %>" value="<%= issue.done_ratio %>"></div>
-  <% else %>
-    <div class="progressbar" value="<%= issue.done_ratio %>" id="progress<%= issue.id %>"></div>
+  <% if @show_progress_bars %>
+    <% if @has_permission %>
+      <div class="slider-horizontal" id="slider<%= issue.id %>" value="<%= issue.done_ratio %>"></div>
+    <% else %>
+      <div class="progressbar" value="<%= issue.done_ratio %>" id="progress<%= issue.id %>"></div>
+    <% end %>
   <% end %>
   
   
