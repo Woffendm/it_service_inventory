@@ -15,9 +15,9 @@ class S2bBoardsController < ApplicationController
       max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
       issue_no_position = @project.issues.where(:s2b_position => nil)
     else
-      max_position_issue = Issue.where(:project_id => @projects.pluck(:id)).maximum(
+      max_position_issue = Issue.where(:project_id => @projects.pluck("projects.id")).maximum(
           :s2b_position).to_i + 1
-      issue_no_position = Issue.where(:project_id => @projects.pluck(:id), :s2b_position => nil)
+      issue_no_position = Issue.where(:project_id => @projects.pluck("projects.id"), :s2b_position => nil)
     end
     unless issue_no_position.blank?
       issue_no_position.each_with_index do |issue, index|
@@ -91,7 +91,7 @@ class S2bBoardsController < ApplicationController
   
   
   def create
-    @sort_issue = Issue.where(:project_id => @projects.pluck(:id)).where(
+    @sort_issue = Issue.where(:project_id => @projects.pluck("projects.id")).where(
         "status_id IN (?)", @board_columns.first[:status_ids])    
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
         :tracker_id => params[:tracker], :project_id => params[:project], 
