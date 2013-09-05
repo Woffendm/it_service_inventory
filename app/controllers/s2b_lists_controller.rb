@@ -92,10 +92,12 @@ class S2bListsController < ApplicationController
     session[:params_project_ids] = ((params[:project_ids] unless params[:project_ids].blank?) || ([Project.find(params[:project_id]).id] unless params[:project_id].blank?)).to_a
     session[:params_status_ids] = params[:status_ids]
     session[:params_member_ids] = params[:member_ids]
-    session[:params_project_ids] = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if session[:params_project_ids].blank?
+    
+    project_ids = session[:params_project_ids]
+    project_ids = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if project_ids.blank?
     
     @issue_backlogs = Issue.eager_load(:custom_values, :status, :assigned_to, :project)
-    @issue_backlogs = @issue_backlogs.where(:project_id => session[:params_project_ids])
+    @issue_backlogs = @issue_backlogs.where(:project_id => project_ids)
     @issue_backlogs = @issue_backlogs.where(:status_id => session[:params_status_ids]) unless session[:params_status_ids].blank?
     @issue_backlogs = @issue_backlogs.where(:assigned_to_id => session[:params_member_ids]) unless session[:params_member_ids].blank?
     
@@ -123,7 +125,7 @@ class S2bListsController < ApplicationController
     else
       session[:params_custom_values] = params[:custom_values]
       issue_ids_with_custom_field = Issue.joins(:custom_values).where(
-          :project_id => session[:params_project_ids]).where(
+          :project_id => project_ids).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
           @custom_field.id).pluck("issues.id")
       issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
@@ -136,7 +138,7 @@ class S2bListsController < ApplicationController
       custom_values.each do |cv|
         issues =  Issue.eager_load(:assigned_to, :status, :tracker, :fixed_version,
             :custom_values, {:project => :issue_custom_fields}).where(
-            :project_id => session[:params_project_ids]).where(
+            :project_id => project_ids).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(:status_id => session[:params_status_ids]) unless

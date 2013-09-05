@@ -6,20 +6,20 @@
     
     <% if @use_version_for_sprint %>
       <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, 
-          :name, :selected => session[:params_version_ids]), {:prompt => "All Sprints", :class => "chosen-select", :multiple => true}) %>
+          :name, :selected => session[:params_version_ids]), {"data-placeholder" => "All Sprints", :class => "chosen-select", :multiple => true}) %>
     <% else %>
       <%= select_tag("custom_values", options_for_select(@sprints, 
-          :selected => session[:params_custom_values]), {:prompt => "All Sprints", :class => "chosen-select", :multiple => true}) %>
+          :selected => session[:params_custom_values]), {"data-placeholder" => "All Sprints", :class => "chosen-select", :multiple => true}) %>
     <% end %>
     
     <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
-        :selected => session[:params_project_ids]), :prompt => "All Projects", :class => "chosen-select", :multiple => true) %>
+        :selected => session[:params_project_ids]), "data-placeholder" => "All Projects", :class => "chosen-select", :multiple => true) %>
     
     <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
-        :selected => session[:params_member_ids]), :prompt => "All Members", :class => "chosen-select", :multiple => true) %>
+        :selected => session[:params_member_ids]), "data-placeholder" => "All Members", :class => "chosen-select", :multiple => true) %>
     
     <%= select_tag "statuses", options_from_collection_for_select(@statuses, 
-        :id, :name), :selected => session[:params_status_ids], :prompt => "All Statuses", :class => "chosen-select", :multiple => true %>
+        :id, :name), :selected => session[:params_status_ids], "data-placeholder" => "All Statuses", :class => "chosen-select", :multiple => true %>
   </span>
     
 </div>
