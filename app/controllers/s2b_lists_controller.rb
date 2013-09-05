@@ -88,10 +88,9 @@ class S2bListsController < ApplicationController
     end
     
     session[:view_issue] = "list"
-    # REMEMBER TO REMOVE THE [ ] WHEN YOU CHANGE THEM TO MULTIPLE SELECTS!
-    session[:params_project_ids] = ((params[:project_ids] unless params[:project_ids].blank?) || ([Project.find(params[:project_id]).id] unless params[:project_id].blank?)).to_a
-    session[:params_status_ids] = params[:status_ids]
-    session[:params_member_ids] = params[:member_ids]
+    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
+    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
+    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
     
     project_ids = session[:params_project_ids]
     project_ids = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if project_ids.blank?
@@ -103,7 +102,7 @@ class S2bListsController < ApplicationController
     
     @sorted_issues = []
     if @use_version_for_sprint
-      session[:params_version_ids]  = params[:version_ids]
+      session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
       @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
       if session[:params_version_ids].blank?
         versions = @project.versions.order("created_on")
@@ -123,7 +122,7 @@ class S2bListsController < ApplicationController
             "status_id, s2b_position")}
       end
     else
-      session[:params_custom_values] = params[:custom_values]
+      session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
       issue_ids_with_custom_field = Issue.joins(:custom_values).where(
           :project_id => project_ids).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
@@ -133,7 +132,7 @@ class S2bListsController < ApplicationController
       if session[:params_custom_values].blank?
         custom_values = @custom_field.possible_values
       else
-        custom_values = [session[:params_custom_values]]
+        custom_values = session[:params_custom_values]
       end
       custom_values.each do |cv|
         issues =  Issue.eager_load(:assigned_to, :status, :tracker, :fixed_version,
