@@ -168,31 +168,31 @@ class S2bBoardsController < ApplicationController
 
 
   def filter_issues(params)
-    session[:params_version_ids] = params[:version_ids]
-    session[:params_member_ids] = params[:member_ids]
-    session[:params_custom_values] = params[:custom_values]
-    session[:params_project_ids] = params[:project_ids]
-    session[:params_status_ids] = params[:status_ids]
+    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
+    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
+    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
+    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
     
     session[:conditions] = ["true"]
-    unless session[:params_version_ids].blank? || session[:params_version_ids] == "undefined"
-      session[:conditions][0] += " AND issues.fixed_version_id = ? "
+    unless session[:params_version_ids].blank?
+      session[:conditions][0] += " AND issues.fixed_version_id IN (?)"
       session[:conditions] << session[:params_version_ids]
     end
-    unless session[:params_project_ids].blank? || session[:params_project_ids] == "undefined"
-      session[:conditions][0] += " AND issues.project_id = ? "
+    unless session[:params_project_ids].blank?
+      session[:conditions][0] += " AND issues.project_id IN (?)"
       session[:conditions] << session[:params_project_ids]
     end
     unless session[:params_member_ids].blank?
-      session[:conditions][0] += " AND issues.assigned_to_id = ?"
+      session[:conditions][0] += " AND issues.assigned_to_id IN (?)"
       session[:conditions] << session[:params_member_ids].to_i
     end
     unless session[:params_status_ids].blank?
-      session[:conditions][0] += " AND issues.status_id = ?"
+      session[:conditions][0] += " AND issues.status_id IN (?)"
       session[:conditions] << session[:params_status_ids].to_i
     end
-    unless session[:params_custom_values].blank? || session[:params_custom_values] == "undefined"
-      session[:conditions][0] += " AND custom_values.value = ?"
+    unless session[:params_custom_values].blank?
+      session[:conditions][0] += " AND custom_values.value IN (?)"
       session[:conditions] << session[:params_custom_values]
       session[:conditions][0] += " AND custom_values.custom_field_id = ?"
       session[:conditions] << @custom_field.id

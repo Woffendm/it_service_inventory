@@ -14,11 +14,11 @@
   $(document).ready(function(){  
     
     $("#btn_filter").live("click",function(){
-      var version_ids = $("#versions").val();
-      var status_ids = $("#statuses").val();
-      var custom_values = $("#custom_values").val();
-      var member_ids = $("#members").val();
-      var project_ids = $("#projects").val();
+      var version_ids = $("#versions").val() || "";
+      var status_ids = $("#statuses").val() || "";
+      var custom_values = $("#custom_values").val() || "";
+      var member_ids = $("#members").val() || "";
+      var project_ids = $("#projects").val() || "";
       var url_ajax = '<%= boards_filter_issues_onboard_path %>'
       $.ajax({
         url : url_ajax,
@@ -129,18 +129,18 @@
       }else {
          var url_ajax = "create";
       }
-      var subject = $("#new_subject_"+id_issue).val();
-      var description = $("#new_description_"+id_issue).val();
-      var project = $("#new_project_"+id_issue).val();
-      var tracker = $("#new_tracker_"+id_issue).val();
-      var status = $("#new_status_"+id_issue).val();
-      var priority = $("#new_priority_"+id_issue).val();
-      var assignee = $("#new_assignee_"+id_issue).val();
-      var version = $("#new_version_"+id_issue).val();
-      var custom_value = $("#new_custom_value_"+id_issue).val();
-      var time = $("#new_time_"+id_issue).val();
-      var date_start = $("#new_date_start_"+id_issue).val();
-      var date_end = $("#new_date_end_"+id_issue).val();
+      var subject = $("#new_subject_"+id_issue).val() || "";
+      var description = $("#new_description_"+id_issue).val() || "";
+      var project = $("#new_project_"+id_issue).val() || "";
+      var tracker = $("#new_tracker_"+id_issue).val() || "";
+      var status = $("#new_status_"+id_issue).val() || "";
+      var priority = $("#new_priority_"+id_issue).val() || "";
+      var assignee = $("#new_assignee_"+id_issue).val() || "";
+      var version = $("#new_version_"+id_issue).val() || "";
+      var custom_value = $("#new_custom_value_"+id_issue).val() || "";
+      var time = $("#new_time_"+id_issue).val() || "";
+      var date_start = $("#new_date_start_"+id_issue).val() || "";
+      var date_end = $("#new_date_end_"+id_issue).val() || "";
       var slide_value = $("#slider" + id_issue).attr("value");
       $.ajax({
         url : url_ajax,
