@@ -18,7 +18,7 @@ class S2bListsController < ApplicationController
       @sprints = @custom_field.possible_values
       @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
           {:id => @custom_field.id}).order("projects.name")
-      @members = User.where(:id => Member.where(:project_id => @projects.pluck(:id)
+      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
       
     end
