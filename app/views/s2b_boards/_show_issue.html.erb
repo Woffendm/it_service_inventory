@@ -97,16 +97,18 @@
   
   
   <div class="slider_footer">
-    <div class="float_right">
-      <% if @has_permission %>
-        <p class="percent"> % </p>
-        <input type="button" id="amount<%= issue.id %>" class="percent" />
-      <% else %>
-        <p class="percent">
-          <%= issue.done_ratio %> %
-        </p>
-      <% end %>
-    </div>
+    <% if @show_progress_bars %>
+      <div class="float_right">
+        <% if @has_permission %>
+          <p class="percent"> % </p>
+          <input type="button" id="amount<%= issue.id %>" class="percent" />
+        <% else %>
+          <p class="percent">
+            <%= issue.done_ratio %> %
+          </p>
+        <% end %>
+      </div>
+    <% end %>
     
     <p class="float_left">
       <%= l(:label_board_issue_time) %>
