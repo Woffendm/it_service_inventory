@@ -26,7 +26,7 @@
     
     <p id="p_tracker_<%= issue.id %>">
       <span class="span5">
-        <%= l(:label_tracker)%>
+        <%= l(:label_tracker) %>
       </span>
       <%= select_tag("new_tracker_#{issue.id}", options_from_collection_for_select(
           @trackers, :id, :name, :selected => issue.tracker_id), 
@@ -35,7 +35,7 @@
     
     <p id="p_status_<%= issue.id %>">
       <span class="span5">
-        <%= l(:label_head_issue_status)%> 
+        <%= l(:label_head_issue_status) %> 
       </span>
       <%= select_tag("new_status_#{issue.id}", options_from_collection_for_select(
           @statuses, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
@@ -43,7 +43,7 @@
     
     <p id="p_assignee_<%= issue.id %>">
       <span class="span5">
-        <%= l(:label_head_issue_assignee)%> 
+        <%= l(:label_head_issue_assignee) %> 
       </span>
       <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(
           @members, :id, :name, :selected => issue.assigned_to_id), 
@@ -52,7 +52,7 @@
     
     <p id="p_sprint_<%= issue.id %>">
       <span class="span5">
-        <%= l(:label_sprint)%> 
+        <%= l(:label_sprint) %> 
       </span>
       <% if @use_version_for_sprint %>
         <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
@@ -77,7 +77,7 @@
     
     <p id="p_time_<%= issue.id %>">
       <span class="span5" style="text-align:justify; white-space: nowrap;">
-        <%= l(:label_head_issue_est_time)%> 
+        <%= l(:label_head_issue_est_time) %> 
       </span>
       <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, 
           :class => "span7 input-mini value_content") %>
@@ -103,10 +103,11 @@
   
   <div class="submit_new_issue span12" value = "<%= issue.id %>">
     <button type="button" class="submit_issue btn-mini btn-primary">
-      <%= l(:label_board_edit_btn_submit)%>
+      <%= l(:label_board_edit_btn_submit) %>
     </button>
     <button type="button" class="cancel_issue btn-mini btn-danger">
-      <%= l(:label_board_edit_btn_cancel)%>
+      <%= l(:label_board_edit_btn_cancel) %>
     </button>
   </div>
 </div>
+
