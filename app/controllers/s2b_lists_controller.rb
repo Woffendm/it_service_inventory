@@ -9,7 +9,15 @@ class S2bListsController < ApplicationController
 
 
   def index
+    if session[:view_issue].blank? || session[:view_issue] == "board" && 
+        params[:switch_screens].blank?
+      redirect_to :controller => "s2b_boards", :action => "index", 
+          :project_id => params[:project_id]
+      return
+    end
+    
     filter_issues
+    
     @statuses = IssueStatus.sorted.where(:is_closed => false)
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
@@ -78,14 +86,7 @@ class S2bListsController < ApplicationController
   
   
   
-  def filter_issues_onlist    
-    if session[:view_issue].blank? || session[:view_issue] == "board" && 
-        params[:switch_screens].blank?
-      redirect_to :controller => "s2b_boards", :action => "index", 
-          :project_id => params[:project_id]
-      return
-    end
-    
+  def filter_issues_onlist        
     session[:view_issue] = "list"
     session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
     session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
@@ -94,6 +95,13 @@ class S2bListsController < ApplicationController
     session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
     
     filter_issues
+    
+    respond_to do |format|
+      format.js {
+        @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
+            :locals => {:sorted_issues => @sorted_issues})
+      }
+    end
   end  
   
   
@@ -162,13 +170,6 @@ class S2bListsController < ApplicationController
     @issue_backlogs = @issue_backlogs.order("status_id, projects.name, s2b_position")
     
     @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
-    respond_to do |format|
-      format.js {
-        @return_content = render_to_string(:partial => "/s2b_lists/screen_list", 
-            :locals => {:sorted_issues => @sorted_issues})
-      }
-      format.html {}
-    end
   end
   
   

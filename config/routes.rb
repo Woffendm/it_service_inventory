@@ -4,8 +4,6 @@ RedmineApp::Application.routes.draw do
   match 'boards/index' => 's2b_boards#index'
   match 'boards/update_status' => 's2b_boards#update_status'
   match "boards/update_progress" => "s2b_boards#update_progress"
-  match "lists/close_on_list" => "s2b_lists#close_on_list"
-  match "boards/close_on_board" => "s2b_boards#close_on_board"
   match "boards/filter_issues_onboard" => "s2b_boards#filter_issues_onboard"
   match "lists/filter_issues_onlist" => "s2b_lists#filter_issues_onlist"
   match "boards/update" => "s2b_boards#update"

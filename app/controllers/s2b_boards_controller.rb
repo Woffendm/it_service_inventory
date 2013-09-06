@@ -25,7 +25,11 @@ class S2bBoardsController < ApplicationController
       end
     end
     session[:view_issue] = "board"
-    session[:params_custom_values] = @current_sprint.to_s.to_a if session[:params_custom_values].blank?
+    if session[:params_custom_values].blank?
+      session[:params_custom_values] = @current_sprint.to_s.to_a 
+      flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
+    end
+      
     filter_issues
   end
   
@@ -133,8 +137,8 @@ class S2bBoardsController < ApplicationController
       format.js {
         @return_content = render_to_string(:partial => "/s2b_boards/screen_board", 
             :locals => { :projects => @projects, :trackers => @trackers,
-            :priorities => @priorities, :members => @members, :issue => @issue, :statuses => @statuses,
-            :sprints => @sprints, :board_columns => @board_columns })
+            :priorities => @priorities, :members => @members, :issue => @issue, 
+            :statuses => @statuses, :sprints => @sprints, :board_columns => @board_columns })
       }
     end
   end
