@@ -185,11 +185,11 @@ class S2bBoardsController < ApplicationController
     end
     unless session[:params_member_ids].blank?
       session[:conditions][0] += " AND issues.assigned_to_id IN (?)"
-      session[:conditions] << session[:params_member_ids].to_i
+      session[:conditions] << session[:params_member_ids]
     end
     unless session[:params_status_ids].blank?
       session[:conditions][0] += " AND issues.status_id IN (?)"
-      session[:conditions] << session[:params_status_ids].to_i
+      session[:conditions] << session[:params_status_ids]
     end
     unless session[:params_custom_values].blank?
       session[:conditions][0] += " AND custom_values.value IN (?)"
