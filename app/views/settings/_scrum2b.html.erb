@@ -22,33 +22,35 @@
 
       <div class="section_header">
         <h3>
-          Sprint Sorting
+          <%= l(:setting_sprint_settings) %>
         </h3>
       </div>
 
       <p>
-        <%= content_tag(:label, "Use project version") %>
+        <%= content_tag(:label, l(:setting_use_project_version)) %>
         <%= radio_button_tag("settings[use_version_for_sprint]", "true", using_version) %>
       </p>
       <p>
-        <%= content_tag(:label, "Use custom field") %>
+        <%= content_tag(:label, l(:setting_use_custom_field)) %>
         <%= radio_button_tag("settings[use_version_for_sprint]", "false", !using_version) %>
       </p>
 
       <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
-        <%= content_tag(:label, "Sprint custom field") %>
+        <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
         <%= select_tag("settings[custom_field_id]",
             options_from_collection_for_select(custom_fields, :id, :name, 
-            {:selected => @settings["custom_field_id"]}), :prompt => "Select custom field") %>
+            {:selected => @settings["custom_field_id"]}), :prompt =>
+            l(:setting_select_custom_field)) %>
       </p>
       
       <p id="current_sprint_select" class='<%= "hidden" if using_version ||
           @settings["custom_field_id"].blank? %>'>
-        <%= content_tag(:label, "Current sprint") %>
+        <%= content_tag(:label, l(:setting_current_sprint)) %>
         <% custom_fields.each do |custom_field| %>
           <%= select_tag("settings[current_sprint]",
               options_for_select(custom_field.possible_values, 
-              {:selected => @settings["current_sprint"]}), :prompt => "Select current sprint", 
+              {:selected => @settings["current_sprint"]}), :prompt =>
+              l(:setting_select_current_sprint), 
               :id => "current_sprint_select_#{custom_field.id}", 
               :class => "#{'hidden' unless custom_field.id.to_s == @settings["custom_field_id"]} sprint_select") %>
         <% end %>
@@ -62,8 +64,8 @@
     <div class="box tabular">
       <div class="section_header">
         <h3>
-          Board Columns 
-          <%= button_tag("New Column", :type => :button, :id => "new_column_button") %>  
+          <%= l(:setting_board_columns) %>
+          <%= button_tag(l(:setting_new_column), :type => :button, :id => "new_column_button") %>  
         </h3>
       </div>
 
@@ -74,22 +76,22 @@
         <div class="<%= 'subsection' unless board_column == board_columns.last %>"
         id="column_<%= index %>" >
           <p>
-            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
+            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
                 :parent_id => "#column_#{ index }") %>  
 
-            <%= content_tag(:label, "Name" ) %>
+            <%= content_tag(:label, l(:setting_name) ) %>
             <%= text_field_tag("settings[board_columns][#{board_column.first}][name]",
                 board_column.last["name"]) %>
 
             <br/>
 
-            <%= content_tag(:label, "Position" ) %>
+            <%= content_tag(:label, l(:setting_position) ) %>
             <%= select_tag("settings[board_columns][#{board_column.first}][position]",
                 options_for_select(1..number_of_columns, :selected => (index + 1))) %>
 
             <br/>
 
-            <%= content_tag(:label, "Statuses" ) %>
+            <%= content_tag(:label, l(:setting_statuses) ) %>
             <% all_issue_statuses.each do |status| %>
               <span class="checkbox_group">
                 <%= check_box_tag(
@@ -108,20 +110,20 @@
       <div id="template" class="hidden">
         <div class="subsection" id="column_-1">
           <p>
-            <%= button_tag("Delete", :type => :button, :class => "delete_column contextual",
+            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
                 :parent_id => "#column_-1", :id => "delete_-1") %>  
 
-            <%= content_tag(:label, "Name" ) %>
+            <%= content_tag(:label, l(:setting_name) ) %>
             <%= text_field_tag("settings[board_columns][-1][name]") %>
 
             <br/>
 
-            <%= content_tag(:label, "Position" ) %>
+            <%= content_tag(:label, l(:setting_position) ) %>
             <%= select_tag("settings[board_columns][-1][position]",
                 options_for_select(1..(number_of_columns + 1))) %>
             <br/>
 
-            <%= content_tag(:label, "Statuses" ) %>
+            <%= content_tag(:label, l(:setting_statuses) ) %>
             <% all_issue_statuses.each do |status| %>
               <span class="checkbox_group">
                 <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
@@ -140,12 +142,12 @@
     
       <div class="section_header">
         <h3>
-          Other Settings
+          <%= l(:setting_other_settings) %>
         </h3>
       </div>
     
       <p>
-        <%= content_tag(:label, "Show progress bars") %>
+        <%= content_tag(:label, l(:setting_show_progress_bars)) %>
         <%= check_box_tag("settings[show_progress_bars]", "true", 
             @settings["show_progress_bars"] == 'true') %>
       </p>
