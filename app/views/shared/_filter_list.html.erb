@@ -19,8 +19,8 @@
         :selected => session[:params_member_ids]), "data-placeholder" => "All Members", 
         :class => "chosen-select", :multiple => true) %>
     
-    <%= select_tag "statuses", options_from_collection_for_select(@statuses, :id, :name), 
-        :selected => session[:params_status_ids], "data-placeholder" => "All Statuses", 
+    <%= select_tag "statuses", options_from_collection_for_select(@statuses, :id, :name, 
+        :selected => session[:params_status_ids]), "data-placeholder" => "All Statuses", 
         :class => "chosen-select", :multiple => true %>
         
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary", 

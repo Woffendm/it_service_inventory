@@ -2,7 +2,6 @@ class S2bListsController < ApplicationController
   unloadable
   before_filter :find_project
   before_filter :load_settings 
-  before_filter :filter_issues_onlist, :only => [:index]
   skip_before_filter :verify_authenticity_token
   self.allow_forgery_protection = false
   
@@ -10,6 +9,7 @@ class S2bListsController < ApplicationController
 
 
   def index
+    filter_issues
     @statuses = IssueStatus.sorted.where(:is_closed => false)
     if @use_version_for_sprint
       @sprints = Version.where(project_id: [@project.id, @project.parent_id])
@@ -90,7 +90,19 @@ class S2bListsController < ApplicationController
     session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
     session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
     session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
+    session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
     
+    filter_issues
+  end  
+  
+  
+  
+  
+  
+  private  
+  
+  def filter_issues
     project_ids = session[:params_project_ids]
     project_ids = Project.joins(:issue_custom_fields).where(:custom_fields => {:id => @custom_field.id}).pluck("projects.id") if project_ids.blank?
     
@@ -101,7 +113,6 @@ class S2bListsController < ApplicationController
     
     @sorted_issues = []
     if @use_version_for_sprint
-      session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
       @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
       if session[:params_version_ids].blank?
         versions = @project.versions.order("created_on")
@@ -121,7 +132,6 @@ class S2bListsController < ApplicationController
             "status_id, s2b_position")}
       end
     else
-      session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
       issue_ids_with_custom_field = Issue.joins(:custom_values).where(
           :project_id => project_ids).where(
           "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
@@ -159,13 +169,9 @@ class S2bListsController < ApplicationController
       }
       format.html {}
     end
-  end  
+  end
   
   
-  
-  
-  
-  private  
   
   def find_project
     # @project variable must be set before calling the authorize filter

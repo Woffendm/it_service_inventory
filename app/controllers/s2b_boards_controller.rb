@@ -25,8 +25,8 @@ class S2bBoardsController < ApplicationController
       end
     end
     session[:view_issue] = "board"
-    params[:custom_values] = @current_sprint
-    filter_issues(params)
+    session[:params_custom_values] = @current_sprint.to_s.to_a if session[:params_custom_values].blank?
+    filter_issues
   end
   
   
@@ -121,7 +121,13 @@ class S2bBoardsController < ApplicationController
     
   
   def filter_issues_onboard
-    filter_issues(params)
+    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
+    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
+    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
+    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
+    
+    filter_issues
     
     respond_to do |format|
       format.js {
@@ -167,13 +173,7 @@ class S2bBoardsController < ApplicationController
   
 
 
-  def filter_issues(params)
-    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
-    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
-    session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
-    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
-    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
-    
+  def filter_issues
     session[:conditions] = ["true"]
     unless session[:params_version_ids].blank?
       session[:conditions][0] += " AND issues.fixed_version_id IN (?)"
