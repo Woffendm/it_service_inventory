@@ -4,30 +4,42 @@
       <th>
         <%= l(:label_sprint) %>
       </th>
+      
       <th> 
         # 
       </th>
+      
       <th> 
         <%= l(:label_head_issue_priority) %> 
       </th>
+      
       <th> 
         <%= l(:label_head_issue_status) %> 
       </th>
+      
+      <% unless @use_version_for_sprint %>
+        <th> 
+          <%= l(:label_head_issue_project) %> 
+        </th>
+      <% end %>
+      
       <th> 
         <%= l(:label_head_issue_subject) %> 
       </th>
+      
       <th> 
         <%= l(:label_head_issue_assignee) %> 
       </th>
-      <th> 
-        <%= l(:label_head_issue_updated) %> 
-      </th>
+      
       <th> 
         <%= l(:label_head_issue_est_time) %> 
       </th>
-      <th> 
-        <%= l(:label_head_issue_done) %> 
-      </th>
+      
+      <% if @show_progress_bars %>
+        <th> 
+          <%= l(:label_head_issue_done) %> 
+        </th>
+      <% end %>
     </tr>
   </thead>
 
@@ -35,6 +47,5 @@
     <% if @sorted_issues %>
       <%= render :partial => "version", :locals =>{:sorted_issues => @sorted_issues}  %>
     <% end %>
-    <%= render :partial => "backlog", :locals =>{:issue_backlogs => @issue_backlogs }%>
   </tbody>
 </table>

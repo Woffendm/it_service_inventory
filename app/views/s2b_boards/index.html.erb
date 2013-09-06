@@ -1,47 +1,33 @@
 <%= render :partial => "/shared/plugin_header", :locals => {:is_board => true, 
-      :member => @member, :sprints => @sprints, 
+      :members => @members, :sprints => @sprints, 
       :use_version_for_sprint => @use_version_for_sprint} %>
 
 <div class="container-fluid">
-  <%= render :partial => "screen_board", :locals => { :id_member =>@id_member , 
-      :board_columns => @board_columns, :issue => @issue, :tracker => @tracker , 
-      :priority => @priority, :member => @member, :status => @status, :sprints => @sprints,
-      :use_version_for_sprint => @use_version_for_sprint} %>
+  <%= render :partial => "screen_board", :locals => { :id_member =>@id_member, 
+      :board_columns => @board_columns, :issue => @issue, :trackers => @trackers, 
+      :priorities => @priorities, :members => @members, :statuses => @statuses, 
+      :sprints => @sprints, :use_version_for_sprint => @use_version_for_sprint} %>
 </div>
 
 
 <script>
   $(document).ready(function(){  
-    $("#completed").find(".icon_close_issue").show();
-    $(".icon_close_issue").live("click",function(){
-      var issue_id = $(this).parent().attr("value")
-      var project_id = <%= @project.id %>
-      var url_ajax = 'close_on_board'
+    
+    $("#btn_filter").live("click",function(){
+      var version_ids = $("#versions").val() || "";
+      var status_ids = $("#statuses").val() || "";
+      var custom_values = $("#custom_values").val() || "";
+      var member_ids = $("#members").val() || "";
+      var project_ids = $("#projects").val() || "";
+      var url_ajax = '<%= boards_filter_issues_onboard_path %>'
       $.ajax({
         url : url_ajax,
         type : "POST",
-        data : 'issue_id=' + issue_id + '&project_id=' + project_id,
-        dataType : "script",
-        success : function() {
-          }
-      });
-      return false;
-    });
-    
-    
-    $("#btn_filter_issues_on_board").live("click",function(){
-      var select_version = $("#select_version_onboard").val()
-      var select_custom_value = $("#select_custom_value_onboard").val()
-      var select_member = $("#select_member").val()
-      var project_id = <%= @project.id %>
-      var url_ajax = 'filter_issues_onboard'
-      $.ajax({
-        url : url_ajax,
-        type : "POST",
-        data : 'select_version=' + select_version + '&select_member=' + select_member + '&project_id=' + project_id + '&select_custom_value=' + select_custom_value,
+        data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&custom_values=' + custom_values + '&status_ids=' + status_ids,
         dataType : "script",
         success : function() {
           setup_sortable_columns();
+          setup_progress_bars();
         }
       });
       return false;
@@ -58,17 +44,16 @@
         },
         receive: function(){
           var status = sortable_columns.index(this);
-          var project_id = <%= @project.id %>;
           var url_ajax = 'update_status';
           var issue_id = $(this).find(".check").attr("id");
           $.ajax({
             url : url_ajax,
             type : "POST",
-            data : 'issue_id=' + issue_id + '&project_id=' + project_id + '&status=' + status,
+            data : 'issue_id=' + issue_id + '&status=' + status,
             dataType : "json",
             success : function(res) {
               if (res.status == "completed"){
-                makeSlider(issue_id,res.done_ratio);
+                makeSlider(issue_id, res.done_ratio);
               }
             }
           });
@@ -76,39 +61,40 @@
         stop: function() {
           var issue_id = $(".check").attr("id");
           var url_sort = "<%= lists_sort_path %>";
-          var project_id = <%= @project.id %>;
           var id_next = $(".check").next().attr("id");
           var id_prev = $(".check").prev().attr("id");
-          var old_status = $(this).attr("value");
-          var new_status = $(".check").parent().attr("value");
           $(".check").removeClass("check");
-          console.debug(id_prev);
           $.ajax({
             url : url_sort,
             type : "POST",
-            data : 'issue_id=' + issue_id +'&id_prev=' + id_prev + '&project_id=' + project_id + '&id_next=' + id_next + '&new_status=' + new_status + '&old_status=' + old_status,
+            data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next,
             dataType : "text",
             success : function(){}
           });
         }
       });
-    };
+    }
     
     setup_sortable_columns();
     
+    function setup_progress_bars() {
+      $(".slider-horizontal").each(function() {
+        var id = parseInt($(this).parent().attr("value"));
+        var slide_value = $(this).attr("value");
+        makeSlider(id, slide_value);
+      });
+      
+      
+      $(".progressbar").each(function() {
+        var id = parseInt($(this).parent().attr("value"))
+        $("#progress"+id).progressbar({
+          value:parseInt($(this).attr("value"))
+         });
+      });
+    }
     
-    $(".slider-horizontal").each(function() {
-      var id = parseInt($(this).parent().attr("value"));
-      var slide_value = $(this).attr("value");
-      makeSlider(id, slide_value);
-    });
+    setup_progress_bars();
     
-    $(".progressbar").each(function() {
-      var id = parseInt($(this).parent().attr("value"))
-      $("#progress"+id).progressbar({
-        value:parseInt($(this).attr("value"))
-       });
-    });
     $(".icon_edit_issue").live("click", function(){
       var id_issue = parseInt($(this).parent().attr("value"))
       $(".icon_edit_issue").show();
@@ -121,6 +107,8 @@
       $("#show_issue_" + id_issue).hide();
       $(".hide").hide();
     });
+    
+    
     $(".cancel_issue").live("click", function(){
       var id_issue = parseInt($(this).parent().attr("value"))
       $("#completed").find("#close_" + id_issue).show();
@@ -133,6 +121,7 @@
       $("#edit_issue_").hide();
     });
    
+   
     $(".submit_issue").live("click", function(){
       var id_issue = $(this).parent().attr("value");
       if(id_issue != "" ){
@@ -140,27 +129,26 @@
       }else {
          var url_ajax = "create";
       }
-      var subject = $("#new_subject_"+id_issue).val();
-      var description = $("#new_description_"+id_issue).val();
-      var tracker = $("#new_tracker_"+id_issue).val();
-      var status = $("#new_status_"+id_issue).val();
-      var priority = $("#new_priority_"+id_issue).val();
-      var assignee = $("#new_assignee_"+id_issue).val();
-      var version = $("#new_version_"+id_issue).val();
-      var custom_value = $("#new_custom_value_"+id_issue).val();
-      var time = $("#new_time_"+id_issue).val();
-      var date_start = $("#new_date_start_"+id_issue).val();
-      var date_end = $("#new_date_end_"+id_issue).val();
-      var project_id = <%= @project.id %>;
+      var subject = $("#new_subject_"+id_issue).val() || "";
+      var description = $("#new_description_"+id_issue).val() || "";
+      var project = $("#new_project_"+id_issue).val() || "";
+      var tracker = $("#new_tracker_"+id_issue).val() || "";
+      var status = $("#new_status_"+id_issue).val() || "";
+      var priority = $("#new_priority_"+id_issue).val() || "";
+      var assignee = $("#new_assignee_"+id_issue).val() || "";
+      var version = $("#new_version_"+id_issue).val() || "";
+      var custom_value = $("#new_custom_value_"+id_issue).val() || "";
+      var time = $("#new_time_"+id_issue).val() || "";
+      var date_start = $("#new_date_start_"+id_issue).val() || "";
+      var date_end = $("#new_date_end_"+id_issue).val() || "";
       var slide_value = $("#slider" + id_issue).attr("value");
       $.ajax({
         url : url_ajax,
         type : "POST",
-        data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project_id=' + project_id,
+        data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
         dataType : "json",
         success : function(data) {
           if(data.result == "edit_success") {
-            console.debug("get value :" + data.edit_content);
             $("#show_issue_" + id_issue).replaceWith(data.content).show();
             makeSlider(id_issue, slide_value);
             $("#edit_issue_" + id_issue).replaceWith(data.edit_content).hide();
@@ -191,6 +179,7 @@
       }      
     })
     
+    
     $(".readmore").live("click", function(){
       var id = $(this).attr("value");
       $(this).hide();
@@ -200,6 +189,8 @@
        return false;
   
     });
+    
+    
     $(".hide").live("click", function() {
       var id = $(this).attr("value");
       $(this).hide();
@@ -226,12 +217,17 @@
       });
       
     }); 
+    
+    
     function form_edit(id){
       $("#p_status_" + id).hide();
       $("#p_priority_" + id).hide();
       $("#p_tracker_" + id).hide();
       $("#p_sprint_" + id).hide(); 
+      $("#p_project_" + id).hide(); 
     }
+    
+    
     function editDate(id){
       var start_date = $( "#new_date_start_" + id);
       var end_date = $( "#new_date_end_" + id);
@@ -245,6 +241,7 @@
       });
     }
     
+    
     function makeSlider(id, slide_value) {
       $("#slider" + id ).slider({
         orientation: "horizontal",
@@ -257,12 +254,11 @@
         },
         stop: function(e, ui) {
           var issue_id = parseInt($(this).parent().attr("value"));
-          var project_id = <%= @project.id %>;
           var url_ajax = "update_progress";
           $.ajax({
             url : url_ajax,
             type : "POST",
-            data : 'done_ratio=' + ui.value + '&issue_id=' + issue_id + '&project_id='+project_id,
+            data : 'done_ratio=' + ui.value + '&issue_id=' + issue_id,
             dataType : "json",
             success : function(res) {
               $("#slider" + issue_id).attr("value", ui.value);

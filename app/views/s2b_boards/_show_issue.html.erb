@@ -1,56 +1,60 @@
 <div class="no_edit issue_show" id="show_issue_<%= issue.id %>" value="<%= issue.id %>">
-  <p class="id">    
-    #<%= link_to issue.id,:controller => 'issues', :action => 'show', :id => issue.id %>
-  </p>
-  
-  <% if @has_permission %>
-    <p class="icon_close_issue">
-      <i class="icon-remove" title="<%= l(:label_board_issue_text_close_issue) %>" id="close_<%= issue.id %>" alt="close_issue"></i>
-    </p>  
+  <div value="<%= issue.id %>">
+    <div class="float_left">    
+      <%= link_to "##{issue.id}", issue_path(issue.id) %>
+    </div>
     
-    <p class="icon_edit_issue">
-      <i class="icon-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
-    </p>  
-  <% end %>
-  
-  <div class="subject" >
-    <p class="no_edit subject_issue" id="subject_<%= issue.id %>">
-      <%= issue.subject %>
-    </p>
+    <% if @has_permission %>
+      <div class="icon_edit_issue float_right">
+        <i class="icon-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
+      </div>  
+    <% end %>
+    &nbsp;
   </div>
   
-  <div class="assignee clearfix">
-    <% if issue.assigned_to %>
-      <div class="no_edit float_left" id="assignee_<%= issue.id %>">
-        <i class="icon-arrow-right float_left"></i>
-        <%= link_to issue.assigned_to, :controller => 'users', :action => 'show', 
-            :id => issue.assigned_to.id %>
-      </div>
-    <% end %>
+  
+  <div class="no_edit subject_issue center" id="subject_<%= issue.id %>">
+    <%= issue.subject.truncate(40, :separator => ' ') %>
+  </div>
+  
+  
+  <div class="clearfix">
+    <div class="float_left">
+      <% unless @project %>
+        <div id="project_<%= issue.id %>">
+          <i class="icon-arrow-right"></i>
+          <%= link_to issue.project.name, project_path(issue.project_id) %>
+        </div>
+      <% end %>
+      
+      <% if issue.assigned_to %>
+        <div id="assignee_<%= issue.id %>">
+          <i class="icon-user"></i>
+          <%= link_to issue.assigned_to.name, user_path(issue.assigned_to.id) %>
+        </div>
+      <% end %>
+    </div>
+    
     
     <div id="date_<%= issue.id %>" class="float_right dates">
       <% unless issue.start_date.blank? %>
-        <p id="start_date_<%= issue.id %>">
-          <%= l(:field_start_date) %>:
+        <div id="start_date_<%= issue.id %>">
+          <%= l(:field_start_date) %>: 
           <%= format_date(issue.start_date) %>
-        </p>
+        </div>
       <% end %>
       
       <% if issue.due_date %>
-        <p id="end_date_<%= issue.id %>">
-          <%= l(:field_due_date) %>:
-          <span class="float_right">
-            <%= format_date(issue.due_date) %>
-          </span>
-        </p>
+        <div id="end_date_<%= issue.id %>">
+          <%= l(:field_due_date) %>: 
+          <%= format_date(issue.due_date) %>
+        </div>
       <% else %>
         <% if issue.fixed_version && issue.fixed_version.effective_date != nil %>
-          <p id="end_date_<%= issue.id %>">
-            <%= l(:field_due_date) %>:
-            <span class="float_right">
-              <%= format_date(issue.fixed_version.effective_date) %>(v)
-            </span>
-          </p>
+          <div id="end_date_<%= issue.id %>">
+            <%= l(:field_due_date) %>: 
+            <%= format_date(issue.fixed_version.effective_date) %>(v)
+          </div>
         <% end %>
       <% end %>
     </div>
@@ -83,24 +87,28 @@
   <% end %>
   
   
-  <% if @has_permission %>
-    <div class="slider-horizontal" id="slider<%= issue.id %>" value="<%= issue.done_ratio %>"></div>
-  <% else %>
-    <div class="progressbar" value="<%= issue.done_ratio %>" id="progress<%= issue.id %>"></div>
+  <% if @show_progress_bars %>
+    <% if @has_permission %>
+      <div class="slider-horizontal" id="slider<%= issue.id %>" value="<%= issue.done_ratio %>"></div>
+    <% else %>
+      <div class="progressbar" value="<%= issue.done_ratio %>" id="progress<%= issue.id %>"></div>
+    <% end %>
   <% end %>
   
   
   <div class="slider_footer">
-    <div class="float_right">
-      <% if @has_permission %>
-        <p class="percent"> % </p>
-        <input type="button" id="amount<%= issue.id %>" class="percent" />
-      <% else %>
-        <p class="percent">
-          <%= issue.done_ratio %> %
-        </p>
-      <% end %>
-    </div>
+    <% if @show_progress_bars %>
+      <div class="float_right">
+        <% if @has_permission %>
+          <p class="percent"> % </p>
+          <input type="button" id="amount<%= issue.id %>" class="percent" />
+        <% else %>
+          <p class="percent">
+            <%= issue.done_ratio %> %
+          </p>
+        <% end %>
+      </div>
+    <% end %>
     
     <p class="float_left">
       <%= l(:label_board_issue_time) %>

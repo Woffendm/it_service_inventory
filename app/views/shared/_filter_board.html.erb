@@ -12,7 +12,7 @@
           :selected => session[:params_select_custom_value]), :id => "select_custom_value_onboard") %>
     <% end %>
     
-    <%= select_tag("select_member", options_from_collection_for_select(@member, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
+    <%= select_tag("select_member", options_from_collection_for_select(@members, :id, :name, :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
   </span>
   
 </div>

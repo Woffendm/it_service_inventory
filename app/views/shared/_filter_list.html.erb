@@ -1,22 +1,32 @@
 <div class="container-fluid filter">
   
   <span class="float_right">
-    <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary btn_submit", 
-        :id => "btn_filter_issues_onlist" %>
-    
     <% if @use_version_for_sprint %>
-      <%= select_tag("select_version_onlist", options_from_collection_for_select(@sprints, :id, 
-          :name, :selected => session[:params_select_version].to_i), {:prompt => "All Sprints"}) %>
+      <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, :name, 
+          :selected => session[:params_version_ids]), {"data-placeholder" => "All Sprints",
+          :class => "chosen-select", :multiple => true}) %>
     <% else %>
-      <%= select_tag("select_custom_value_onlist", options_for_select(@sprints, 
-          :selected => session[:params_select_custom_value]), {:prompt => "All Sprints"}) %>
+      <%= select_tag("custom_values", options_for_select(@sprints, 
+          :selected => session[:params_custom_values]), {"data-placeholder" => "All Sprints", 
+          :class => "chosen-select", :multiple => true}) %>
     <% end %>
     
-    <%= select_tag("select_member_onlist", options_from_collection_for_select(@member, :id, :name,
-        :selected => session[:params_select_member].to_i), :prompt => "All Members") %>
+    <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
+        :selected => session[:params_project_ids]), "data-placeholder" => "All Projects", 
+        :class => "chosen-select", :multiple => true) %>
     
-    <%= select_tag "select_issue_onlist", options_from_collection_for_select(@issue_statuses, 
-        :id, :name), :selected => session[:params_select_issue].to_i, :prompt => "All Statuses" %>
+    <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
+        :selected => session[:params_member_ids]), "data-placeholder" => "All Members", 
+        :class => "chosen-select", :multiple => true) %>
+    
+    <%= select_tag "statuses", options_from_collection_for_select(@statuses, :id, :name, 
+        :selected => session[:params_status_ids]), "data-placeholder" => "All Statuses", 
+        :class => "chosen-select", :multiple => true %>
+        
+    <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary", 
+        :id => "btn_filter" %>
+        
+    <%= button_tag l(:label_btn_clear), :class => "btn", :id => "btn_clear" %>
   </span>
-  
+    
 </div>

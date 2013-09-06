@@ -17,6 +17,7 @@ en:
   label_select_all_versions: "All Sprints"
   label_select_backlog: "Backlog" 
   label_btn_submit_selected: "Filter"
+  label_btn_clear: "Clear"
   label_group_closed_sprin: "Closed Sprint"
   
   label_head_issue_priority: "Priority"
@@ -26,6 +27,8 @@ en:
   label_head_issue_updated: "Updated"
   label_head_issue_est_time: "Est Time"
   label_head_issue_done: "% Done"
+  label_head_issue_project: "Project"
+  
   
   
   label_version_backlog: "Backlog"
@@ -48,6 +51,7 @@ en:
   label_board_edit_btn_cancel: "Cancel"
   label_readmore: "Read more"
   label_hide: "Hide"
+  label_total: "Total: "
   
   label_tracker: "Tracker"
   label_priority: "Priority"
@@ -60,3 +64,27 @@ en:
   label_move_issues: "Move To"
   label_error_select_issues: "Please select an issue..."
   label_sure_to_close_issues: "Are you sure to close the issues"
+  
+  
+  notice_sprint_changed_to: "Sprint changed to: "
+  
+  
+  setting_use_project_version: "Use project version"
+  setting_use_custom_field: "Use custom field"
+  setting_sprint_custom_field:  "Sprint custom field"
+  setting_select_custom_field:  "Select custom field"
+  setting_select_current_sprint:  "Select current sprint"
+  setting_current_sprint:  "Current sprint"
+  setting_new_column: "New column"
+  setting_delete: "Delete"
+  setting_name: "Name"
+  setting_position: "Position"
+  setting_statuses: "Statuses"
+  setting_sprint_settings: "Sprint settings"
+  setting_board_columns: "Board columns"
+  setting_other_settings: "Other settings"
+  setting_show_progress_bars: "Show progress bars"
+  
+  
+  
+  
