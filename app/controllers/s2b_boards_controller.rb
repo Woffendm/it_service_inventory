@@ -25,9 +25,19 @@ class S2bBoardsController < ApplicationController
       end
     end
     session[:view_issue] = "board"
-    if session[:params_custom_values].blank?
+    if session[:params_custom_values].blank? && !@use_version_for_sprint
       session[:params_custom_values] = @current_sprint.to_s.to_a 
       flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
+    end
+      
+    if session[:params_project_ids].blank? && @use_version_for_sprint
+      if @project.blank?
+        session[:params_project_ids] = @projects.first.id.to_s.to_a 
+        flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+      else
+        session[:params_project_ids] = @project.id.to_s.to_a
+        flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
+      end
     end
       
     filter_issues
@@ -152,6 +162,7 @@ class S2bBoardsController < ApplicationController
     # @project variable must be set before calling the authorize filter
     project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
     @project = Project.find(project_id) unless project_id.blank?
+    session[:params_project_ids] = @project.id.to_s.to_a unless @project.blank?
   end
   
   
@@ -162,9 +173,10 @@ class S2bBoardsController < ApplicationController
     @trackers = Tracker.all
     @statuses = IssueStatus.sorted
     if @use_version_for_sprint
-      @projects = @project.order(:name)
-      @members = @project.assignable_users
-      @sprints = Version.where(project_id: [@project.id, @project.parent_id])
+      @projects = Project.order(:name)
+      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
+          ).pluck(:user_id).uniq).order(:firstname)
+      @sprints = Version.where(project_id: @projects.pluck(:id))
     else
       @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
           {:id => @custom_field.id}).order("projects.name")
@@ -195,7 +207,7 @@ class S2bBoardsController < ApplicationController
       session[:conditions][0] += " AND issues.status_id IN (?)"
       session[:conditions] << session[:params_status_ids]
     end
-    unless session[:params_custom_values].blank?
+    unless session[:params_custom_values].blank? || @custom_field.blank?
       session[:conditions][0] += " AND custom_values.value IN (?)"
       session[:conditions] << session[:params_custom_values]
       session[:conditions][0] += " AND custom_values.custom_field_id = ?"
@@ -205,8 +217,9 @@ class S2bBoardsController < ApplicationController
     
     @board_columns.each do |board_column|
       if @use_version_for_sprint
-        issues = @project.issues.eager_load(:assigned_to, :tracker, :fixed_version).where(
-            "status_id IN (?)", board_column[:status_ids])
+        issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status).where(
+            "status_id IN (?)", board_column[:status_ids]).where(
+            :project_id => @projects.pluck(:id))
       else
         issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status).where(
             "status_id IN (?)", board_column[:status_ids])
