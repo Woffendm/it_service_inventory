@@ -67,6 +67,8 @@ en:
   
   
   notice_sprint_changed_to: "Sprint changed to: "
+  notice_project_changed_to: "Project changed to: "
+  
   
   
   setting_use_project_version: "Use project version"

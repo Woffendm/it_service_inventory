@@ -13,7 +13,7 @@
     
     <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
         :selected => session[:params_project_ids]), "data-placeholder" => "All Projects", 
-        :class => "chosen-select", :multiple => true) %>
+        :class => "chosen-select", :multiple => !@use_version_for_sprint) %>
     
     <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
         :selected => session[:params_member_ids]), "data-placeholder" => "All Members", 
