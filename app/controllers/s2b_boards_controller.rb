@@ -2,7 +2,7 @@ class S2bBoardsController < ApplicationController
   unloadable
   before_filter :find_project
   before_filter :load_settings
-  before_filter :check_before_board, :only => [:index, :close_on_board, :filter_issues_onboard,
+  before_filter :check_before_board, :only => [:index, :filter_issues_onboard,
                                                :update, :create]
   
   skip_before_filter :verify_authenticity_token
@@ -216,13 +216,9 @@ class S2bBoardsController < ApplicationController
     
     
     @board_columns.each do |board_column|
-      if @use_version_for_sprint
-        issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status).where(
-            "status_id IN (?)", board_column[:status_ids]).where(
-            :project_id => @projects.pluck(:id))
-      else
-        issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status).where(
-            "status_id IN (?)", board_column[:status_ids])
+      issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status, :project).where(
+          "status_id IN (?)", board_column[:status_ids])
+      unless @use_version_for_sprint
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id})         
       end
