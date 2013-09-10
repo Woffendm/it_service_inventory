@@ -10,15 +10,23 @@ class S2bBoardsController < ApplicationController
  
  
  
+ 
+  def edit
+    @issue = Issue.find(params[:issue_id])
+    return if @issue.blank?
+    edit = render_to_string(:partial => "/s2b_boards/form_edit", :locals => {:issue => @issue, 
+        :members => @members, :priorities => @priorities, :sprints => @sprints})
+    render :json => {:result => 200, :content => edit}
+  end
+ 
+ 
+ 
   def index
-    if @use_version_for_sprints
-      max_position_issue = @project.issues.maximum(:s2b_position).to_i + 1
-      issue_no_position = @project.issues.where(:s2b_position => nil)
-    else
-      max_position_issue = Issue.where(:project_id => @projects.pluck("projects.id")).maximum(
-          :s2b_position).to_i + 1
-      issue_no_position = Issue.where(:project_id => @projects.pluck("projects.id"), :s2b_position => nil)
-    end
+    max_position_issue = Issue.where(:project_id => @projects.pluck("projects.id")).maximum(
+        :s2b_position).to_i + 1
+    issue_no_position = Issue.where(:project_id => @projects.pluck("projects.id"), 
+        :s2b_position => nil)
+
     unless issue_no_position.blank?
       issue_no_position.each_with_index do |issue, index|
         issue.update_attribute(:s2b_position, max_position_issue + index)

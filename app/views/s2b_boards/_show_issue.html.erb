@@ -5,7 +5,7 @@
     </div>
     
     <% if @has_permission %>
-      <div class="icon_edit_issue float_right">
+      <div class="icon_edit_issue float_right" issue_id="<%= issue.id %>">
         <i class="icon-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
       </div>  
     <% end %>

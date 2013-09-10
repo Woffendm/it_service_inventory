@@ -34,7 +34,7 @@ class S2bListsController < ApplicationController
   
   def sort
     @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status)
-    unless @use_version_for_sprints
+    unless @use_version_for_sprint
       @issues_in_column = @issues_in_column.eager_load(:custom_values, {
           :project => :issue_custom_fields})
       @issues_in_column = @issues_in_column.where(:custom_values => {:custom_field_id => @custom_field.id})
@@ -163,7 +163,7 @@ class S2bListsController < ApplicationController
         versions = Version.where(:id => session[:params_version_ids]).order("created_on")
       end
       versions.each do |version|
-        issues = Issue.eager_load(:assigned_to, :status, :tracker, 
+        issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(session[:conditions])
@@ -174,9 +174,9 @@ class S2bListsController < ApplicationController
       @issue_backlogs = @issue_backlogs.eager_load(:custom_values, 
           {:project => :issue_custom_fields}).where(
           :custom_values => {:custom_field_id => @custom_field.id})
-      issue_ids_with_custom_field = @issue_backlogs.where(
-          "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL",
-          @custom_field.id).pluck("issues.id")
+      issue_ids_with_custom_field = Issue.joins(:custom_values).where(
+          "custom_values.value IS NOT NULL").where(:custom_values => 
+          {:custom_field_id => @custom_field.id}).pluck("issues.id")
       issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       if session[:params_custom_values].blank?
@@ -185,9 +185,8 @@ class S2bListsController < ApplicationController
         custom_values = session[:params_custom_values]
       end
       custom_values.each do |cv|
-        issues =  Issue.eager_load(:assigned_to, :status, :tracker, :fixed_version, :priority,
+        issues =  Issue.eager_load(:assigned_to, :status, :fixed_version, :priority,
             :custom_values, {:project => :issue_custom_fields}).where(
-            :project_id => project_ids).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(session[:conditions])
