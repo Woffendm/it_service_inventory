@@ -2,6 +2,7 @@ RedmineApp::Application.routes.draw do
 
   match 'lists/index' => 's2b_lists#index'
   match 'boards/index' => 's2b_boards#index'
+  match 'boards/edit' => 's2b_boards#edit'
   match 'boards/update_status' => 's2b_boards#update_status'
   match "boards/update_progress" => "s2b_boards#update_progress"
   match "boards/filter_issues_onboard" => "s2b_boards#filter_issues_onboard"

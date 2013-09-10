@@ -83,7 +83,7 @@ $(document).ready(function(){
   
   
   $(".icon_edit_issue").live("click", function(){
-    var id_issue = parseInt($(this).parent().attr("value"));
+    var id_issue = parseInt($(this).attr("issue_id"));
     $(".icon_edit_issue").show();
     $(this).hide();
     $("#completed").find(".icon_close_issue").show();
