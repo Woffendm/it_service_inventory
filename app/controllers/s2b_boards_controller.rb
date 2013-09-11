@@ -3,7 +3,7 @@ class S2bBoardsController < ApplicationController
   before_filter :find_project
   before_filter :load_settings
   before_filter :check_before_board, :only => [:index, :filter_issues_onboard,
-                                               :update, :create]
+                                               :update, :create, :edit]
   
   skip_before_filter :verify_authenticity_token
   self.allow_forgery_protection = false
@@ -16,35 +16,26 @@ class S2bBoardsController < ApplicationController
     return if @issue.blank?
     edit = render_to_string(:partial => "/s2b_boards/form_edit", :locals => {:issue => @issue, 
         :members => @members, :priorities => @priorities, :sprints => @sprints})
-    render :json => {:result => 200, :content => edit}
+    render :json => {:result => "success", :content => edit}
   end
  
  
  
   def index
-    max_position_issue = Issue.where(:project_id => @projects.pluck("projects.id")).maximum(
-        :s2b_position).to_i + 1
-    issue_no_position = Issue.where(:project_id => @projects.pluck("projects.id"), 
-        :s2b_position => nil)
-
-    unless issue_no_position.blank?
-      issue_no_position.each_with_index do |issue, index|
-        issue.update_attribute(:s2b_position, max_position_issue + index)
-      end
-    end
     session[:view_issue] = "board"
-    if session[:params_custom_values].blank? && !@use_version_for_sprint
-      session[:params_custom_values] = @current_sprint.to_s.to_a 
-      flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
-    end
-      
-    if session[:params_project_ids].blank? && @use_version_for_sprint
-      if @project.blank?
-        session[:params_project_ids] = @projects.first.id.to_s.to_a 
-        flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+    
+    if session[:conditions].blank? || session[:conditions] == ["true"]
+      if @use_version_for_sprint
+        if @project.blank?
+          session[:params_project_ids] = @projects.first.id.to_s.to_a 
+          flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+        else
+          session[:params_project_ids] = @project.id.to_s.to_a
+          flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
+        end
       else
-        session[:params_project_ids] = @project.id.to_s.to_a
-        flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
+        session[:params_custom_values] = @current_sprint.to_s.to_a 
+        flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
       end
     end
       
@@ -84,24 +75,35 @@ class S2bBoardsController < ApplicationController
 
 
   def update
-    @id_version  = params[:version_ids]
     @issue = Issue.find(params[:id_issue])
     @issue.update_attributes(
         :subject => params[:subject], 
+        :priority_id => params[:priority],
         :assigned_to_id => params[:assignee],
         :estimated_hours => params[:time],
         :description => params[:description], 
         :start_date => params[:date_start], 
         :due_date => params[:date_end], 
-        :tracker_id => params[:tracker]
     )
+    @issue.update_attribute(:version_id, params[:version]) unless params[:version].blank?
+   unless params[:custom_value].blank?
+      @issue.custom_values.where(:custom_field_id => @custom_field.id).first.destroy
+      cv = CustomValue.new
+      cv.customized_type = "Issue"
+      cv.value = params[:custom_value]
+      cv.custom_field_id = @custom_field.id
+      cv.save
+      @issue.custom_values << cv
+   end
+    
     if @issue.valid? 
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
                                :locals => {:issue => @issue})
       edit  = render_to_string(:partial => "/s2b_boards/form_new", 
                                :locals => {:issue => @issue, :trackers => @trackers, 
                                :member => @members,
-                               :statuses => @statuses, :priorities => @priorities, :sprints => @sprints})
+                               :statuses => @statuses, :priorities => @priorities, 
+                               :sprints => @sprints})
       render :json => {:result => "edit_success", :message => "Success to update the message",
                        :content => data, :edit_content => edit }
     else
@@ -113,8 +115,14 @@ class S2bBoardsController < ApplicationController
   
   
   def create
-    @sort_issue = Issue.where(:project_id => @projects.pluck("projects.id")).where(
-        "status_id IN (?)", @board_columns.first[:status_ids])    
+    @sorted_issues = Issue.where(:status_id => @board_columns.first[:status_ids])
+    unless @use_version_for_sprint
+      @sorted_issues = @sorted_issues.eager_load(:custom_values, {
+          :project => :issue_custom_fields})
+      @sorted_issues = @sorted_issues.where(:custom_values => {
+          :custom_field_id => @custom_field.id})
+    end
+    @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
         :tracker_id => params[:tracker], :project_id => params[:project], 
         :status_id => params[:status], :assigned_to_id => params[:assignee],
@@ -128,18 +136,17 @@ class S2bBoardsController < ApplicationController
     cv.custom_field_id = @custom_field.id
     cv.save
     if @issue.save && @issue.custom_values << cv
-      @sort_issue.each do |issue|
-        issue.update_attribute(:s2b_position, issue.s2b_position.to_i + 1)
-      end
+      @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
           :issue => @issue, :trackers => @trackers, :members => @members,
           :statuses => @statuses, :priorities => @priorities, :sprints => @sprints})
-      render :json => {:result => "create_success", :message => "Success to create the issue",
+      render :json => {:result => "create_success", :message => "Issue successfully created",
           :content => data, :id => @issue.id}
     else
       render :json => {:result => "failure", :message => @issue.errors.full_messages}
     end
   end
+    
     
   
   def filter_issues_onboard
@@ -186,8 +193,12 @@ class S2bBoardsController < ApplicationController
           ).pluck(:user_id).uniq).order(:firstname)
       @sprints = Version.where(project_id: @projects.pluck(:id))
     else
-      @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
-          {:id => @custom_field.id}).order("projects.name")
+      if @custom_field.is_for_all
+        @projects = Project.order(:name)
+      else
+        @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
+            {:id => @custom_field.id}).order("projects.name")
+      end
       @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
       @sprints = @custom_field.possible_values
@@ -220,6 +231,24 @@ class S2bBoardsController < ApplicationController
       session[:conditions] << session[:params_custom_values]
       session[:conditions][0] += " AND custom_values.custom_field_id = ?"
       session[:conditions] << @custom_field.id
+    end
+    
+    
+    issue_no_position = Issue.where(:status_id => @board_columns.first[:status_ids])
+    unless @use_version_for_sprint
+      issue_no_position = issue_no_position.eager_load(:custom_values, {
+          :project => :issue_custom_fields})
+      issue_no_position = issue_no_position.where(:custom_values => {
+          :custom_field_id => @custom_field.id})
+    end
+    issue_no_position = issue_no_position.where(session[:conditions]).order(:s2b_position)
+    max_position_issue = issue_no_position.last.s2b_position.to_i + 1 unless issue_no_position.blank?
+    issue_no_position = Issue.where(:s2b_position => nil)
+
+    unless issue_no_position.blank?
+      issue_no_position.each_with_index do |issue, index|
+        issue.update_attribute(:s2b_position, max_position_issue + index)
+      end
     end
     
     

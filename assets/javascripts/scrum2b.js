@@ -23,6 +23,7 @@ $(document).ready(function(){
   });
   
   
+  
   function setup_sortable_columns() {
     var sortable_columns = $(".connectedSortable");
     sortable_columns.sortable({
@@ -65,13 +66,13 @@ $(document).ready(function(){
   }
   
   
+  
   function draw_progress_bars() {
     $(".slider-horizontal").each(function() {
       var id = parseInt($(this).parent().attr("value"));
       var slide_value = $(this).attr("value");
       makeSlider(id, slide_value);
     });
-    
     
     $(".progressbar").each(function() {
       var id = parseInt($(this).parent().attr("value"));
@@ -82,31 +83,40 @@ $(document).ready(function(){
   }
   
   
+  
   $(".icon_edit_issue").live("click", function(){
-    var id_issue = parseInt($(this).attr("issue_id"));
-    $(".icon_edit_issue").show();
-    $(this).hide();
-    $("#completed").find(".icon_close_issue").show();
-    $("#close_"+id_issue).hide();
-    $(".editing").hide();
-    $(".no_edit").show();
-    $("#edit_issue_" + id_issue).show();
-    $("#show_issue_" + id_issue).hide();
-    $(".hide").hide();
+    var issue_id = parseInt($(this).attr("issue_id"));
+    var url_ajax = "edit";
+    var edit = $("#edit_issue_" + issue_id);
+    if (edit.html().length < 10) {
+      $.ajax({
+        url : url_ajax,
+        type : "GET",
+        data : 'issue_id=' + issue_id,
+        dataType : "json",
+        success : function(data) {
+          if (data.result == "success") {
+            edit.html(data.content);
+            editDate(issue_id); 
+          }
+          else{
+            alert(data.message);
+          }
+        }
+      });
+    }
+    edit.show();
+    $("#show_issue_" + issue_id).hide();
   });
+  
   
   
   $(".cancel_issue").live("click", function(){
-    var id_issue = parseInt($(this).parent().attr("value"));
-    $("#completed").find("#close_" + id_issue).show();
-    $("#edit_issue_"+id_issue).hide();
-    $("#show_issue_"+id_issue).show();
-    $(".icon_edit_issue").show();
-    $(".readmore").show();
-    $(".hide").hide();
-    $(".description_readmore").hide();
-    $("#edit_issue_").hide();
+    var id_issue = parseInt($(this).parent().attr("value")) || "";
+    $("#edit_issue_" + id_issue).hide();
+    $("#show_issue_" + id_issue).show();
   });
+ 
  
  
   $(".submit_issue").live("click", function(){
@@ -137,18 +147,13 @@ $(document).ready(function(){
       success : function(data) {
         if(data.result == "edit_success") {
           $("#show_issue_" + id_issue).replaceWith(data.content).show();
+          $("#edit_issue_" + id_issue).hide();
           makeSlider(id_issue, slide_value);
-          $("#edit_issue_" + id_issue).replaceWith(data.edit_content).hide();
-          editDate(id_issue); 
-          form_edit(id_issue);
-          $("#completed").find(".icon_close_issue").show();
         }else if(data.result == "create_success"){
           $("#edit_issue_").find(".value_content").val("");
           $("#edit_issue_").hide();
           $("#edit_issue_").after(data.content);
-          makeSlider(data.id,0);
-          editDate(data.id); 
-          form_edit(data.id);
+          makeSlider(data.id, 0);
         }
         else{
           alert(data.message);
@@ -157,14 +162,6 @@ $(document).ready(function(){
     });
   });
   
-  
-  $(".editing").each(function() {
-    var id = $(this).attr("value");
-    editDate(id);
-    if( id != ""){ 
-      form_edit(id);
-    }      
-  })
   
   
   $(".readmore").live("click", function(){
@@ -178,6 +175,7 @@ $(document).ready(function(){
   });
   
   
+  
   $(".hide").live("click", function() {
     var id = $(this).attr("value");
     $(this).hide();
@@ -188,35 +186,12 @@ $(document).ready(function(){
   });
   
   
-  var start_date = $( "#date_start_");
-  start_date.datepicker({
-    defaultDate: start_date.attr("value"),
-    dateFormat: "yy-mm-dd"
-  });
-  
-  
-  var end_date = $( "#date_end_");
-  end_date.datepicker({
-    defaultDate: end_date.attr("value"),
-    dateFormat: "yy-mm-dd"
-  });
-  
-  
   
   $(".icon_new_issue").live("click", function(){
     $("#edit_issue_").show();
     $("#edit_issue_").addClass("board_issue");
   });
     
-  
-  
-  function form_edit(id){
-    $("#p_status_" + id).hide();
-    $("#p_priority_" + id).hide();
-    $("#p_tracker_" + id).hide();
-    $("#p_sprint_" + id).hide(); 
-    $("#p_project_" + id).hide(); 
-  }
   
   
   function editDate(id){
@@ -231,6 +206,7 @@ $(document).ready(function(){
         dateFormat: "yy-mm-dd"
     });
   }
+  
   
   
   function makeSlider(id, slide_value) {
@@ -262,10 +238,12 @@ $(document).ready(function(){
   }
   
   
+  
   var chosen_selects = $(".chosen-select");
   $("#btn_clear").live("click", function () {
     chosen_selects.val('').trigger("chosen:updated");
   });
+  
   
   
   function calculate_time() {
@@ -283,6 +261,7 @@ $(document).ready(function(){
       total_hours_div.html(total);
     });
   }
+  
   
   
   chosen_selects.chosen();

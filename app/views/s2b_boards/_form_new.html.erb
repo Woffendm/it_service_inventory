@@ -63,7 +63,7 @@
       <% else %>
         <% selected = nil %>
         <% issue.custom_values.each do |cv| %>
-          <% if cv.custom_field_id.to_s == @custom_field_id %>
+          <% if cv.custom_field_id.to_s == @custom_field.id %>
             <% selected = cv.value %>
             <% break %>
           <% end %>
@@ -87,7 +87,7 @@
       <span class="span5">
         <%= l(:label_start_date) %>
       </span>
-      <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, :class => "span7 value_content") %>
+      <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, :class => "span7") %>
     </p>
     
     <p>

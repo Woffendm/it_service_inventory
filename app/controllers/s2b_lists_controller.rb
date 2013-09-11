@@ -37,7 +37,8 @@ class S2bListsController < ApplicationController
     unless @use_version_for_sprint
       @issues_in_column = @issues_in_column.eager_load(:custom_values, {
           :project => :issue_custom_fields})
-      @issues_in_column = @issues_in_column.where(:custom_values => {:custom_field_id => @custom_field.id})
+      @issues_in_column = @issues_in_column.where(:custom_values => {
+          :custom_field_id => @custom_field.id})
     end
     @issue = Issue.find(params[:issue_id])
     @status_ids = [-1]
@@ -48,7 +49,8 @@ class S2bListsController < ApplicationController
     
     @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
     @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
-    @max_position = @issues_in_column.last.s2b_position unless @issues_in_column.blank?
+    @max_position = @issues_in_column.last.s2b_position.to_i unless @issues_in_column.blank?
+    @min_position = @issues_in_column.first.s2b_position.to_i unless @issues_in_column.blank?
     
     if params[:id_next].to_i != 0
       next_issue = Issue.find(params[:id_next].to_i) 
@@ -65,10 +67,7 @@ class S2bListsController < ApplicationController
     elsif @next_position.blank? && @prev_position
       @issue.update_attribute(:s2b_position, @max_position + 1)
     elsif @next_position && @prev_position.blank?
-      @issues_in_column.each do |issue|
-        issue.update_attribute(:s2b_position, issue.s2b_position + 1) unless issue.id == @issue.id
-      end
-      @issue.update_attribute(:s2b_position, 1)
+      @issue.update_attribute(:s2b_position, @min_position - 1)
     else 
       @issues_in_column = @issues_in_column.where("s2b_position >= ? ", @next_position)
       @issues_in_column.each do |issue|
@@ -116,11 +115,15 @@ class S2bListsController < ApplicationController
           ).pluck(:user_id).uniq).order(:firstname)
       @sprints = Version.where(project_id: @projects.pluck(:id))
     else
-      @sprints = @custom_field.possible_values
-      @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
-          {:id => @custom_field.id}).order("projects.name")
+      if @custom_field.is_for_all
+        @projects = Project.order(:name)
+      else
+        @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
+            {:id => @custom_field.id}).order("projects.name")
+      end
       @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
+      @sprints = @custom_field.possible_values
     end
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end

@@ -1,87 +1,80 @@
+<%= text_field_tag("new_subject_#{issue.id}", issue.subject, :class => "span12 value_content") %>
+<%= text_area_tag("new_description_#{issue.id}", issue.description, 
+    :class => "span12 value_content") %>
 
-
-<div class="editing clearfix" id="edit_issue_<%= issue.id %>" value="<%= issue.id %>">
-  <%= text_field_tag("new_subject_#{issue.id}", issue.subject, :class => "span12 value_content") %>
-  <%= text_area_tag("new_description_#{issue.id}", issue.description, 
-      :class => "span12 value_content") %>
+<div  class="span12">
+  <p id="p_priority_<%= issue.id %>">
+    <span class="span5">
+      <%= l(:label_priority) %> 
+    </span>
+    <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
+        @priorities, :id, :name, :selected => issue.priority_id),
+        :class => "span7 value_content") %>
+  </p>
   
-  <div  class="span12">
-    <p id="p_priority_<%= issue.id %>">
-      <span class="span5">
-        <%= l(:label_priority) %> 
-      </span>
-      <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
-          @priorities, :id, :name, :selected => issue.priority_id),
-          :class => "span7 value_content") %>
-    </p>
-    
-    <p id="p_assignee_<%= issue.id %>">
-      <span class="span5">
-        <%= l(:label_head_issue_assignee) %> 
-      </span>
-      <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(
-          @members, :id, :name, :selected => issue.assigned_to_id), 
+  <p id="p_assignee_<%= issue.id %>">
+    <span class="span5">
+      <%= l(:label_head_issue_assignee) %> 
+    </span>
+    <%= select_tag("new_assignee_#{issue.id}", options_from_collection_for_select(
+        @members, :id, :name, :selected => issue.assigned_to_id), 
+        :class => "span7 value_content", :include_blank => true) %>
+  </p>
+  
+  <p id="p_sprint_<%= issue.id %>">
+    <span class="span5">
+      <%= l(:label_sprint) %> 
+    </span>
+    <% if @use_version_for_sprint %>
+      <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
+          @sprints, :id, :name, :selected => issue.fixed_version_id), 
           :class => "span7 value_content", :include_blank => true) %>
-    </p>
-    
-    <p id="p_sprint_<%= issue.id %>">
-      <span class="span5">
-        <%= l(:label_sprint) %> 
-      </span>
-      <% if @use_version_for_sprint %>
-        <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
-            @sprints, :id, :name, :selected => issue.fixed_version_id), 
-            :class => "span7 value_content", :include_blank => true) %>
-         <%= select_tag("new_custom_value_#{issue.id}", nil, :class => "hidden", 
-             :include_blank => true) %>
-      <% else %>
-        <% selected = nil %>
-        <% issue.custom_values.each do |cv| %>
-          <% if cv.custom_field_id.to_s == @custom_field_id %>
-            <% selected = cv.value %>
-            <% break %>
-          <% end %>
-        <% end %>
-        <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, 
-            :selected => selected), :class => "span7 value_content", :include_blank => true) %>
-        <%= select_tag("new_version_#{issue.id}", nil, :class => "hidden", 
-            :include_blank => true) %>
+    <% else %>
+      <% selected = nil %>
+      <% issue.custom_values.each do |cv| %>
+        <% selected = cv.value %>
+        <% break if cv.custom_field_id == @custom_field.id %>
       <% end %>
-    </p>
-    
-    <p id="p_time_<%= issue.id %>">
-      <span class="span5" style="text-align:justify; white-space: nowrap;">
-        <%= l(:label_head_issue_est_time) %> 
-      </span>
-      <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, 
-          :class => "span7 input-mini value_content") %>
-    </p>
-    
-    <p>
-      <span class="span5">
-        <%= l(:label_start_date) %>
-      </span>
-      <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, :class => "span7 value_content") %>
-    </p>
-    
-    <p>
-      <span class="span5" >
-        <%= l(:label_due_date) %>
-      </span>
-      <%= text_field_tag("new_date_end_#{ issue.id }", issue.due_date, :class => "span7 value_content") %>
-    </p>
-    
-  </div>
+      <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, 
+          :selected => selected), :class => "span7 value_content",
+          :include_blank => true) %>
+    <% end %>
+  </p>
   
+  <p id="p_time_<%= issue.id %>">
+    <span class="span5" style="text-align:justify; white-space: nowrap;">
+      <%= l(:label_head_issue_est_time) %> 
+    </span>
+    <%= text_field_tag("new_time_#{issue.id}", issue.estimated_hours, 
+        :class => "span7 input-mini value_content") %>
+  </p>
   
+  <p>
+    <span class="span5">
+      <%= l(:label_start_date) %>
+    </span>
+    <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, 
+        :class => "span7 value_content") %>
+  </p>
   
-  <div class="submit_new_issue span12" value = "<%= issue.id %>">
-    <button type="button" class="submit_issue btn-mini btn-primary">
-      <%= l(:label_board_edit_btn_submit) %>
-    </button>
-    <button type="button" class="cancel_issue btn-mini btn-danger">
-      <%= l(:label_board_edit_btn_cancel) %>
-    </button>
-  </div>
+  <p>
+    <span class="span5" >
+      <%= l(:label_due_date) %>
+    </span>
+    <%= text_field_tag("new_date_end_#{ issue.id }", issue.due_date, 
+        :class => "span7 value_content") %>
+  </p>
+  
+</div>
+
+
+
+<div class="submit_new_issue span12" value = "<%= issue.id %>">
+  <button type="button" class="submit_issue btn-mini btn-primary">
+    <%= l(:label_board_edit_btn_submit) %>
+  </button>
+  <button type="button" class="cancel_issue btn-mini btn-danger">
+    <%= l(:label_board_edit_btn_cancel) %>
+  </button>
 </div>
 
