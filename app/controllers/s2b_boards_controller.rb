@@ -24,8 +24,9 @@ class S2bBoardsController < ApplicationController
   def index
     session[:view_issue] = "board"
     
-    if session[:conditions].blank? || session[:conditions] == ["true"]
-      if @use_version_for_sprint
+    blank_conditions = session[:conditions].blank? || session[:conditions] == ["true"]
+    if @use_version_for_sprint
+      if blank_conditions || session[:params_project_ids].blank?
         if @project.blank?
           session[:params_project_ids] = @projects.first.id.to_s.to_a 
           flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
@@ -33,10 +34,10 @@ class S2bBoardsController < ApplicationController
           session[:params_project_ids] = @project.id.to_s.to_a
           flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
         end
-      else
-        session[:params_custom_values] = @current_sprint.to_s.to_a 
-        flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
       end
+    elsif blank_conditions
+      session[:params_custom_values] = @current_sprint.to_s.to_a 
+      flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
     end
       
     filter_issues
@@ -121,6 +122,11 @@ class S2bBoardsController < ApplicationController
           :project => :issue_custom_fields})
       @sorted_issues = @sorted_issues.where(:custom_values => {
           :custom_field_id => @custom_field.id})
+      cv = CustomValue.new
+      cv.customized_type = "Issue"
+      cv.value = params[:custom_value]
+      cv.custom_field_id = @custom_field.id
+      cv.save
     end
     @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
@@ -130,12 +136,8 @@ class S2bBoardsController < ApplicationController
         :start_date => params[:date_start], :due_date => params[:date_end], 
         :estimated_hours => params[:time], :author_id => User.current.id,
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
-    cv = CustomValue.new
-    cv.customized_type = "Issue"
-    cv.value = params[:custom_value]
-    cv.custom_field_id = @custom_field.id
-    cv.save
-    if @issue.save && @issue.custom_values << cv
+    if @issue.save
+      @issue.custom_values << cv unless cv.blank?
       @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
           :issue => @issue, :trackers => @trackers, :members => @members,
