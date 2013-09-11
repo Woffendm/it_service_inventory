@@ -86,7 +86,7 @@ class S2bBoardsController < ApplicationController
         :start_date => params[:date_start], 
         :due_date => params[:date_end], 
     )
-    @issue.update_attribute(:version_id, params[:version]) unless params[:version].blank?
+    @issue.update_attribute(:fixed_version_id, params[:version]) unless params[:version].blank?
    unless params[:custom_value].blank?
       @issue.custom_values.where(:custom_field_id => @custom_field.id).first.destroy
       cv = CustomValue.new
