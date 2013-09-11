@@ -299,9 +299,15 @@ class S2bBoardsController < ApplicationController
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      session[:params_custom_values] = nil
+      if session[:params_custom_values] 
+        session[:params_custom_values] = nil
+        session[:conditions] = nil
+      end
     else
-      session[:params_version_ids] = nil
+      if session[:params_version_ids] 
+        session[:params_version_ids] = nil
+        session[:conditions] = nil
+      end
     end
   end
   
