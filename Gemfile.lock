@@ -1,5 +1,5 @@
 GIT
-  remote: git@gitlab.cws.oregonstate.edu:cws_logger.git
+  remote: git@gitlab.cws.oregonstate.edu:gems/cws_logger.git
   revision: 188c3ac48d043583999c5761aff1c2b4d59da9d6
   specs:
     cws_logger (0.0.1)

@@ -21,7 +21,7 @@ gem 'mysql2'
 
 gem 'seed-fu', '~> 2.2.0'
 
-gem "cws_logger", :git => "git@gitlab.cws.oregonstate.edu:cws_logger.git"
+gem "cws_logger", :git => "git@gitlab.cws.oregonstate.edu:gems/cws_logger.git"
 
 group :development, :test do
 #  gem 'debugger'
