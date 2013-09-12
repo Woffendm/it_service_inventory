@@ -1,6 +1,6 @@
 <div id="results_per_page">
   <%= t(:results_per_page) %>
-  <% Project1::Application.config.config['results_per_page_options'].each do |number_of_results|%>
+  <% ITSI::Application.config.config['results_per_page_options'].each do |number_of_results|%>
     <% if number_of_results.to_s == session[:results_per_page].to_s %>
       <span id="pagination_selected">
     <% else %>

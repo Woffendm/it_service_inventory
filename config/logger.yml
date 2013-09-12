@@ -1,0 +1,26 @@
+defaults: &defaults
+  port: 12201
+  max_size: LAN
+  facility: CWS-ITSI
+
+development:
+  logger_1:
+    environment: development
+    enabled: 0
+    host: 
+    <<: *defaults
+
+production:
+  logger_1:
+    environment: development
+    enabled: 1
+    host: 
+    <<: *defaults
+
+test:
+  logger_1:
+    environment: development
+    enabled: 1
+    host: 
+    <<: *defaults
+
