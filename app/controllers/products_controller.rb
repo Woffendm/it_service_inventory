@@ -267,6 +267,7 @@ class ProductsController < ApplicationController
       @product_state = search[:product_state]
       @product_type = search[:product_type]
       @product_priority = search[:product_priority]
+      @dependency = search[:dependency]
       @search_string = ""
       @search_array = ["true"]
       @search_array << "products.name LIKE '%#{@name}%'" unless @name.blank? 
@@ -276,6 +277,8 @@ class ProductsController < ApplicationController
       @search_string = @search_array.join(" AND ")
       @products = Product.where(@search_string)
       @products = @products.joins(:groups).where("product_groups.group_id" => @group).uniq unless @group.blank?
+      @products = @products.joins(:dependencies).uniq if @dependency == "true"
+      @products = @products.where("products.id NOT IN (?)", @products.joins(:dependencies).pluck("products.id").uniq) if @dependency == "false"
       return @products
     end
     

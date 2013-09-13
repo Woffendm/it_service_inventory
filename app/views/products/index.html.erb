@@ -25,6 +25,10 @@
     <%= collection_select(:search, :product_type, @product_types, :id, :name, 
                          {:include_blank => t(:all_product_types),
                           :selected => @product_type}, {:class => "autocomplete large-select"}) %>
+    <%= select(:search, :dependency, options_for_select([["Has Dependencies", true], 
+                         ["No Dependencies", false]], :selected => @dependency),
+                         {:include_blank => "All Dependencies"}, 
+                         {:class => "autocomplete large-select"}) %>
     <div class="btn-group">
       <%= submit_tag t(:search), :class => "btn" %>
       <%= link_to t(:clear), products_path, :class => "btn" %>
