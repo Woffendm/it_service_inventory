@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: fiscal_years
+#
+#  id         :integer          not null, primary key
+#  year       :integer
+#  active     :boolean          default(TRUE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  seed_id    :integer
+#
+
 year_2013: 
   year: 2013
   active: true

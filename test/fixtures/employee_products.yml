@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: employee_products
+#
+#  id             :integer          not null, primary key
+#  product_id     :integer
+#  employee_id    :integer
+#  allocation     :float
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  fiscal_year_id :integer
+#
+
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:

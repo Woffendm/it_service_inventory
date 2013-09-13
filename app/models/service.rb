@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: services
+#
+#  id          :integer          not null, primary key
+#  name        :string(255)
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  description :text
+#
+
 # This class stores information related to services, such as their names, related employees, etc.
 #
 # Author: Michael Woffendin 

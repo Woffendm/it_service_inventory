@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: product_services
+#
+#  id         :integer          not null, primary key
+#  product_id :integer
+#  service_id :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 # This class links together Products and Services, enabling products to have many services and 
 #   visa versa. 
 #

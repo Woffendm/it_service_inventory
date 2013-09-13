@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: product_portfolios
+#
+#  id           :integer          not null, primary key
+#  portfolio_id :integer
+#  product_id   :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 # This class links together Products and Groups, enabling products to have many products and 
 #   visa versa. 
 #

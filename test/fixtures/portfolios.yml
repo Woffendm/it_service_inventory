@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: portfolios
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 awesome_stuff:
   name: awesome_stuff
 

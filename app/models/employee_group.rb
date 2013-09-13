@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: employee_groups
+#
+#  id          :integer          not null, primary key
+#  employee_id :integer
+#  group_id    :integer
+#  group_admin :boolean
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  active      :boolean          default(TRUE)
+#
+
 # This class links together Employees and Groups, enabling employees to have many groups and 
 #   visa versa. It also store whether or not the given employee is an admin of the given group.
 #

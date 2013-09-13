@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: portfolios
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class Portfolio < ActiveRecord::Base
     attr_accessible :name, :global, :group_portfolios, :group_portfolios_attributes,
                     :product_group_portfolios, :product_group_portfolios_attributes,  

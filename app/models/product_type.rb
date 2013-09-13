@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: product_types
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  seed_id    :integer
+#
+
 # Stores information about product types. Product types represent who the product was made for, such
 #     as Vendor, Custom Developed, Open Source, etc. 
 #

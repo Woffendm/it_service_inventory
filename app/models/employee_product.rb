@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: employee_products
+#
+#  id             :integer          not null, primary key
+#  product_id     :integer
+#  employee_id    :integer
+#  allocation     :float
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  fiscal_year_id :integer
+#
+
 # This class links together Employees and Products, enabling employees to have many products and 
 #   visa versa
 #

@@ -7,13 +7,14 @@ gem 'json', '1.7.6'
 gem 'dynamic_form', '1.1.4'
 
 gem 'therubyracer'
+gem 'libv8', '3.11.8.17'
 
 gem 'cancan', '1.6.9'
 
 gem 'net-ldap'
 
-gem 'rubycas-client', '~> 2.2.1'
-gem 'rubycas-client-rails'
+gem 'rubycas-client'
+gem 'rubycas-client-rails', :git => "https://github.com/oregonstateuniv/rubycas-client-rails.git"
 
 gem 'will_paginate', '3.0.4'
 
@@ -22,6 +23,8 @@ gem 'mysql2'
 gem 'seed-fu', '~> 2.2.0'
 
 gem "cws_logger", :git => "git@gitlab.cws.oregonstate.edu:gems/cws_logger.git"
+
+gem 'annotate', ">=2.5.0"
 
 group :development, :test do
 #  gem 'debugger'

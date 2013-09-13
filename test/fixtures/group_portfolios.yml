@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: group_portfolios
+#
+#  id           :integer          not null, primary key
+#  portfolio_id :integer
+#  group_id     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
 one:
   group:      cws
   portfolio:  awesome_stuff

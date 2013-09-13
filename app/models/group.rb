@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: groups
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 # This class stores information related to groups, such as their names and list of associated
 #    employees.
 #

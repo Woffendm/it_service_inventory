@@ -1,5 +1,0 @@
-<% if can? :update, service %>
-  <%= link_to service.name, edit_service_path(service.id) %>
-<% else %>
-  <%= service.name %> 
-<% end %>

@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: fiscal_years
+#
+#  id         :integer          not null, primary key
+#  year       :integer
+#  active     :boolean          default(TRUE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  seed_id    :integer
+#
+
 # Fiscal years are used to keep track of employee allocations over time. They may be used for other
 #   purposes as well in the future.
 #
