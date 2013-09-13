@@ -98,7 +98,7 @@ class ProductsController < ApplicationController
   
   
   # Removes product dependent
-  def removed_dependent
+  def remove_dependent
     to_remove = Product.find(params[:product_id])
     @product.dependents.delete to_remove
     flash[:notice] = "Dependency removed"
