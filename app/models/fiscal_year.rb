@@ -23,6 +23,9 @@ class FiscalYear < ActiveRecord::Base
   validates_presence_of :year
   validates :year, :numericality => { :only_integer => true }
   validates_uniqueness_of :year
+  validate :at_least_one_active_fiscal_year
+  after_save :change_active_fiscal_year
+
 
 
  # Returns all active fiscal years.
@@ -30,4 +33,25 @@ class FiscalYear < ActiveRecord::Base
     return FiscalYear.where(:active => true).order(:year)
   end
   
+  
+  
+  protected
+  
+  # Ensures there is always at least one active fiscal year
+  def at_least_one_active_fiscal_year
+    return true if self.active
+    if FiscalYear.active_fiscal_years.where("id != ?", self.id).length < 1
+      self.errors.add(:active, "Must have at least one active fiscal year")
+    end
+  end
+  
+  
+  
+  # Changes the current fiscal yaer if the current year was set to inactive and was the current year
+  def change_active_fiscal_year
+    return true if self.active
+    if AppSetting.current_fiscal_year == self
+      AppSetting.find_by_code("current_fiscal_year").update_attributes(:value => FiscalYear.active_fiscal_years.first.year)
+    end
+  end
 end
