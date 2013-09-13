@@ -1,0 +1,29 @@
+<div class="row-fluid" id="div_screen_board">
+  
+  
+  <% board_columns.each_with_index do |board_column, index| %>
+  
+    <div class="board span<%= (12 / board_columns.length.to_f).floor %>" id="column_<%= index %>">
+      <p class="status">
+        <%= board_column[:name] %>
+      </p>
+      
+      <% if index == 0 && @has_permission %>
+        <p class="new_issue ">
+          <i class="icon-plus icon_new_issue" title="<%= l(:label_board_issue_text_new_issue) %>" alt="new_issue"></i>
+        </p>
+      <% end %>
+      
+      <div class="connectedSortable" status="<%= index %>">
+        <%= render :partial => "form_new", :locals => { :issue => @issue}  if index == 0 %>
+        <% board_column[:issues].each do |issue|%>
+          <li id ="<%= issue.id %>">
+            <%= render :partial => "board_issue", :locals => { :issue => issue} %>
+          </li>
+        <% end %>
+      </div>
+    </div>
+    
+  <% end %>
+  
+</div>

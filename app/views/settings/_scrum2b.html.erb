@@ -1,0 +1,257 @@
+
+<%= stylesheet_link_tag 'scrum2b', :plugin => 'scrum2b' %>
+
+
+
+<% all_issue_statuses = IssueStatus.sorted %>
+<% custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% board_columns = [] %>
+
+<% board_columns = @settings["board_columns"].to_a %>
+<% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
+<% using_version = @settings["use_version_for_sprint"] == "true" %>
+<% number_of_columns = 0 %>
+<% number_of_columns = board_columns.length unless board_columns.blank? %>
+
+
+
+
+  <!-- Commented out because this view is rendered in redmine's /settings/plugin.html.erb, and the div starts there 
+    <div class="box tabular">
+  -->
+
+      <div class="section_header">
+        <h3>
+          <%= l(:setting_sprint_settings) %>
+        </h3>
+      </div>
+
+      <p>
+        <%= content_tag(:label, l(:setting_use_project_version)) %>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "true", using_version) %>
+      </p>
+      <p>
+        <%= content_tag(:label, l(:setting_use_custom_field)) %>
+        <%= radio_button_tag("settings[use_version_for_sprint]", "false", !using_version) %>
+      </p>
+
+      <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
+        <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
+        <%= select_tag("settings[custom_field_id]",
+            options_from_collection_for_select(custom_fields, :id, :name, 
+            {:selected => @settings["custom_field_id"]}), :prompt =>
+            l(:setting_select_custom_field)) %>
+      </p>
+      
+      <p id="current_sprint_select" class='<%= "hidden" if using_version ||
+          @settings["custom_field_id"].blank? %>'>
+        <%= content_tag(:label, l(:setting_current_sprint)) %>
+        <% custom_fields.each do |custom_field| %>
+          <%= select_tag("settings[current_sprint]",
+              options_for_select(custom_field.possible_values, 
+              {:selected => @settings["current_sprint"]}), :prompt =>
+              l(:setting_select_current_sprint), 
+              :id => "current_sprint_select_#{custom_field.id}", 
+              :class => "#{'hidden' unless custom_field.id.to_s == @settings["custom_field_id"]} sprint_select") %>
+        <% end %>
+      </p>
+
+    </div>
+
+
+
+
+    <div class="box tabular">
+      <div class="section_header">
+        <h3>
+          <%= l(:setting_board_columns) %>
+          <%= button_tag(l(:setting_new_column), :type => :button, :id => "new_column_button") %>  
+        </h3>
+      </div>
+
+      <div id="new_columns" class="hidden">
+      </div>
+
+      <% board_columns.each_with_index do |board_column, index| %>
+        <div class="<%= 'subsection' unless board_column == board_columns.last %>"
+        id="column_<%= index %>" >
+          <p>
+            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
+                :parent_id => "#column_#{ index }") %>  
+
+            <%= content_tag(:label, l(:setting_name) ) %>
+            <%= text_field_tag("settings[board_columns][#{board_column.first}][name]",
+                board_column.last["name"]) %>
+
+            <br/>
+
+            <%= content_tag(:label, l(:setting_position) ) %>
+            <%= select_tag("settings[board_columns][#{board_column.first}][position]",
+                options_for_select(1..number_of_columns, :selected => (index + 1))) %>
+
+            <br/>
+
+            <%= content_tag(:label, l(:setting_statuses) ) %>
+            <% all_issue_statuses.each do |status| %>
+              <span class="checkbox_group">
+                <%= check_box_tag(
+                    "settings[board_columns][#{board_column.first}][statuses][#{status.id}]",
+                    status.name, board_column.last["statuses"] &&
+                    board_column.last["statuses"].include?(status.id.to_s)) %>
+                <%= status.name %>
+              </span>
+            <% end %>
+          </p>
+        </div>
+      <% end %>
+
+
+
+      <div id="template" class="hidden">
+        <div class="subsection" id="column_-1">
+          <p>
+            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
+                :parent_id => "#column_-1", :id => "delete_-1") %>  
+
+            <%= content_tag(:label, l(:setting_name) ) %>
+            <%= text_field_tag("settings[board_columns][-1][name]") %>
+
+            <br/>
+
+            <%= content_tag(:label, l(:setting_position) ) %>
+            <%= select_tag("settings[board_columns][-1][position]",
+                options_for_select(1..(number_of_columns + 1))) %>
+            <br/>
+
+            <%= content_tag(:label, l(:setting_statuses) ) %>
+            <% all_issue_statuses.each do |status| %>
+              <span class="checkbox_group">
+                <%= check_box_tag "settings[board_columns][-1][statuses][#{status.id}]" %>
+                <%= status.name %>
+              </span>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="box tabular">
+    
+      <div class="section_header">
+        <h3>
+          <%= l(:setting_other_settings) %>
+        </h3>
+      </div>
+    
+      <p>
+        <%= content_tag(:label, l(:setting_show_progress_bars)) %>
+        <%= check_box_tag("settings[show_progress_bars]", "true", 
+            @settings["show_progress_bars"] == 'true') %>
+      </p>
+
+  <!-- Commented out because this view is rendered in redmine's /settings/plugin.html.erb, and the div ends there 
+    </div>
+  -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- confirmation popup -->
+<script type="text/javascript">
+  $(document).ready(function(){  
+    
+    
+    var confirm_msg = "<%= l(:text_are_you_sure) %>";
+    var new_columns = $("#new_columns");
+    var delete_column = $(".delete_column");
+    var template = $("#template");
+    var custom_field_select = $("#custom_field_select");
+    var current_sprint_select = $("#current_sprint_select");
+    var sprint_selects = $(".sprint_select");
+    
+    var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
+    var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
+
+
+    $("input[type='submit']").click(function(e){
+      if (!confirm(confirm_msg)) {
+        e.preventDefault();
+        return;
+      }
+      template.remove();
+      $.each(sprint_selects, function(index, select_box) {
+        var select_box = $(select_box);
+        if(!select_box.is(":visible")) {
+          select_box.remove();
+        }
+      });
+    });
+
+
+    $("#new_column_button").click(function(e) {
+      new_columns.show();
+      new_columns.prepend(template.html());
+      $("#column_-1").attr("id", "column_" + new_column_id);
+      $("#delete_-1").attr("parent_id", "#column_" + new_column_id).attr("id", "delete_" + new_column_id);
+      $("#settings_board_columns_-1_name").attr("name", "settings[board_columns][" + new_column_id + "][name]").attr("id", "settings_board_columns_" + new_column_id + "_name");
+      $("#settings_board_columns_-1_position").attr("name", "settings[board_columns][" + new_column_id + "][position]").attr("id", "settings_board_columns_" + new_column_id + "_position");
+      $.each(issue_ids, function(index, value) {
+        $("#settings_board_columns_-1_statuses_" + value).attr("name", "settings[board_columns][" + new_column_id + "][statuses][" + value + "]").attr("id", "settings_board_columns_" + new_column_id + "_statuses_" + value);
+      });
+      new_column_id += 1;
+      delete_column = $(".delete_column");
+    });
+
+
+    delete_column.live("click", function(e) {
+      $($(this).attr("parent_id")).remove();
+    });
+    
+    
+    $("#settings_use_version_for_sprint_false").click(function(e) {
+      custom_field_select.show();
+      current_sprint_select.show();
+      
+    });
+    
+    
+    $("#settings_use_version_for_sprint_true").click(function(e) {
+      custom_field_select.hide();
+      current_sprint_select.hide();
+    });
+    
+    
+    custom_field_select.change(function(e) {
+      sprint_selects.hide();
+      if(e.target.value != "") {
+        $("#current_sprint_select_" + e.target.value).show();
+        current_sprint_select.show();
+      }
+      else {
+        current_sprint_select.hide();
+      }
+    });
+    
+    
+  });
+</script>
+
+
+
+
+
+

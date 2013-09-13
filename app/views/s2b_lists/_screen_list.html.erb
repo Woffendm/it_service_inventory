@@ -1,0 +1,51 @@
+<table id="table_issues" class="table" style="border: 1px solid #e4e4e4">
+  <thead>
+    <tr class="head_issue">
+      <th>
+        <%= l(:label_sprint) %>
+      </th>
+      
+      <th> 
+        # 
+      </th>
+      
+      <th> 
+        <%= l(:label_head_issue_priority) %> 
+      </th>
+      
+      <th> 
+        <%= l(:label_head_issue_status) %> 
+      </th>
+      
+      <% unless @use_version_for_sprint %>
+        <th> 
+          <%= l(:label_head_issue_project) %> 
+        </th>
+      <% end %>
+      
+      <th> 
+        <%= l(:label_head_issue_subject) %> 
+      </th>
+      
+      <th> 
+        <%= l(:label_head_issue_assignee) %> 
+      </th>
+      
+      <th> 
+        <%= l(:label_head_issue_est_time) %> 
+      </th>
+      
+      <% if @show_progress_bars %>
+        <th> 
+          <%= l(:label_head_issue_done) %> 
+        </th>
+      <% end %>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @sorted_issues %>
+      <%= render :partial => "version", :locals =>{:sorted_issues => @sorted_issues}  %>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,12 @@
+<%= render :partial => "/shared/plugin_header", :locals => {:is_board => false} %>
+<div class="container-fluid" id="div_screen_list">
+  <%= render :partial => "screen_list", :locals => {:sorted_issues => @sorted_issues, 
+      :issue_backlogs => @issue_backlogs} %>
+</div>
+
+
+<script type="text/javascript">
+  var url_filter = '<%= lists_filter_issues_onlist_path %>';
+  var url_sort = "<%= lists_sort_path %>";
+</script>
+

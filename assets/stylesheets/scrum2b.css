@@ -1,0 +1,336 @@
+p.issues {
+	font-size: 20px;
+	font-weight: bold;
+	color: #555555;
+	margin-top: 0;
+	float: left;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
+.btn_submit:hover {
+	text-decoration: none;
+}
+
+.view_issue {
+	width: 100%;
+}
+.head_issue {
+	background: #e4e4e4;
+	color: #0044CC;
+}
+
+.btn_submit {
+	float: right;
+	margin: 0 0 0 5px;
+}
+.btn_submit_board {
+	float: right;
+	margin:0 0 10px 0;
+}
+.filter {
+margin: 0 0 10px 0;
+}
+#check_all {
+	cursor: pointer
+}
+
+.board {
+	background: #e3e3e3;
+	padding: 0 10px 10px 10px;
+	border: 1px solid #000000;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+ #ui-datepicker-div{
+    display: none;
+  }
+	.board_issue {
+		border: 1px solid #000000;
+		padding: 5px;
+		margin: 0 0 5px 0;
+		background: #ffffff;
+		width: 97%;
+		border-radius: 2px;
+		-moz-border-radius: 2px;
+		-webkit-border-radius: 2px;
+	}
+	.assignee {
+		width: 99.5%;
+		font-size: 12px;
+		margin:-8px 0 0 0;
+	}
+	.description {
+    border-top: 1px solid #339BB9;
+    border-bottom: 1px solid #339BB9;
+    
+    padding: 3px;
+    margin: 0 0 5px 0;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+	.connectedSortable {
+		margin-top: 25px;
+		padding: 5px 0;
+	}
+	
+	
+	
+	.submit_edit_issue {
+
+	}
+
+	.readmore {
+		text-decoration: none;
+		font-size: 12px;
+	}
+	.readmore:hover {
+		text-decoration: none;
+	}
+	.hide:hover {
+		text-decoration: none;
+	}
+	.hide {
+		display: none;
+		text-decoration: none;
+		font-size: 12px;
+	}
+.board p.status {
+	float:left;
+	color: #606264;
+	font-size: 17px;
+	font-weight: bold;
+	font-family: Trebuchet MS, Georgia, "Times New Roman", serif;
+	margin: 5px 0 10px 10px;
+}
+
+.board_issue:hover {
+	border: 1px solid #628db6;
+}
+.board_issue .id {
+	font-weight: bold;
+	margin: 0;
+}
+.subject, .subject_issue{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.board_issue .done {
+	float: left;
+	margin-left: 5px;
+}
+table#done {
+	float: left
+}
+table#done tr td {
+	width: 100px;
+	height: 10px;
+	float: left;
+}
+table#done tr td.todo {
+
+	background: #eeeeee;
+}
+table#done tr td.done {
+	background: #bae0ba;
+}
+.icon_close_issue {
+	float: right;
+	cursor: pointer;
+	display: none;
+}
+
+.text_new {
+	position: absolute;
+	padding: 2px 3px;
+	top: -30px;
+	right:0;
+	display: none;
+	background: #e4e4e4;
+}
+
+.new_issue {
+  float:right;
+  position: relative;
+  cursor: pointer;
+  margin:5px 0 0 0;
+}
+img.icon{
+  height: 20px;
+  width:20px;
+  padding:0px;
+  position: relative;
+}
+.no_edit {
+		position: relative;
+	}
+
+	.text_edit {
+		position: absolute;
+		padding: 2px 3px;
+		right: 0;
+		top: -30px;
+		background: #e4e4e4;
+		color: #252525;
+		display: none
+	}
+	.text_close {
+		position: absolute;
+		padding: 2px 3px;
+		right: 0px;
+		top: -30px;
+		background: #e4e4e4;
+		color: #252525;
+		display: none
+	}
+.version_row {
+	background-color: #DFF0D8;
+}
+#create_issue p span{
+   line-height: 30px;
+
+}
+#create_issue select{
+  background: #D9D9D9
+}
+#create_issue {
+  font-size:12px;
+  font-weight: bold;
+}
+.editing p span{
+   line-height: 30px;
+   font-size: 12px;
+}
+.editing select{
+  background: #D9D9D9;
+  margin:0;
+}
+.editing {
+  font-size:12px;
+  font-weight: bold;
+  display:none;
+  padding-top: 15px;
+}
+.connectedSortable li{
+  list-style: none;
+}
+
+  #create_issue{
+    font-size:11px;
+    display:none;
+  }
+  #create_issue p input{
+    margin-top:5px;
+  }
+  #create_issue p input{
+
+  }
+  #create_issue p {
+    margin-bottom:0;
+  }
+  #new_description{
+    height:150px;
+  }
+  #p_status_{
+    display:none;
+  }
+  #p_priority_{
+  }
+  #div_change_sprint{
+  display:none;
+	}
+	#btn_close_issue_list{
+  float: left;
+	}
+	#btn_change_sprint_issues,#change_sprint,#btn_move_issues,#cancel_move_issue{
+	  float:left;
+	  margin-left:5px;
+	}
+	
+	
+	.section_header {
+    border-bottom: 2px dotted #BBBBBB;
+    margin-bottom: 10px;
+  }
+
+  .subsection {
+    border-bottom: 1px dotted #BBBBBB;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .float_right {
+    float: right;
+  }
+  
+  .float_left {
+    float: left;
+  }
+  
+  .checkbox_group {
+    display: inline-block;
+  }
+  
+.issue_show {
+  float: left;
+  font-size: 13px;
+  width: 100%;
+}
+
+.percent {
+  border:0;
+  font-weight: bold;
+  float: right;
+  margin-bottom: 0;
+  font-size: 13px;
+  width: 15px;
+  padding: 0px;
+  cursor: default;
+  background: transparent;
+}
+
+.center {
+  text-align: center;
+}
+
+.slider_footer {
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.dates p{
+  margin-bottom: 0px;
+}
+
+.ui-slider-horizontal {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.progressbar {
+  height: 12px;
+}
+
+
+.input-append input[class*="span"], .input-append .uneditable-input[class*="span"], .input-prepend input[class*="span"], .input-prepend .uneditable-input[class*="span"], .row-fluid input[class*="span"], .row-fluid select[class*="span"], .row-fluid textarea[class*="span"], .row-fluid .uneditable-input[class*="span"], .row-fluid .input-prepend [class*="span"], .row-fluid .input-append [class*="span"] {
+    margin-bottom: 5px;
+}
+
+
+.clearfix {
+  width: 97%;
+  margin-bottom: 5px;
+}
