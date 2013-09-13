@@ -35,9 +35,9 @@ Redmine::Plugin.register :scrum2b do
      }, :partial => 'settings/scrum2b'
   
   project_module :scrum2b do
-    permission :view_issue, :s2b_lists => :index
-    permission :view_issue, :s2b_boards => :index
+
   end
+  
   menu :project_menu, :scrum_board, { :controller => :s2b_lists, :action => :index }, :caption => "Sprint Board", :after => :activity, :param => :project_id
   
   menu :top_menu, :scrum_board, { :controller => :s2b_lists, :action => :index }, :caption => "Sprint Board"
