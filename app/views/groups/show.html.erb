@@ -59,21 +59,23 @@
       <%= t(:products) %>
     </a>
   </li>
-  <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
-      <%= t(:portfolios) %>
-      <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu">
-      <% @portfolios.each_with_index do |portfolio, index| %>
-        <li>
-          <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
-            <%= portfolio.name %> 
-          </a>
-        </li>
-      <% end %>
-    </ul>
-  </li>
+  <% unless @portfolios.blank? %>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#"> 
+        <%= t(:portfolios) %>
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <% @portfolios.each_with_index do |portfolio, index| %>
+          <li>
+            <a href="#portfolio-<%= index %>" id="portfolio-tab-<%= index %>" data-toggle="tab"> 
+              <%= portfolio.name %> 
+            </a>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
   <li>
      <a href="#employees" id="employees_tab" data-toggle="tab" > 
        <%= t(:employees) %>
