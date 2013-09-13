@@ -278,7 +278,11 @@ class S2bBoardsController < ApplicationController
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the Settings page of the plugin: " + 
           "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
-      redirect_to "/projects/#{@project.to_param}"
+      if @project 
+        redirect_to "/projects/#{@project.to_param}"
+      else
+        redirect_to request.referer
+      end
       return
     else
       board_columns.each do |board_column|
