@@ -331,8 +331,8 @@ img.icon{
 
 
 .clearfix {
-  width: 97%;
   margin-bottom: 5px;
+  text-overflow: ellipsis;
 }
 
 .handle {

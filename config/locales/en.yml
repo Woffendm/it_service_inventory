@@ -55,6 +55,7 @@ en:
   label_total: "Total: "
   
   label_tracker: "Tracker"
+  label_estimated_time: "Estimated Time"
   label_priority: "Priority"
   label_start_date: "Start"
   label_due_date: "Due"

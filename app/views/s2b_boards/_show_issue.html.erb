@@ -34,40 +34,60 @@
   
   
   <div class="clearfix">
-    <div class="float_left">
+    <div class="">
+      <% if @use_version_for_sprint && issue.fixed_version_id %>
+        <div id="sprint_<%= issue.id %>">
+          <i class="icon-tasks" title="<%= l(:label_sprint) %>"></i>
+          <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
+              :id => issue.fixed_version_id if issue.fixed_version_id %>
+        </div>
+      <% elsif issue.custom_values.last %>
+        <div id="sprint_<%= issue.id %>">
+          <i class="icon-tasks" title="<%= l(:label_sprint) %>"></i>
+          <%= issue.custom_values.last.value %>
+        </div>
+      <% end %>
+      
       <% unless @project %>
         <div id="project_<%= issue.id %>">
-          <i class="icon-arrow-right"></i>
+          <i class="icon-folder-open" title="<%= l(:label_project) %>"></i>
           <%= link_to issue.project.name, project_path(issue.project_id) %>
         </div>
       <% end %>
       
       <% if issue.assigned_to %>
         <div id="assignee_<%= issue.id %>">
-          <i class="icon-user"></i>
+          <i class="icon-user" title="<%= l(:label_assigned_to) %>"></i>
           <%= link_to issue.assigned_to.name, user_path(issue.assigned_to.id) %>
         </div>
       <% end %>
     </div>
     
     
-    <div id="date_<%= issue.id %>" class="float_right dates">
+    <div id="date_<%= issue.id %>" class=" dates">
+      <% unless issue.estimated_hours.blank? %>
+        <div id="est_<%= issue.id %>">
+          <i class="icon-time" title="<%= l(:label_estimated_time) %>"></i>
+          <%= issue.estimated_hours %>
+        </div>
+      <% end %>
+      
       <% unless issue.start_date.blank? %>
         <div id="start_date_<%= issue.id %>">
-          <%= l(:field_start_date) %>: 
+          <i class="icon-play" title="<%= l(:label_start_date) %>"></i>
           <%= format_date(issue.start_date) %>
         </div>
       <% end %>
       
       <% if issue.due_date %>
         <div id="end_date_<%= issue.id %>">
-          <%= l(:field_due_date) %>: 
+          <i class="icon-stop" title="<%= l(:label_due_date) %>"></i>
           <%= format_date(issue.due_date) %>
         </div>
       <% else %>
         <% if issue.fixed_version && issue.fixed_version.effective_date != nil %>
           <div id="end_date_<%= issue.id %>">
-            <%= l(:field_due_date) %>: 
+            <i class="icon-stop" title="<%= l(:due_date) %>"></i>
             <%= format_date(issue.fixed_version.effective_date) %>(v)
           </div>
         <% end %>
@@ -124,22 +144,5 @@
         <% end %>
       </div>
     <% end %>
-    
-    <p class="float_left">
-      <%= l(:label_board_issue_time) %>
-      <span id="est_<%= issue.id %>"> 
-        <%= issue.estimated_hours %>
-      </span>
-    </p>
-    
-    <p class="center">
-      <% if @use_version_for_sprint %>
-        <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
-            :id => issue.fixed_version_id if issue.fixed_version_id %>
-      <% else %>
-        <%= issue.custom_values.last.value %>
-      <% end %>
-    </p>
-  </div>
 </div>
   
