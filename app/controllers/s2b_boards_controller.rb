@@ -48,19 +48,17 @@ class S2bBoardsController < ApplicationController
   # Had to get rid of 'done ratio' stuff
   def update_status
     @issue = Issue.find(params[:issue_id])
-    return if @issue.blank? || params[:status].blank?
-    new_status = params[:status].to_f.to_i
-    new_status = @board_columns[new_status][:status_ids].first.to_i
-    @issue.update_attributes(:status_id => new_status)
-    
-    if @issue.valid? 
-      data  = render_to_string(:partial => "/s2b_boards/show_issue", 
-                               :locals => {:issue => @issue})
-      render :json => {:result => "update_success", :message => "Success to update the message",
-                       :content => data}
+    return if @issue.blank? 
+    unless params[:status].blank?
+      new_status = params[:status].to_f.to_i
+      new_status = @board_columns[new_status][:status_ids].first.to_i
+      @issue.status_id = new_status
+    end
+    if @issue.save
+      sort(params)
+      render :json => {:result => "success", :message => "Issue updated."}
     else
-      render :json => {:result => "failure", :message => @issue.errors.full_messages,
-                       :content => data}
+      render :json => {:result => "failure", :message => @issue.errors.full_messages}
     end
   end
   
@@ -69,6 +67,7 @@ class S2bBoardsController < ApplicationController
   def update_progress
     @issue = Issue.find(params[:issue_id])
     @issue.update_attribute(:done_ratio, params[:done_ratio])
+    sort(params)
     render :json => {:result => "success", :new => "Issue progress updated",
                      :new_ratio => params[:done_ratio]}
   end
@@ -172,6 +171,7 @@ class S2bBoardsController < ApplicationController
   
   
   
+  
   private
   
   
@@ -244,10 +244,10 @@ class S2bBoardsController < ApplicationController
           :custom_field_id => @custom_field.id})
     end
     issue_no_position = issue_no_position.where(session[:conditions]).order(:s2b_position)
-    max_position_issue = issue_no_position.last.s2b_position.to_i + 1 unless issue_no_position.blank?
-    issue_no_position = Issue.where(:s2b_position => nil)
 
     unless issue_no_position.blank?
+      max_position_issue = issue_no_position.last.s2b_position.to_i + 1
+      issue_no_position = Issue.where(:s2b_position => nil)
       issue_no_position.each_with_index do |issue, index|
         issue.update_attribute(:s2b_position, max_position_issue + index)
       end
@@ -314,6 +314,54 @@ class S2bBoardsController < ApplicationController
         session[:params_version_ids] = nil
         session[:conditions] = nil
       end
+    end
+  end
+  
+  
+  
+  
+  def sort(params)
+    @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status)
+    unless @use_version_for_sprint
+      @issues_in_column = @issues_in_column.eager_load(:custom_values, {
+          :project => :issue_custom_fields})
+      @issues_in_column = @issues_in_column.where(:custom_values => {
+          :custom_field_id => @custom_field.id})
+    end
+    @issue = Issue.find(params[:issue_id])
+    @status_ids = [-1]
+    @board_columns.each do |board_column|
+      @status_ids = board_column[:status_ids]
+      break if @status_ids.index(@issue.status_id.to_s)
+    end
+    
+    @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
+    @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
+    @max_position = @issues_in_column.last.s2b_position.to_i unless @issues_in_column.blank?
+    @min_position = @issues_in_column.first.s2b_position.to_i unless @issues_in_column.blank?
+    
+    if params[:id_next].to_i != 0
+      next_issue = Issue.find(params[:id_next].to_i) 
+      @next_position = next_issue.s2b_position
+    end
+    
+    if params[:id_prev].to_i != 0
+      prev_issue = Issue.find(params[:id_prev].to_i)
+      @prev_position = prev_issue.s2b_position
+    end
+    
+    if @next_position.blank? && @prev_position.blank?
+       @issue.update_attribute(:s2b_position, 1)
+    elsif @next_position.blank? && @prev_position
+      @issue.update_attribute(:s2b_position, @max_position + 1)
+    elsif @next_position && @prev_position.blank?
+      @issue.update_attribute(:s2b_position, @min_position - 1)
+    else 
+      @issues_in_column = @issues_in_column.where("s2b_position >= ? ", @next_position)
+      @issues_in_column.each do |issue|
+        issue.update_attribute(:s2b_position,issue.s2b_position + 1) unless issue.id == @issue.id
+      end
+      @issue.update_attribute(:s2b_position, @next_position)
     end
   end
   

@@ -2,7 +2,7 @@ class S2bListsController < ApplicationController
   unloadable
   before_filter :find_project
   before_filter :load_settings 
-  before_filter :check_before_list, :only => [:index, :filter_issues_onlist]
+  before_filter :check_before_list
   skip_before_filter :verify_authenticity_token
   self.allow_forgery_protection = false
   
@@ -28,56 +28,6 @@ class S2bListsController < ApplicationController
     end
     
     filter_issues
-  end
-  
-  
-  
-  def sort
-    @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status)
-    unless @use_version_for_sprint
-      @issues_in_column = @issues_in_column.eager_load(:custom_values, {
-          :project => :issue_custom_fields})
-      @issues_in_column = @issues_in_column.where(:custom_values => {
-          :custom_field_id => @custom_field.id})
-    end
-    @issue = Issue.find(params[:issue_id])
-    @status_ids = [-1]
-    @board_columns.each do |board_column|
-      @status_ids = board_column[:status_ids]
-      break if @status_ids.index(@issue.status_id.to_s)
-    end
-    
-    @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
-    @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
-    @max_position = @issues_in_column.last.s2b_position.to_i unless @issues_in_column.blank?
-    @min_position = @issues_in_column.first.s2b_position.to_i unless @issues_in_column.blank?
-    
-    if params[:id_next].to_i != 0
-      next_issue = Issue.find(params[:id_next].to_i) 
-      @next_position = next_issue.s2b_position
-    end
-    
-    if params[:id_prev].to_i != 0
-      prev_issue = Issue.find(params[:id_prev].to_i)
-      @prev_position = prev_issue.s2b_position
-    end
-    
-    if @next_position.blank? && @prev_position.blank?
-       @issue.update_attribute(:s2b_position, 1)
-    elsif @next_position.blank? && @prev_position
-      @issue.update_attribute(:s2b_position, @max_position + 1)
-    elsif @next_position && @prev_position.blank?
-      @issue.update_attribute(:s2b_position, @min_position - 1)
-    else 
-      @issues_in_column = @issues_in_column.where("s2b_position >= ? ", @next_position)
-      @issues_in_column.each do |issue|
-        issue.update_attribute(:s2b_position,issue.s2b_position + 1) unless issue.id == @issue.id
-      end
-      @issue.update_attribute(:s2b_position, @next_position)
-    end
-    data  = render_to_string(:partial => "/s2b_boards/show_issue", :locals => {:issue => @issue})
-    render :json => {:result => "sort_success", :message => "Successfully sorted issues",
-           :content => data}
   end
   
   

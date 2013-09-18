@@ -62,6 +62,49 @@
 
 
     <div class="box tabular">
+    
+       <div class="section_header">
+         <h3>
+           <%= l(:setting_priority_settings) %>
+         </h3>
+       </div>
+    
+       <p>
+         <%= content_tag(:label, l(:setting_default_priority)) %>
+         <%= radio_button_tag("settings[use_default_priority]", "true", using_priority) %>
+       </p>
+       <p>
+         <%= content_tag(:label, l(:setting_use_custom_field)) %>
+         <%= radio_button_tag("settings[use_default_priority]", "false", !using_priority) %>
+       </p>
+    
+       <p id="custom_field_select" class='<%= "hidden" if using_priority %>'>
+         <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
+         <%= select_tag("settings[custom_field_id]",
+             options_from_collection_for_select(custom_fields, :id, :name, 
+             {:selected => @settings["custom_field_id"]}), :prompt =>
+             l(:setting_select_custom_field)) %>
+       </p>
+    
+       <p id="current_sprint_select" class='<%= "hidden" if using_version ||
+           @settings["custom_field_id"].blank? %>'>
+         <%= content_tag(:label, l(:setting_current_sprint)) %>
+         <% custom_fields.each do |custom_field| %>
+           <%= select_tag("settings[current_sprint]",
+               options_for_select(custom_field.possible_values, 
+               {:selected => @settings["current_sprint"]}), :prompt =>
+               l(:setting_select_current_sprint), 
+               :id => "current_sprint_select_#{custom_field.id}", 
+               :class => "#{'hidden' unless custom_field.id.to_s == @settings["custom_field_id"]} sprint_select") %>
+         <% end %>
+       </p>
+    
+    </div>
+
+
+
+
+    <div class="box tabular">
       <div class="section_header">
         <h3>
           <%= l(:setting_board_columns) %>

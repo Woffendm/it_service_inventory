@@ -26,40 +26,40 @@ $(document).ready(function(){
   
   function setup_sortable_columns() {
     var sortable_columns = $(".connectedSortable");
+    var status;
     sortable_columns.sortable({
+      // When dragging an element to an edge of the screen, will scroll at full speed
       scroll: true, scrollSensitivity: 100, scrollSpeed: 100,
+      // Says where you can 'drop' the sortable elements
       connectWith: ".connectedSortable",
+      // Says what part you can 'grab'
+      handle: ".handle",
+      // Triggered during sorting
       sort: function(){
         $(this).find(".ui-sortable-helper").addClass("check");
       },
+      // Triggered when a connectedSortable list recieves an item from another list
       receive: function(){
-        var status = sortable_columns.index(this);
+        status = sortable_columns.index(this) || '';
+      },
+      // Triggered when sorting has stopped
+      stop: function() {
+        var issue_id = $(".check").attr("id");
         var url_ajax = 'update_status';
-        var issue_id = $(this).find(".check").attr("id");
+        status = status || '';
+        var id_next = $(".check").next().attr("id") || '';
+        var id_prev = $(".check").prev().attr("id") || '';
+        $(".check").removeClass("check");
         $.ajax({
           url : url_ajax,
           type : "POST",
-          data : 'issue_id=' + issue_id + '&status=' + status,
+          data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next + "&status=" + status,
           dataType : "json",
-          success : function(res) {
-            if (res.status == "completed"){
-              makeSlider(issue_id, res.done_ratio);
+          success : function(data) {
+            if (data.result != "success") {
+              alert(data.message);
             }
           }
-        });
-      },
-      stop: function() {
-        var issue_id = $(".check").attr("id");
-        // url_sort must be defined in the view
-        var id_next = $(".check").next().attr("id");
-        var id_prev = $(".check").prev().attr("id");
-        $(".check").removeClass("check");
-        $.ajax({
-          url : url_sort,
-          type : "POST",
-          data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next,
-          dataType : "text",
-          success : function(){}
         });
       }
     });
