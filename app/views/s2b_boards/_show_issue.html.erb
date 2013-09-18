@@ -97,27 +97,18 @@
   
   
   <% unless issue.description.blank? %>
-    <div class="description">
-      <% if issue.description.to_s.length >= 100 %>
-        <div class="div_description description_hide" id="description_hide_<%= issue.id %>">
-          <%= simple_format(h(issue.description.truncate(100, 
-              :separator => ' '))) %>
-        </div>
-        <div class="div_description description_readmore hidden" 
-            id="description_readmore_<%= issue.id %>">
-          <%= simple_format(h(issue.description)) %>
-        </div>
+    <div class="">
         <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
           <%= l(:label_hide) %>
         </a>
         <a href="#" id="readmore_<%= issue.id %>" class="readmore no_edit" value="<%= issue.id %>">
           <%= l(:label_readmore) %>
         </a>
-      <% else %>
-        <div class="no_edit div_description description_hide" id="description_hide_<%= issue.id %>">
+        <div class="div_description description_readmore hidden" 
+            id="description_readmore_<%= issue.id %>">
           <%= simple_format(h(issue.description)) %>
         </div>
-      <% end %>
+
     </div>
   <% end %>
   
