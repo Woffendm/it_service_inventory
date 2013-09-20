@@ -6,11 +6,35 @@
 
 
 .navbar .brand, .navbar .brand  a {
-  color: #fff;
-  padding: 8px 0px;
-  margin: 0px;
-  font-weight: bold;
-  font-size: 20px;
+  color: #DD4814;
+  margin-left: 80px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float: none;
+  font-size: 30px;
+}
+
+.brand:hover,
+.brand:focus,
+.brand > a:hover,
+.brand > a:focus {
+  text-decoration: none;
+}
+
+
+#qqq {
+  margin: 0 29px;
+  padding: 0px;
+  border-radius: 5px;
+}
+
+
+.navbar-inner {
+  background-color: #F5F2ED;
+  background-image: none;
+  box-shadow: none;
+  border: none;
+  padding: 0px;
 }
 
 
@@ -404,7 +428,7 @@ body{
   min-height: 40px;
   margin-bottom: 20px;
   width: 100%;
-  background-color: #D44413;
+  background-color: none;;
   background-image: none;
 }
 
@@ -427,6 +451,7 @@ body{
   padding: 0 10px;
   min-height: 100%;
   padding-bottom: 20px;
+  border-radius: 5px;
 }
 
 #footer {
@@ -458,19 +483,13 @@ html, body {
   background-color: #A5360F;
 }
 
-.brand:hover,
-.brand:focus,
-.brand > a:hover,
-.brand > a:focus {
-  text-decoration: none;
-}
+
 
 
 .logo {
   display: inline-block;
   float: left;
   position: relative;
-  max-width: 90px;
   max-height: 1px;
 }
 
@@ -1123,7 +1142,7 @@ a > i{
 
 
 @media (max-width: 768px) {
-  .navbar-fixed-top .navbar-inner{
+  navbar-inner{
     margin: 0 10px;
   }
 }
@@ -1204,3 +1223,17 @@ a > i{
   }
 }
 
+
+.navbar-inner > .container, .navbar, #footer {
+    background: -moz-linear-gradient(center top , #565656 0%, #252525 100%) repeat scroll 0 0 transparent;
+}
+
+#qqq {
+  background: #373737;
+}
+
+
+.navbar .nav > li > a {
+    border-color: transparent;
+    border-radius: 6px;
+}
