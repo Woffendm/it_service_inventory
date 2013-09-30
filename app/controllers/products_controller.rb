@@ -267,7 +267,7 @@ class ProductsController < ApplicationController
       @product_state = search[:product_state]
       @product_type = search[:product_type]
       @product_priority = search[:product_priority]
-      @dependency = search[:dependency]
+      @dependency = search[:dependency].to_s
       @search_string = ""
       @search_array = ["true"]
       @search_array << "products.name LIKE '%#{@name}%'" unless @name.blank? 

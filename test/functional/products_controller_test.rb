@@ -27,6 +27,63 @@ class ProductsControllerTest < ActionController::TestCase
     get :index, :search => {:name => "itsi"}
     assert_not_nil assigns(:products)
     assert_equal @product, assigns(:products).first
+    assert_equal assigns(:products).length, 1
+    assert_response :success
+  end
+  
+  
+  test "should filter products by group" do
+    @group = groups(:cws)
+    @product.groups << @group
+    get :index, :search => {:group => @group.id}
+    assert_not_nil assigns(:products)
+    assert_equal assigns(:products).length, 1
+    assert_equal @product, assigns(:products).first
+    assert_response :success
+  end
+  
+  
+  test "should filter products by priority" do
+    get :index, :search => {:product_priority => @product.product_priority_id}
+    assert_not_nil assigns(:products)
+    assert_equal assigns(:products).length, 1
+    assert_equal @product, assigns(:products).first
+    assert_response :success
+  end
+  
+  
+  test "should filter products by state" do
+    get :index, :search => {:product_state => @product.product_state_id}
+    assert_not_nil assigns(:products)
+    assert_equal assigns(:products).length, 1
+    assert_equal @product, assigns(:products).first
+    assert_response :success
+  end
+  
+  
+  test "should filter products by type" do
+    get :index, :search => {:product_type => @product.product_type_id}
+    assert_not_nil assigns(:products)
+    assert_equal assigns(:products).length, 1
+    assert_equal @product, assigns(:products).first
+    assert_response :success
+  end
+
+
+  test "should filter products by dependencies" do
+    @product.dependencies << products(:dnc)
+    get :index, :search => {:dependency => true}
+    assert_not_nil assigns(:products)
+    assert_equal 1, assigns(:products).length
+    assert_equal @product, assigns(:products).first
+    assert_response :success
+  end
+
+
+  test "should return all products if filter is blank" do
+    get :index, :search => {}
+    assert_not_nil assigns(:products)
+    assert_equal 2, assigns(:products).length
     assert_response :success
   end
 
