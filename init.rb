@@ -30,6 +30,7 @@ Redmine::Plugin.register :scrum2b do
        }, 
        'use_version_for_sprint' => 'true',
        'custom_field_id' => '',
+       'use_default_priority' => 'true',
        'current_sprint' => '',
        'show_progress_bars' => 'true'
      }, :partial => 'settings/scrum2b'

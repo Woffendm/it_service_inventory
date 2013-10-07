@@ -10,6 +10,7 @@
 <% board_columns = @settings["board_columns"].to_a %>
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
 <% using_version = @settings["use_version_for_sprint"] == "true" %>
+<% using_priority = @settings["use_default_priority"] == "true" %>
 <% number_of_columns = 0 %>
 <% number_of_columns = board_columns.length unless board_columns.blank? %>
 
@@ -61,7 +62,7 @@
 
 
 
-    <div class="box tabular">
+    <div class="box tabular hidden">
     
        <div class="section_header">
          <h3>
@@ -78,9 +79,9 @@
          <%= radio_button_tag("settings[use_default_priority]", "false", !using_priority) %>
        </p>
     
-       <p id="custom_field_select" class='<%= "hidden" if using_priority %>'>
+       <p id="priority_custom_field_select" class='<%= "hidden" if using_priority %>'>
          <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
-         <%= select_tag("settings[custom_field_id]",
+         <%= select_tag("settings[priority_custom_field_id]",
              options_from_collection_for_select(custom_fields, :id, :name, 
              {:selected => @settings["custom_field_id"]}), :prompt =>
              l(:setting_select_custom_field)) %>
