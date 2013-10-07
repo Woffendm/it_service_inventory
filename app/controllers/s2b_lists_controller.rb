@@ -10,19 +10,21 @@ class S2bListsController < ApplicationController
 
 
   def index
-    if session[:view_issue].blank? || session[:view_issue] == "board" && 
+    if cookies[:view_issue].blank? || cookies[:view_issue] == "board" && 
         params[:switch_screens].blank?
       redirect_to :controller => "s2b_boards", :action => "index", 
           :project_id => params[:project_id]
       return
     end
     
-    if session[:params_project_ids].blank? && @use_version_for_sprint
+    if cookies[:params_project_ids].blank? && @use_version_for_sprint
       if @project.blank?
-        session[:params_project_ids] = @projects.first.id.to_s.to_a 
+        cookies[:params_project_ids] = { :value => @projects.first.id.to_s.to_a, 
+            :expires => 1.hour.from_now }
         flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
       else
-        session[:params_project_ids] = @project.id.to_s.to_a
+        cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
+            :expires => 1.hour.from_now }
         flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
       end
     end
@@ -34,12 +36,17 @@ class S2bListsController < ApplicationController
   
   
   def filter_issues_onlist        
-    session[:view_issue] = "list"
-    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
-    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
-    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
-    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
-    session[:params_custom_values] = params[:custom_values].to_s.split(",").to_a
+    cookies[:view_issue] = { :value => "list", :expires => 1.hour.from_now }
+    cookies[:params_project_ids] = { :value => params[:project_ids].to_s.split(",").to_a, 
+        :expires => 1.hour.from_now }
+    cookies[:params_status_ids] = { :value => params[:status_ids].to_s.split(",").to_a, 
+        :expires => 1.hour.from_now }
+    cookies[:params_member_ids] = { :value => params[:member_ids].to_s.split(",").to_a, 
+        :expires => 1.hour.from_now }
+    cookies[:params_version_ids] = { :value => params[:version_ids].to_s.split(",").to_a, 
+        :expires => 1.hour.from_now }
+    cookies[:params_custom_values] = { :value => params[:custom_values].to_s.split(",").to_a, 
+        :expires => 1.hour.from_now }
     
     filter_issues
     
@@ -81,45 +88,45 @@ class S2bListsController < ApplicationController
   
   
   def filter_issues
-    session[:conditions] = ["true"]
-    unless session[:params_version_ids].blank?
-      session[:conditions][0] += " AND issues.fixed_version_id IN (?)"
-      session[:conditions] << session[:params_version_ids]
+    conditions = ["true"]
+    unless cookies[:params_version_ids].blank?
+      conditions[0] += " AND issues.fixed_version_id IN (?)"
+      conditions << cookies[:params_version_ids]
     end
-    unless session[:params_project_ids].blank?
-      session[:conditions][0] += " AND issues.project_id IN (?)"
-      session[:conditions] << session[:params_project_ids]
+    unless cookies[:params_project_ids].blank?
+      conditions[0] += " AND issues.project_id IN (?)"
+      conditions << cookies[:params_project_ids]
     end
-    unless session[:params_member_ids].blank?
-      session[:conditions][0] += " AND issues.assigned_to_id IN (?)"
-      session[:conditions] << session[:params_member_ids]
+    unless cookies[:params_member_ids].blank?
+      conditions[0] += " AND issues.assigned_to_id IN (?)"
+      conditions << cookies[:params_member_ids]
     end
-    unless session[:params_status_ids].blank?
-      session[:conditions][0] += " AND issues.status_id IN (?)"
-      session[:conditions] << session[:params_status_ids]
+    unless cookies[:params_status_ids].blank?
+      conditions[0] += " AND issues.status_id IN (?)"
+      conditions << cookies[:params_status_ids]
     end
-    unless session[:params_custom_values].blank? || @custom_field.blank?
-      session[:conditions][0] += " AND custom_values.value IN (?)"
-      session[:conditions] << session[:params_custom_values]
-      session[:conditions][0] += " AND custom_values.custom_field_id = ?"
-      session[:conditions] << @custom_field.id
+    unless cookies[:params_custom_values].blank? || @custom_field.blank?
+      conditions[0] += " AND custom_values.value IN (?)"
+      conditions << cookies[:params_custom_values]
+      conditions[0] += " AND custom_values.custom_field_id = ?"
+      conditions << @custom_field.id
     end
-    
+    cookies[:conditions] = { :value =>  conditions, :expires => 1.hour.from_now }
     @issue_backlogs = Issue.eager_load(:custom_values, :status, :assigned_to, :project, :priority)
     
     @sorted_issues = []
     if @use_version_for_sprint
       @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
-      if session[:params_version_ids].blank?
-        versions = Version.where(:project_id => session[:params_project_ids]).order("created_on")
+      if cookies[:params_version_ids].blank?
+        versions = Version.where(:project_id => cookies[:params_project_ids]).order("created_on")
       else
-        versions = Version.where(:id => session[:params_version_ids]).order("created_on")
+        versions = Version.where(:id => cookies[:params_version_ids]).order("created_on")
       end
       versions.each do |version|
         issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(session[:conditions])
+        issues = issues.where(cookies[:conditions])
         @sorted_issues << {:name => version.name, :issues => issues.order(
             "status_id, s2b_position")}
       end
@@ -132,23 +139,23 @@ class S2bListsController < ApplicationController
           {:custom_field_id => @custom_field.id}).pluck("issues.id")
       issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
-      if session[:params_custom_values].blank?
+      if cookies[:params_custom_values].blank?
         custom_values = @custom_field.possible_values
       else
-        custom_values = session[:params_custom_values]
+        custom_values = cookies[:params_custom_values].to_a
       end
       custom_values.each do |cv|
         issues =  Issue.eager_load(:assigned_to, :status, :fixed_version, :priority,
             :custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(session[:conditions])
+        issues = issues.where(cookies[:conditions])
         @sorted_issues << {:name => cv, :issues => issues.order("status_id, projects.name,
             s2b_position")}
       end
     end
     
-    @issue_backlogs = @issue_backlogs.where(session[:conditions])
+    @issue_backlogs = @issue_backlogs.where(cookies[:conditions])
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
     @issue_backlogs = @issue_backlogs.order("status_id, projects.name, s2b_position")
     @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
@@ -201,14 +208,14 @@ class S2bListsController < ApplicationController
     @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
     
     if @use_version_for_sprint
-      if session[:params_custom_values] 
-        session[:params_custom_values] = nil
-        session[:conditions] = nil
+      if cookies[:params_custom_values] 
+        cookies.delete :params_custom_values
+        cookies.delete :conditions
       end
     else
-      if session[:params_version_ids] 
-        session[:params_version_ids] = nil
-        session[:conditions] = nil
+      if cookies[:params_version_ids] 
+        cookies.delete :params_version_ids
+        cookies.delete :conditions
       end
     end
   end
