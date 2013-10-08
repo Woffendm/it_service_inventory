@@ -176,8 +176,10 @@ class S2bListsController < ApplicationController
     @plugin = Redmine::Plugin.find("scrum2b")
     @settings = Setting["plugin_#{@plugin.id}"]   
     board_columns = @settings["board_columns"]
+    sprint = @settings["sprint"]
+    priority = @settings["priority"]
     @board_columns = []
-    if board_columns.blank?
+    if board_columns.blank? || sprint.blank? || priority.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the Settings page of the plugin: " + 
           "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
@@ -202,10 +204,12 @@ class S2bListsController < ApplicationController
       end 
     end
     
-    @use_version_for_sprint = @settings["use_version_for_sprint"] == "true"
     @show_progress_bars = @settings["show_progress_bars"] == "true"
-    @custom_field = CustomField.find(@settings["custom_field_id"]) unless @use_version_for_sprint
-    @current_sprint = @settings["current_sprint"] unless @use_version_for_sprint
+    @use_version_for_sprint = sprint["use_default"] == "true"
+    @custom_field = CustomField.find(sprint["custom_field_id"]) unless @use_version_for_sprint
+    @current_sprint = sprint["current_sprint"] unless @use_version_for_sprint
+    @use_default_priority = priority["use_default"]
+    @custom_priority = CustomField.find(priority["custom_field_id"]) unless @use_default_priority
     
     if @use_version_for_sprint
       if cookies[:params_custom_values] 

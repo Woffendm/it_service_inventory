@@ -4,7 +4,8 @@
 
 
 <% all_issue_statuses = IssueStatus.sorted %>
-<% custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% custom_fields = IssueCustomField.order(:name) %>
+<% list_custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
 <% board_columns = [] %>
 
 <% board_columns = @settings["board_columns"].to_a %>
@@ -41,7 +42,7 @@
       <p id="sprint_custom_field_select" class='<%= "hidden" if @using_version %>'>
         <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
         <%= select_tag("settings[sprint][custom_field_id]",
-            options_from_collection_for_select(custom_fields, :id, :name, 
+            options_from_collection_for_select(list_custom_fields, :id, :name, 
             {:selected => @sprint ? @sprint["custom_field_id"] : nil}), 
             :prompt => l(:setting_select_custom_field)) %>
       </p>
@@ -49,7 +50,7 @@
       <p id="current_sprint_select" class='<%= "hidden" if @using_version || @sprint.blank? ||
           @sprint["custom_field_id"].blank? %>'>
         <%= content_tag(:label, l(:setting_current_sprint)) %>
-        <% custom_fields.each do |custom_field| %>
+        <% list_custom_fields.each do |custom_field| %>
           <%= select_tag("settings[sprint][current_sprint]",
               options_for_select(custom_field.possible_values, 
               {:selected => @sprint ? @sprint["current_sprint"] : nil}), 
