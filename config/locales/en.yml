@@ -76,6 +76,11 @@ en:
   setting_use_project_version: "Use project version"
   setting_use_custom_field: "Use custom field"
   setting_sprint_custom_field:  "Sprint custom field"
+  setting_priority_custom_field:  "Priority custom field"
+  setting_priority_settings:  "Priority Settings"
+  setting_default_priority:  "Use default priority"
+  
+  
   setting_select_custom_field:  "Select custom field"
   setting_select_current_sprint:  "Select current sprint"
   setting_current_sprint:  "Current sprint"
