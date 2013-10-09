@@ -14,7 +14,7 @@ gem 'cancan', '1.6.9'
 gem 'net-ldap'
 
 gem 'rubycas-client'
-gem 'rubycas-client-rails', :git => "https://github.com/oregonstateuniv/rubycas-client-rails.git"
+gem 'rubycas-client-rails', :git => "git@gitlab.cws.oregonstate.edu:gems/rubycas-client-rails-osu.git"
 
 gem 'will_paginate', '3.0.4'
 
