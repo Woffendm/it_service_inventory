@@ -132,8 +132,7 @@ class S2bListsController < ApplicationController
       end
     else
       @issue_backlogs = @issue_backlogs.eager_load(:custom_values, 
-          {:project => :issue_custom_fields}).where(
-          :custom_values => {:custom_field_id => @custom_field.id})
+          {:project => :issue_custom_fields})
       issue_ids_with_custom_field = Issue.joins(:custom_values).where(
           "custom_values.value IS NOT NULL").where(:custom_values => 
           {:custom_field_id => @custom_field.id}).pluck("issues.id")
@@ -157,7 +156,7 @@ class S2bListsController < ApplicationController
     
     @issue_backlogs = @issue_backlogs.where(cookies[:conditions])
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
-    @issue_backlogs = @issue_backlogs.order("status_id, projects.name, s2b_position")
+    @issue_backlogs = @issue_backlogs.order("projects.name, status_id, s2b_position")
     @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
   end
   
