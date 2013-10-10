@@ -112,43 +112,43 @@ $(document).ready(function(){
   
   
   $(".cancel_issue").live("click", function(){
-    var id_issue = parseInt($(this).parent().attr("value")) || "";
-    $("#edit_issue_" + id_issue).hide();
-    $("#show_issue_" + id_issue).show();
+    var issue_id = parseInt($(this).parent().attr("value")) || "";
+    $("#edit_issue_" + issue_id).hide();
+    $("#show_issue_" + issue_id).show();
   });
  
  
  
   $(".submit_issue").live("click", function(){
-    var id_issue = $(this).parent().attr("value");
-    if(id_issue != "" ){
+    var issue_id = $(this).parent().attr("value");
+    if(issue_id != "" ){
       var url_ajax = "update";
     }else {
        var url_ajax = "create";
     }
-    var subject = $("#new_subject_"+id_issue).val() || "";
-    var description = $("#new_description_"+id_issue).val() || "";
-    var project = $("#new_project_"+id_issue).val() || "";
-    var tracker = $("#new_tracker_"+id_issue).val() || "";
-    var status = $("#new_status_"+id_issue).val() || "";
-    var priority = $("#new_priority_"+id_issue).val() || "";
-    var assignee = $("#new_assignee_"+id_issue).val() || "";
-    var version = $("#new_version_"+id_issue).val() || "";
-    var custom_value = $("#new_custom_value_"+id_issue).val() || "";
-    var time = $("#new_time_"+id_issue).val() || "";
-    var date_start = $("#new_date_start_"+id_issue).val() || "";
-    var date_end = $("#new_date_end_"+id_issue).val() || "";
-    var slide_value = $("#slider" + id_issue).attr("value");
+    var subject = $("#new_subject_"+issue_id).val() || "";
+    var description = $("#new_description_"+issue_id).val() || "";
+    var project = $("#new_project_"+issue_id).val() || "";
+    var tracker = $("#new_tracker_"+issue_id).val() || "";
+    var status = $("#new_status_"+issue_id).val() || "";
+    var priority = $("#new_priority_"+issue_id).val() || "";
+    var assignee = $("#new_assignee_"+issue_id).val() || "";
+    var version = $("#new_version_"+issue_id).val() || "";
+    var custom_value = $("#new_custom_value_"+issue_id).val() || "";
+    var time = $("#new_time_"+issue_id).val() || "";
+    var date_start = $("#new_date_start_"+issue_id).val() || "";
+    var date_end = $("#new_date_end_"+issue_id).val() || "";
+    var slide_value = $("#slider" + issue_id).attr("value");
     $.ajax({
       url : url_ajax,
       type : "POST",
-      data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
+      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
       dataType : "json",
       success : function(data) {
         if(data.result == "edit_success") {
-          $("#show_issue_" + id_issue).replaceWith(data.content).show();
-          $("#edit_issue_" + id_issue).hide();
-          makeSlider(id_issue, slide_value);
+          $("#show_issue_" + issue_id).replaceWith(data.content).show();
+          $("#edit_issue_" + issue_id).hide();
+          makeSlider(issue_id, slide_value);
         }else if(data.result == "create_success"){
           $("#edit_issue_").find(".value_content").val("");
           $("#edit_issue_").hide();
