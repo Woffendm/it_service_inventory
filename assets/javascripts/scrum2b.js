@@ -41,13 +41,11 @@ $(document).ready(function(){
       // Triggered when a connectedSortable list recieves an item from another list
       receive: function(){
         status = sortable_columns.index(this);
-        status = $.type(status) == "number" ? status : '';
       },
       // Triggered when sorting has stopped
       stop: function() {
         var issue_id = $(".check").attr("id");
         var url_ajax = 'update_status';
-        status = $.type(status) == "number" ? status : '';
         var id_next = $(".check").next().attr("id") || '';
         var id_prev = $(".check").prev().attr("id") || '';
         $(".check").removeClass("check");
