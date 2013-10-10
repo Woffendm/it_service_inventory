@@ -3,7 +3,7 @@ class S2bBoardsController < ApplicationController
   before_filter :find_project
   before_filter :load_settings
   before_filter :validate_conditions
-  before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
+  #before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
   before_filter :check_before_board,  :only   => [:index, :filter_issues_onboard,
                                                   :update, :create, :edit]
   
@@ -14,7 +14,8 @@ class S2bBoardsController < ApplicationController
  
  
   def edit
-    return if @issue.blank?
+    @issue = Issue.find(params[:issue_id])
+    return if @issue.blank? 
     edit = render_to_string(:partial => "/s2b_boards/form_edit", :locals => {:issue => @issue, 
         :members => @members, :priorities => @priorities, :sprints => @sprints})
     render :json => {:result => "success", :content => edit}
@@ -54,6 +55,7 @@ class S2bBoardsController < ApplicationController
   
   # Had to get rid of 'done ratio' stuff
   def update_status
+    @issue = Issue.find(params[:issue_id])
     return if @issue.blank? 
     create_journal
     unless params[:status].blank?
@@ -72,7 +74,8 @@ class S2bBoardsController < ApplicationController
   
   
   def update_progress
-    return if @issue.blank? 
+    @issue = Issue.find(params[:issue_id])
+    return if @issue.blank?
     create_journal
     @issue.update_attribute(:done_ratio, params[:done_ratio])
     sort(params)
@@ -83,7 +86,8 @@ class S2bBoardsController < ApplicationController
 
 
   def update
-    return if @issue.blank? 
+    @issue = Issue.find(params[:issue_id])
+    return if @issue.blank?
     create_journal
     @issue.update_attributes(
         :subject => params[:subject], 
@@ -273,7 +277,7 @@ class S2bBoardsController < ApplicationController
   end
 
 
-
+  # Doesn't work! WHY?!?!?!?
   def find_issue
     @issue = Issue.find(params[:issue_id])
   end
