@@ -2,8 +2,10 @@ class S2bBoardsController < ApplicationController
   unloadable
   before_filter :find_project
   before_filter :load_settings
-  before_filter :check_before_board, :only => [:index, :filter_issues_onboard,
-                                               :update, :create, :edit]
+  before_filter :validate_conditions
+  before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
+  before_filter :check_before_board,  :only   => [:index, :filter_issues_onboard,
+                                                  :update, :create, :edit]
   
   skip_before_filter :verify_authenticity_token
   self.allow_forgery_protection = false
@@ -12,7 +14,6 @@ class S2bBoardsController < ApplicationController
  
  
   def edit
-    @issue = Issue.find(params[:issue_id])
     return if @issue.blank?
     edit = render_to_string(:partial => "/s2b_boards/form_edit", :locals => {:issue => @issue, 
         :members => @members, :priorities => @priorities, :sprints => @sprints})
@@ -23,21 +24,27 @@ class S2bBoardsController < ApplicationController
  
   def index
     cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
-    
-    blank_conditions = cookies[:conditions].blank? || cookies[:conditions] == ["true"]
+    blank_conditions = false
+    blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
     if @use_version_for_sprint
       if blank_conditions || cookies[:params_project_ids].blank?
         if @project.blank?
-          cookies[:params_project_ids] = { :value => @projects.first.id.to_s.to_a, :expires => 1.hour.from_now }
+          cookies[:params_project_ids] = { :value => @projects.first.id.to_s.to_a, 
+              :expires => 1.hour.from_now }
           flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
         else
-          cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, :expires => 1.hour.from_now }
+          cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
+              :expires => 1.hour.from_now }
           flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
         end
       end
-    elsif blank_conditions
-      cookies[:params_custom_values] = { :value => @current_sprint.to_s.to_a, :expires => 1.hour.from_now }
-      flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
+    else
+      if blank_conditions
+        cookies[:params_custom_values] = { :value => @current_sprint.to_s.to_a, 
+            :expires => 1.hour.from_now }
+        cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
+        flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
+      end
     end
       
     filter_issues
@@ -47,8 +54,8 @@ class S2bBoardsController < ApplicationController
   
   # Had to get rid of 'done ratio' stuff
   def update_status
-    @issue = Issue.find(params[:issue_id])
     return if @issue.blank? 
+    create_journal
     unless params[:status].blank?
       new_status = params[:status].to_f.to_i
       new_status = @board_columns[new_status][:status_ids].first.to_i
@@ -65,7 +72,8 @@ class S2bBoardsController < ApplicationController
   
   
   def update_progress
-    @issue = Issue.find(params[:issue_id])
+    return if @issue.blank? 
+    create_journal
     @issue.update_attribute(:done_ratio, params[:done_ratio])
     sort(params)
     render :json => {:result => "success", :new => "Issue progress updated",
@@ -75,7 +83,8 @@ class S2bBoardsController < ApplicationController
 
 
   def update
-    @issue = Issue.find(params[:id_issue])
+    return if @issue.blank? 
+    create_journal
     @issue.update_attributes(
         :subject => params[:subject], 
         :priority_id => params[:priority],
@@ -127,7 +136,7 @@ class S2bBoardsController < ApplicationController
       cv.custom_field_id = @custom_field.id
       cv.save
     end
-    @sorted_issues = @sorted_issues.where(cookies[:conditions]).order(:s2b_position)
+    @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
         :tracker_id => params[:tracker], :project_id => params[:project], 
         :status_id => params[:status], :assigned_to_id => params[:assignee],
@@ -151,17 +160,20 @@ class S2bBoardsController < ApplicationController
     
   
   def filter_issues_onboard
-    cookies[:params_version_ids] = { :value => params[:version_ids].to_s.split(",").to_a, 
-        :expires => 1.hour.from_now }
+    if @use_version_form_sprint
+      cookies[:params_version_ids] = { :value => params[:version_ids].to_s.split(",").to_a, 
+          :expires => 1.hour.from_now } 
+    else
+      cookies[:params_custom_values] = { :value => params[:custom_values].to_s.split(",").to_a,
+          :expires => 1.hour.from_now }
+    end
     cookies[:params_member_ids] = { :value => params[:member_ids].to_s.split(",").to_a, 
-        :expires => 1.hour.from_now }
-    cookies[:params_custom_values] = { :value => params[:custom_values].to_s.split(",").to_a,
         :expires => 1.hour.from_now }
     cookies[:params_project_ids] = { :value => params[:project_ids].to_s.split(",").to_a, 
         :expires => 1.hour.from_now }
     cookies[:params_status_ids] = { :value => params[:status_ids].to_s.split(",").to_a, 
         :expires => 1.hour.from_now }
-    
+
     filter_issues
     
     respond_to do |format|
@@ -178,17 +190,6 @@ class S2bBoardsController < ApplicationController
   
   
   private
-  
-  
-  def find_project
-    # @project variable must be set before calling the authorize filter
-    project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
-    @project = Project.find(project_id) unless project_id.blank?
-    cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
-        :expires => 1.hour.from_now } unless @project.blank?
-  end
-  
-  
   
   def check_before_board
     @issue = Issue.new
@@ -214,9 +215,16 @@ class S2bBoardsController < ApplicationController
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
+  
+  
+  def create_journal
+    @issue.init_journal(User.current)
+  end
+  
 
 
   def filter_issues
+    # Sets conditions based on what user selects in filters
     conditions = ["true"]
     unless cookies[:params_version_ids].blank?
       conditions[0] += " AND issues.fixed_version_id IN (?)"
@@ -240,36 +248,44 @@ class S2bBoardsController < ApplicationController
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @custom_field.id
     end
-    cookies[:conditions] = { :value => conditions, :expires => 1.hour.from_now }
+    session[:conditions] = conditions
+    cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
     
-    issue_no_position = Issue.where(:status_id => @board_columns.first[:status_ids])
-    unless @use_version_for_sprint
-      issue_no_position = issue_no_position.eager_load(:custom_values, {
-          :project => :issue_custom_fields})
-      issue_no_position = issue_no_position.where(:custom_values => {
-          :custom_field_id => @custom_field.id})
-    end
-    issue_no_position = issue_no_position.where(cookies[:conditions]).order(:s2b_position)
-
-    unless issue_no_position.blank?
-      max_position_issue = issue_no_position.last.s2b_position.to_i + 1
-      issue_no_position = Issue.where(:s2b_position => nil)
-      issue_no_position.each_with_index do |issue, index|
-        issue.update_attribute(:s2b_position, max_position_issue + index)
-      end
+    # Assigns positions to all issues without positions.
+    max_position_issue = Issue.eager_load(:custom_values).where(
+        :status_id => @board_columns.first[:status_ids]).where(
+        session[:conditions]).maximum(:s2b_position).to_i + 1
+    issue_no_position = Issue.where(:s2b_position => nil)
+    issue_no_position.each_with_index do |issue, index|
+      issue.update_attribute(:s2b_position, max_position_issue + index)
     end
     
-    
+    # Populates each column with issues
     @board_columns.each do |board_column|
       issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status, :project).where(
           "status_id IN (?)", board_column[:status_ids])
       unless @use_version_for_sprint
-        issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields}).where(
-            :custom_values => {:custom_field_id => @custom_field.id})         
+        issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields})
       end
-      issues = issues.where(cookies[:conditions])
+      issues = issues.where(session[:conditions])
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
+  end
+
+
+
+  def find_issue
+    @issue = Issue.find(params[:issue_id])
+  end
+
+
+
+  def find_project
+    # @project variable must be set before calling the authorize filter
+    project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
+    @project = Project.find(project_id) unless project_id.blank?
+    cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
+        :expires => 1.hour.from_now } unless @project.blank?
   end
 
 
@@ -302,7 +318,8 @@ class S2bBoardsController < ApplicationController
           redirect_to "/projects/#{@project.to_param}"
           return
         else
-          @board_columns << {:name => board_column.last["name"], :status_ids => board_column.last["statuses"].keys}
+          @board_columns << {:name => board_column.last["name"], 
+              :status_ids => board_column.last["statuses"].keys}
         end
       end 
     end
@@ -313,40 +330,33 @@ class S2bBoardsController < ApplicationController
     @current_sprint = sprint["current_sprint"] unless @use_version_for_sprint
     @use_default_priority = priority["use_default"]
     @custom_priority = CustomField.find(priority["custom_field_id"]) unless @use_default_priority
-    
     if @use_version_for_sprint
-      if cookies[:params_custom_values] 
+      unless cookies[:params_custom_values].blank?
         cookies.delete :params_custom_values
-        cookies.delete :conditions
+        cookies.delete :conditions_valid
       end
     else
-      if cookies[:params_version_ids] 
+      unless cookies[:params_version_ids].blank?
         cookies.delete :params_version_ids
-        cookies.delete :conditions
+        cookies.delete :conditions_valid
       end
     end
   end
   
   
   
-  
   def sort(params)
-    @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status)
-    unless @use_version_for_sprint
-      @issues_in_column = @issues_in_column.eager_load(:custom_values, {
-          :project => :issue_custom_fields})
-      @issues_in_column = @issues_in_column.where(:custom_values => {
-          :custom_field_id => @custom_field.id})
-    end
+    @issues_in_column = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status,
+        :custom_values)
     @issue = Issue.find(params[:issue_id])
     @status_ids = [-1]
     @board_columns.each do |board_column|
       @status_ids = board_column[:status_ids]
       break if @status_ids.index(@issue.status_id.to_s)
     end
-    
+        
     @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
-    @issues_in_column = @issues_in_column.where(cookies[:conditions]).order(:s2b_position)
+    @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
     @max_position = @issues_in_column.last.s2b_position.to_i unless @issues_in_column.blank?
     @min_position = @issues_in_column.first.s2b_position.to_i unless @issues_in_column.blank?
     
@@ -373,6 +383,12 @@ class S2bBoardsController < ApplicationController
       end
       @issue.update_attribute(:s2b_position, @next_position)
     end
+  end
+  
+  
+  
+  def validate_conditions
+    session[:conditions] = nil unless cookies[:conditions_valid]
   end
   
   

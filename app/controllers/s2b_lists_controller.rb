@@ -111,7 +111,10 @@ class S2bListsController < ApplicationController
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @custom_field.id
     end
-    cookies[:conditions] = { :value =>  conditions, :expires => 1.hour.from_now }
+    session[:conditions] = conditions
+    cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
+    
+    
     @issue_backlogs = Issue.eager_load(:custom_values, :status, :assigned_to, :project, :priority)
     
     @sorted_issues = []
@@ -126,7 +129,7 @@ class S2bListsController < ApplicationController
         issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(cookies[:conditions])
+        issues = issues.where(session[:conditions])
         @sorted_issues << {:name => version.name, :issues => issues.order(
             "status_id, s2b_position")}
       end
@@ -148,13 +151,13 @@ class S2bListsController < ApplicationController
             :custom_values, {:project => :issue_custom_fields}).where(
             :custom_values => {:custom_field_id => @custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(cookies[:conditions])
+        issues = issues.where(session[:conditions])
         @sorted_issues << {:name => cv, :issues => issues.order("status_id, projects.name,
             s2b_position")}
       end
     end
     
-    @issue_backlogs = @issue_backlogs.where(cookies[:conditions])
+    @issue_backlogs = @issue_backlogs.where(session[:conditions])
     @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
     @issue_backlogs = @issue_backlogs.order("projects.name, status_id, s2b_position")
     @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
