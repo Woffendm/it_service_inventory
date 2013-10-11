@@ -89,27 +89,23 @@ class S2bBoardsController < ApplicationController
     @issue = Issue.find(params[:issue_id])
     return if @issue.blank?
     create_journal
-    @issue.update_attributes(
-        :subject => params[:subject], 
-        :priority_id => params[:priority],
-        :assigned_to_id => params[:assignee],
-        :estimated_hours => params[:time],
-        :description => params[:description], 
-        :start_date => params[:date_start], 
-        :due_date => params[:date_end], 
-    )
-    @issue.update_attribute(:fixed_version_id, params[:version]) unless params[:version].blank?
+    @issue.subject = params[:subject]
+    @issue.priority_id = params[:priority]
+    @issue.assigned_to_id = params[:assignee]
+    @issue.estimated_hours = params[:time]
+    @issue.description = params[:description] 
+    @issue.start_date = params[:date_start]
+    @issue.due_date = params[:date_end] 
+    @issue.fixed_version_id = params[:version] unless params[:version].blank?
     unless params[:custom_value].blank?
-      @issue.custom_values.where(:custom_field_id => @custom_field.id).first.destroy
-      cv = CustomValue.new
-      cv.customized_type = "Issue"
-      cv.value = params[:custom_value]
-      cv.custom_field_id = @custom_field.id
-      cv.save
-      @issue.custom_values << cv
+      @issue.custom_field_values.each do |cfv|
+        next unless cfv.custom_field_id == @custom_field.id
+        cfv.value = params[:custom_value]
+        break
+      end
     end
     
-    if @issue.valid? 
+    if @issue.save
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
                                :locals => {:issue => @issue})
       edit  = render_to_string(:partial => "/s2b_boards/form_new", 
