@@ -98,11 +98,8 @@ class S2bBoardsController < ApplicationController
     @issue.due_date = params[:date_end] 
     @issue.fixed_version_id = params[:version] unless params[:version].blank?
     unless params[:custom_value].blank?
-      @issue.custom_field_values.each do |cfv|
-        next unless cfv.custom_field_id == @custom_field.id
-        cfv.value = params[:custom_value]
-        break
-      end
+      cfv = @issue.get_custom_field_value(@custom_field)
+      cfv.value = params[:custom_value] unless cfv.blank?
     end
     
     if @issue.save
@@ -130,11 +127,6 @@ class S2bBoardsController < ApplicationController
           :project => :issue_custom_fields})
       @sorted_issues = @sorted_issues.where(:custom_values => {
           :custom_field_id => @custom_field.id})
-      cv = CustomValue.new
-      cv.customized_type = "Issue"
-      cv.value = params[:custom_value]
-      cv.custom_field_id = @custom_field.id
-      cv.save
     end
     @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
@@ -145,7 +137,10 @@ class S2bBoardsController < ApplicationController
         :estimated_hours => params[:time], :author_id => User.current.id,
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
     if @issue.save
-      @issue.custom_values << cv unless cv.blank?
+      unless params[:custom_value].blank?
+        cfv = @issue.get_custom_field_value(@custom_field)
+        cfv.value = params[:custom_value] unless cfv.blank?
+      end
       @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
           :issue => @issue, :trackers => @trackers, :members => @members,
