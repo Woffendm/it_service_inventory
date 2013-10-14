@@ -1,15 +1,6 @@
 <div class="no_edit issue_show" id="show_issue_<%= issue.id %>" value="<%= issue.id %>">
   
   
-  
-  
-  
-
-  
-  
-  
-  
-  
   <div value="<%= issue.id %>">
     <div class="float_left">    
       <%= link_to "##{issue.id}", issue_path(issue.id) %>
@@ -41,10 +32,10 @@
           <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
               :id => issue.fixed_version_id if issue.fixed_version_id %>
         </div>
-      <% elsif issue.custom_values.last && issue.custom_values.last.value %>
+      <% elsif issue.get_custom_value(@custom_field) %>
         <div id="sprint_<%= issue.id %>">
           <i class="icon-tasks" title="<%= l(:label_sprint) %>"></i>
-          <%= issue.custom_values.last.value %>
+          <%= issue.get_custom_value(@custom_field) %>
         </div>
       <% end %>
       
