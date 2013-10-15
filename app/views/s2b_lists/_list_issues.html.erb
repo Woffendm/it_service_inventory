@@ -12,7 +12,7 @@
   <%= issue.status %>
 </td>
 
-<% unless @use_version_for_sprint %>
+<% unless @sprint_use_default %>
   <td>
     <%= issue.project.name.truncate(30) %>
   </td>

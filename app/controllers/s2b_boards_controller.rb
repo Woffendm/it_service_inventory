@@ -27,7 +27,7 @@ class S2bBoardsController < ApplicationController
     cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     blank_conditions = false
     blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
-    if @use_version_for_sprint
+    if @sprint_use_default
       if blank_conditions || cookies[:params_project_ids].blank?
         if @project.blank?
           cookies[:params_project_ids] = { :value => @projects.first.id.to_s.to_a, 
@@ -98,7 +98,7 @@ class S2bBoardsController < ApplicationController
     @issue.due_date = params[:date_end] 
     @issue.fixed_version_id = params[:version] unless params[:version].blank?
     unless params[:custom_value].blank?
-      cfv = @issue.get_custom_field_value(@custom_field)
+      cfv = @issue.get_custom_field_value(@sprint_custom_field)
       cfv.value = params[:custom_value] unless cfv.blank?
     end
     
@@ -122,11 +122,11 @@ class S2bBoardsController < ApplicationController
   
   def create
     @sorted_issues = Issue.where(:status_id => @board_columns.first[:status_ids])
-    unless @use_version_for_sprint
+    unless @sprint_use_default
       @sorted_issues = @sorted_issues.eager_load(:custom_values, {
           :project => :issue_custom_fields})
       @sorted_issues = @sorted_issues.where(:custom_values => {
-          :custom_field_id => @custom_field.id})
+          :custom_field_id => @sprint_custom_field.id})
     end
     @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
@@ -138,7 +138,7 @@ class S2bBoardsController < ApplicationController
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
     if @issue.save
       unless params[:custom_value].blank?
-        cfv = @issue.get_custom_field_value(@custom_field)
+        cfv = @issue.get_custom_field_value(@sprint_custom_field)
         cfv.value = params[:custom_value] unless cfv.blank?
       end
       @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
@@ -191,21 +191,21 @@ class S2bBoardsController < ApplicationController
     @priorities = IssuePriority.all
     @trackers = Tracker.all
     @statuses = IssueStatus.sorted
-    if @use_version_for_sprint
+    if @sprint_use_default
       @projects = Project.order(:name)
       @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
       @sprints = Version.where(project_id: @projects.pluck(:id))
     else
-      if @custom_field.is_for_all
+      if @sprint_custom_field.is_for_all
         @projects = Project.order(:name)
       else
         @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
-            {:id => @custom_field.id}).order("projects.name")
+            {:id => @sprint_custom_field.id}).order("projects.name")
       end
       @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
           ).pluck(:user_id).uniq).order(:firstname)
-      @sprints = @custom_field.possible_values
+      @sprints = @sprint_custom_field.possible_values
     end
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
@@ -237,11 +237,11 @@ class S2bBoardsController < ApplicationController
       conditions[0] += " AND issues.status_id IN (?)"
       conditions << cookies[:params_status_ids]
     end
-    unless cookies[:params_custom_values].blank? || @custom_field.blank?
+    unless cookies[:params_custom_values].blank? || @sprint_custom_field.blank?
       conditions[0] += " AND custom_values.value IN (?)"
       conditions << cookies[:params_custom_values]
       conditions[0] += " AND custom_values.custom_field_id = ?"
-      conditions << @custom_field.id
+      conditions << @sprint_custom_field.id
     end
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
@@ -259,7 +259,7 @@ class S2bBoardsController < ApplicationController
     @board_columns.each do |board_column|
       issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status, :project).where(
           "status_id IN (?)", board_column[:status_ids])
-      unless @use_version_for_sprint
+      unless @sprint_use_default
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields})
       end
       issues = issues.where(session[:conditions])
@@ -290,10 +290,10 @@ class S2bBoardsController < ApplicationController
     @plugin = Redmine::Plugin.find("scrum2b")
     @settings = Setting["plugin_#{@plugin.id}"]   
     board_columns = @settings["board_columns"]
-    sprint = @settings["sprint"]
-    priority = @settings["priority"]
+    sprint_settings = @settings["sprint"]
+    priority_settings = @settings["priority"]
     @board_columns = []
-    if board_columns.blank? || sprint.blank? || priority.blank?
+    if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the Settings page of the plugin: " + 
           "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
@@ -320,12 +320,12 @@ class S2bBoardsController < ApplicationController
     end
     
     @show_progress_bars = @settings["show_progress_bars"] == "true"
-    @use_version_for_sprint = sprint["use_default"] == "true"
-    @custom_field = CustomField.find(sprint["custom_field_id"]) unless @use_version_for_sprint
-    @current_sprint = sprint["current_sprint"] unless @use_version_for_sprint
-    @use_default_priority = priority["use_default"]
-    @custom_priority = CustomField.find(priority["custom_field_id"]) unless @use_default_priority
-    if @use_version_for_sprint
+    @sprint_use_default = sprint_settings["use_default"] == "true"
+    @sprint_custom_field = CustomField.find(sprint_settings["custom_field_id"]) unless @sprint_use_default
+    @current_sprint = sprint_settings["current_sprint"] unless @sprint_use_default
+    @use_default_priority = priority_settings["use_default"] == "true"
+    @custom_priority = CustomField.find(priority_settings["custom_field_id"]) unless @use_default_priority
+    if @sprint_use_default
       unless cookies[:params_custom_values].blank?
         cookies.delete :params_custom_values
         cookies.delete :conditions_valid

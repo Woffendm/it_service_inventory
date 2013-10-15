@@ -26,16 +26,16 @@
   
   <div class="clearfix">
     <div class="">
-      <% if @use_version_for_sprint && issue.fixed_version_id %>
+      <% if @sprint_use_default && issue.fixed_version_id %>
         <div id="sprint_<%= issue.id %>">
           <i class="icon-tasks" title="<%= l(:label_sprint) %>"></i>
           <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
               :id => issue.fixed_version_id if issue.fixed_version_id %>
         </div>
-      <% elsif issue.get_custom_value(@custom_field) %>
+      <% elsif issue.get_custom_value(@sprint_custom_field) %>
         <div id="sprint_<%= issue.id %>">
           <i class="icon-tasks" title="<%= l(:label_sprint) %>"></i>
-          <%= issue.get_custom_value(@custom_field) %>
+          <%= issue.get_custom_value(@sprint_custom_field) %>
         </div>
       <% end %>
       

@@ -25,19 +25,14 @@
     <span class="span5">
       <%= l(:label_sprint) %> 
     </span>
-    <% if @use_version_for_sprint %>
+    <% if @sprint_use_default %>
       <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
           @sprints, :id, :name, :selected => issue.fixed_version_id), 
           :class => "span7 value_content", :include_blank => true) %>
     <% else %>
-      <% selected = nil %>
-      <% issue.custom_values.each do |cv| %>
-        <% selected = cv.value %>
-        <% break if cv.custom_field_id == @custom_field.id %>
-      <% end %>
       <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, 
-          :selected => selected), :class => "span7 value_content",
-          :include_blank => true) %>
+          :selected => issue.get_custom_value(@sprint_custom_field)),
+          :class => "span7 value_content", :include_blank => true) %>
     <% end %>
   </p>
   

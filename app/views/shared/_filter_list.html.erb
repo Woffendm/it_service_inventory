@@ -1,7 +1,7 @@
 <div class="container-fluid filter">
   
   <span class="float_right">
-    <% if @use_version_for_sprint %>
+    <% if @sprint_use_default %>
       <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, :name, 
           :selected => cookies[:params_version_ids]), {"data-placeholder" => "All Sprints",
           :class => "chosen-select", :multiple => true}) %>
@@ -13,7 +13,7 @@
     
     <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
         :selected => cookies[:params_project_ids]), "data-placeholder" => "All Projects", 
-        :class => "chosen-select", :multiple => !@use_version_for_sprint) %>
+        :class => "chosen-select", :multiple => !@sprint_use_default) %>
     
     <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
         :selected => cookies[:params_member_ids]), "data-placeholder" => "All Members", 
