@@ -1,4 +1,5 @@
 require 'redmine'
+
 Redmine::Plugin.register :scrum2b do
   name 'Scrum2B Plugin'
   author 'Scrum2B, Michael Woffendin'
@@ -50,5 +51,14 @@ Redmine::Plugin.register :scrum2b do
   menu :top_menu, :scrum_board, { :controller => :s2b_lists, :action => :index }, :caption => "Sprint Board"
   
 end
+
+
+
+Rails.configuration.to_prepare do
+  require_dependency 'issue'
+  require_dependency 'issue_patch'
+  Issue.send(:include, IssuePatch)
+end
+
 
 
