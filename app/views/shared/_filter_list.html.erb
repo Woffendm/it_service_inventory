@@ -6,8 +6,8 @@
           :selected => cookies[:params_version_ids]), {"data-placeholder" => "All Sprints",
           :class => "chosen-select", :multiple => true}) %>
     <% else %>
-      <%= select_tag("custom_values", options_for_select(@sprints, 
-          :selected => cookies[:params_custom_values]), {"data-placeholder" => "All Sprints", 
+      <%= select_tag("sprint_custom_values", options_for_select(@sprints, 
+          :selected => cookies[:params_sprint_custom_values]), {"data-placeholder" => "All Sprints", 
           :class => "chosen-select", :multiple => true}) %>
     <% end %>
     

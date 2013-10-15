@@ -45,7 +45,8 @@ class S2bListsController < ApplicationController
         :expires => 1.hour.from_now }
     cookies[:params_version_ids] = { :value => params[:version_ids].to_s.split(",").to_a, 
         :expires => 1.hour.from_now }
-    cookies[:params_custom_values] = { :value => params[:custom_values].to_s.split(",").to_a, 
+    cookies[:params_sprint_custom_values] = { 
+        :value => params[:sprint_custom_values].to_s.split(",").to_a, 
         :expires => 1.hour.from_now }
     
     filter_issues
@@ -105,9 +106,9 @@ class S2bListsController < ApplicationController
       conditions[0] += " AND issues.status_id IN (?)"
       conditions << cookies[:params_status_ids]
     end
-    unless cookies[:params_custom_values].blank? || @sprint_custom_field.blank?
+    unless cookies[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
       conditions[0] += " AND custom_values.value IN (?)"
-      conditions << cookies[:params_custom_values]
+      conditions << cookies[:params_sprint_custom_values]
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
     end
@@ -140,10 +141,10 @@ class S2bListsController < ApplicationController
           {:custom_field_id => @sprint_custom_field.id}).pluck("issues.id")
       issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
       @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
-      if cookies[:params_custom_values].blank?
+      if cookies[:params_sprint_custom_values].blank?
         custom_values = @sprint_custom_field.possible_values
       else
-        custom_values = cookies[:params_custom_values].to_a
+        custom_values = cookies[:params_sprint_custom_values].to_a
       end
       custom_values.each do |cv|
         issues =  Issue.eager_load(:assigned_to, :status, :fixed_version, :priority,
@@ -210,11 +211,11 @@ class S2bListsController < ApplicationController
     @sprint_use_default = sprint_settings["use_default"] == "true"
     @sprint_custom_field = CustomField.find(sprint_settings["custom_field_id"]) unless @sprint_use_default
     @current_sprint = sprint_settings["current_sprint"] unless @sprint_use_default
-    @use_default_priority = priority_settings["use_default"] == "true"
-    @custom_priority = CustomField.find(priority_settings["custom_field_id"]) unless @use_default_priority
+    @priority_use_default = priority_settings["use_default"] == "true"
+    @priority_custom_field = CustomField.find(priority_settings["custom_field_id"]) unless @priority_use_default
     if @sprint_use_default
-      unless cookies[:params_custom_values].blank?
-        cookies.delete :params_custom_values
+      unless cookies[:params_sprint_custom_values].blank?
+        cookies.delete :params_sprint_custom_values
         cookies.delete :conditions_valid
       end
     else
