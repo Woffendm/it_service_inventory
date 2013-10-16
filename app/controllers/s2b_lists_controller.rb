@@ -115,11 +115,12 @@ class S2bListsController < ApplicationController
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
     
-    @issue_backlogs = Issue.eager_load(:custom_values, :status, :assigned_to, :project, :priority)
+   puts  @show_backlogs = true if cookies[:params_version_ids].blank? && cookies[:params_sprint_custom_values].blank?
+    @issue_backlogs = Issue.joins(:status) if @show_backlogs
     
     @sorted_issues = []
     if @sprint_use_default
-      @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
+      @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil) if @show_backlogs
       if cookies[:params_version_ids].blank?
         versions = Version.where(:project_id => cookies[:params_project_ids]).order("created_on")
       else
@@ -134,33 +135,42 @@ class S2bListsController < ApplicationController
             "status_id, s2b_position")}
       end
     else
-      @issue_backlogs = @issue_backlogs.eager_load(:custom_values, 
-          {:project => :issue_custom_fields})
-      issue_ids_with_custom_field = Issue.joins(:custom_values).where(
-          "custom_values.value IS NOT NULL").where(:custom_values => 
-          {:custom_field_id => @sprint_custom_field.id}).pluck("issues.id")
-      issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
-      @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
+      if @show_backlogs
+        @issue_backlogs = @issue_backlogs.joins(:custom_values)
+        issue_ids_with_custom_field = Issue.joins(:custom_values).where(session[:conditions]).where(
+            :custom_values => {:value => nil, 
+            :custom_field_id => @sprint_custom_field.id}).pluck("issues.id")
+        issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
+        @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
+      end
+      
       if cookies[:params_sprint_custom_values].blank?
         custom_values = @sprint_custom_field.possible_values
       else
         custom_values = cookies[:params_sprint_custom_values].to_a
       end
-      custom_values.each do |cv|
-        issues =  Issue.eager_load(:assigned_to, :status, :fixed_version, :priority,
-            :custom_values, {:project => :issue_custom_fields}).where(
-            :custom_values => {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
+      
+      custom_values.each do |cv|  
+        issues =  Issue.joins(:custom_values, :status).where(:custom_values => 
+            {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(session[:conditions])
+        issues = Issue.where(:id => issues.pluck(:id)).eager_load(
+            :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
         @sorted_issues << {:name => cv, :issues => issues.order("status_id, projects.name,
             s2b_position")}
       end
     end
     
-    @issue_backlogs = @issue_backlogs.where(session[:conditions])
-    @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
-    @issue_backlogs = @issue_backlogs.order("projects.name, status_id, s2b_position")
-    @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
+    if @show_backlogs
+      @issue_backlogs = @issue_backlogs.where(session[:conditions])
+      @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
+      @issue_backlogs = Issue.where(:id => @issue_backlogs.pluck(:id))
+      @issue_backlogs = @issue_backlogs.eager_load(:custom_values, :status, :assigned_to, 
+          :project, :priority)
+      @issue_backlogs = @issue_backlogs.order("projects.name, status_id, s2b_position")
+      @sorted_issues << {:name => l(:label_version_no_sprint), :issues => @issue_backlogs}
+    end
   end
   
   

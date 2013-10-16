@@ -268,14 +268,13 @@ class S2bBoardsController < ApplicationController
     
     # Populates each column with issues
     @board_columns.each do |board_column|
-      issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status, :project).where(
-          "status_id IN (?)", board_column[:status_ids])
-      unless @sprint_use_default
+      issues = Issue.where("status_id IN (?)", board_column[:status_ids])
+      unless @sprint_use_default || cookies[:params_sprint_custom_values].blank?
         # CAUSES PROBLEMS!!! MUST BE A JOIN TO USE PLUCK!!!!!!!!!!!!!!!!!!
-        issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields})
+        issues = issues.joins(:custom_values, {:project => :issue_custom_fields}) 
       end
       issues = issues.where(session[:conditions])
-      issues.pluck(:id)
+      issues = Issue.where(:id => issues.pluck(:id)).eager_load(:assigned_to, :tracker, :fixed_version, :status, :project, :custom_values)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
   end
