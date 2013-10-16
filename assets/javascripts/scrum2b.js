@@ -4,14 +4,14 @@ $(document).ready(function(){
   $("#btn_filter").live("click",function(){
     var version_ids = $("#versions").val() || "";
     var status_ids = $("#statuses").val() || "";
-    var custom_values = $("#custom_values").val() || "";
+    var sprint_custom_values = $("#sprint_custom_values").val() || "";
     var member_ids = $("#members").val() || "";
     var project_ids = $("#projects").val() || "";
     // url_filter must be defined on the view, as the path changes.
     $.ajax({
       url : url_filter,
       type : "POST",
-      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&custom_values=' + custom_values + '&status_ids=' + status_ids,
+      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&sprint_custom_values=' + sprint_custom_values + '&status_ids=' + status_ids,
       dataType : "script",
       success : function() {
         setup_sortable_columns();
@@ -133,7 +133,7 @@ $(document).ready(function(){
     var priority = $("#new_priority_"+issue_id).val() || "";
     var assignee = $("#new_assignee_"+issue_id).val() || "";
     var version = $("#new_version_"+issue_id).val() || "";
-    var custom_value = $("#new_custom_value_"+issue_id).val() || "";
+    var sprint_custom_value = $("#new_sprint_custom_value_"+issue_id).val() || "";
     var time = $("#new_time_"+issue_id).val() || "";
     var date_start = $("#new_date_start_"+issue_id).val() || "";
     var date_end = $("#new_date_end_"+issue_id).val() || "";
@@ -141,7 +141,7 @@ $(document).ready(function(){
     $.ajax({
       url : url_ajax,
       type : "POST",
-      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
+      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&sprint_custom_value=' + sprint_custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
       dataType : "json",
       success : function(data) {
         if(data.result == "edit_success") {

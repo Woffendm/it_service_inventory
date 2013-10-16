@@ -10,7 +10,11 @@
       </th>
       
       <th> 
-        <%= l(:label_head_issue_priority) %> 
+        <% if @priority_use_default %>
+          <%= l(:label_head_issue_priority) %> 
+        <% else %>
+          <%= @priority_custom_field.name %>
+        <% end %>        
       </th>
       
       <th> 

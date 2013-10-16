@@ -271,9 +271,11 @@ class S2bBoardsController < ApplicationController
       issues = Issue.eager_load(:assigned_to, :tracker, :fixed_version, :status, :project).where(
           "status_id IN (?)", board_column[:status_ids])
       unless @sprint_use_default
+        # CAUSES PROBLEMS!!! MUST BE A JOIN TO USE PLUCK!!!!!!!!!!!!!!!!!!
         issues = issues.eager_load(:custom_values, {:project => :issue_custom_fields})
       end
       issues = issues.where(session[:conditions])
+      issues.pluck(:id)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
   end
