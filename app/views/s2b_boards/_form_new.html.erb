@@ -58,10 +58,10 @@
         <%= select_tag("new_version_#{issue.id}", options_from_collection_for_select(
             @sprints, :id, :name, :selected => issue.fixed_version_id), 
             :class => "span7 value_content", :include_blank => true) %>
-         <%= select_tag("new_custom_value_#{issue.id}", nil, :class => "hidden", 
+         <%= select_tag("new_sprint_custom_value_#{issue.id}", nil, :class => "hidden", 
              :include_blank => true) %>
       <% else %>
-        <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, 
+        <%= select_tag("new_sprint_custom_value_#{issue.id}", options_for_select(@sprints, 
             :selected => issue.get_custom_value(@sprint_custom_field)), 
             :class => "span7 value_content", :include_blank => true) %>
         <%= select_tag("new_version_#{issue.id}", nil, :class => "hidden", 

@@ -7,9 +7,15 @@
     <span class="span5">
       <%= l(:label_priority) %> 
     </span>
-    <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
-        @priorities, :id, :name, :selected => issue.priority_id),
-        :class => "span7 value_content") %>
+    <% if @priority_use_default %>
+      <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
+          @priorities, :id, :name, :selected => issue.priority_id),
+          :class => "span7 value_content") %>
+    <% else %>
+      <%= select_tag("new_priority_custom_value_#{issue.id}", options_for_select(@priorities, 
+          :selected => issue.get_custom_value(@priority_custom_field)),
+          :class => "span7 value_content", :include_blank => true) %>
+    <% end %>
   </p>
   
   <p id="p_assignee_<%= issue.id %>">
@@ -30,7 +36,7 @@
           @sprints, :id, :name, :selected => issue.fixed_version_id), 
           :class => "span7 value_content", :include_blank => true) %>
     <% else %>
-      <%= select_tag("new_custom_value_#{issue.id}", options_for_select(@sprints, 
+      <%= select_tag("new_sprint_custom_value_#{issue.id}", options_for_select(@sprints, 
           :selected => issue.get_custom_value(@sprint_custom_field)),
           :class => "span7 value_content", :include_blank => true) %>
     <% end %>

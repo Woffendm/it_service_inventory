@@ -89,6 +89,7 @@ class S2bListsController < ApplicationController
   
   
   def filter_issues
+    # Sets conditions based on what user selects in filters
     conditions = ["true"]
     unless cookies[:params_version_ids].blank?
       conditions[0] += " AND issues.fixed_version_id IN (?)"
@@ -115,6 +116,7 @@ class S2bListsController < ApplicationController
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
     
+    # Determines whether to bother calculating issues without sprints
     @show_backlogs = true if cookies[:params_version_ids].blank? && cookies[:params_sprint_custom_values].blank?
     @issue_backlogs = Issue.joins(:status) if @show_backlogs
     
@@ -126,6 +128,8 @@ class S2bListsController < ApplicationController
       else
         versions = Version.where(:id => cookies[:params_version_ids]).order("created_on")
       end
+      
+      # Finds all unfinished issues for each version of the project.
       versions.each do |version|
         issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
@@ -135,6 +139,7 @@ class S2bListsController < ApplicationController
             "status_id, s2b_position")}
       end
     else
+      # Finds all unfinished issues not assigned to a custom field sprint
       if @show_backlogs
         @issue_backlogs = @issue_backlogs.joins(:custom_values)
         issue_ids_with_custom_field = Issue.joins(:custom_values).where(session[:conditions]).where(
@@ -150,6 +155,7 @@ class S2bListsController < ApplicationController
         custom_values = cookies[:params_sprint_custom_values].to_a
       end
       
+      # Finds all unfinished issues for each possible value in the custom field used for sprint
       custom_values.each do |cv|  
         issues =  Issue.joins(:custom_values, :status).where(:custom_values => 
             {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
@@ -162,7 +168,6 @@ class S2bListsController < ApplicationController
               :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
           issues =  issues.order("status_id, projects.name, s2b_position")
           @sorted_issues << {:name => cv, :issues => issues}
-          
         end
       end
     end
