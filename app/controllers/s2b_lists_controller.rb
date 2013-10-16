@@ -164,7 +164,7 @@ class S2bListsController < ApplicationController
         if issues.blank?
           @sorted_issues << {:name => cv, :issues => []}
         else
-          issues = Issue.where(:id => issues.pluck(:id)).eager_load(
+          issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
               :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
           issues =  issues.order("status_id, projects.name, s2b_position")
           @sorted_issues << {:name => cv, :issues => issues}
@@ -175,7 +175,7 @@ class S2bListsController < ApplicationController
     if @show_backlogs
       @issue_backlogs = @issue_backlogs.where(session[:conditions])
       @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
-      @issue_backlogs = Issue.where(:id => @issue_backlogs.pluck(:id))
+      @issue_backlogs = Issue.where(:id => @issue_backlogs.pluck("issues.id"))
       @issue_backlogs = @issue_backlogs.eager_load(:custom_values, :status, :assigned_to, 
           :project, :priority)
       @issue_backlogs = @issue_backlogs.order("projects.name, status_id, s2b_position")

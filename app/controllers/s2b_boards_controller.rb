@@ -273,7 +273,8 @@ class S2bBoardsController < ApplicationController
         issues = issues.joins(:custom_values, {:project => :issue_custom_fields}) 
       end
       issues = issues.where(session[:conditions])
-      issues = Issue.where(:id => issues.pluck(:id)).eager_load(:assigned_to, :tracker, :fixed_version, :status, :project, :custom_values)
+      issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
+          :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
   end
