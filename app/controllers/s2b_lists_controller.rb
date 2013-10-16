@@ -115,7 +115,7 @@ class S2bListsController < ApplicationController
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
     
-   puts  @show_backlogs = true if cookies[:params_version_ids].blank? && cookies[:params_sprint_custom_values].blank?
+    @show_backlogs = true if cookies[:params_version_ids].blank? && cookies[:params_sprint_custom_values].blank?
     @issue_backlogs = Issue.joins(:status) if @show_backlogs
     
     @sorted_issues = []
@@ -155,10 +155,15 @@ class S2bListsController < ApplicationController
             {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(session[:conditions])
-        issues = Issue.where(:id => issues.pluck(:id)).eager_load(
-            :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
-        @sorted_issues << {:name => cv, :issues => issues.order("status_id, projects.name,
-            s2b_position")}
+        if issues.blank?
+          @sorted_issues << {:name => cv, :issues => []}
+        else
+          issues = Issue.where(:id => issues.pluck(:id)).eager_load(
+              :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
+          issues =  issues.order("status_id, projects.name, s2b_position")
+          @sorted_issues << {:name => cv, :issues => issues}
+          
+        end
       end
     end
     
