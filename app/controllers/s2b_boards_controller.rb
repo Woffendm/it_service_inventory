@@ -142,11 +142,30 @@ class S2bBoardsController < ApplicationController
         :start_date => params[:date_start], :due_date => params[:date_end], 
         :estimated_hours => params[:time], :author_id => User.current.id,
         :done_ratio => 0, :is_private => false, :lock_version => 0, :s2b_position => 1)
-    if @issue.save
+    @issue.valid?
+    
+    unless params[:sprint_custom_value].blank?
+      errors = @sprint_custom_field.validate_field_value(params[:sprint_custom_value]).first
+      @issue.errors.add :base, "#{@sprint_custom_field.name} #{errors}" unless errors.blank? 
+    end
+    
+    unless params[:priority_custom_value].blank?
+      errors = @priority_custom_field.validate_field_value(params[:priority_custom_value]).first
+      @issue.errors.add :base, "#{@priority_custom_field.name} #{errors}" unless errors.blank? 
+    end
+    
+    
+    if @issue.errors.messages.blank? && @issue.save
       unless params[:sprint_custom_value].blank?
         cfv = @issue.get_custom_field_value(@sprint_custom_field)
         cfv.value = params[:sprint_custom_value] unless cfv.blank?
       end
+
+      unless params[:priority_custom_value].blank?
+        cfv = @issue.get_custom_field_value(@priority_custom_field)
+        cfv.value = params[:priority_custom_value] unless cfv.blank?
+      end
+      
       @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
           :issue => @issue, :trackers => @trackers, :members => @members,
@@ -405,7 +424,6 @@ class S2bBoardsController < ApplicationController
   
   def validate_issue(issue)
     issue.valid?
-    issue.validate_issue
     issue.custom_field_values.each do |cfv|
       cfv.validate_value
     end
