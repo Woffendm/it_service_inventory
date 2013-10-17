@@ -142,9 +142,14 @@ class S2bListsController < ApplicationController
       # Finds all unfinished issues not assigned to a custom field sprint
       if @show_backlogs
         @issue_backlogs = @issue_backlogs.joins(:custom_values)
-        issue_ids_with_custom_field = Issue.joins(:custom_values).where(session[:conditions]).where(
-            :custom_values => {:value => nil, 
-            :custom_field_id => @sprint_custom_field.id}).pluck("issues.id")
+        issue_ids_with_custom_field = Issue.joins(:custom_values, :status).where(
+            session[:conditions]).where(:issue_statuses => {:is_closed => false}).where(
+            "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != ''",
+             @sprint_custom_field.id).pluck("issues.id")
+        
+
+        
+        
         issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
         @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       end

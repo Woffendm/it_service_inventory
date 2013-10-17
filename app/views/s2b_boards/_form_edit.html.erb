@@ -11,9 +11,13 @@
       <%= select_tag("new_priority_#{issue.id}", options_from_collection_for_select(
           @priorities, :id, :name, :selected => issue.priority_id),
           :class => "span7 value_content") %>
-    <% else %>
+    <% elsif !priorities.blank? %>
       <%= select_tag("new_priority_custom_value_#{issue.id}", options_for_select(@priorities, 
           :selected => issue.get_custom_value(@priority_custom_field)),
+          :class => "span7 value_content", :include_blank => true) %>
+    <% else %>
+      <%= text_field_tag("new_priority_custom_value_#{issue.id}",
+          issue.get_custom_value(@priority_custom_field)),
           :class => "span7 value_content", :include_blank => true) %>
     <% end %>
   </p>
