@@ -90,7 +90,7 @@ class S2bBoardsController < ApplicationController
     return if @issue.blank?
     create_journal
     @issue.subject = params[:subject]
-    @issue.priority_id = params[:priority]
+    @issue.priority_id = params[:priority] unless params[:version].blank?
     @issue.assigned_to_id = params[:assignee]
     @issue.estimated_hours = params[:time]
     @issue.description = params[:description] 
@@ -108,7 +108,7 @@ class S2bBoardsController < ApplicationController
       cfv.value = params[:priority_custom_value] unless cfv.blank?
     end
     
-    if @issue.save
+    if validate_issue(@issue) && @issue.save
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
                                :locals => {:issue => @issue})
       edit  = render_to_string(:partial => "/s2b_boards/form_new", 
@@ -401,5 +401,15 @@ class S2bBoardsController < ApplicationController
     session[:conditions] = nil unless cookies[:conditions_valid]
   end
   
+  
+  
+  def validate_issue(issue)
+    issue.valid?
+    issue.validate_issue
+    issue.custom_field_values.each do |cfv|
+      cfv.validate_value
+    end
+    return issue.errors.messages.blank?
+  end
   
 end

@@ -33,14 +33,6 @@
           :class => "span7 value_content") %>
     </p>
     
-    <p id="p_status_<%= issue.id %>">
-      <span class="span5">
-        <%= l(:label_head_issue_status) %> 
-      </span>
-      <%= select_tag("new_status_#{issue.id}", options_from_collection_for_select(
-          @statuses, :id, :name, :selected => issue.status_id), :class => "span7 value_content") %>
-    </p>
-    
     <p id="p_assignee_<%= issue.id %>">
       <span class="span5">
         <%= l(:label_head_issue_assignee) %> 

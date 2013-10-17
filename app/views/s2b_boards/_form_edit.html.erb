@@ -17,7 +17,7 @@
           :class => "span7 value_content", :include_blank => true) %>
     <% else %>
       <%= text_field_tag("new_priority_custom_value_#{issue.id}",
-          issue.get_custom_value(@priority_custom_field)),
+          issue.get_custom_value(@priority_custom_field),
           :class => "span7 value_content", :include_blank => true) %>
     <% end %>
   </p>
