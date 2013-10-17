@@ -79,6 +79,10 @@ en:
   setting_priority_custom_field:  "Priority custom field"
   setting_priority_settings:  "Priority Settings"
   setting_default_priority:  "Use default priority"
+  setting_assignee_custom_field:  "Assignee custom field"
+  setting_assignee_settings:  "Assignee Settings"
+  setting_default_assignee:  "Use 'assigned to'"
+  
   
   
   setting_select_custom_field:  "Select custom field"

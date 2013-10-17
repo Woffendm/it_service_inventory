@@ -38,6 +38,10 @@ Redmine::Plugin.register :scrum2b do
       'use_default'      => 'true',
       'custom_field_id'  => ''
     },
+    'assignee' => {
+      'use_default'      => 'true',
+      'custom_field_id'  => ''
+    },
     'show_progress_bars' => 'true'
   }, 
   :partial => 'settings/scrum2b'

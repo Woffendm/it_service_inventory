@@ -6,6 +6,8 @@
 <% all_issue_statuses = IssueStatus.sorted %>
 <% custom_fields = IssueCustomField.order(:name) %>
 <% list_custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% user_custom_fields = IssueCustomField.where(:field_format => "user").order(:name) %>
+
 <% board_columns = [] %>
 
 <% board_columns = @settings["board_columns"].to_a %>
@@ -14,6 +16,8 @@
 <% @using_version = @sprint["use_default"] == "true" if @sprint %>
 <% @priority = @settings["priority"] %>
 <% @using_priority = @priority["use_default"] == "true" if @priority %>
+<% @assignee = @settings["assignee"] %>
+<% @using_assignee = @assignee["use_default"] == "true" if @assignee %>
 <% number_of_columns = 0 %>
 <% number_of_columns = board_columns.length unless board_columns.blank? %>
 
@@ -87,6 +91,36 @@
          <%= select_tag("settings[priority][custom_field_id]",
              options_from_collection_for_select(custom_fields, :id, :name, 
              {:selected => @priority ? @priority["custom_field_id"] : nil}), 
+             :prompt => l(:setting_select_custom_field)) %>
+       </p>
+    
+    </div>
+    
+    
+    
+    
+    <div class="box tabular">
+    
+       <div class="section_header">
+         <h3>
+           <%= l(:setting_assignee_settings) %>
+         </h3>
+       </div>
+    
+       <p>
+         <%= content_tag(:label, l(:setting_default_assignee)) %>
+         <%= radio_button_tag("settings[assignee][use_default]", "true", @using_assignee) %>
+       </p>
+       <p>
+         <%= content_tag(:label, l(:setting_use_custom_field)) %>
+         <%= radio_button_tag("settings[assignee][use_default]", "false", !@using_assignee) %>
+       </p>
+    
+       <p id="assignee_custom_field_select" class='<%= "hidden" if @using_assignee %>'>
+         <%= content_tag(:label, l(:setting_priority_custom_field)) %>
+         <%= select_tag("settings[assignee][custom_field_id]",
+             options_from_collection_for_select(user_custom_fields, :id, :name, 
+             {:selected => @assignee ? @assignee["custom_field_id"] : nil}), 
              :prompt => l(:setting_select_custom_field)) %>
        </p>
     
@@ -219,6 +253,7 @@
     var current_sprint_select = $("#current_sprint_select");
     var sprint_selects = $(".sprint_select");
     var priority_custom_field_select = $("#priority_custom_field_select");
+    var assignee_custom_field_select = $("#assignee_custom_field_select");
     
     
     var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
@@ -288,7 +323,6 @@
     
     $("#settings_priority_use_default_false").click(function(e) {
       priority_custom_field_select.show();
-      
     });
     
     
@@ -296,6 +330,15 @@
       priority_custom_field_select.hide();
     });
     
+    
+    $("#settings_assignee_use_default_false").click(function(e) {
+      assignee_custom_field_select.show();
+    });
+    
+    
+    $("#settings_assignee_use_default_true").click(function(e) {
+      assignee_custom_field_select.hide();
+    });
     
   });
 </script>
