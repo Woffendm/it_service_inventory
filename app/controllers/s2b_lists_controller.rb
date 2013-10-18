@@ -205,6 +205,7 @@ class S2bListsController < ApplicationController
     board_columns = @settings["board_columns"]
     sprint_settings = @settings["sprint"]
     priority_settings = @settings["priority"]
+    assignee_settings = @settings["assignee"]
     @board_columns = []
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
@@ -236,8 +237,13 @@ class S2bListsController < ApplicationController
     @sprint_use_default = sprint_settings["use_default"] == "true"
     @sprint_custom_field = CustomField.find(sprint_settings["custom_field_id"]) unless @sprint_use_default
     @current_sprint = sprint_settings["current_sprint"] unless @sprint_use_default
+
     @priority_use_default = priority_settings["use_default"] == "true"
     @priority_custom_field = CustomField.find(priority_settings["custom_field_id"]) unless @priority_use_default
+
+    @assignee_use_default = assignee_settings["use_default"] == "true"
+    @assignee_custom_field = CustomField.find(assignee_settings["custom_field_id"]) unless @assignee_use_default
+
     if @sprint_use_default
       unless cookies[:params_sprint_custom_values].blank?
         cookies.delete :params_sprint_custom_values
@@ -246,6 +252,18 @@ class S2bListsController < ApplicationController
     else
       unless cookies[:params_version_ids].blank?
         cookies.delete :params_version_ids
+        cookies.delete :conditions_valid
+      end
+    end
+    
+    if @assignee_use_default
+      unless cookies[:params_assignee_custom_values].blank?
+        cookies.delete :params_assignee_custom_values
+        cookies.delete :conditions_valid
+      end
+    else
+      unless cookies[:params_member_ids].blank?
+        cookies.delete :params_member_ids
         cookies.delete :conditions_valid
       end
     end

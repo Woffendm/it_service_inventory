@@ -214,29 +214,28 @@ class S2bBoardsController < ApplicationController
   
   def check_before_board
     @issue = Issue.new
+    @trackers = Tracker.all
+    @statuses = IssueStatus.sorted
+    @projects = Project.order(:name)
+    
     if @priority_use_default
       @priorities = IssuePriority.all
     else
       @priorities = @priority_custom_field.possible_values
     end
-    @trackers = Tracker.all
-    @statuses = IssueStatus.sorted
+    
     if @sprint_use_default
-      @projects = Project.order(:name)
-      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
-          ).pluck(:user_id).uniq).order(:firstname)
       @sprints = Version.where(project_id: @projects.pluck(:id))
     else
-      if @sprint_custom_field.is_for_all
-        @projects = Project.order(:name)
-      else
+      unless @sprint_custom_field.is_for_all
         @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
             {:id => @sprint_custom_field.id}).order("projects.name")
       end
-      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
-          ).pluck(:user_id).uniq).order(:firstname)
       @sprints = @sprint_custom_field.possible_values
     end
+    
+    @members = User.joins(:members).where(:members => {:project_id => @projects.pluck(
+        :id)}).order(:firstname, :lastname).uniq
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
@@ -272,6 +271,12 @@ class S2bBoardsController < ApplicationController
       conditions << cookies[:params_sprint_custom_values]
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
+    end
+    unless cookies[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
+      conditions[0] += " AND custom_values.value IN (?)"
+      conditions << cookies[:params_assignee_custom_values]
+      conditions[0] += " AND custom_values.custom_field_id = ?"
+      conditions << @assignee_custom_field.id
     end
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
@@ -324,6 +329,7 @@ class S2bBoardsController < ApplicationController
     board_columns = @settings["board_columns"]
     sprint_settings = @settings["sprint"]
     priority_settings = @settings["priority"]
+    assignee_settings = @settings["assignee"]
     @board_columns = []
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
@@ -359,6 +365,9 @@ class S2bBoardsController < ApplicationController
     @priority_use_default = priority_settings["use_default"] == "true"
     @priority_custom_field = CustomField.find(priority_settings["custom_field_id"]) unless @priority_use_default
 
+    @assignee_use_default = assignee_settings["use_default"] == "true"
+    @assignee_custom_field = CustomField.find(assignee_settings["custom_field_id"]) unless @assignee_use_default
+
     if @sprint_use_default
       unless cookies[:params_sprint_custom_values].blank?
         cookies.delete :params_sprint_custom_values
@@ -367,6 +376,18 @@ class S2bBoardsController < ApplicationController
     else
       unless cookies[:params_version_ids].blank?
         cookies.delete :params_version_ids
+        cookies.delete :conditions_valid
+      end
+    end
+    
+    if @assignee_use_default
+      unless cookies[:params_assignee_custom_values].blank?
+        cookies.delete :params_assignee_custom_values
+        cookies.delete :conditions_valid
+      end
+    else
+      unless cookies[:params_member_ids].blank?
+        cookies.delete :params_member_ids
         cookies.delete :conditions_valid
       end
     end

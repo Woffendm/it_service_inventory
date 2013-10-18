@@ -44,7 +44,7 @@
           <i class="icon-star" title="<%= l(:label_priority) %>"></i>
           <%= issue.priority.name %>
         </div>
-      <% elsif issue.get_custom_value(@priority_custom_field) %>
+      <% elsif !issue.get_custom_value(@priority_custom_field).blank? %>
         <div id="priority_<%= issue.id %>">
           <i class="icon-star" title="<%= @priority_custom_field.name %>"></i>
           <%= issue.get_custom_value(@priority_custom_field) %>
@@ -64,8 +64,18 @@
           <%= link_to issue.assigned_to.name, user_path(issue.assigned_to.id) %>
         </div>
       <% end %>
+      
+      <% if !@assignee_use_default && !issue.get_custom_value(@assignee_custom_field).blank? %>
+        <% user = User.find(issue.get_custom_value(@assignee_custom_field)) %>
+        <% unless user.blank? %>
+          <div id="priority_<%= issue.id %>">
+            <i class="icon-leaf" title="<%= @assignee_custom_field.name %>"></i>
+            <%= link_to user.name, user_path(user.id) %>
+          </div>
+        <% end %>
+      <% end %>
     </div>
-    
+
     
     <div id="date_<%= issue.id %>" class=" dates">
       <% unless issue.estimated_hours.blank? %>
