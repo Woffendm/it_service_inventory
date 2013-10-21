@@ -208,22 +208,22 @@ class S2bListsController < ApplicationController
     @board_columns = []
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
-          " Please contact to Administrator or go to the Settings page of the plugin: " + 
-          "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+          " Please contact to Administrator or go to the " + 
+          "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
       if @project 
-        redirect_to "/projects/#{@project.to_param}"
+        redirect_to Rails.root
       else
-        redirect_to request.referer
+        redirect_to projects_path
       end
       return
     else
       board_columns.each do |board_column|
         if board_column.last["statuses"].blank?
           flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
-              "' has no associated statuses. Please contact an Administrator " + 
-              "or go to the Settings page of the plugin: " + 
-              "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
-          redirect_to "/projects/#{@project.to_param}"
+              "' has no associated statuses. Please contact an Administrator or go to the " +
+              "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
+              
+          redirect_to projects_path
           return
         else
           @board_columns << {:name => board_column.last["name"], 
