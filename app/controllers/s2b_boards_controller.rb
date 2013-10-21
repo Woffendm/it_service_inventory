@@ -1,3 +1,6 @@
+require 'action_view'
+
+
 class S2bBoardsController < ApplicationController
   unloadable
   before_filter :find_project
