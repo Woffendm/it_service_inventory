@@ -1,26 +1,26 @@
 <div class="container-fluid filter">
   
   <span class="float_right">
-    <% if @use_version_for_sprint %>
+    <% if @sprint_use_default %>
       <%= select_tag("versions", options_from_collection_for_select(@sprints, :id, :name, 
-          :selected => session[:params_version_ids]), {"data-placeholder" => "All Sprints",
+          :selected => cookies[:params_version_ids]), {"data-placeholder" => "All Sprints",
           :class => "chosen-select", :multiple => true}) %>
     <% else %>
-      <%= select_tag("custom_values", options_for_select(@sprints, 
-          :selected => session[:params_custom_values]), {"data-placeholder" => "All Sprints", 
+      <%= select_tag("sprint_custom_values", options_for_select(@sprints, 
+          :selected => cookies[:params_sprint_custom_values]), {"data-placeholder" => "All Sprints", 
           :class => "chosen-select", :multiple => true}) %>
     <% end %>
     
     <%= select_tag("projects", options_from_collection_for_select(@projects, :id, :name,
-        :selected => session[:params_project_ids]), "data-placeholder" => "All Projects", 
-        :class => "chosen-select", :multiple => !@use_version_for_sprint) %>
+        :selected => cookies[:params_project_ids]), "data-placeholder" => "All Projects", 
+        :class => "chosen-select", :multiple => !@sprint_use_default) %>
     
     <%= select_tag("members", options_from_collection_for_select(@members, :id, :name,
-        :selected => session[:params_member_ids]), "data-placeholder" => "All Members", 
+        :selected => cookies[:params_member_ids]), "data-placeholder" => "All Members", 
         :class => "chosen-select", :multiple => true) %>
     
     <%= select_tag "statuses", options_from_collection_for_select(@statuses, :id, :name, 
-        :selected => session[:params_status_ids]), "data-placeholder" => "All Statuses", 
+        :selected => cookies[:params_status_ids]), "data-placeholder" => "All Statuses", 
         :class => "chosen-select", :multiple => true %>
         
     <%= button_tag l(:label_btn_submit_selected), :class => "btn btn-primary", 

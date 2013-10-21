@@ -5,14 +5,18 @@
 </td>
 
 <td>
-  <%= issue.priority %>
+  <% if @priority_use_default && issue.priority_id %>
+    <%= issue.priority.name %>
+  <% elsif issue.get_custom_value(@priority_custom_field) %>
+    <%= issue.get_custom_value(@priority_custom_field) %>
+  <% end %>
 </td>
 
 <td>
   <%= issue.status %>
 </td>
 
-<% unless @use_version_for_sprint %>
+<% unless @sprint_use_default %>
   <td>
     <%= issue.project.name.truncate(30) %>
   </td>
