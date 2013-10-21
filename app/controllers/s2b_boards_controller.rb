@@ -3,7 +3,7 @@ class S2bBoardsController < ApplicationController
   before_filter :find_project
   before_filter :load_settings
   before_filter :validate_conditions
-  #before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
+  before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
   before_filter :check_before_board,  :only   => [:index, :filter_issues_onboard,
                                                   :update, :create, :edit]
   
@@ -24,6 +24,7 @@ class S2bBoardsController < ApplicationController
  
  
   def index
+    @issue = Issue.new
     cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     blank_conditions = false
     blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
@@ -153,8 +154,7 @@ class S2bBoardsController < ApplicationController
       errors = @priority_custom_field.validate_field_value(params[:priority_custom_value]).first
       @issue.errors.add :base, "#{@priority_custom_field.name} #{errors}" unless errors.blank? 
     end
-    
-    
+      
     if @issue.errors.messages.blank? && @issue.save
       unless params[:sprint_custom_value].blank?
         cfv = @issue.get_custom_field_value(@sprint_custom_field)
@@ -213,7 +213,6 @@ class S2bBoardsController < ApplicationController
   private
   
   def check_before_board
-    @issue = Issue.new
     if @priority_use_default
       @priorities = IssuePriority.all
     else
@@ -293,7 +292,7 @@ class S2bBoardsController < ApplicationController
       end
       issues = issues.where(session[:conditions])
       issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
-          :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values)
+          :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values).limit(100)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
   end
