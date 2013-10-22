@@ -1,4 +1,6 @@
 <div class="no_edit issue_show" id="show_issue_<%= issue.id %>" value="<%= issue.id %>">
+  
+  
   <div value="<%= issue.id %>">
     <div class="float_left">    
       <%= link_to "##{issue.id}", issue_path(issue.id) %>
@@ -8,6 +10,10 @@
       <div class="icon_edit_issue float_right" issue_id="<%= issue.id %>">
         <i class="icon-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
       </div>  
+      
+      <div class="handle float_right">
+        <i class="icon-move" title="<%= l(:label_board_issue_text_move_issue) %>"></i>
+      </div>
     <% end %>
     &nbsp;
   </div>
@@ -19,40 +25,72 @@
   
   
   <div class="clearfix">
-    <div class="float_left">
+    <div class="">
+      <% if @sprint_use_default && issue.fixed_version_id %>
+        <div id="sprint_<%= issue.id %>">
+          <i class="icon-tags" title="<%= l(:label_sprint) %>"></i>
+          <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
+              :id => issue.fixed_version_id if issue.fixed_version_id %>
+        </div>
+      <% elsif !issue.get_custom_value(@sprint_custom_field).blank? %>
+        <div id="sprint_<%= issue.id %>">
+          <i class="icon-tags" title="<%= @sprint_custom_field.name %>"></i>
+          <%= issue.get_custom_value(@sprint_custom_field) %>
+        </div>
+      <% end %>
+      
+      <% if @priority_use_default && issue.priority_id %>
+        <div id="priority_<%= issue.id %>">
+          <i class="icon-star" title="<%= l(:label_priority) %>"></i>
+          <%= issue.priority.name %>
+        </div>
+      <% elsif issue.get_custom_value(@priority_custom_field) %>
+        <div id="priority_<%= issue.id %>">
+          <i class="icon-star" title="<%= @priority_custom_field.name %>"></i>
+          <%= issue.get_custom_value(@priority_custom_field) %>
+        </div>
+      <% end %>
+      
       <% unless @project %>
         <div id="project_<%= issue.id %>">
-          <i class="icon-arrow-right"></i>
+          <i class="icon-folder-open" title="<%= l(:label_project) %>"></i>
           <%= link_to issue.project.name, project_path(issue.project_id) %>
         </div>
       <% end %>
       
       <% if issue.assigned_to %>
         <div id="assignee_<%= issue.id %>">
-          <i class="icon-user"></i>
+          <i class="icon-user" title="<%= l(:label_assigned_to) %>"></i>
           <%= link_to issue.assigned_to.name, user_path(issue.assigned_to.id) %>
         </div>
       <% end %>
     </div>
     
     
-    <div id="date_<%= issue.id %>" class="float_right dates">
+    <div id="date_<%= issue.id %>" class=" dates">
+      <% unless issue.estimated_hours.blank? %>
+        <div id="est_<%= issue.id %>">
+          <i class="icon-time" title="<%= l(:label_estimated_time) %>"></i>
+          <%= issue.estimated_hours %>
+        </div>
+      <% end %>
+      
       <% unless issue.start_date.blank? %>
         <div id="start_date_<%= issue.id %>">
-          <%= l(:field_start_date) %>: 
+          <i class="icon-play" title="<%= l(:label_start_date) %>"></i>
           <%= format_date(issue.start_date) %>
         </div>
       <% end %>
       
       <% if issue.due_date %>
         <div id="end_date_<%= issue.id %>">
-          <%= l(:field_due_date) %>: 
+          <i class="icon-stop" title="<%= l(:label_due_date) %>"></i>
           <%= format_date(issue.due_date) %>
         </div>
       <% else %>
         <% if issue.fixed_version && issue.fixed_version.effective_date != nil %>
           <div id="end_date_<%= issue.id %>">
-            <%= l(:field_due_date) %>: 
+            <i class="icon-stop" title="<%= l(:due_date) %>"></i>
             <%= format_date(issue.fixed_version.effective_date) %>(v)
           </div>
         <% end %>
@@ -62,27 +100,18 @@
   
   
   <% unless issue.description.blank? %>
-    <div class="description">
-      <% if issue.description.to_s.length >= 100 %>
-        <div class="div_description description_hide" id="description_hide_<%= issue.id %>">
-          <%= simple_format(h(issue.description.truncate(100, 
-              :separator => ' '))) %>
-        </div>
-        <div class="div_description description_readmore hidden" 
-            id="description_readmore_<%= issue.id %>">
-          <%= simple_format(h(issue.description)) %>
-        </div>
+    <div class="">
         <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
           <%= l(:label_hide) %>
         </a>
         <a href="#" id="readmore_<%= issue.id %>" class="readmore no_edit" value="<%= issue.id %>">
           <%= l(:label_readmore) %>
         </a>
-      <% else %>
-        <div class="no_edit div_description description_hide" id="description_hide_<%= issue.id %>">
+        <div class="div_description description_readmore hidden" 
+            id="description_readmore_<%= issue.id %>">
           <%= simple_format(h(issue.description)) %>
         </div>
-      <% end %>
+
     </div>
   <% end %>
   
@@ -109,22 +138,6 @@
         <% end %>
       </div>
     <% end %>
-    
-    <p class="float_left">
-      <%= l(:label_board_issue_time) %>
-      <span id="est_<%= issue.id %>"> 
-        <%= issue.estimated_hours %>
-      </span>
-    </p>
-    
-    <p class="center">
-      <% if @use_version_for_sprint %>
-        <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
-            :id => issue.fixed_version_id if issue.fixed_version_id %>
-      <% else %>
-        <%= issue.custom_values.last.value %>
-      <% end %>
-    </p>
   </div>
 </div>
   

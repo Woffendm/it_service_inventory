@@ -4,14 +4,14 @@ $(document).ready(function(){
   $("#btn_filter").live("click",function(){
     var version_ids = $("#versions").val() || "";
     var status_ids = $("#statuses").val() || "";
-    var custom_values = $("#custom_values").val() || "";
+    var sprint_custom_values = $("#sprint_custom_values").val() || "";
     var member_ids = $("#members").val() || "";
     var project_ids = $("#projects").val() || "";
     // url_filter must be defined on the view, as the path changes.
     $.ajax({
       url : url_filter,
       type : "POST",
-      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&custom_values=' + custom_values + '&status_ids=' + status_ids,
+      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&sprint_custom_values=' + sprint_custom_values + '&status_ids=' + status_ids,
       dataType : "script",
       success : function() {
         setup_sortable_columns();
@@ -26,40 +26,39 @@ $(document).ready(function(){
   
   function setup_sortable_columns() {
     var sortable_columns = $(".connectedSortable");
+    var status;
     sortable_columns.sortable({
+      // When dragging an element to an edge of the screen, will scroll at full speed
       scroll: true, scrollSensitivity: 100, scrollSpeed: 100,
+      // Says where you can 'drop' the sortable elements
       connectWith: ".connectedSortable",
+      // Says what part you can 'grab'
+      handle: ".handle",
+      // Triggered during sorting
       sort: function(){
         $(this).find(".ui-sortable-helper").addClass("check");
       },
+      // Triggered when a connectedSortable list recieves an item from another list
       receive: function(){
-        var status = sortable_columns.index(this);
+        status = sortable_columns.index(this);
+      },
+      // Triggered when sorting has stopped
+      stop: function() {
+        var issue_id = $(".check").attr("id");
         var url_ajax = 'update_status';
-        var issue_id = $(this).find(".check").attr("id");
+        var id_next = $(".check").next().attr("id") || '';
+        var id_prev = $(".check").prev().attr("id") || '';
+        $(".check").removeClass("check");
         $.ajax({
           url : url_ajax,
           type : "POST",
-          data : 'issue_id=' + issue_id + '&status=' + status,
+          data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next + "&status=" + status,
           dataType : "json",
-          success : function(res) {
-            if (res.status == "completed"){
-              makeSlider(issue_id, res.done_ratio);
+          success : function(data) {
+            if (data.result != "success") {
+              alert(data.message);
             }
           }
-        });
-      },
-      stop: function() {
-        var issue_id = $(".check").attr("id");
-        // url_sort must be defined in the view
-        var id_next = $(".check").next().attr("id");
-        var id_prev = $(".check").prev().attr("id");
-        $(".check").removeClass("check");
-        $.ajax({
-          url : url_sort,
-          type : "POST",
-          data : 'issue_id=' + issue_id + '&id_prev=' + id_prev + '&id_next=' + id_next,
-          dataType : "text",
-          success : function(){}
         });
       }
     });
@@ -112,43 +111,43 @@ $(document).ready(function(){
   
   
   $(".cancel_issue").live("click", function(){
-    var id_issue = parseInt($(this).parent().attr("value")) || "";
-    $("#edit_issue_" + id_issue).hide();
-    $("#show_issue_" + id_issue).show();
+    var issue_id = parseInt($(this).parent().attr("value")) || "";
+    $("#edit_issue_" + issue_id).hide();
+    $("#show_issue_" + issue_id).show();
   });
  
  
  
   $(".submit_issue").live("click", function(){
-    var id_issue = $(this).parent().attr("value");
-    if(id_issue != "" ){
+    var issue_id = $(this).parent().attr("value");
+    if(issue_id != "" ){
       var url_ajax = "update";
     }else {
        var url_ajax = "create";
     }
-    var subject = $("#new_subject_"+id_issue).val() || "";
-    var description = $("#new_description_"+id_issue).val() || "";
-    var project = $("#new_project_"+id_issue).val() || "";
-    var tracker = $("#new_tracker_"+id_issue).val() || "";
-    var status = $("#new_status_"+id_issue).val() || "";
-    var priority = $("#new_priority_"+id_issue).val() || "";
-    var assignee = $("#new_assignee_"+id_issue).val() || "";
-    var version = $("#new_version_"+id_issue).val() || "";
-    var custom_value = $("#new_custom_value_"+id_issue).val() || "";
-    var time = $("#new_time_"+id_issue).val() || "";
-    var date_start = $("#new_date_start_"+id_issue).val() || "";
-    var date_end = $("#new_date_end_"+id_issue).val() || "";
-    var slide_value = $("#slider" + id_issue).attr("value");
+    var subject = $("#new_subject_"+issue_id).val() || "";
+    var description = $("#new_description_"+issue_id).val() || "";
+    var project = $("#new_project_"+issue_id).val() || "";
+    var tracker = $("#new_tracker_"+issue_id).val() || "";
+    var priority = $("#new_priority_"+issue_id).val() || "";
+    var assignee = $("#new_assignee_"+issue_id).val() || "";
+    var version = $("#new_version_"+issue_id).val() || "";
+    var sprint_custom_value = $("#new_sprint_custom_value_"+issue_id).val() || "";
+    var priority_custom_value = $("#new_priority_custom_value_"+issue_id).val() || "";
+    var time = $("#new_time_"+issue_id).val() || "";
+    var date_start = $("#new_date_start_"+issue_id).val() || "";
+    var date_end = $("#new_date_end_"+issue_id).val() || "";
+    var slide_value = $("#slider" + issue_id).attr("value");
     $.ajax({
       url : url_ajax,
       type : "POST",
-      data : 'subject=' + subject + '&id_issue=' + id_issue + '&description=' + description + '&tracker=' + tracker + '&status=' + status + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&custom_value=' + custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&project=' + project,
+      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&sprint_custom_value=' + sprint_custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&priority_custom_value=' + priority_custom_value + '&project=' + project,
       dataType : "json",
       success : function(data) {
         if(data.result == "edit_success") {
-          $("#show_issue_" + id_issue).replaceWith(data.content).show();
-          $("#edit_issue_" + id_issue).hide();
-          makeSlider(id_issue, slide_value);
+          $("#show_issue_" + issue_id).replaceWith(data.content).show();
+          $("#edit_issue_" + issue_id).hide();
+          makeSlider(issue_id, slide_value);
         }else if(data.result == "create_success"){
           $("#edit_issue_").find(".value_content").val("");
           $("#edit_issue_").hide();

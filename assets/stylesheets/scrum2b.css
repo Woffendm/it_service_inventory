@@ -331,6 +331,15 @@ img.icon{
 
 
 .clearfix {
-  width: 97%;
   margin-bottom: 5px;
+  text-overflow: ellipsis;
 }
+
+.handle {
+  margin-right: 10px;
+}
+
+.icon_edit_issue:hover {
+  cursor: pointer;
+}
+

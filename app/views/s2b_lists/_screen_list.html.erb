@@ -10,14 +10,18 @@
       </th>
       
       <th> 
-        <%= l(:label_head_issue_priority) %> 
+        <% if @priority_use_default %>
+          <%= l(:label_head_issue_priority) %> 
+        <% else %>
+          <%= @priority_custom_field.name %>
+        <% end %>        
       </th>
       
       <th> 
         <%= l(:label_head_issue_status) %> 
       </th>
       
-      <% unless @use_version_for_sprint %>
+      <% unless @sprint_use_default %>
         <th> 
           <%= l(:label_head_issue_project) %> 
         </th>

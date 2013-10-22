@@ -4,12 +4,16 @@
 
 
 <% all_issue_statuses = IssueStatus.sorted %>
-<% custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
+<% custom_fields = IssueCustomField.order(:name) %>
+<% list_custom_fields = IssueCustomField.where(:field_format => "list").order(:name) %>
 <% board_columns = [] %>
 
 <% board_columns = @settings["board_columns"].to_a %>
 <% board_columns.sort! { |a, b| a.second["position"].to_f <=> b.second["position"].to_f} %>
-<% using_version = @settings["use_version_for_sprint"] == "true" %>
+<% @sprint = @settings["sprint"] %>
+<% @using_version = @sprint["use_default"] == "true" if @sprint %>
+<% @priority = @settings["priority"] %>
+<% @using_priority = @priority["use_default"] == "true" if @priority %>
 <% number_of_columns = 0 %>
 <% number_of_columns = board_columns.length unless board_columns.blank? %>
 
@@ -28,34 +32,64 @@
 
       <p>
         <%= content_tag(:label, l(:setting_use_project_version)) %>
-        <%= radio_button_tag("settings[use_version_for_sprint]", "true", using_version) %>
+        <%= radio_button_tag("settings[sprint][use_default]", "true", @using_version) %>
       </p>
       <p>
         <%= content_tag(:label, l(:setting_use_custom_field)) %>
-        <%= radio_button_tag("settings[use_version_for_sprint]", "false", !using_version) %>
+        <%= radio_button_tag("settings[sprint][use_default]", "false", !@using_version) %>
       </p>
 
-      <p id="custom_field_select" class='<%= "hidden" if using_version %>'>
+      <p id="sprint_custom_field_select" class='<%= "hidden" if @using_version %>'>
         <%= content_tag(:label, l(:setting_sprint_custom_field)) %>
-        <%= select_tag("settings[custom_field_id]",
-            options_from_collection_for_select(custom_fields, :id, :name, 
-            {:selected => @settings["custom_field_id"]}), :prompt =>
-            l(:setting_select_custom_field)) %>
+        <%= select_tag("settings[sprint][custom_field_id]",
+            options_from_collection_for_select(list_custom_fields, :id, :name, 
+            {:selected => @sprint ? @sprint["custom_field_id"] : nil}), 
+            :prompt => l(:setting_select_custom_field)) %>
       </p>
       
-      <p id="current_sprint_select" class='<%= "hidden" if using_version ||
-          @settings["custom_field_id"].blank? %>'>
+      <p id="current_sprint_select" class='<%= "hidden" if @using_version || @sprint.blank? ||
+          @sprint["custom_field_id"].blank? %>'>
         <%= content_tag(:label, l(:setting_current_sprint)) %>
-        <% custom_fields.each do |custom_field| %>
-          <%= select_tag("settings[current_sprint]",
+        <% list_custom_fields.each do |custom_field| %>
+          <%= select_tag("settings[sprint][current_sprint]",
               options_for_select(custom_field.possible_values, 
-              {:selected => @settings["current_sprint"]}), :prompt =>
-              l(:setting_select_current_sprint), 
+              {:selected => @sprint ? @sprint["current_sprint"] : nil}), 
+              :prompt => l(:setting_select_current_sprint), 
               :id => "current_sprint_select_#{custom_field.id}", 
-              :class => "#{'hidden' unless custom_field.id.to_s == @settings["custom_field_id"]} sprint_select") %>
+              :class => "#{'hidden' unless @sprint && custom_field.id.to_s == @sprint['custom_field_id']} sprint_select") %>
         <% end %>
       </p>
 
+    </div>
+
+
+
+
+    <div class="box tabular">
+    
+       <div class="section_header">
+         <h3>
+           <%= l(:setting_priority_settings) %>
+         </h3>
+       </div>
+    
+       <p>
+         <%= content_tag(:label, l(:setting_default_priority)) %>
+         <%= radio_button_tag("settings[priority][use_default]", "true", @using_priority) %>
+       </p>
+       <p>
+         <%= content_tag(:label, l(:setting_use_custom_field)) %>
+         <%= radio_button_tag("settings[priority][use_default]", "false", !@using_priority) %>
+       </p>
+    
+       <p id="priority_custom_field_select" class='<%= "hidden" if @using_priority %>'>
+         <%= content_tag(:label, l(:setting_priority_custom_field)) %>
+         <%= select_tag("settings[priority][custom_field_id]",
+             options_from_collection_for_select(custom_fields, :id, :name, 
+             {:selected => @priority ? @priority["custom_field_id"] : nil}), 
+             :prompt => l(:setting_select_custom_field)) %>
+       </p>
+    
     </div>
 
 
@@ -76,7 +110,8 @@
         <div class="<%= 'subsection' unless board_column == board_columns.last %>"
         id="column_<%= index %>" >
           <p>
-            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
+            <%= button_tag(l(:setting_delete), :type => :button, 
+                :class => "delete_column contextual",
                 :parent_id => "#column_#{ index }") %>  
 
             <%= content_tag(:label, l(:setting_name) ) %>
@@ -110,7 +145,8 @@
       <div id="template" class="hidden">
         <div class="subsection" id="column_-1">
           <p>
-            <%= button_tag(l(:setting_delete), :type => :button, :class => "delete_column contextual",
+            <%= button_tag(l(:setting_delete), :type => :button, 
+                :class => "delete_column contextual",
                 :parent_id => "#column_-1", :id => "delete_-1") %>  
 
             <%= content_tag(:label, l(:setting_name) ) %>
@@ -179,9 +215,11 @@
     var new_columns = $("#new_columns");
     var delete_column = $(".delete_column");
     var template = $("#template");
-    var custom_field_select = $("#custom_field_select");
+    var sprint_custom_field_select = $("#sprint_custom_field_select");
     var current_sprint_select = $("#current_sprint_select");
     var sprint_selects = $(".sprint_select");
+    var priority_custom_field_select = $("#priority_custom_field_select");
+    
     
     var issue_ids = <%= all_issue_statuses.pluck(:id) %>;
     var new_column_id = <%= @settings["board_columns"].to_a.map!{ |p| p.first.to_f }.sort!.last.to_i + 1 %>;
@@ -222,28 +260,40 @@
     });
     
     
-    $("#settings_use_version_for_sprint_false").click(function(e) {
-      custom_field_select.show();
-      current_sprint_select.show();
+    $("#settings_sprint_use_default_false").click(function(e) {
+      sprint_custom_field_select.show();
+      sprint_custom_field_select.trigger("change");
       
     });
     
     
-    $("#settings_use_version_for_sprint_true").click(function(e) {
-      custom_field_select.hide();
+    $("#settings_sprint_use_default_true").click(function(e) {
+      sprint_custom_field_select.hide();
       current_sprint_select.hide();
     });
     
     
-    custom_field_select.change(function(e) {
+    sprint_custom_field_select.live("change", function(e) {
       sprint_selects.hide();
-      if(e.target.value != "") {
-        $("#current_sprint_select_" + e.target.value).show();
+      var target = $("#settings_sprint_custom_field_id");
+      if(target.val() != "") {
+        $("#current_sprint_select_" + target.val()).show();
         current_sprint_select.show();
       }
       else {
         current_sprint_select.hide();
       }
+    });
+    
+    
+    $("#settings_priority_use_default_false").click(function(e) {
+      priority_custom_field_select.show();
+      
+    });
+    
+    
+    $("#settings_priority_use_default_true").click(function(e) {
+      priority_custom_field_select.hide();
     });
     
     
