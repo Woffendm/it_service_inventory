@@ -18,6 +18,8 @@ class S2bListsController < ApplicationController
       return
     end
     
+    cookies[:view_issue] = { :value => "list", :expires => 1.hour.from_now }
+    
     if session[:params_project_ids].blank? && @sprint_use_default
       if @project.blank?
         session[:params_project_ids] = @projects.first.id.to_s.to_a

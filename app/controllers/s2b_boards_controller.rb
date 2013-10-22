@@ -279,7 +279,7 @@ class S2bBoardsController < ApplicationController
     @board_columns.each do |board_column|
       issues = Issue.where("status_id IN (?)", board_column[:status_ids])
       unless @sprint_use_default || session[:params_sprint_custom_values].blank?
-        issues = issues.joins(:custom_values, {:project => :issue_custom_fields}) 
+        issues = issues.joins(:custom_values) 
       end
       issues = issues.where(session[:conditions])
       issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
