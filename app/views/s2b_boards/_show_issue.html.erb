@@ -44,7 +44,7 @@
           <i class="icon-star" title="<%= l(:label_priority) %>"></i>
           <%= issue.priority.name %>
         </div>
-      <% elsif issue.get_custom_value(@priority_custom_field) %>
+      <% elsif !issue.get_custom_value(@priority_custom_field).blank? %>
         <div id="priority_<%= issue.id %>">
           <i class="icon-star" title="<%= @priority_custom_field.name %>"></i>
           <%= issue.get_custom_value(@priority_custom_field) %>
