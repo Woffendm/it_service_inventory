@@ -109,7 +109,7 @@ class S2bListsController < ApplicationController
       conditions << @sprint_custom_field.id
     end
     session[:conditions] = conditions
-    cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
+    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
     
     # Determines whether to bother calculating issues without sprints
     @show_backlogs = true if session[:params_version_ids].blank? && session[:params_sprint_custom_values].blank?
