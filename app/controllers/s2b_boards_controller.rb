@@ -264,7 +264,7 @@ class S2bBoardsController < ApplicationController
       conditions << @sprint_custom_field.id
     end
     session[:conditions] = conditions
-    cookies[:conditions_valid] = { :value => true, :expires => 1.second.from_now }
+    cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
     
     # Assigns positions to all issues without positions.
     max_position_issue = Issue.eager_load(:custom_values).where(
