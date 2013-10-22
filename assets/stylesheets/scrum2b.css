@@ -343,3 +343,13 @@ img.icon{
   cursor: pointer;
 }
 
+#s2id_groupSelect, .select2-input, .select2-container, .select2-choices {
+  width: 200px;
+  border-radius: 4px;
+  margin-right: 2px;
+}
+
+.select2-search-field input {
+  height: auto;
+}
+

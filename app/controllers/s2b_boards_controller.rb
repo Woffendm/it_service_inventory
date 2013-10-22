@@ -300,8 +300,7 @@ class S2bBoardsController < ApplicationController
     # @project variable must be set before calling the authorize filter
     project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
     @project = Project.find(project_id) unless project_id.blank?
-    session[:params_project_ids] = { :value => @project.id.to_s.to_a, 
-        :expires => 1.hour.from_now } unless @project.blank?
+    session[:params_project_ids] = @project.id.to_s.to_a unless @project.blank?
   end
 
 

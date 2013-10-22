@@ -265,7 +265,7 @@ $(document).ready(function(){
   
 
   editDate("");   
-  chosen_selects.chosen();
+  chosen_selects.select2();
   draw_progress_bars();
   setup_sortable_columns();
   calculate_time();
