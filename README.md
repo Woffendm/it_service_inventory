@@ -42,14 +42,13 @@ The tool could run based on Redmine 2.3.x, 2.2.x, 2.1.x, 2.0.x.
 
 Go to the Redmine plugin folder. Clone the plugin from GitHub:
     
-    $ git clone https://github.com/scrum2b/scrum2b.git
+    $ git clone git@github.com:scrum2b/scrum2b.git
     $ 
 
 Go back to the Redmine folder, update your bundle and migrate the database:
 
     $ bundle install
-    $ rake redmine:plugins:migrate RAILS_ENV=production
-    
+    $ rake redmine:plugins:migrate
 
 Restart Redmine
 
