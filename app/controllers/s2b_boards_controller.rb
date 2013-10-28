@@ -331,7 +331,7 @@ class S2bBoardsController < ApplicationController
     priority_settings = @settings["priority"]
     assignee_settings = @settings["assignee"]
     @board_columns = []
-    if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
+    if board_columns.blank? || sprint_settings.blank? || priority_settings.blank? || assignee_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the Settings page of the plugin: " + 
           "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."

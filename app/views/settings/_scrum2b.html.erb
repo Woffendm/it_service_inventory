@@ -117,7 +117,7 @@
        </p>
     
        <p id="assignee_custom_field_select" class='<%= "hidden" if @using_assignee %>'>
-         <%= content_tag(:label, l(:setting_priority_custom_field)) %>
+         <%= content_tag(:label, l(:setting_assignee_custom_field)) %>
          <%= select_tag("settings[assignee][custom_field_id]",
              options_from_collection_for_select(user_custom_fields, :id, :name, 
              {:selected => @assignee ? @assignee["custom_field_id"] : nil}), 
