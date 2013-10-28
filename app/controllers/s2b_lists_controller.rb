@@ -17,9 +17,7 @@ class S2bListsController < ApplicationController
           :project_id => params[:project_id]
       return
     end
-    
-    cookies[:view_issue] = { :value => "list", :expires => 1.hour.from_now }
-    
+        
     if session[:params_project_ids].blank? && @sprint_use_default
       if @project.blank?
         session[:params_project_ids] = @projects.first.id.to_s.to_a
@@ -43,6 +41,7 @@ class S2bListsController < ApplicationController
     session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
     session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
     session[:params_sprint_custom_values] = params[:sprint_custom_values].to_s.split(",").to_a
+    session[:params_assignee_custom_values] = params[:assignee_custom_values].to_s.split(",").to_a
     
     filter_issues
     
@@ -108,6 +107,12 @@ class S2bListsController < ApplicationController
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
     end
+    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
+      conditions[0] += " AND custom_values.value IN (?)"
+      conditions << session[:params_assignee_custom_values]
+      conditions[0] += " AND custom_values.custom_field_id = ?"
+      conditions << @assignee_custom_field.id
+    end
     session[:conditions] = conditions
     cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
     
@@ -129,6 +134,7 @@ class S2bListsController < ApplicationController
         issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
+        issues = issues.joins(:custom_values) unless session[:params_assignee_custom_values].blank?
         issues = issues.where(session[:conditions])
         @sorted_issues << {:name => version.name, :issues => issues.order(
             "status_id, s2b_position")}
@@ -136,7 +142,7 @@ class S2bListsController < ApplicationController
     else
       # Finds all unfinished issues not assigned to a custom field sprint
       if @show_backlogs
-        @issue_backlogs = @issue_backlogs.joins(:custom_values)
+        @issue_backlogs = @issue_backlogs.joins(:custom_values) 
         issue_ids_with_custom_field = Issue.joins(:custom_values, :status).where(
             session[:conditions]).where(:issue_statuses => {:is_closed => false}).where(
             "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != ''",

@@ -25,14 +25,15 @@ class S2bBoardsController < ApplicationController
  
   def index
     @issue = Issue.new
-    cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     blank_conditions = false
     blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
     if @sprint_use_default
       if blank_conditions || session[:params_project_ids].blank?
         if @project.blank?
-          session[:params_project_ids] = @projects.first.id.to_s.to_a
-          flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+          unless @projects.blank?
+            session[:params_project_ids] = @projects.first.id.to_s.to_a
+            flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+          end
         else
           session[:params_project_ids] = @project.id.to_s.to_a
           flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
@@ -177,15 +178,15 @@ class S2bBoardsController < ApplicationController
   
   def filter_issues_onboard
     @issue = Issue.new
-    if @use_version_form_sprint
-      session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
-    else
-      session[:params_sprint_custom_values] = params[:sprint_custom_values].to_s.split(",").to_a
-    end
-    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    
+    cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
     session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
-
+    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
+    session[:params_sprint_custom_values] = params[:sprint_custom_values].to_s.split(",").to_a
+    session[:params_assignee_custom_values] = params[:assignee_custom_values].to_s.split(",").to_a
+    
     filter_issues
     
     respond_to do |format|
@@ -261,9 +262,9 @@ class S2bBoardsController < ApplicationController
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
     end
-    unless cookies[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
+    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
       conditions[0] += " AND custom_values.value IN (?)"
-      conditions << cookies[:params_assignee_custom_values]
+      conditions << session[:params_assignee_custom_values]
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @assignee_custom_field.id
     end
@@ -282,7 +283,7 @@ class S2bBoardsController < ApplicationController
     # Populates each column with issues
     @board_columns.each do |board_column|
       issues = Issue.where("status_id IN (?)", board_column[:status_ids])
-      unless @sprint_use_default || session[:params_sprint_custom_values].blank?
+      unless session[:params_assignee_custom_values].blank? && session[:params_sprint_custom_values].blank?
         issues = issues.joins(:custom_values) 
       end
       issues = issues.where(session[:conditions])
@@ -357,7 +358,7 @@ class S2bBoardsController < ApplicationController
 
     if @sprint_use_default
       unless session[:params_sprint_custom_values].blank?
-        cookies[:params_sprint_custom_values] = nil
+        session[:params_sprint_custom_values] = nil
         cookies.delete :conditions_valid
       end
     else
@@ -368,13 +369,8 @@ class S2bBoardsController < ApplicationController
     end
     
     if @assignee_use_default
-      unless cookies[:params_assignee_custom_values].blank?
-        cookies.delete :params_assignee_custom_values
-        cookies.delete :conditions_valid
-      end
-    else
-      unless cookies[:params_member_ids].blank?
-        cookies.delete :params_member_ids
+      unless session[:params_assignee_custom_values].blank?
+        session[:params_assignee_custom_values] = nil
         cookies.delete :conditions_valid
       end
     end

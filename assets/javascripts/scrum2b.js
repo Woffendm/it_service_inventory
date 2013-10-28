@@ -5,13 +5,14 @@ $(document).ready(function(){
     var version_ids = $("#versions").val() || "";
     var status_ids = $("#statuses").val() || "";
     var sprint_custom_values = $("#sprint_custom_values").val() || "";
+    var assignee_custom_values = $("#assignee_custom_values").val() || "";
     var member_ids = $("#members").val() || "";
     var project_ids = $("#projects").val() || "";
     // url_filter must be defined on the view, as the path changes.
     $.ajax({
       url : url_filter,
       type : "POST",
-      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&sprint_custom_values=' + sprint_custom_values + '&status_ids=' + status_ids,
+      data : 'version_ids=' + version_ids + '&member_ids=' + member_ids + '&project_ids=' + project_ids + '&sprint_custom_values=' + sprint_custom_values + '&assignee_custom_values=' + assignee_custom_values + '&status_ids=' + status_ids,
       dataType : "script",
       success : function() {
         setup_sortable_columns();

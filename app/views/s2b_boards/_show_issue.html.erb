@@ -65,7 +65,7 @@
         </div>
       <% end %>
       
-      <% if !@assignee_use_default && !issue.get_custom_value(@assignee_custom_field).blank? %>
+      <% unless @assignee_use_default || issue.get_custom_value(@assignee_custom_field).blank? %>
         <% user = User.find(issue.get_custom_value(@assignee_custom_field)) %>
         <% unless user.blank? %>
           <div id="priority_<%= issue.id %>">
@@ -111,17 +111,16 @@
   
   <% unless issue.description.blank? %>
     <div class="">
-        <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
-          <%= l(:label_hide) %>
-        </a>
-        <a href="#" id="readmore_<%= issue.id %>" class="readmore no_edit" value="<%= issue.id %>">
-          <%= l(:label_readmore) %>
-        </a>
-        <div class="div_description description_readmore hidden" 
-            id="description_readmore_<%= issue.id %>">
-          <%= simple_format(h(issue.description)) %>
-        </div>
-
+      <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
+        <%= l(:label_hide) %>
+      </a>
+      <a href="#" id="readmore_<%= issue.id %>" class="readmore no_edit" value="<%= issue.id %>">
+        <%= l(:label_readmore) %>
+      </a>
+      <div class="div_description description_readmore hidden" 
+          id="description_readmore_<%= issue.id %>">
+        <%= simple_format(h(issue.description)) %>
+      </div>
     </div>
   <% end %>
   
