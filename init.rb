@@ -7,7 +7,8 @@ Redmine::Plugin.register :scrum2b do
                   Scrum board
                   Customize views
                 }
-  version '1.0.1'
+
+  version '1.1.0'
   url 'https://github.com/scrum2b/scrum2b'
 
 

@@ -343,3 +343,26 @@ img.icon{
   cursor: pointer;
 }
 
+#s2id_groupSelect, .select2-input, .select2-container, .select2-choices {
+  width: 200px;
+  border-radius: 4px;
+  margin-right: 2px;
+}
+
+.select2-search-field input {
+  height: auto;
+}
+
+.div_description {
+  -ms-word-break: break-all;
+       word-break: break-all;
+
+       /* Non standard for webkit */
+       word-break: break-word;
+
+  -webkit-hyphens: auto;
+     -moz-hyphens: auto;
+          hyphens: auto;
+}
+
+

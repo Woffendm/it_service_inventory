@@ -3,7 +3,7 @@ class S2bBoardsController < ApplicationController
   before_filter :find_project
   before_filter :load_settings
   before_filter :validate_conditions
-  #before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
+  before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
   before_filter :check_before_board,  :only   => [:index, :filter_issues_onboard,
                                                   :update, :create, :edit]
   
@@ -24,26 +24,23 @@ class S2bBoardsController < ApplicationController
  
  
   def index
+    @issue = Issue.new
     cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     blank_conditions = false
     blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
     if @sprint_use_default
-      if blank_conditions || cookies[:params_project_ids].blank?
+      if blank_conditions || session[:params_project_ids].blank?
         if @project.blank?
-          cookies[:params_project_ids] = { :value => @projects.first.id.to_s.to_a, 
-              :expires => 1.hour.from_now }
+          session[:params_project_ids] = @projects.first.id.to_s.to_a
           flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
         else
-          cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
-              :expires => 1.hour.from_now }
+          session[:params_project_ids] = @project.id.to_s.to_a
           flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
         end
       end
     else
       if blank_conditions
-        cookies[:params_sprint_custom_values] = { :value => @current_sprint.to_s.to_a, 
-            :expires => 1.hour.from_now }
-        cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
+        session[:params_sprint_custom_values] = @current_sprint.to_s.to_a
         flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
       end
     end
@@ -153,8 +150,7 @@ class S2bBoardsController < ApplicationController
       errors = @priority_custom_field.validate_field_value(params[:priority_custom_value]).first
       @issue.errors.add :base, "#{@priority_custom_field.name} #{errors}" unless errors.blank? 
     end
-    
-    
+      
     if @issue.errors.messages.blank? && @issue.save
       unless params[:sprint_custom_value].blank?
         cfv = @issue.get_custom_field_value(@sprint_custom_field)
@@ -180,20 +176,15 @@ class S2bBoardsController < ApplicationController
     
   
   def filter_issues_onboard
+    @issue = Issue.new
     if @use_version_form_sprint
-      cookies[:params_version_ids] = { :value => params[:version_ids].to_s.split(",").to_a, 
-          :expires => 1.hour.from_now } 
+      session[:params_version_ids] = params[:version_ids].to_s.split(",").to_a
     else
-      cookies[:params_sprint_custom_values] = { 
-          :value => params[:sprint_custom_values].to_s.split(",").to_a,
-          :expires => 1.hour.from_now }
+      session[:params_sprint_custom_values] = params[:sprint_custom_values].to_s.split(",").to_a
     end
-    cookies[:params_member_ids] = { :value => params[:member_ids].to_s.split(",").to_a, 
-        :expires => 1.hour.from_now }
-    cookies[:params_project_ids] = { :value => params[:project_ids].to_s.split(",").to_a, 
-        :expires => 1.hour.from_now }
-    cookies[:params_status_ids] = { :value => params[:status_ids].to_s.split(",").to_a, 
-        :expires => 1.hour.from_now }
+    session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
+    session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
+    session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
 
     filter_issues
     
@@ -213,11 +204,9 @@ class S2bBoardsController < ApplicationController
   private
   
   def check_before_board
-    @issue = Issue.new
     @trackers = Tracker.all
     @statuses = IssueStatus.sorted
     @projects = Project.order(:name)
-    
     if @priority_use_default
       @priorities = IssuePriority.all
     else
@@ -250,25 +239,25 @@ class S2bBoardsController < ApplicationController
   def filter_issues
     # Sets conditions based on what user selects in filters
     conditions = ["true"]
-    unless cookies[:params_version_ids].blank?
+    unless session[:params_version_ids].blank?
       conditions[0] += " AND issues.fixed_version_id IN (?)"
-      conditions << cookies[:params_version_ids]
+      conditions << session[:params_version_ids]
     end
-    unless cookies[:params_project_ids].blank?
+    unless session[:params_project_ids].blank?
       conditions[0] += " AND issues.project_id IN (?)"
-      conditions << cookies[:params_project_ids]
+      conditions << session[:params_project_ids]
     end
-    unless cookies[:params_member_ids].blank?
+    unless session[:params_member_ids].blank?
       conditions[0] += " AND issues.assigned_to_id IN (?)"
-      conditions << cookies[:params_member_ids]
+      conditions << session[:params_member_ids]
     end
-    unless cookies[:params_status_ids].blank?
+    unless session[:params_status_ids].blank?
       conditions[0] += " AND issues.status_id IN (?)"
-      conditions << cookies[:params_status_ids]
+      conditions << session[:params_status_ids]
     end
-    unless cookies[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
+    unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
       conditions[0] += " AND custom_values.value IN (?)"
-      conditions << cookies[:params_sprint_custom_values]
+      conditions << session[:params_sprint_custom_values]
       conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
     end
@@ -279,7 +268,7 @@ class S2bBoardsController < ApplicationController
       conditions << @assignee_custom_field.id
     end
     session[:conditions] = conditions
-    cookies[:conditions_valid] = { :value => true, :expires => 1.hour.from_now }
+    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
     
     # Assigns positions to all issues without positions.
     max_position_issue = Issue.eager_load(:custom_values).where(
@@ -293,19 +282,18 @@ class S2bBoardsController < ApplicationController
     # Populates each column with issues
     @board_columns.each do |board_column|
       issues = Issue.where("status_id IN (?)", board_column[:status_ids])
-      unless @sprint_use_default || cookies[:params_sprint_custom_values].blank?
-        issues = issues.joins(:custom_values, {:project => :issue_custom_fields}) 
+      unless @sprint_use_default || session[:params_sprint_custom_values].blank?
+        issues = issues.joins(:custom_values) 
       end
       issues = issues.where(session[:conditions])
       issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
-          :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values)
+          :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values).limit(100)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
     end
   end
 
 
 
-  # Doesn't work! WHY?!?!?!?
   def find_issue
     @issue = Issue.find(params[:issue_id])
   end
@@ -316,8 +304,7 @@ class S2bBoardsController < ApplicationController
     # @project variable must be set before calling the authorize filter
     project_id = params[:project_id] || (params[:issue] && params[:issue][:project_id])
     @project = Project.find(project_id) unless project_id.blank?
-    cookies[:params_project_ids] = { :value => @project.id.to_s.to_a, 
-        :expires => 1.hour.from_now } unless @project.blank?
+    session[:params_project_ids] = @project.id.to_s.to_a unless @project.blank?
   end
 
 
@@ -333,22 +320,22 @@ class S2bBoardsController < ApplicationController
     @board_columns = []
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank? || assignee_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
-          " Please contact to Administrator or go to the Settings page of the plugin: " + 
-          "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
+          " Please contact to Administrator or go to the " + 
+          "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
       if @project 
-        redirect_to "/projects/#{@project.to_param}"
+        redirect_to Rails.root
       else
-        redirect_to request.referer
+        redirect_to projects_path
       end
       return
     else
       board_columns.each do |board_column|
         if board_column.last["statuses"].blank?
           flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
-              "' has no associated statuses. Please contact an Administrator " + 
-              "or go to the Settings page of the plugin: " + 
-              "<a href='/settings/plugin/scrum2b'>/settings/plugin/scrum2b</a> to config."
-          redirect_to "/projects/#{@project.to_param}"
+              "' has no associated statuses. Please contact an Administrator or go to the " +
+              "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
+              
+          redirect_to projects_path
           return
         else
           @board_columns << {:name => board_column.last["name"], 
@@ -369,13 +356,13 @@ class S2bBoardsController < ApplicationController
     @assignee_custom_field = CustomField.find(assignee_settings["custom_field_id"]) unless @assignee_use_default
 
     if @sprint_use_default
-      unless cookies[:params_sprint_custom_values].blank?
-        cookies.delete :params_sprint_custom_values
+      unless session[:params_sprint_custom_values].blank?
+        cookies[:params_sprint_custom_values] = nil
         cookies.delete :conditions_valid
       end
     else
-      unless cookies[:params_version_ids].blank?
-        cookies.delete :params_version_ids
+      unless session[:params_version_ids].blank?
+        session[:params_version_ids] = nil
         cookies.delete :conditions_valid
       end
     end
@@ -438,7 +425,14 @@ class S2bBoardsController < ApplicationController
   
   
   def validate_conditions
-    session[:conditions] = nil unless cookies[:conditions_valid]
+    unless cookies[:conditions_valid]
+      session[:conditions] = nil
+      session[:params_project_ids] = nil
+      session[:params_status_ids] = nil
+      session[:params_member_ids] = nil
+      session[:params_version_ids] = nil
+      session[:params_sprint_custom_values] = nil
+    end
   end
   
   
