@@ -106,6 +106,11 @@ class S2bBoardsController < ApplicationController
       cfv.value = params[:priority_custom_value] unless cfv.blank?
     end
     
+    unless params[:assignee_custom_value].blank?
+      cfv = @issue.get_custom_field_value(@assignee_custom_field)
+      cfv.value = params[:assignee_custom_value] unless cfv.blank?
+    end
+    
     if validate_issue(@issue) && @issue.save
       data  = render_to_string(:partial => "/s2b_boards/show_issue", 
                                :locals => {:issue => @issue})
@@ -126,11 +131,8 @@ class S2bBoardsController < ApplicationController
   
   def create
     @sorted_issues = Issue.where(:status_id => @board_columns.first[:status_ids])
-    unless @sprint_use_default
-      @sorted_issues = @sorted_issues.eager_load(:custom_values, {
-          :project => :issue_custom_fields})
-      @sorted_issues = @sorted_issues.where(:custom_values => {
-          :custom_field_id => @sprint_custom_field.id})
+    unless @sprint_use_default && @priority_use_default && @assignee_use_default
+      @sorted_issues = @sorted_issues.joins(:custom_values)
     end
     @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
@@ -151,6 +153,11 @@ class S2bBoardsController < ApplicationController
       errors = @priority_custom_field.validate_field_value(params[:priority_custom_value]).first
       @issue.errors.add :base, "#{@priority_custom_field.name} #{errors}" unless errors.blank? 
     end
+    
+    unless params[:assignee_custom_value].blank?
+      errors = @assignee_custom_field.validate_field_value(params[:assignee_custom_value]).first
+      @issue.errors.add :base, "#{@assignee_custom_field.name} #{errors}" unless errors.blank? 
+    end
       
     if @issue.errors.messages.blank? && @issue.save
       unless params[:sprint_custom_value].blank?
@@ -163,7 +170,14 @@ class S2bBoardsController < ApplicationController
         cfv.value = params[:priority_custom_value] unless cfv.blank?
       end
       
-      @issue.update_attribute(:s2b_position, @sorted_issues.first.s2b_position.to_i - 1)
+      unless params[:assignee_custom_value].blank?
+        cfv = @issue.get_custom_field_value(@assignee_custom_field)
+        cfv.value = params[:assignee_custom_value] unless cfv.blank?
+      end
+      
+      position = @sorted_issues.first ? @sorted_issues.first.s2b_position.to_i - 1 : 1
+      
+      @issue.update_attribute(:s2b_position, position)
       data = render_to_string(:partial => "/s2b_boards/board_issue", :locals => {
           :issue => @issue, :trackers => @trackers, :members => @members,
           :statuses => @statuses, :priorities => @priorities, :sprints => @sprints})
@@ -178,8 +192,6 @@ class S2bBoardsController < ApplicationController
   
   def filter_issues_onboard
     @issue = Issue.new
-    
-    cookies[:view_issue] = { :value => "board", :expires => 1.hour.from_now }
     session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
     session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
     session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
@@ -226,6 +238,13 @@ class S2bBoardsController < ApplicationController
     
     @members = User.joins(:members).where(:members => {:project_id => @projects.pluck(
         :id)}).order(:firstname, :lastname).uniq
+    
+    unless @assignee_use_default || @assignee_custom_field.blank?
+      @member_hash = {}
+      @members.each do |member|
+        @member_hash = @member_hash.merge({member.id.to_s => member.name})
+      end
+    end
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   

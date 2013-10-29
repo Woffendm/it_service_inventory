@@ -18,7 +18,8 @@
 
 <% unless @sprint_use_default %>
   <td>
-    <%= issue.project.name.truncate(30) %>
+    <%= link_to issue.project.name.truncate(30), :controller => 'projects', :action => 'show', 
+        :id => issue.project_id %>
   </td>
 <% end %>
 
@@ -32,8 +33,17 @@
     <%= link_to issue.assigned_to, :controller => 'users', :action => 'show', 
         :id => issue.assigned_to.id %>
   </td>
-<% elsif %>
+<% else %>
   <td></td>
+<% end %>
+
+<% unless @assignee_use_default || issue.get_custom_value(@assignee_custom_field).blank? %>
+  <% user = User.find(issue.get_custom_value(@assignee_custom_field)) %>
+  <% unless user.blank? %>
+    <td>
+      <%= link_to user.name, user_path(user.id) %>
+    </td>
+  <% end %>
 <% end %>
 
 <td class="estimated_hours_<%= index %>">

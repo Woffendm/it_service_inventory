@@ -22,6 +22,7 @@
     <% end %>
   </p>
   
+  
   <p id="p_assignee_<%= issue.id %>">
     <span class="span5">
       <%= l(:label_head_issue_assignee) %> 
@@ -30,6 +31,19 @@
         @members, :id, :name, :selected => issue.assigned_to_id), 
         :class => "span7 value_content", :include_blank => true) %>
   </p>
+  
+  
+  <% unless @assignee_use_default || @assignee_custom_field.blank? %>
+    <p id="p_custom_assignee_<%= issue.id %>">
+      <span class="span5">
+        <%= @assignee_custom_field.name %> 
+      </span>
+      <%= select_tag("new_assignee_custom_value_#{issue.id}", options_from_collection_for_select(
+          @members, :id, :name, :selected => issue.get_custom_value(@assignee_custom_field)), 
+          :class => "span7 value_content", :include_blank => true) %>
+    </p>
+  <% end %>
+  
   
   <p id="p_sprint_<%= issue.id %>">
     <span class="span5">
@@ -46,6 +60,7 @@
     <% end %>
   </p>
   
+  
   <p id="p_time_<%= issue.id %>">
     <span class="span5" style="text-align:justify; white-space: nowrap;">
       <%= l(:label_head_issue_est_time) %> 
@@ -54,6 +69,7 @@
         :class => "span7 input-mini value_content") %>
   </p>
   
+  
   <p>
     <span class="span5">
       <%= l(:label_start_date) %>
@@ -61,6 +77,7 @@
     <%= text_field_tag("new_date_start_#{ issue.id }", issue.start_date || Date.today, 
         :class => "span7 value_content") %>
   </p>
+  
   
   <p>
     <span class="span5" >

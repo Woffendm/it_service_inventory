@@ -135,6 +135,7 @@ $(document).ready(function(){
     var version = $("#new_version_"+issue_id).val() || "";
     var sprint_custom_value = $("#new_sprint_custom_value_"+issue_id).val() || "";
     var priority_custom_value = $("#new_priority_custom_value_"+issue_id).val() || "";
+    var assignee_custom_value = $("#new_assignee_custom_value_"+issue_id).val() || "";
     var time = $("#new_time_"+issue_id).val() || "";
     var date_start = $("#new_date_start_"+issue_id).val() || "";
     var date_end = $("#new_date_end_"+issue_id).val() || "";
@@ -142,7 +143,7 @@ $(document).ready(function(){
     $.ajax({
       url : url_ajax,
       type : "POST",
-      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&sprint_custom_value=' + sprint_custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&priority_custom_value=' + priority_custom_value + '&project=' + project,
+      data : 'subject=' + subject + '&issue_id=' + issue_id + '&description=' + description + '&tracker=' + tracker + '&priority=' + priority + '&assignee=' + assignee + '&version=' + version + '&sprint_custom_value=' + sprint_custom_value + '&time=' + time + '&date_start=' + date_start + '&date_end=' + date_end + '&priority_custom_value=' + priority_custom_value +  '&assignee_custom_value=' + assignee_custom_value + '&project=' + project,
       dataType : "json",
       success : function(data) {
         if(data.result == "edit_success") {

@@ -11,13 +11,6 @@ class S2bListsController < ApplicationController
 
 
   def index
-    if cookies[:view_issue].blank? || cookies[:view_issue] == "board" && 
-        params[:switch_screens].blank?
-      redirect_to :controller => "s2b_boards", :action => "index", 
-          :project_id => params[:project_id]
-      return
-    end
-        
     if session[:params_project_ids].blank? && @sprint_use_default
       if @project.blank?
         session[:params_project_ids] = @projects.first.id.to_s.to_a
@@ -35,7 +28,6 @@ class S2bListsController < ApplicationController
   
   
   def filter_issues_onlist        
-    cookies[:view_issue] = { :value => "list", :expires => 1.hour.from_now }
     session[:params_project_ids] = params[:project_ids].to_s.split(",").to_a
     session[:params_status_ids] = params[:status_ids].to_s.split(",").to_a
     session[:params_member_ids] = params[:member_ids].to_s.split(",").to_a
@@ -159,7 +151,7 @@ class S2bListsController < ApplicationController
       
       # Finds all unfinished issues for each possible value in the custom field used for sprint
       custom_values.each do |cv|  
-        issues =  Issue.joins(:custom_values, :status).where(:custom_values => 
+        issues = Issue.joins(:custom_values, :status).where(:custom_values => 
             {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
         issues = issues.where(session[:conditions])
@@ -254,13 +246,13 @@ class S2bListsController < ApplicationController
     end
     
     if @assignee_use_default
-      unless cookies[:params_assignee_custom_values].blank?
-        cookies.delete :params_assignee_custom_values
+      unless sessions[:params_assignee_custom_values].blank?
+        csession[:params_assignee_custom_values] = nil
         cookies.delete :conditions_valid
       end
     else
-      unless cookies[:params_member_ids].blank?
-        cookies.delete :params_member_ids
+      unless session[:params_member_ids].blank?
+        session[:params_member_ids]
         cookies.delete :conditions_valid
       end
     end

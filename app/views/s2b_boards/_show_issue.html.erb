@@ -65,14 +65,12 @@
         </div>
       <% end %>
       
-      <% unless @assignee_use_default || issue.get_custom_value(@assignee_custom_field).blank? %>
-        <% user = User.find(issue.get_custom_value(@assignee_custom_field)) %>
-        <% unless user.blank? %>
-          <div id="priority_<%= issue.id %>">
-            <i class="icon-leaf" title="<%= @assignee_custom_field.name %>"></i>
-            <%= link_to user.name, user_path(user.id) %>
-          </div>
-        <% end %>
+      <% user_id = issue.get_custom_value(@assignee_custom_field) %>
+      <% unless @assignee_use_default || user_id.blank? %>
+        <div id="custom_assignee_<%= issue.id %>">
+          <i class="icon-leaf" title="<%= @assignee_custom_field.name %>"></i>
+          <%= link_to @member_hash[user_id], user_path(user_id) %>
+        </div>
       <% end %>
     </div>
 
