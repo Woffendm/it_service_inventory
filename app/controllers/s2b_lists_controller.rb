@@ -211,8 +211,8 @@ class S2bListsController < ApplicationController
       board_columns.each do |board_column|
         if board_column.last["statuses"].blank?
           flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
-              "' has no associated statuses. Please contact an Administrator or go to the " +
-              "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
+              "' has no associated statuses. Please contact an Administrator or go to the "
+          
               
           redirect_to projects_path
           return

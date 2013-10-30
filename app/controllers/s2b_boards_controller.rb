@@ -31,8 +31,8 @@ class S2bBoardsController < ApplicationController
     if @sprint_use_default
       if blank_conditions || session[:params_project_ids].blank?
         if @project.blank?
-          session[:params_project_ids] = @projects.first.id.to_s.to_a
-          flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}"
+          session[:params_project_ids] = @projects.first.id.to_s.to_a unless @projects.blank?
+          flash[:notice] = l(:notice_project_changed_to) + "#{@projects.first.name}" unless @projects.blank?
         else
           session[:params_project_ids] = @project.id.to_s.to_a
           flash[:notice] = l(:notice_project_changed_to) + "#{@project.name}"
