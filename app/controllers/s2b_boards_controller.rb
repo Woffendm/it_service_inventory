@@ -25,10 +25,9 @@ class S2bBoardsController < ApplicationController
  
   def index
     @issue = Issue.new
-    blank_conditions = false
-    blank_conditions = true if session[:conditions].blank? || session[:conditions] == ["true"]
+    @blank_conditions = blank_conditions()
     if @sprint_use_default
-      if blank_conditions || session[:params_project_ids].blank?
+      if @blank_conditions || session[:params_project_ids].blank?
         if @project.blank?
           unless @projects.blank?
             session[:params_project_ids] = @projects.first.id.to_s.to_a
@@ -40,7 +39,7 @@ class S2bBoardsController < ApplicationController
         end
       end
     else
-      if blank_conditions
+      if @blank_conditions
         session[:params_sprint_custom_values] = @current_sprint.to_s.to_a
         flash[:notice] = l(:notice_sprint_changed_to) + "#{@current_sprint}"
       end
@@ -134,7 +133,7 @@ class S2bBoardsController < ApplicationController
     unless @sprint_use_default && @priority_use_default && @assignee_use_default
       @sorted_issues = @sorted_issues.joins(:custom_values)
     end
-    @sorted_issues = @sorted_issues.where(session[:conditions]).order(:s2b_position)
+    @sorted_issues = apply_conditions(@sorted_issues).order(:s2b_position)
     @issue = Issue.new(:subject => params[:subject], :description => params[:description],
         :tracker_id => params[:tracker], :project_id => params[:project], 
         :status_id => params[:status], :assigned_to_id => params[:assignee],
@@ -216,6 +215,51 @@ class S2bBoardsController < ApplicationController
   
   private
   
+  
+  def apply_conditions(issues)
+    unless session[:params_version_ids].blank?
+      issues = issues.where("issues.fixed_version_id IN (?)", session[:params_version_ids])
+    end
+    
+    unless session[:params_project_ids].blank?
+      issues = issues.where("issues.project_id IN (?)", session[:params_project_ids])
+    end
+    
+    unless session[:params_member_ids].blank?
+      issues = issues.where("issues.assigned_to_id IN (?)", session[:params_member_ids])
+    end
+    
+    unless session[:params_status_ids].blank?
+      issues = issues.where("issues.status_id IN (?)", session[:params_status_ids])
+    end
+    
+    unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
+      issues = issues.joins("INNER JOIN custom_values cv1 ON issues.id = cv1.customized_id")
+      issues = issues.where("cv1.custom_field_id = ? AND cv1.value IN (?)", 
+          @sprint_custom_field.id, session[:params_sprint_custom_values])
+    end
+    
+    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
+      issues = issues.joins("INNER JOIN custom_values cv2 ON issues.id = cv2.customized_id")
+      issues = issues.where("cv2.custom_field_id = ? AND cv2.value IN (?)",
+          @assignee_custom_field.id, session[:params_assignee_custom_values])
+    end
+    
+    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
+    return issues
+  end
+  
+  
+  
+  def blank_conditions
+    return session[:params_project_ids].blank? && session[:params_status_ids].blank? &&
+        session[:params_member_ids].blank? &&  session[:params_version_ids].blank? &&  
+        session[:params_sprint_custom_values].blank? && 
+        session[:params_assignee_custom_values].blank?
+  end
+  
+  
+  
   def check_before_board
     @trackers = Tracker.all
     @statuses = IssueStatus.sorted
@@ -256,56 +300,21 @@ class S2bBoardsController < ApplicationController
   
 
 
-  def filter_issues
-    # Sets conditions based on what user selects in filters
-    conditions = ["true"]
-    unless session[:params_version_ids].blank?
-      conditions[0] += " AND issues.fixed_version_id IN (?)"
-      conditions << session[:params_version_ids]
-    end
-    unless session[:params_project_ids].blank?
-      conditions[0] += " AND issues.project_id IN (?)"
-      conditions << session[:params_project_ids]
-    end
-    unless session[:params_member_ids].blank?
-      conditions[0] += " AND issues.assigned_to_id IN (?)"
-      conditions << session[:params_member_ids]
-    end
-    unless session[:params_status_ids].blank?
-      conditions[0] += " AND issues.status_id IN (?)"
-      conditions << session[:params_status_ids]
-    end
-    unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
-      conditions[0] += " AND custom_values.value IN (?)"
-      conditions << session[:params_sprint_custom_values]
-      conditions[0] += " AND custom_values.custom_field_id = ?"
-      conditions << @sprint_custom_field.id
-    end
-    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
-      conditions[0] += " AND custom_values.value IN (?)"
-      conditions << session[:params_assignee_custom_values]
-      conditions[0] += " AND custom_values.custom_field_id = ?"
-      conditions << @assignee_custom_field.id
-    end
-    session[:conditions] = conditions
-    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
-    
+  def filter_issues    
     # Assigns positions to all issues without positions.
-    max_position_issue = Issue.eager_load(:custom_values).where(
-        :status_id => @board_columns.first[:status_ids]).where(
-        session[:conditions]).maximum(:s2b_position).to_i + 1
     issue_no_position = Issue.where(:s2b_position => nil)
-    issue_no_position.each_with_index do |issue, index|
-      issue.update_attribute(:s2b_position, max_position_issue + index)
+    unless issue_no_position.blank?
+      max_position_issue = Issue.where(:status_id => @board_columns.first[:status_ids])
+      max_position_issue = apply_conditions(max_position_issue).maximum(:s2b_position).to_i + 1
+      issue_no_position.each_with_index do |issue, index|
+        issue.update_attribute(:s2b_position, max_position_issue + index)
+      end
     end
     
     # Populates each column with issues
     @board_columns.each do |board_column|
-      issues = Issue.where("status_id IN (?)", board_column[:status_ids])
-      unless session[:params_assignee_custom_values].blank? && session[:params_sprint_custom_values].blank?
-        issues = issues.joins(:custom_values) 
-      end
-      issues = issues.where(session[:conditions])
+      issues = Issue.where(:status_id => board_column[:status_ids])
+      issues = apply_conditions(issues)
       issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
           :assigned_to, :tracker, :fixed_version, :status, :project, :custom_values).limit(100)
       board_column.merge!({:issues => issues.order(:s2b_position)}) 
@@ -408,7 +417,7 @@ class S2bBoardsController < ApplicationController
     end
         
     @issues_in_column = @issues_in_column.where(:status_id => @status_ids)
-    @issues_in_column = @issues_in_column.where(session[:conditions]).order(:s2b_position)
+    @issues_in_column = apply_conditions(@issues_in_column).order(:s2b_position)
     @max_position = @issues_in_column.last.s2b_position.to_i unless @issues_in_column.blank?
     @min_position = @issues_in_column.first.s2b_position.to_i unless @issues_in_column.blank?
     
@@ -441,12 +450,12 @@ class S2bBoardsController < ApplicationController
   
   def validate_conditions
     unless cookies[:conditions_valid]
-      session[:conditions] = nil
       session[:params_project_ids] = nil
       session[:params_status_ids] = nil
       session[:params_member_ids] = nil
       session[:params_version_ids] = nil
       session[:params_sprint_custom_values] = nil
+      session[:params_assignee_custom_values] = nil
     end
   end
   
