@@ -51,6 +51,42 @@ class S2bListsController < ApplicationController
   
   private  
   
+  
+  def apply_conditions(issues)
+    unless session[:params_version_ids].blank?
+      issues = issues.where("issues.fixed_version_id IN (?)", session[:params_version_ids])
+    end
+    
+    unless session[:params_project_ids].blank?
+      issues = issues.where("issues.project_id IN (?)", session[:params_project_ids])
+    end
+    
+    unless session[:params_member_ids].blank?
+      issues = issues.where("issues.assigned_to_id IN (?)", session[:params_member_ids])
+    end
+    
+    unless session[:params_status_ids].blank?
+      issues = issues.where("issues.status_id IN (?)", session[:params_status_ids])
+    end
+    
+    unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
+      issues = issues.joins("INNER JOIN custom_values cv1 ON issues.id = cv1.customized_id")
+      issues = issues.where("cv1.custom_field_id = ? AND cv1.value IN (?)", 
+          @sprint_custom_field.id, session[:params_sprint_custom_values])
+    end
+    
+    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
+      issues = issues.joins("INNER JOIN custom_values cv2 ON issues.id = cv2.customized_id")
+      issues = issues.where("cv2.custom_field_id = ? AND cv2.value IN (?)",
+          @assignee_custom_field.id, session[:params_assignee_custom_values])
+    end
+    
+    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
+    return issues
+  end
+  
+  
+  
   def check_before_list
     @statuses = IssueStatus.sorted.where(:is_closed => false)
     if @sprint_use_default
@@ -81,37 +117,6 @@ class S2bListsController < ApplicationController
   
   
   def filter_issues
-    # Sets conditions based on what user selects in filters
-    conditions = ["true"]
-    unless session[:params_version_ids].blank?
-      conditions[0] += " AND issues.fixed_version_id IN (?)"
-      conditions << session[:params_version_ids]
-    end
-    unless session[:params_project_ids].blank?
-      conditions[0] += " AND issues.project_id IN (?)"
-      conditions << session[:params_project_ids]
-    end
-    unless session[:params_member_ids].blank?
-      conditions[0] += " AND issues.assigned_to_id IN (?)"
-      conditions << session[:params_member_ids]
-    end
-    unless session[:params_status_ids].blank?
-      conditions[0] += " AND issues.status_id IN (?)"
-      conditions << session[:params_status_ids]
-    end
-    unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
-      conditions[0] += " AND (custom_values.value IN (?) AND custom_values.custom_field_id = ?)"
-      conditions << session[:params_sprint_custom_values]
-      conditions << @sprint_custom_field.id
-    end
-    unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
-      conditions[0] += " AND (custom_values.value IN (?) AND custom_values.custom_field_id = ?)"
-      conditions << session[:params_assignee_custom_values]
-      conditions << @assignee_custom_field.id
-    end
-    session[:conditions] = conditions
-    cookies[:conditions_valid] = { :value => true, :expires => 1.day.from_now }
-    
     # Determines whether to bother calculating issues without sprints
     @show_backlogs = true if session[:params_version_ids].blank? && session[:params_sprint_custom_values].blank?
     @issue_backlogs = Issue.joins(:status) if @show_backlogs
@@ -130,8 +135,7 @@ class S2bListsController < ApplicationController
         issues = Issue.eager_load(:assigned_to, :status, 
             :fixed_version, :priority).where(:fixed_version_id => version, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.joins(:custom_values) unless session[:params_assignee_custom_values].blank?
-        issues = issues.where(session[:conditions])
+        issues = apply_conditions(issues)        
         @sorted_issues << {:name => version.name, :issues => issues.order(
             "status_id, s2b_position")}
       end
@@ -140,9 +144,10 @@ class S2bListsController < ApplicationController
       if @show_backlogs
         @issue_backlogs = @issue_backlogs.joins(:custom_values) 
         issue_ids_with_custom_field = Issue.joins(:custom_values, :status).where(
-            session[:conditions]).where(:issue_statuses => {:is_closed => false}).where(
-            "(custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != '')",
-             @sprint_custom_field.id).pluck("issues.id")
+            :issue_statuses => {:is_closed => false}).where(
+            "(custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != '')", @sprint_custom_field.id)
+        issue_ids_with_custom_field =
+            apply_conditions(issue_ids_with_custom_field).pluck("issues.id")
         issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
         @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       end
@@ -158,7 +163,7 @@ class S2bListsController < ApplicationController
         issues = Issue.joins(:custom_values, :status).where(:custom_values => 
             {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
             :issue_statuses => {:is_closed => false})
-        issues = issues.where(session[:conditions])
+        issues = apply_conditions(issues)
         if issues.blank?
           @sorted_issues << {:name => cv, :issues => []}
         else
@@ -171,7 +176,7 @@ class S2bListsController < ApplicationController
     end
     
     if @show_backlogs
-      @issue_backlogs = @issue_backlogs.where(session[:conditions])
+      @issue_backlogs = apply_conditions(@issue_backlogs)
       @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
       @issue_backlogs = Issue.where(:id => @issue_backlogs.pluck("issues.id"))
       @issue_backlogs = @issue_backlogs.eager_load(:custom_values, :status, :assigned_to, 
@@ -266,12 +271,12 @@ class S2bListsController < ApplicationController
   
   def validate_conditions
     unless cookies[:conditions_valid]
-      session[:conditions] = nil
       session[:params_project_ids] = nil
       session[:params_status_ids] = nil
       session[:params_member_ids] = nil
       session[:params_version_ids] = nil
       session[:params_sprint_custom_values] = nil
+      session[:params_assignee_custom_values] = nil
     end
   end
   
