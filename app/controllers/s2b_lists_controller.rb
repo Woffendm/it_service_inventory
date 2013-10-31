@@ -69,6 +69,12 @@ class S2bListsController < ApplicationController
           ).pluck(:user_id).uniq).order(:firstname)
       @sprints = @sprint_custom_field.possible_values
     end
+    unless @assignee_use_default || @assignee_custom_field.blank?
+      @member_hash = {}
+      @members.each do |member|
+        @member_hash = @member_hash.merge({member.id.to_s => member.name})
+      end
+    end
     @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
@@ -94,15 +100,13 @@ class S2bListsController < ApplicationController
       conditions << session[:params_status_ids]
     end
     unless session[:params_sprint_custom_values].blank? || @sprint_custom_field.blank?
-      conditions[0] += " AND custom_values.value IN (?)"
+      conditions[0] += " AND (custom_values.value IN (?) AND custom_values.custom_field_id = ?)"
       conditions << session[:params_sprint_custom_values]
-      conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @sprint_custom_field.id
     end
     unless session[:params_assignee_custom_values].blank? || @assignee_custom_field.blank?
-      conditions[0] += " AND custom_values.value IN (?)"
+      conditions[0] += " AND (custom_values.value IN (?) AND custom_values.custom_field_id = ?)"
       conditions << session[:params_assignee_custom_values]
-      conditions[0] += " AND custom_values.custom_field_id = ?"
       conditions << @assignee_custom_field.id
     end
     session[:conditions] = conditions
@@ -137,7 +141,7 @@ class S2bListsController < ApplicationController
         @issue_backlogs = @issue_backlogs.joins(:custom_values) 
         issue_ids_with_custom_field = Issue.joins(:custom_values, :status).where(
             session[:conditions]).where(:issue_statuses => {:is_closed => false}).where(
-            "custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != ''",
+            "(custom_values.custom_field_id = ? AND custom_values.value IS NOT NULL AND custom_values.value != '')",
              @sprint_custom_field.id).pluck("issues.id")
         issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
         @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
@@ -270,6 +274,7 @@ class S2bListsController < ApplicationController
       session[:params_sprint_custom_values] = nil
     end
   end
+  
   
   
 end

@@ -24,7 +24,7 @@
 <% end %>
 
 <td>
-  <%= link_to issue.subject.truncate(100), :controller => 'issues', :action => 'show', 
+  <%= link_to issue.subject.truncate(50), :controller => 'issues', :action => 'show', 
       :id => issue.id %>
 </td>
 
@@ -37,13 +37,12 @@
   <td></td>
 <% end %>
 
-<% unless @assignee_use_default || issue.get_custom_value(@assignee_custom_field).blank? %>
-  <% user = User.find(issue.get_custom_value(@assignee_custom_field)) %>
-  <% unless user.blank? %>
-    <td>
-      <%= link_to user.name, user_path(user.id) %>
-    </td>
-  <% end %>
+<% unless @assignee_use_default %>
+  <td> 
+    <% user_id = issue.get_custom_value(@assignee_custom_field) %>
+    <%= link_to @member_hash[user_id], :controller => 'users', :action => 'show', 
+        :id => user_id unless user_id.blank?%>
+  </td>
 <% end %>
 
 <td class="estimated_hours_<%= index %>">

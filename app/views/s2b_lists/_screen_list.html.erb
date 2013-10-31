@@ -35,9 +35,9 @@
         <%= l(:label_head_issue_assignee) %> 
       </th>
       
-      <% unless @assignee_use_default || @assignee_custom_field.blank?%>
+      <% unless @assignee_use_default %>
         <th> 
-          <%= @assignee_custom_field.name %> 
+          <%= @assignee_custom_field.name %>
         </th>
       <% end %>
       
