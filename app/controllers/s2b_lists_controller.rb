@@ -205,7 +205,7 @@ class S2bListsController < ApplicationController
     priority_settings = @settings["priority"]
     assignee_settings = @settings["assignee"]
     @board_columns = []
-    if board_columns.blank? || sprint_settings.blank? || priority_settings.blank?
+    if board_columns.blank? || sprint_settings.blank? || priority_settings.blank? || assignee_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the " + 
           "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
@@ -255,13 +255,8 @@ class S2bListsController < ApplicationController
     end
     
     if @assignee_use_default
-      unless sessions[:params_assignee_custom_values].blank?
-        csession[:params_assignee_custom_values] = nil
-        cookies.delete :conditions_valid
-      end
-    else
-      unless session[:params_member_ids].blank?
-        session[:params_member_ids]
+      unless session[:params_assignee_custom_values].blank?
+        session[:params_assignee_custom_values] = nil
         cookies.delete :conditions_valid
       end
     end
