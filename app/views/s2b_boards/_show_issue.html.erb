@@ -26,12 +26,14 @@
   
   <div class="clearfix">
     <div class="">
-      <% if @sprint_use_default && issue.fixed_version_id %>
-        <div id="sprint_<%= issue.id %>">
-          <i class="icon-tags" title="<%= l(:label_sprint) %>"></i>
-          <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
-              :id => issue.fixed_version_id if issue.fixed_version_id %>
-        </div>
+      <% if @sprint_use_default %>
+        <% if issue.fixed_version_id %>
+          <div id="sprint_<%= issue.id %>">
+            <i class="icon-tags" title="<%= l(:label_sprint) %>"></i>
+            <%= link_to issue.fixed_version, :controller => 'versions', :action => 'show', 
+                :id => issue.fixed_version_id if issue.fixed_version_id %>
+          </div>
+        <% end %>
       <% elsif !issue.get_custom_value(@sprint_custom_field).blank? %>
         <div id="sprint_<%= issue.id %>">
           <i class="icon-tags" title="<%= @sprint_custom_field.name %>"></i>
@@ -65,12 +67,14 @@
         </div>
       <% end %>
       
-      <% user_id = issue.get_custom_value(@assignee_custom_field) %>
-      <% unless @assignee_use_default || user_id.blank? %>
-        <div id="custom_assignee_<%= issue.id %>">
-          <i class="icon-leaf" title="<%= @assignee_custom_field.name %>"></i>
-          <%= link_to @member_hash[user_id], user_path(user_id) %>
-        </div>
+      <% unless @assignee_use_default %>
+        <% user_id = issue.get_custom_value(@assignee_custom_field) %>
+        <% unless user_id.blank? %>
+          <div id="custom_assignee_<%= issue.id %>">
+            <i class="icon-leaf" title="<%= @assignee_custom_field.name %>"></i>
+            <%= link_to @member_hash[user_id], user_path(user_id) %>
+          </div>
+        <% end %>
       <% end %>
     </div>
 
