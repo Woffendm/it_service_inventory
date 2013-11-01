@@ -7,9 +7,9 @@
     </div>
     
     <% if @has_permission %>
-      <div class="icon_edit_issue float_right" issue_id="<%= issue.id %>">
+      <a href="#" class="icon_edit_issue float_right" issue_id="<%= issue.id %>">
         <i class="fa fa-edit" title="<%= l(:label_board_issue_text_edit_issue) %>" alt="edit_issue"></i>
-      </div>  
+      </a>
       
       <div class="handle float_right">
         <i class="fa fa-move" title="<%= l(:label_board_issue_text_move_issue) %>"></i>
@@ -24,7 +24,7 @@
   </div>
   
   
-  <div class="clearfix">
+  <div class="">
     <div class="">
       <% if @sprint_use_default %>
         <% if issue.fixed_version_id %>
@@ -114,9 +114,11 @@
   <% unless issue.description.blank? %>
     <div class="">
       <a href="#" id="hide_<%= issue.id %>" class="hide no_edit" value="<%= issue.id %>">
+        <i class="fa fa-level-up" title="<%= l(:label_hide) %>"></i>
         <%= l(:label_hide) %>
       </a>
       <a href="#" id="readmore_<%= issue.id %>" class="readmore no_edit" value="<%= issue.id %>">
+        <i class="fa fa-level-down" title="<%= l(:label_readmore) %>"></i>
         <%= l(:label_readmore) %>
       </a>
       <div class="div_description description_readmore hidden" 

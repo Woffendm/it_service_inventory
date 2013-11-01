@@ -170,6 +170,24 @@ img.icon{
   padding:0px;
   position: relative;
 }
+
+.fa {
+  margin-left: 2px;
+  width: 14px;
+}
+
+div > i.fa {
+  cursor: default;
+}
+
+a > i.fa {
+  cursor: pointer;  
+}
+
+.handle .fa{
+  cursor: move;
+}
+
 .no_edit {
 		position: relative;
 	}
