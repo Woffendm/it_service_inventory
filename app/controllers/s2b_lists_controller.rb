@@ -46,12 +46,8 @@ class S2bListsController < S2bController
   
   def filter_issues
     # Determines whether to bother calculating issues without sprints
-    @show_backlogs = true if session[:params_version_ids].blank? && session[:params_sprint_custom_values].blank?
-    @issue_backlogs = Issue.joins(:status) if @show_backlogs
-    
     @sorted_issues = []
     if @sprint_use_default
-      @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil) if @show_backlogs
       if session[:params_version_ids].blank?
         versions = Version.where(:project_id => session[:params_project_ids]).order("created_on")
       else
@@ -60,16 +56,44 @@ class S2bListsController < S2bController
       
       # Finds all unfinished issues for each version of the project.
       versions.each do |version|
-        issues = Issue.eager_load(:assigned_to, :status, 
-            :fixed_version, :priority).where(:fixed_version_id => version, 
-            :issue_statuses => {:is_closed => false})
+        issues = Issue.eager_load(:assigned_to, :status, :fixed_version, :priority, :custom_values)
+        issues = issues.where(:fixed_version_id => version.id, :issue_statuses => 
+            {:is_closed => false})
         issues = apply_conditions(issues)        
         @sorted_issues << {:name => version.name, :issues => issues.order(
             "status_id, s2b_position")}
       end
     else
-      # Finds all unfinished issues not assigned to a custom field sprint
-      if @show_backlogs
+      if session[:params_sprint_custom_values].blank?
+        custom_values = @sprint_custom_field.possible_values
+      else
+        custom_values = session[:params_sprint_custom_values].to_a
+      end
+      
+      # Finds all unfinished issues for each possible value in the custom field used for sprint
+      custom_values.each do |cv|  
+        issues = Issue.joins(:status).where(:issue_statuses => {:is_closed => false})
+        issues = issues.joins("INNER JOIN custom_values cv0 ON issues.id = cv0.customized_id")
+        issues = issues.where("cv0.custom_field_id = ? AND cv0.value = ?", 
+            @sprint_custom_field.id, cv)
+        issues = apply_conditions(issues)
+        issues = issues.eager_load(:assigned_to, :status, :priority, :custom_values, :project)
+        issues = issues.order("status_id, projects.name, s2b_position")
+        @sorted_issues << {:name => cv, :issues => issues}
+      end
+    end
+    
+    filter_backlogs()
+  end
+  
+  
+  
+  def filter_backlogs
+    if session[:params_version_ids].blank? && session[:params_sprint_custom_values].blank?
+      @issue_backlogs = Issue.joins(:status)
+      if @sprint_use_default
+        @issue_backlogs = @issue_backlogs.where(:fixed_version_id => nil)
+      else
         @issue_backlogs = @issue_backlogs.joins(:custom_values) 
         issue_ids_with_custom_field = Issue.joins(:custom_values, :status).where(
             :issue_statuses => {:is_closed => false}).where(
@@ -79,31 +103,6 @@ class S2bListsController < S2bController
         issue_ids_with_custom_field = [-1] if issue_ids_with_custom_field.blank?
         @issue_backlogs = @issue_backlogs.where("issues.id NOT IN (?)", issue_ids_with_custom_field)
       end
-      
-      if session[:params_sprint_custom_values].blank?
-        custom_values = @sprint_custom_field.possible_values
-      else
-        custom_values = session[:params_sprint_custom_values].to_a
-      end
-      
-      # Finds all unfinished issues for each possible value in the custom field used for sprint
-      custom_values.each do |cv|  
-        issues = Issue.joins(:custom_values, :status).where(:custom_values => 
-            {:custom_field_id => @sprint_custom_field.id, :value => cv}, 
-            :issue_statuses => {:is_closed => false})
-        issues = apply_conditions(issues)
-        if issues.blank?
-          @sorted_issues << {:name => cv, :issues => []}
-        else
-          issues = Issue.where(:id => issues.pluck("issues.id")).eager_load(
-              :assigned_to, :status, :fixed_version, :priority, :custom_values, :project)
-          issues =  issues.order("status_id, projects.name, s2b_position")
-          @sorted_issues << {:name => cv, :issues => issues}
-        end
-      end
-    end
-    
-    if @show_backlogs
       @issue_backlogs = apply_conditions(@issue_backlogs)
       @issue_backlogs = @issue_backlogs.where("issue_statuses.is_closed IS NOT TRUE")
       @issue_backlogs = Issue.where(:id => @issue_backlogs.pluck("issues.id"))

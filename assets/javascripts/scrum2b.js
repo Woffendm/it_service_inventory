@@ -1,6 +1,8 @@
 $(document).ready(function(){ 
   
   
+  // Sets up the filters. When a user clicks on 'filter', it fires off an ajax request which
+  // gets a list of matching issues and updates the scrum board / backlog accordingly. 
   $("#btn_filter").live("click",function(){
     var version_ids = $("#versions").val() || "";
     var status_ids = $("#statuses").val() || "";
@@ -24,7 +26,9 @@ $(document).ready(function(){
   });
   
   
-  
+  // Makes issues on the scrum board drag-and-drop able. When an issue is dropped into a new column
+  // an ajax request is fired off which updates the issue's status to the first matching status in
+  // the new column.
   function setup_sortable_columns() {
     var sortable_columns = $(".connectedSortable");
     var status;
@@ -66,7 +70,7 @@ $(document).ready(function(){
   }
   
   
-  
+  // Draws progress bars based on the issue's done ratio
   function draw_progress_bars() {
     $(".slider-horizontal").each(function() {
       var id = parseInt($(this).parent().attr("value"));
@@ -83,7 +87,8 @@ $(document).ready(function(){
   }
   
   
-  
+  // Performs an ajax request when user clicks on edit button. Pulls in the 'edit issue' partial
+  // along with appropriate data. This is done to speed up the page's initial load time.
   $(".icon_edit_issue").live("click", function(){
     var issue_id = parseInt($(this).attr("issue_id"));
     var url_ajax = "edit";
@@ -107,10 +112,11 @@ $(document).ready(function(){
     }
     edit.show();
     $("#show_issue_" + issue_id).hide();
+    return false;
   });
   
   
-  
+  // Hides edit partial, shows show partial
   $(".cancel_issue").live("click", function(){
     var issue_id = parseInt($(this).parent().attr("value")) || "";
     $("#edit_issue_" + issue_id).hide();
@@ -118,7 +124,8 @@ $(document).ready(function(){
   });
  
  
- 
+  // Performs ajax request which will create / update issue based off data entered in the
+  // corresponding partial. If the creation / update fails, displays an error message on the screen
   $(".submit_issue").live("click", function(){
     var issue_id = $(this).parent().attr("value");
     if(issue_id != "" ){
@@ -164,19 +171,18 @@ $(document).ready(function(){
   });
   
   
-  
+  // Sets up 'read more' link to display an issue's description when clicked
   $(".readmore").live("click", function(){
     var id = $(this).attr("value");
     $(this).hide();
     $("#hide_" + id).show();
     $("#description_readmore_" + id).show();
     $("#description_hide_" + id).hide();
-     return false;
-
+    return false;
   });
   
   
-  
+  // Sets up 'hide' link to hide an issue's description when clicked
   $(".hide").live("click", function() {
     var id = $(this).attr("value");
     $(this).hide();
@@ -187,14 +193,15 @@ $(document).ready(function(){
   });
   
   
-  
+  // Sets up + icon to show 'new issue' partial when clicked
   $(".icon_new_issue").live("click", function(){
     $("#edit_issue_").show();
     $("#edit_issue_").addClass("board_issue");
   });
     
   
-  
+  // Creates datepickers for the start / end date when editing an issue. Default based on the
+  // issue's current setting.
   function editDate(id){
     var start_date = $( "#new_date_start_" + id);
     var end_date = $( "#new_date_end_" + id);
@@ -209,7 +216,8 @@ $(document).ready(function(){
   }
   
   
-  
+  // Creates 'done ratio' slider for issue. When changed, fires of an ajax request to update the 
+  // issue's done ratio. The default value is based on the issue's current value.
   function makeSlider(id, slide_value) {
     $("#slider" + id ).slider({
       orientation: "horizontal",
@@ -239,14 +247,15 @@ $(document).ready(function(){
   }
   
   
-  
+  // Creates Select2 autocomplete select boxes with clear buttons. DOES NOT USE 'chosen'!
   var chosen_selects = $(".chosen-select");
   $("#btn_clear").live("click", function () {
-    chosen_selects.val('').trigger("chosen:updated");
+    chosen_selects.select2("val", "");
   });
   
   
-  
+  // Uses javascript to calculate the total time allocated to a given sprint on the 
+  // 'sprint backlogs' view.
   function calculate_time() {
     $(".version_row").each(function() {
       var index = $(this).attr("index");
