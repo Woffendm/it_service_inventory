@@ -1,3 +1,6 @@
+# This controller is never instantiated. The S2bBoardsController and S2bListsController inherit
+# its protected methods. This means less maintenance. 
+
 class S2bController < ApplicationController
   unloadable
   before_filter :find_project
@@ -57,7 +60,41 @@ class S2bController < ApplicationController
     session[:params_project_ids] = @project.id.to_s.to_a unless @project.blank?
   end
 
-
+  
+  
+  def load_filter_and_association_options
+    @trackers = Tracker.sorted
+    @statuses = IssueStatus.sorted
+    @projects = Project.order("projects.name")
+    if @priority_use_default
+      @priorities = IssuePriority.sorted
+    else
+      @priorities = @priority_custom_field.possible_values
+    end
+    
+    if @sprint_use_default
+      @sprints = Version.where(project_id: @projects.pluck(:id))
+    else
+      unless @sprint_custom_field.is_for_all
+        @projects = @projects.joins(:issue_custom_fields).where(:custom_fields => 
+            {:id => @sprint_custom_field.id})
+      end
+      @sprints = @sprint_custom_field.possible_values
+    end
+    
+    @members = User.joins(:members).where(:members => {:project_id => @projects.pluck(
+        :id)}).order(:firstname, :lastname).uniq
+    
+    unless @assignee_use_default || @assignee_custom_field.blank?
+      @member_hash = {}
+      @members.each do |member|
+        @member_hash = @member_hash.merge({member.id.to_s => member.name})
+      end
+    end
+    @has_permission = true if @members.include?(User.current) || User.current.admin
+  end
+  
+  
 
   # Loads settings and builds board_columns hash. Reminds user to configure plugin if it hasn't 
   # already been configured. 
@@ -69,31 +106,13 @@ class S2bController < ApplicationController
     sprint_settings = @settings["sprint"]
     priority_settings = @settings["priority"]
     assignee_settings = @settings["assignee"]
-    @board_columns = []
+
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank? || assignee_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
           " Please contact to Administrator or go to the " + 
           "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
-      if @project 
-        redirect_to Rails.root
-      else
-        redirect_to projects_path
-      end
+      redirect_to projects_path
       return
-    else
-      board_columns.each do |board_column|
-        if board_column.last["statuses"].blank?
-          flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
-              "' has no associated statuses. Please contact an Administrator or go to the " +
-              "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
-              
-          redirect_to projects_path
-          return
-        else
-          @board_columns << {:name => board_column.last["name"], 
-              :status_ids => board_column.last["statuses"].keys}
-        end
-      end 
     end
     
     @show_progress_bars = @settings["show_progress_bars"] == "true"

@@ -1,7 +1,8 @@
 class S2bBoardsController < S2bController
-  before_filter :find_issue,          :except => [:index, :create, :filter_issues_onboard]
-  before_filter :check_before_board,  :only   => [:index, :filter_issues_onboard,
-                                                  :update, :create, :edit] 
+  before_filter :build_board_columns
+  before_filter :find_issue,  :except =>  [:index, :create, :filter_issues_onboard]
+  before_filter :load_filter_and_association_options, :only =>  [:index, :filter_issues_onboard,
+      :update, :create, :edit] 
  
  
  
@@ -209,6 +210,7 @@ class S2bBoardsController < S2bController
   private
   
   
+  # Returns true if there are no filters currently applied.
   def blank_conditions
     return session[:params_project_ids].blank? && session[:params_status_ids].blank? &&
         session[:params_member_ids].blank? &&  session[:params_version_ids].blank? &&  
@@ -218,36 +220,23 @@ class S2bBoardsController < S2bController
   
   
   
-  def check_before_board
-    @trackers = Tracker.all
-    @statuses = IssueStatus.sorted
-    @projects = Project.order(:name)
-    if @priority_use_default
-      @priorities = IssuePriority.all
-    else
-      @priorities = @priority_custom_field.possible_values
-    end
-    
-    if @sprint_use_default
-      @sprints = Version.where(project_id: @projects.pluck(:id))
-    else
-      unless @sprint_custom_field.is_for_all
-        @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
-            {:id => @sprint_custom_field.id}).order("projects.name")
-      end
-      @sprints = @sprint_custom_field.possible_values
-    end
-    
-    @members = User.joins(:members).where(:members => {:project_id => @projects.pluck(
-        :id)}).order(:firstname, :lastname).uniq
-    
-    unless @assignee_use_default || @assignee_custom_field.blank?
-      @member_hash = {}
-      @members.each do |member|
-        @member_hash = @member_hash.merge({member.id.to_s => member.name})
+  # Builds a hash representing the columns for the scrum board. After running, each column will 
+  # have a name and list of issue status ids associated with it. The collection of columns is stored
+  # in @board_columns. 
+  def build_board_columns
+    @board_columns = []
+    @settings["board_columns"].each do |board_column|
+      if board_column.last["statuses"].blank?
+        flash[:error] = "The Scrum2B board column named '" + board_column.last['name'] + 
+            "' has no associated statuses. Please contact an Administrator or go to the " +
+            "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
+        redirect_to projects_path
+        return
+      else
+        @board_columns << {:name => board_column.last["name"], 
+            :status_ids => board_column.last["statuses"].keys}
       end
     end
-    @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
   end
   
   

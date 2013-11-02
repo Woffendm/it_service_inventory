@@ -1,5 +1,5 @@
 class S2bListsController < S2bController
-  before_filter :check_before_list
+  before_filter :load_filter_and_association_options
 
 
 
@@ -42,36 +42,6 @@ class S2bListsController < S2bController
   
   
   private
-  
-  
-  
-  def check_before_list
-    @statuses = IssueStatus.sorted.where(:is_closed => false)
-    if @sprint_use_default
-      @projects = Project.order(:name)
-      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
-          ).pluck(:user_id).uniq).order(:firstname)
-      @sprints = Version.where(project_id: @projects.pluck(:id))
-    else
-      if @sprint_custom_field.is_for_all
-        @projects = Project.order(:name)
-      else
-        @projects = Project.joins(:issue_custom_fields).where(:custom_fields => 
-            {:id => @sprint_custom_field.id}).order("projects.name")
-      end
-      @members = User.where(:id => Member.where(:project_id => @projects.pluck("projects.id")
-          ).pluck(:user_id).uniq).order(:firstname)
-      @sprints = @sprint_custom_field.possible_values
-    end
-    unless @assignee_use_default || @assignee_custom_field.blank?
-      @member_hash = {}
-      @members.each do |member|
-        @member_hash = @member_hash.merge({member.id.to_s => member.name})
-      end
-    end
-    @has_permission = true if !User.current.anonymous? && @members.include?(User.current) || User.current.admin
-  end
-  
   
   
   def filter_issues
