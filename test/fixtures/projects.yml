@@ -1,0 +1,66 @@
+--- 
+projects_005: 
+  rgt: 4
+  updated_on: 2012-11-21 09:31:02 -08:00
+  created_on: 2012-11-21 09:31:02 -08:00
+  parent_id: 
+  status: 1
+  id: 5
+  lft: 3
+  is_public: true
+  name: Multi-channelled fresh-thinking architecture
+  identifier: multi_channel
+  homepage: ""
+  description: Develop a new enterprise system for the future
+projects_004: 
+  rgt: 10
+  updated_on: 2012-11-07 13:25:45 -08:00
+  created_on: 2012-11-07 13:25:45 -08:00
+  parent_id: 
+  status: 1
+  id: 4
+  lft: 9
+  is_public: true
+  name: Redmine
+  identifier: redmine
+  homepage: ""
+  description: Upgrade Redmine
+projects_003: 
+  rgt: 2
+  updated_on: 2012-11-07 13:08:59 -08:00
+  created_on: 2012-11-07 13:08:59 -08:00
+  parent_id: 
+  status: 1
+  id: 3
+  lft: 1
+  is_public: true
+  name: Incident Plugin
+  identifier: incident_plugin
+  homepage: ""
+  description: ITIL Incident plugin for Redmine
+projects_002: 
+  rgt: 8
+  updated_on: 2012-10-02 10:44:55 -07:00
+  created_on: 2012-10-02 10:44:55 -07:00
+  parent_id: 
+  status: 1
+  id: 2
+  lft: 7
+  is_public: true
+  name: Plugin Documentation
+  identifier: plugin_documentation
+  homepage: ""
+  description: Plugin Documentation
+projects_001: 
+  rgt: 6
+  updated_on: 2012-08-20 10:55:59 -07:00
+  created_on: 2012-08-20 10:55:59 -07:00
+  parent_id: 
+  status: 1
+  id: 1
+  lft: 5
+  is_public: true
+  name: Plugin Development
+  identifier: plugins_development
+  homepage: ""
+  description: Plugin Development for 1.4 and 2.0

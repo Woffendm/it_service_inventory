@@ -1,0 +1,19 @@
+--- 
+trackers_003: 
+  position: 3
+  id: 3
+  name: Support
+  is_in_roadmap: false
+  is_in_chlog: false
+trackers_002: 
+  position: 2
+  id: 2
+  name: Feature
+  is_in_roadmap: true
+  is_in_chlog: true
+trackers_001: 
+  position: 1
+  id: 1
+  name: Bug
+  is_in_roadmap: false
+  is_in_chlog: true

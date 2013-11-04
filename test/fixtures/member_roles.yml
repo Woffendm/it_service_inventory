@@ -1,0 +1,186 @@
+--- 
+member_roles_019: 
+  role_id: 3
+  id: 19
+  member_id: 13
+  inherited_from: 18
+member_roles_018: 
+  role_id: 3
+  id: 18
+  member_id: 12
+  inherited_from: 
+member_roles_017: 
+  role_id: 4
+  id: 17
+  member_id: 11
+  inherited_from: 14
+member_roles_016: 
+  role_id: 4
+  id: 16
+  member_id: 2
+  inherited_from: 14
+member_roles_015: 
+  role_id: 4
+  id: 15
+  member_id: 5
+  inherited_from: 14
+member_roles_014: 
+  role_id: 4
+  id: 14
+  member_id: 10
+  inherited_from: 
+member_roles_013: 
+  role_id: 3
+  id: 13
+  member_id: 8
+  inherited_from: 
+member_roles_012: 
+  role_id: 4
+  id: 12
+  member_id: 9
+  inherited_from: 
+member_roles_011: 
+  role_id: 4
+  id: 11
+  member_id: 8
+  inherited_from: 
+member_roles_010: 
+  role_id: 3
+  id: 10
+  member_id: 6
+  inherited_from: 
+member_roles_037: 
+  role_id: 3
+  id: 37
+  member_id: 31
+  inherited_from: 
+member_roles_036: 
+  role_id: 4
+  id: 36
+  member_id: 30
+  inherited_from: 
+member_roles_035: 
+  role_id: 4
+  id: 35
+  member_id: 29
+  inherited_from: 
+member_roles_034: 
+  role_id: 3
+  id: 34
+  member_id: 28
+  inherited_from: 
+member_roles_033: 
+  role_id: 3
+  id: 33
+  member_id: 27
+  inherited_from: 
+member_roles_032: 
+  role_id: 3
+  id: 32
+  member_id: 26
+  inherited_from: 
+member_roles_031: 
+  role_id: 3
+  id: 31
+  member_id: 25
+  inherited_from: 
+member_roles_030: 
+  role_id: 3
+  id: 30
+  member_id: 24
+  inherited_from: 
+member_roles_009: 
+  role_id: 4
+  id: 9
+  member_id: 7
+  inherited_from: 
+member_roles_008: 
+  role_id: 4
+  id: 8
+  member_id: 6
+  inherited_from: 
+member_roles_007: 
+  role_id: 4
+  id: 7
+  member_id: 4
+  inherited_from: 
+member_roles_006: 
+  role_id: 4
+  id: 6
+  member_id: 3
+  inherited_from: 
+member_roles_005: 
+  role_id: 3
+  id: 5
+  member_id: 3
+  inherited_from: 
+member_roles_004: 
+  role_id: 4
+  id: 4
+  member_id: 5
+  inherited_from: 
+member_roles_003: 
+  role_id: 3
+  id: 3
+  member_id: 1
+  inherited_from: 
+member_roles_002: 
+  role_id: 4
+  id: 2
+  member_id: 2
+  inherited_from: 
+member_roles_001: 
+  role_id: 4
+  id: 1
+  member_id: 1
+  inherited_from: 
+member_roles_029: 
+  role_id: 3
+  id: 29
+  member_id: 23
+  inherited_from: 
+member_roles_028: 
+  role_id: 3
+  id: 28
+  member_id: 22
+  inherited_from: 
+member_roles_027: 
+  role_id: 3
+  id: 27
+  member_id: 21
+  inherited_from: 
+member_roles_026: 
+  role_id: 3
+  id: 26
+  member_id: 20
+  inherited_from: 
+member_roles_025: 
+  role_id: 3
+  id: 25
+  member_id: 19
+  inherited_from: 
+member_roles_024: 
+  role_id: 3
+  id: 24
+  member_id: 18
+  inherited_from: 
+member_roles_023: 
+  role_id: 3
+  id: 23
+  member_id: 17
+  inherited_from: 
+member_roles_022: 
+  role_id: 3
+  id: 22
+  member_id: 16
+  inherited_from: 18
+member_roles_021: 
+  role_id: 3
+  id: 21
+  member_id: 15
+  inherited_from: 18
+member_roles_020: 
+  role_id: 3
+  id: 20
+  member_id: 14
+  inherited_from: 18

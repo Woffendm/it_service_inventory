@@ -49,7 +49,6 @@ class S2bBoardsControllerTest < ActionController::TestCase
   test "should get index issue one" do
     get :index
     assert_response :success
-    assert_template :index
   end
   
   test "should get update_status" do

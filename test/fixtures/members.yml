@@ -1,0 +1,187 @@
+--- 
+members_031: 
+  mail_notification: false
+  created_on: 2012-11-21 09:31:44 -08:00
+  id: 31
+  project_id: 5
+  user_id: 3
+members_030: 
+  mail_notification: false
+  created_on: 2012-11-21 09:31:39 -08:00
+  id: 30
+  project_id: 5
+  user_id: 2
+members_009: 
+  mail_notification: false
+  created_on: 2012-11-07 13:25:56 -08:00
+  id: 9
+  project_id: 4
+  user_id: 2
+members_008: 
+  mail_notification: false
+  created_on: 2012-11-07 13:25:56 -08:00
+  id: 8
+  project_id: 4
+  user_id: 3
+members_007: 
+  mail_notification: false
+  created_on: 2012-11-07 13:10:27 -08:00
+  id: 7
+  project_id: 3
+  user_id: 2
+members_006: 
+  mail_notification: false
+  created_on: 2012-11-07 13:10:27 -08:00
+  id: 6
+  project_id: 3
+  user_id: 3
+members_005: 
+  mail_notification: false
+  created_on: 2012-10-08 12:35:44 -07:00
+  id: 5
+  project_id: 1
+  user_id: 2
+members_004: 
+  mail_notification: false
+  created_on: 2012-10-02 10:45:46 -07:00
+  id: 4
+  project_id: 2
+  user_id: 2
+members_003: 
+  mail_notification: false
+  created_on: 2012-10-02 10:45:46 -07:00
+  id: 3
+  project_id: 2
+  user_id: 3
+members_002: 
+  mail_notification: false
+  created_on: 2012-08-20 13:30:06 -07:00
+  id: 2
+  project_id: 1
+  user_id: 3
+members_001: 
+  mail_notification: false
+  created_on: 2012-08-20 11:33:46 -07:00
+  id: 1
+  project_id: 1
+  user_id: 1
+members_029: 
+  mail_notification: false
+  created_on: 2012-11-21 09:31:38 -08:00
+  id: 29
+  project_id: 5
+  user_id: 9
+members_028: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 28
+  project_id: 4
+  user_id: 8
+members_027: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 27
+  project_id: 3
+  user_id: 8
+members_026: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 26
+  project_id: 2
+  user_id: 8
+members_025: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 25
+  project_id: 4
+  user_id: 7
+members_024: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 24
+  project_id: 3
+  user_id: 7
+members_023: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:49 -08:00
+  id: 23
+  project_id: 2
+  user_id: 7
+members_022: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 22
+  project_id: 4
+  user_id: 6
+members_021: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 21
+  project_id: 3
+  user_id: 6
+members_020: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 20
+  project_id: 2
+  user_id: 6
+members_019: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 19
+  project_id: 4
+  user_id: 5
+members_018: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 18
+  project_id: 3
+  user_id: 5
+members_017: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:48 -08:00
+  id: 17
+  project_id: 2
+  user_id: 5
+members_016: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:23 -08:00
+  id: 16
+  project_id: 1
+  user_id: 8
+members_015: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:23 -08:00
+  id: 15
+  project_id: 1
+  user_id: 7
+members_014: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:23 -08:00
+  id: 14
+  project_id: 1
+  user_id: 6
+members_013: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:23 -08:00
+  id: 13
+  project_id: 1
+  user_id: 5
+members_012: 
+  mail_notification: false
+  created_on: 2012-11-20 15:22:23 -08:00
+  id: 12
+  project_id: 1
+  user_id: 11
+members_011: 
+  mail_notification: false
+  created_on: 2012-11-14 15:33:28 -08:00
+  id: 11
+  project_id: 1
+  user_id: 9
+members_010: 
+  mail_notification: false
+  created_on: 2012-11-14 15:33:27 -08:00
+  id: 10
+  project_id: 1
+  user_id: 10

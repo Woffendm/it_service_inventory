@@ -1,0 +1,177 @@
+--- 
+roles_005: 
+  builtin: 0
+  position: 5
+  issues_visibility: default
+  id: 5
+  permissions: |
+    --- 
+    - :add_messages
+    - :edit_own_messages
+    - :view_calendar
+    - :view_documents
+    - :view_files
+    - :view_gantt
+    - :view_issues
+    - :add_issues
+    - :add_issue_notes
+    - :save_queries
+    - :comment_news
+    - :browse_repository
+    - :view_changesets
+    - :log_time
+    - :view_time_entries
+    - :view_wiki_pages
+    - :view_wiki_edits
+
+  assignable: true
+  name: Reporter
+roles_004: 
+  builtin: 0
+  position: 4
+  issues_visibility: default
+  id: 4
+  permissions: |
+    --- 
+    - :manage_versions
+    - :add_messages
+    - :edit_own_messages
+    - :view_calendar
+    - :deploy_deployments
+    - :view_deployments
+    - :view_documents
+    - :manage_files
+    - :view_files
+    - :view_gantt
+    - :edit_issues
+    - :manage_categories
+    - :view_issues
+    - :add_issues
+    - :manage_issue_relations
+    - :manage_subtasks
+    - :add_issue_notes
+    - :save_queries
+    - :comment_news
+    - :browse_repository
+    - :view_changesets
+    - :commit_access
+    - :log_time
+    - :view_time_entries
+    - :delete_wiki_pages
+    - :view_wiki_pages
+    - :view_wiki_edits
+    - :edit_wiki_pages
+
+  assignable: true
+  name: Developer
+roles_003: 
+  builtin: 0
+  position: 3
+  issues_visibility: all
+  id: 3
+  permissions: |
+    --- 
+    - :add_project
+    - :edit_project
+    - :select_project_modules
+    - :manage_members
+    - :manage_versions
+    - :add_subprojects
+    - :manage_boards
+    - :add_messages
+    - :edit_messages
+    - :edit_own_messages
+    - :delete_messages
+    - :delete_own_messages
+    - :view_calendar
+    - :manage_deployments
+    - :delete_deployments
+    - :edit_deployments
+    - :manage_documents
+    - :view_documents
+    - :manage_files
+    - :view_files
+    - :view_gantt
+    - :edit_issues
+    - :manage_categories
+    - :view_issues
+    - :add_issues
+    - :manage_issue_relations
+    - :manage_subtasks
+    - :set_issues_private
+    - :set_own_issues_private
+    - :add_issue_notes
+    - :edit_issue_notes
+    - :edit_own_issue_notes
+    - :move_issues
+    - :delete_issues
+    - :manage_public_queries
+    - :save_queries
+    - :view_issue_watchers
+    - :add_issue_watchers
+    - :delete_issue_watchers
+    - :manage_news
+    - :comment_news
+    - :manage_repository
+    - :browse_repository
+    - :view_changesets
+    - :commit_access
+    - :log_time
+    - :view_time_entries
+    - :edit_time_entries
+    - :edit_own_time_entries
+    - :manage_project_activities
+    - :manage_wiki
+    - :rename_wiki_pages
+    - :delete_wiki_pages
+    - :view_wiki_pages
+    - :export_wiki_pages
+    - :view_wiki_edits
+    - :edit_wiki_pages
+    - :delete_wiki_pages_attachments
+    - :protect_wiki_pages
+
+  assignable: true
+  name: Manager
+roles_002: 
+  builtin: 2
+  position: 2
+  issues_visibility: default
+  id: 2
+  permissions: |
+    --- 
+    - :view_calendar
+    - :view_documents
+    - :view_files
+    - :view_gantt
+    - :view_issues
+    - :browse_repository
+    - :view_changesets
+    - :view_time_entries
+    - :view_wiki_pages
+    - :view_wiki_edits
+
+  assignable: true
+  name: Anonymous
+roles_001: 
+  builtin: 1
+  position: 1
+  issues_visibility: default
+  id: 1
+  permissions: |
+    --- 
+    - :add_messages
+    - :view_calendar
+    - :view_documents
+    - :view_files
+    - :view_gantt
+    - :view_issues
+    - :comment_news
+    - :browse_repository
+    - :view_changesets
+    - :view_time_entries
+    - :view_wiki_pages
+    - :view_wiki_edits
+
+  assignable: true
+  name: Non member

@@ -1,0 +1,202 @@
+--- 
+settings_019: 
+  id: 20
+  name: openid
+  value: "0"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_018: 
+  id: 19
+  name: login_required
+  value: "0"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_017: 
+  id: 18
+  name: self_registration
+  value: "2"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_016: 
+  id: 17
+  name: unsubscribe
+  value: "1"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_015: 
+  id: 16
+  name: session_timeout
+  value: "0"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_014: 
+  id: 15
+  name: rest_api_enabled
+  value: "1"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_013: 
+  id: 14
+  name: plugin_redmine_issue_checklist
+  value: |
+    --- !map:ActiveSupport::HashWithIndifferentAccess 
+    issue_done_ratio: "1"
+    save_log: "1"
+
+  updated_on: 2012-10-29 16:15:03 -07:00
+settings_012: 
+  id: 13
+  name: plugin_redmine_logger
+  value: |
+    --- !map:ActiveSupport::HashWithIndifferentAccess 
+    "0": !map:ActiveSupport::HashWithIndifferentAccess 
+      port: "12201"
+      max_size: LAN
+      environment: development
+      facility: CWS-CREATE
+      enabled: "1"
+      host: vs-graylog.cws.oregonstate.edu
+
+  updated_on: 2012-10-25 13:41:36 -07:00
+settings_011: 
+  id: 12
+  name: thumbnails_enabled
+  value: "0"
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_010: 
+  id: 11
+  name: time_format
+  value: ""
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_009: 
+  id: 10
+  name: date_format
+  value: ""
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_008: 
+  id: 9
+  name: default_language
+  value: en
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_007: 
+  id: 8
+  name: start_of_week
+  value: ""
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_006: 
+  id: 7
+  name: thumbnails_size
+  value: "100"
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_005: 
+  id: 6
+  name: user_format
+  value: firstname_lastname
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_004: 
+  id: 5
+  name: ui_theme
+  value: redmine_osu_highrise_theme
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_003: 
+  id: 4
+  name: gravatar_default
+  value: ""
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_002: 
+  id: 3
+  name: gravatar_enabled
+  value: "0"
+  updated_on: 2012-10-25 08:11:21 -07:00
+settings_001: 
+  id: 1
+  name: plugin_redmine_incidents
+  value: |
+    --- !map:ActiveSupport::HashWithIndifferentAccess
+    reference_number_pattern: CWS/%%ID%%-%%YEAR%%-%%MONTH%%-%%DAY%%
+    sort_column: priority
+    sort_direction: asc
+    status_filter_default: blank
+    closed_field_editable: 0
+
+  updated_on: 2012-08-31 14:05:10 -07:00
+settings_023: 
+  id: 24
+  name: session_lifetime
+  value: "0"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_022: 
+  id: 23
+  name: lost_password
+  value: "1"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_021: 
+  id: 22
+  name: autologin
+  value: "0"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_020: 
+  id: 21
+  name: password_min_length
+  value: "4"
+  updated_on: 2012-10-30 13:50:26 -07:00
+settings_024:
+  id: 25
+  value: |
+    --- !map:ActiveSupport::HashWithIndifferentAccess
+    from_email_address: sam@example.com
+
+  updated_on: 2013-01-29 15:27:49 -08:00
+  name: plugin_redmine_deployments
+settings_025:
+  id: 26
+  name:  plugin_scrum2b
+  value: |
+      --- !map:ActiveSupport::HashWithIndifferentAccess
+        sprint: !map:ActiveSupport::HashWithIndifferentAccess
+          use_default: "false"
+          custom_field_id: "13"
+          current_sprint: FY14-14
+
+        priority: !map:ActiveSupport::HashWithIndifferentAccess
+          use_default: "false"
+          custom_field_id: "25"
+
+        assignee: !map:ActiveSupport::HashWithIndifferentAccess
+          use_default: "false"
+          custom_field_id: "26"
+
+        board_columns: !map:ActiveSupport::HashWithIndifferentAccess
+          "4": !map:ActiveSupport::HashWithIndifferentAccess
+            name: Not Started
+            position: "1"
+            statuses: !map:ActiveSupport::HashWithIndifferentAccess
+              "1": New
+              "2": Assigned
+
+
+          "3": !map:ActiveSupport::HashWithIndifferentAccess
+            name: In Progress
+            position: "2"
+            statuses: !map:ActiveSupport::HashWithIndifferentAccess
+              "4": Feedback
+              "13": In Progress
+
+
+          "2": !map:ActiveSupport::HashWithIndifferentAccess
+            name: Code Review
+            position: "3"
+            statuses: !map:ActiveSupport::HashWithIndifferentAccess
+              "10": Code Review
+              "11": Design Review
+
+
+          "1": !map:ActiveSupport::HashWithIndifferentAccess
+            name: Resolved
+            position: "4"
+            statuses: !map:ActiveSupport::HashWithIndifferentAccess
+              "3": Resolved
+              "5": Closed
+
+
+          "5": !map:ActiveSupport::HashWithIndifferentAccess
+            name: Blocked
+            position: "5"
+            statuses: !map:ActiveSupport::HashWithIndifferentAccess
+              "14": Blocked
+        
+

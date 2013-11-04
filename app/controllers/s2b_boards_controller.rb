@@ -309,6 +309,7 @@ class S2bBoardsController < ApplicationController
   def load_settings
     @plugin = Redmine::Plugin.find("scrum2b")
     @settings = Setting["plugin_#{@plugin.id}"]   
+debugger
     board_columns = @settings["board_columns"]
     sprint_settings = @settings["sprint"]
     priority_settings = @settings["priority"]

@@ -1,0 +1,113 @@
+--- 
+journals_016: 
+  journalized_id: 1
+  created_on: 2012-10-30 13:52:47 -07:00
+  id: 16
+  user_id: 3
+  notes: This is a note. 
+  journalized_type: Issue
+journals_015: 
+  journalized_id: 1
+  created_on: 2012-10-30 10:45:58 -07:00
+  id: 15
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_014: 
+  journalized_id: 1
+  created_on: 2012-10-30 10:45:57 -07:00
+  id: 14
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_013: 
+  journalized_id: 1
+  created_on: 2012-10-30 10:45:35 -07:00
+  id: 13
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_012: 
+  journalized_id: 1
+  created_on: 2012-10-30 10:42:16 -07:00
+  id: 12
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_011: 
+  journalized_id: 1
+  created_on: 2012-10-30 10:21:59 -07:00
+  id: 11
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_010: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:52:35 -07:00
+  id: 10
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_009: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:21:38 -07:00
+  id: 9
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_008: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:21:37 -07:00
+  id: 8
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_007: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:00:33 -07:00
+  id: 7
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_006: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:00:23 -07:00
+  id: 6
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_005: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:00:22 -07:00
+  id: 5
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_004: 
+  journalized_id: 1
+  created_on: 2012-10-30 09:00:09 -07:00
+  id: 4
+  user_id: 1
+  notes: This is a note. ""
+  journalized_type: Issue
+journals_003: 
+  journalized_id: 1
+  created_on: 2012-10-30 08:57:53 -07:00
+  id: 3
+  user_id: 1
+  notes: This is a note. 
+  journalized_type: Issue
+journals_002: 
+  journalized_id: 21
+  created_on: 2012-10-04 10:45:49 -07:00
+  id: 2
+  user_id: 1
+  notes: This is a note. This is a note.
+  journalized_type: DeploymentSection
+journals_001: 
+  journalized_id: 6
+  created_on: 2012-10-04 10:45:49 -07:00
+  id: 1
+  user_id: 1
+  notes: This is a note. This is a note.
+  journalized_type: DeploymentSection

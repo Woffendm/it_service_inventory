@@ -1,0 +1,199 @@
+--- 
+users_009: 
+  mail_notification: only_my_events
+  created_on: 2012-10-31 10:00:44 -07:00
+  id: 9
+  auth_source_id: 
+  hashed_password: bf70556feeb0ed23854dcea7c1c25ca8b1c1f0b9
+  language: en
+  status: 1
+  salt: 7af8b2539b14eaca80af9713f63e00e4
+  identity_url: 
+  last_login_on: 2012-10-31 10:01:30 -07:00
+  admin: false
+  firstname: Larry
+  mail: larry@example.com
+  lastname: Toon
+  login: larry
+  type: User
+  updated_on: 2012-10-31 10:01:30 -07:00
+users_008: 
+  mail_notification: none
+  created_on: 2012-08-20 13:29:02 -07:00
+  id: 8
+  auth_source_id: 
+  hashed_password: 9e428274720d7802d396f4fbf7aab7e5e725098e
+  language: en
+  status: 1
+  salt: 2a877d6f00517efb209b01e98012427a
+  identity_url: 
+  last_login_on: 
+  admin: true
+  firstname: Jean
+  mail: jean@example.com
+  lastname: Waters
+  login: jean
+  type: User
+  updated_on: 2012-08-20 13:29:02 -07:00
+users_007: 
+  mail_notification: none
+  created_on: 2012-08-20 13:29:02 -07:00
+  id: 7
+  auth_source_id: 
+  hashed_password: 9e428274720d7802d396f4fbf7aab7e5e725098e
+  language: en
+  status: 1
+  salt: 2a877d6f00517efb209b01e98012427a
+  identity_url: 
+  last_login_on: 
+  admin: true
+  firstname: Shayne
+  mail: shayne@example.com
+  lastname: Huddleston
+  login: shayne
+  type: User
+  updated_on: 2012-08-20 13:29:02 -07:00
+users_006: 
+  mail_notification: none
+  created_on: 2012-08-20 13:29:02 -07:00
+  id: 6
+  auth_source_id: 
+  hashed_password: 9e428274720d7802d396f4fbf7aab7e5e725098e
+  language: en
+  status: 1
+  salt: 2a877d6f00517efb209b01e98012427a
+  identity_url: 
+  last_login_on: 
+  admin: true
+  firstname: Joan
+  mail: joan@example.com
+  lastname: Lu
+  login: joan
+  type: User
+  updated_on: 2012-08-20 13:29:02 -07:00
+users_005: 
+  mail_notification: none
+  created_on: 2012-08-20 13:29:02 -07:00
+  id: 5
+  auth_source_id: 
+  hashed_password: 9e428274720d7802d396f4fbf7aab7e5e725098e
+  language: en
+  status: 1
+  salt: 2a877d6f00517efb209b01e98012427a
+  identity_url: 
+  last_login_on: 
+  admin: true
+  firstname: Jos
+  mail: jos@example.com
+  lastname: Accapadi
+  login: jos
+  type: User
+  updated_on: 2012-08-20 13:29:02 -07:00
+users_004: 
+  mail_notification: only_my_events
+  created_on: 2012-08-27 09:24:25 -07:00
+  id: 4
+  auth_source_id: 
+  hashed_password: ""
+  language: ""
+  status: 0
+  salt: 
+  identity_url: 
+  last_login_on: 
+  admin: false
+  firstname: ""
+  mail: ""
+  lastname: Anonymous
+  login: ""
+  type: AnonymousUser
+  updated_on: 2012-08-27 09:24:25 -07:00
+users_003: 
+  mail_notification: none
+  created_on: 2012-08-20 13:29:02 -07:00
+  id: 3
+  auth_source_id: 
+  hashed_password: 9e428274720d7802d396f4fbf7aab7e5e725098e
+  language: en
+  status: 1
+  salt: 2a877d6f00517efb209b01e98012427a
+  identity_url: 
+  last_login_on: 2012-10-31 09:48:09 -07:00
+  admin: false
+  firstname: Jeff
+  mail: jeff@example.com
+  lastname: Jones
+  login: jeff
+  type: User
+  updated_on: 2012-10-31 09:48:09 -07:00
+users_002: 
+  mail_notification: none
+  created_on: 2012-08-20 13:28:24 -07:00
+  id: 2
+  auth_source_id: 
+  hashed_password: 69c2a947ac8d54eb2217ac1e027845a7ef0c278c
+  language: en
+  status: 1
+  salt: 503fb62a15089a28269466e6413ce84d
+  identity_url: 
+  last_login_on: 
+  admin: false
+  firstname: Tom
+  mail: tom@example.com
+  lastname: Smit
+  login: tom
+  type: User
+  updated_on: 2012-08-20 13:28:24 -07:00
+users_001: 
+  mail_notification: all
+  created_on: 2012-08-20 10:54:10 -07:00
+  id: 1
+  auth_source_id: 
+  hashed_password: 53b2f90387711a84253e56848eff9c83183d5a98
+  language: en
+  status: 1
+  salt: c26af6c87b31454f2886d812be6b3ab9
+  identity_url: 
+  last_login_on: 2012-10-30 13:49:51 -07:00
+  admin: true
+  firstname: Redmine
+  mail: admin@example.net
+  lastname: Admin
+  login: admin
+  type: User
+  updated_on: 2012-10-30 13:49:51 -07:00
+users_011: 
+  mail_notification: ""
+  created_on: 2012-11-20 15:21:29 -08:00
+  id: 11
+  auth_source_id: 
+  hashed_password: ""
+  language: ""
+  status: 1
+  salt: 
+  identity_url: 
+  last_login_on: 
+  admin: false
+  firstname: ""
+  mail: ""
+  lastname: CWS Managers
+  login: ""
+  type: Group
+  updated_on: 2012-11-20 15:21:29 -08:00
+users_010: 
+  mail_notification: ""
+  created_on: 2012-11-14 14:56:20 -08:00
+  id: 10
+  auth_source_id: 
+  hashed_password: ""
+  language: ""
+  status: 1
+  salt: 
+  identity_url: 
+  last_login_on: 
+  admin: false
+  firstname: ""
+  mail: ""
+  lastname: CWS Rails Developers
+  login: ""
+  type: Group
+  updated_on: 2012-11-14 14:56:20 -08:00
