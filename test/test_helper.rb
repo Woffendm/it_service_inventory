@@ -20,19 +20,10 @@ class ActiveSupport::TestCase
     end
   end
 
-  def load_my_fixtures(fixtures)
-    if Rails::VERSION::MAJOR < 3
-      plugin_create_fixtures( ['projects', 'users', 'versions', 'groups_users', 'settings',
-        'members', 'roles', 'member_roles', 'enabled_modules', 'issues', 'trackers',
-        'projects_trackers', 'issue_statuses', 'enumerations'] )
-      plugin_create_fixtures(fixtures)
-    end
-  end
-
   def self.load_my_fixtures(fixtures)
     if Rails::VERSION::MAJOR >= 3
       plugin_create_fixtures( ['projects', 'users', 'versions', 'groups_users', 'settings',
-        'members', 'roles', 'member_roles', 'enabled_modules', 'issues', 'trackers',
+        'members', 'roles', 'member_roles', 'enabled_modules', 'issues', 'trackers', 'issues',
         'projects_trackers', 'issue_statuses', 'enumerations'] )
       plugin_create_fixtures(fixtures)
     end
@@ -42,25 +33,10 @@ class ActiveSupport::TestCase
     ActiveRecord::Base.establish_connection(Rails.env.to_sym)
     fixtures_dir = File.join(Rails.root,'test','fixtures')
     table_names.each do |tn|
-      if File.exists?(File.join(Rails.root,'plugins','redmine_deployments','test','fixtures',"#{tn}.yml"))
-        ActiveRecord::Fixtures.create_fixtures(File.join(Rails.root,'plugins','redmine_deployments','test','fixtures'),tn)
+      if File.exists?(File.join(Rails.root,'plugins','scrum2b','test','fixtures',"#{tn}.yml"))
+        ActiveRecord::Fixtures.create_fixtures(File.join(Rails.root,'plugins','scrum2b','test','fixtures'),tn)
       else
         if ActiveRecord::Fixtures.create_fixtures(fixtures_dir, tn).empty?
-          puts "Fixture '#{tn}' would not load"
-        end
-      end
-    end
-
-  end
-
-  def plugin_create_fixtures(table_names)
-    ActiveRecord::Base.establish_connection(RAILS_ENV.to_sym)
-    fixtures_dir = File.join(Rails.root,'test','fixtures')
-    table_names.each do |tn|
-      if File.exists?(File.join(Rails.root,'vendor','plugins','redmine_deployments','test','fixtures',"#{tn}.yml"))
-        Fixtures.create_fixtures(File.join(Rails.root,'vendor','plugins','redmine_deployments','test','fixtures'),tn)
-      else
-        if Fixtures.create_fixtures(fixtures_dir, tn).empty?
           puts "Fixture '#{tn}' would not load"
         end
       end

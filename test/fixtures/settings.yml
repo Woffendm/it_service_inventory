@@ -142,61 +142,49 @@ settings_024:
 
   updated_on: 2013-01-29 15:27:49 -08:00
   name: plugin_redmine_deployments
-settings_025:
+setting_025:
   id: 26
-  name:  plugin_scrum2b
+  name: plugin_scrum2b
   value: |
-      --- !map:ActiveSupport::HashWithIndifferentAccess
-        sprint: !map:ActiveSupport::HashWithIndifferentAccess
-          use_default: "false"
-          custom_field_id: "13"
-          current_sprint: FY14-14
-
-        priority: !map:ActiveSupport::HashWithIndifferentAccess
-          use_default: "false"
-          custom_field_id: "25"
-
-        assignee: !map:ActiveSupport::HashWithIndifferentAccess
-          use_default: "false"
-          custom_field_id: "26"
-
-        board_columns: !map:ActiveSupport::HashWithIndifferentAccess
-          "4": !map:ActiveSupport::HashWithIndifferentAccess
-            name: Not Started
-            position: "1"
-            statuses: !map:ActiveSupport::HashWithIndifferentAccess
-              "1": New
-              "2": Assigned
-
-
-          "3": !map:ActiveSupport::HashWithIndifferentAccess
-            name: In Progress
-            position: "2"
-            statuses: !map:ActiveSupport::HashWithIndifferentAccess
-              "4": Feedback
-              "13": In Progress
-
-
-          "2": !map:ActiveSupport::HashWithIndifferentAccess
-            name: Code Review
-            position: "3"
-            statuses: !map:ActiveSupport::HashWithIndifferentAccess
-              "10": Code Review
-              "11": Design Review
-
-
-          "1": !map:ActiveSupport::HashWithIndifferentAccess
-            name: Resolved
-            position: "4"
-            statuses: !map:ActiveSupport::HashWithIndifferentAccess
-              "3": Resolved
-              "5": Closed
-
-
-          "5": !map:ActiveSupport::HashWithIndifferentAccess
-            name: Blocked
-            position: "5"
-            statuses: !map:ActiveSupport::HashWithIndifferentAccess
-              "14": Blocked
-        
-
+    --- !map:ActiveSupport::HashWithIndifferentAccess
+    sprint: !map:ActiveSupport::HashWithIndifferentAccess
+      use_default: 'false'
+      custom_field_id: '13'
+      current_sprint: FY14-14
+    priority: !map:ActiveSupport::HashWithIndifferentAccess
+      use_default: 'false'
+      custom_field_id: '25'
+    assignee: !map:ActiveSupport::HashWithIndifferentAccess
+      use_default: 'false'
+      custom_field_id: '26'
+    board_columns: !map:ActiveSupport::HashWithIndifferentAccess
+      '4': !map:ActiveSupport::HashWithIndifferentAccess
+        name: Not Started
+        position: '1'
+        statuses: !map:ActiveSupport::HashWithIndifferentAccess
+          '1': New
+          '2': Assigned
+      '3': !map:ActiveSupport::HashWithIndifferentAccess
+        name: In Progress
+        position: '2'
+        statuses: !map:ActiveSupport::HashWithIndifferentAccess
+          '4': Feedback
+          '13': In Progress
+      '2': !map:ActiveSupport::HashWithIndifferentAccess
+        name: Code Review
+        position: '3'
+        statuses: !map:ActiveSupport::HashWithIndifferentAccess
+          '10': Code Review
+          '11': Design Review
+      '1': !map:ActiveSupport::HashWithIndifferentAccess
+        name: Resolved
+        position: '4'
+        statuses: !map:ActiveSupport::HashWithIndifferentAccess
+          '3': Resolved
+          '5': Closed
+      '5': !map:ActiveSupport::HashWithIndifferentAccess
+        name: Blocked
+        position: '5'
+        statuses: !map:ActiveSupport::HashWithIndifferentAccess
+          '14': Blocked
+    

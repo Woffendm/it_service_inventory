@@ -4,15 +4,10 @@ class S2bBoardsControllerTest < ActionController::TestCase
   # Replace this with your real tests.
   include Redmine::I18n
 
-  load_my_fixtures(['deployments','deployment_tabs','deployment_sections','deployment_approvers','deployment_communication_plans', 'deployment_statuses',
-                  'deployment_required_personnels','deployment_steps','deployment_texts','journals'])
+  load_my_fixtures(['custom_fields'])
 
   def setup
     
-    load_my_fixtures(['deployments','deployment_tabs','deployment_sections','deployment_approvers','deployment_communication_plans', 'deployment_statuses',
-                    'deployment_required_personnels','deployment_steps','deployment_texts','journals'])
-
-
     Setting.host_name = 'test.example.com'
     
     @issue = Issue.first
@@ -43,7 +38,7 @@ class S2bBoardsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_template :index
-    assert_not_nil assigns(:projects.first.name)
+    assert_not_nil assigns(Project.first.name)
   end
   
   test "should get index issue one" do

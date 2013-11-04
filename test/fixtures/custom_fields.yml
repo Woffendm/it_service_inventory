@@ -1,0 +1,77 @@
+---
+custom_fields10:
+  id: 13
+  type: IssueCustomField
+  name: Iteration
+  field_format: list
+  possible_values: ! '---
+    - ''1''
+    - ''2''
+    - ''3''
+    - ''4''
+    - ''5''
+    - ''6''
+    - ''7''
+    - ''8''
+    - ''9''
+    - ''10''
+    - ''11''
+    - ''12''
+    - ''13''
+    - ''14''
+    - ''15''
+    - ''16''
+    - ''17''
+    - ''18''
+    - ''19''
+    - ''20''
+    - FY13-15
+    - FY13-15S
+    - FY14-1
+    - FY14-1S
+    - FY14-2
+    - FY14-2S
+    - FY14-3
+    - FY14-3S
+    - FY14-4
+    - FY14-4S
+    - FY14-5
+    - FY14-5S
+    - FY14-6
+    - FY14-6S
+    - FY14-7S
+    - FY14-8
+    - FY14-8S
+    - FY14-9
+    - FY14-9S
+    - FY14-10
+    - FY14-10S
+    - FY14-11
+    - FY14-11S
+    - FY14-12
+    - FY14-12S
+    - FY14-13
+    - FY14-13S
+    - FY14-14
+    - FY14-14S
+'
+
+custom_fields22:
+  id: 25
+  type: IssueCustomField
+  name: Backlog Priority
+  field_format: float
+  possible_values: 
+  regexp: ''
+  min_length: 0
+  max_length: 0
+  is_required: 0
+  is_for_all: 1
+  is_filter: 1
+  position: 5
+  searchable: 0
+  default_value: ''
+  editable: 1
+  visible: 1
+  multiple: 0
+
