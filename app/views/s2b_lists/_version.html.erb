@@ -25,6 +25,11 @@
       <td>
       </td>
 
+      <% unless @assignee_use_default || @assignee_custom_field.blank? %>
+        <td>
+        </td>
+      <% end %>
+
       <td>
         <%= l(:label_total) %>
         <span id="total_hours_<%= index %>"> </span>
