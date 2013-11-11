@@ -33,12 +33,11 @@ class S2bBoardsControllerTest < ActionController::TestCase
     assert_response :success
   end
   
-  test "should get index" do
+  test "should get index with user" do
     User.current = @user
     get :index
     assert_response :success
     assert_template :index
-    assert_not_nil assigns(Project.first.name)
   end
   
   test "should get index issue one" do
@@ -49,25 +48,26 @@ class S2bBoardsControllerTest < ActionController::TestCase
   test "should get update_status" do
     get :update_status, :issue_id => @issue_id
     assert_response :success
-    assert_template :update_status
+  end
+  
+  test "post to update_status" do
+    post :update_status, :issue_id => @issue_id
+    assert_response :success
   end
   
   test "should get update_progress" do
     get :update_progress
     assert_response :success
-    assert_template :update_progress
   end
   
-  test "should get update" do
-    get :update
+  test "post to update_progress" do
+    post :update_progress
     assert_response :success
-    assert_template :update
   end
   
   test "should get create" do
     get :create
     assert_response :success
-    assert_template :update
   end
   
   test "should create new issue" do
