@@ -12,7 +12,7 @@
       <th> 
         <% if @priority_use_default %>
           <%= l(:label_head_issue_priority) %> 
-        <% else %>
+        <% elsif !@priority_custom_field.blank? %>
           <%= @priority_custom_field.name %>
         <% end %>        
       </th>
@@ -34,6 +34,12 @@
       <th> 
         <%= l(:label_head_issue_assignee) %> 
       </th>
+      
+      <% unless @assignee_use_default %>
+        <th> 
+          <%= @assignee_custom_field.name %>
+        </th>
+      <% end %>
       
       <th> 
         <%= l(:label_head_issue_est_time) %> 

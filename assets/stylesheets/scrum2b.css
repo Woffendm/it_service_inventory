@@ -1,72 +1,72 @@
 p.issues {
-	font-size: 20px;
-	font-weight: bold;
-	color: #555555;
-	margin-top: 0;
-	float: left;
+  font-size: 20px;
+  font-weight: bold;
+  color: #555555;
+  margin-top: 0;
+  float: left;
 }
 
 html[xmlns] .clearfix {
-	display: block;
+  display: block;
 }
 
 * html .clearfix {
-	height: 1%;
+  height: 1%;
 }
 .btn_submit:hover {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 .view_issue {
-	width: 100%;
+  width: 100%;
 }
 .head_issue {
-	background: #e4e4e4;
-	color: #0044CC;
+  background: #e4e4e4;
+  color: #0044CC;
 }
 
 .btn_submit {
-	float: right;
-	margin: 0 0 0 5px;
+  float: right;
+  margin: 0 0 0 5px;
 }
 .btn_submit_board {
-	float: right;
-	margin:0 0 10px 0;
+  float: right;
+  margin:0 0 10px 0;
 }
 .filter {
 margin: 0 0 10px 0;
 }
 #check_all {
-	cursor: pointer
+  cursor: pointer
 }
 
 .board {
-	background: #e3e3e3;
-	padding: 0 10px 10px 10px;
-	border: 1px solid #000000;
-	border-radius: 2px;
-	-moz-border-radius: 2px;
-	-webkit-border-radius: 2px;
+  background: #e3e3e3;
+  padding: 0 10px 10px 10px;
+  border: 1px solid #000000;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
 }
  #ui-datepicker-div{
     display: none;
   }
-	.board_issue {
-		border: 1px solid #000000;
-		padding: 5px;
-		margin: 0 0 5px 0;
-		background: #ffffff;
-		width: 97%;
-		border-radius: 2px;
-		-moz-border-radius: 2px;
-		-webkit-border-radius: 2px;
-	}
-	.assignee {
-		width: 99.5%;
-		font-size: 12px;
-		margin:-8px 0 0 0;
-	}
-	.description {
+  .board_issue {
+    border: 1px solid #000000;
+    padding: 5px 8px;
+    margin: 0 0 5px 0;
+    background: #ffffff;
+    width: auto;
+    border-radius: 4px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+  }
+  .assignee {
+    width: 99.5%;
+    font-size: 12px;
+    margin:-8px 0 0 0;
+  }
+  .description {
     border-top: 1px solid #339BB9;
     border-bottom: 1px solid #339BB9;
     
@@ -76,86 +76,86 @@ margin: 0 0 10px 0;
     font-size: 13px;
   }
 
-	.connectedSortable {
-		margin-top: 25px;
-		padding: 5px 0;
-	}
-	
-	
-	
-	.submit_edit_issue {
+  .connectedSortable {
+    padding-top: 35px;
+    min-height: 50px;
+  }
+  
+  
+  
+  .submit_edit_issue {
 
-	}
+  }
 
-	.readmore {
-		text-decoration: none;
-		font-size: 12px;
-	}
-	.readmore:hover {
-		text-decoration: none;
-	}
-	.hide:hover {
-		text-decoration: none;
-	}
-	.hide {
-		display: none;
-		text-decoration: none;
-		font-size: 12px;
-	}
+  .readmore {
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .readmore:hover {
+    text-decoration: none;
+  }
+  .hide:hover {
+    text-decoration: none;
+  }
+  .hide {
+    display: none;
+    text-decoration: none;
+    font-size: 12px;
+  }
 .board p.status {
-	float:left;
-	color: #606264;
-	font-size: 17px;
-	font-weight: bold;
-	font-family: Trebuchet MS, Georgia, "Times New Roman", serif;
-	margin: 5px 0 10px 10px;
+  float:left;
+  color: #606264;
+  font-size: 17px;
+  font-weight: bold;
+  font-family: Trebuchet MS, Georgia, "Times New Roman", serif;
+  margin: 5px 0 10px 10px;
 }
 
 .board_issue:hover {
-	border: 1px solid #628db6;
+  border: 1px solid #628db6;
 }
 .board_issue .id {
-	font-weight: bold;
-	margin: 0;
+  font-weight: bold;
+  margin: 0;
 }
 .subject, .subject_issue{
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .board_issue .done {
-	float: left;
-	margin-left: 5px;
+  float: left;
+  margin-left: 5px;
 }
 table#done {
-	float: left
+  float: left
 }
 table#done tr td {
-	width: 100px;
-	height: 10px;
-	float: left;
+  width: 100px;
+  height: 10px;
+  float: left;
 }
 table#done tr td.todo {
 
-	background: #eeeeee;
+  background: #eeeeee;
 }
 table#done tr td.done {
-	background: #bae0ba;
+  background: #bae0ba;
 }
 .icon_close_issue {
-	float: right;
-	cursor: pointer;
-	display: none;
+  float: right;
+  cursor: pointer;
+  display: none;
 }
 
 .text_new {
-	position: absolute;
-	padding: 2px 3px;
-	top: -30px;
-	right:0;
-	display: none;
-	background: #e4e4e4;
+  position: absolute;
+  padding: 2px 3px;
+  top: -30px;
+  right:0;
+  display: none;
+  background: #e4e4e4;
 }
 
 .new_issue {
@@ -170,30 +170,48 @@ img.icon{
   padding:0px;
   position: relative;
 }
-.no_edit {
-		position: relative;
-	}
 
-	.text_edit {
-		position: absolute;
-		padding: 2px 3px;
-		right: 0;
-		top: -30px;
-		background: #e4e4e4;
-		color: #252525;
-		display: none
-	}
-	.text_close {
-		position: absolute;
-		padding: 2px 3px;
-		right: 0px;
-		top: -30px;
-		background: #e4e4e4;
-		color: #252525;
-		display: none
-	}
+.fa {
+  margin-left: 2px;
+  width: 14px;
+}
+
+div > i.fa {
+  cursor: default;
+}
+
+a > i.fa {
+  cursor: pointer;  
+}
+
+.handle .fa{
+  cursor: move;
+}
+
+.no_edit {
+    position: relative;
+  }
+
+  .text_edit {
+    position: absolute;
+    padding: 2px 3px;
+    right: 0;
+    top: -30px;
+    background: #e4e4e4;
+    color: #252525;
+    display: none
+  }
+  .text_close {
+    position: absolute;
+    padding: 2px 3px;
+    right: 0px;
+    top: -30px;
+    background: #e4e4e4;
+    color: #252525;
+    display: none
+  }
 .version_row {
-	background-color: #DFF0D8;
+  background-color: #DFF0D8;
 }
 #create_issue p span{
    line-height: 30px;
@@ -247,17 +265,17 @@ img.icon{
   }
   #div_change_sprint{
   display:none;
-	}
-	#btn_close_issue_list{
+  }
+  #btn_close_issue_list{
   float: left;
-	}
-	#btn_change_sprint_issues,#change_sprint,#btn_move_issues,#cancel_move_issue{
-	  float:left;
-	  margin-left:5px;
-	}
-	
-	
-	.section_header {
+  }
+  #btn_change_sprint_issues,#change_sprint,#btn_move_issues,#cancel_move_issue{
+    float:left;
+    margin-left:5px;
+  }
+  
+  
+  .section_header {
     border-bottom: 2px dotted #BBBBBB;
     margin-bottom: 10px;
   }

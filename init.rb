@@ -3,12 +3,10 @@ require 'redmine'
 Redmine::Plugin.register :scrum2b do
   name 'Scrum2B Plugin'
   author 'Scrum2B, Michael Woffendin'
-  description %Q{A scrum tool for team to work:
-                  Scrum board
-                  Customize views
+  description %Q{A scrum tool for use with agile development. Includes scrum board and issue backlog.
                 }
 
-  version '1.1.0'
+  version '1.2.0'
   url 'https://github.com/scrum2b/scrum2b'
 
 
@@ -39,6 +37,10 @@ Redmine::Plugin.register :scrum2b do
       'use_default'      => 'true',
       'custom_field_id'  => ''
     },
+    'assignee' => {
+      'use_default'      => 'true',
+      'custom_field_id'  => ''
+    },
     'show_progress_bars' => 'true'
   }, 
   :partial => 'settings/scrum2b'
@@ -47,9 +49,9 @@ Redmine::Plugin.register :scrum2b do
 
   end
   
-  menu :project_menu, :scrum_board, { :controller => :s2b_lists, :action => :index }, :caption => "Sprint Board", :after => :activity, :param => :project_id
+  menu :project_menu, :scrum_board, { :controller => :s2b_boards, :action => :index }, :caption => "Scrum Board", :after => :activity, :param => :project_id
   
-  menu :top_menu, :scrum_board, { :controller => :s2b_lists, :action => :index }, :caption => "Sprint Board"
+  menu :top_menu, :scrum_board, { :controller => :s2b_boards, :action => :index }, :caption => "Scrum Board"
   
 end
 

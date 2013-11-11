@@ -19,6 +19,14 @@
         :selected => session[:params_member_ids]), "data-placeholder" => "All Members", 
         :class => "chosen-select", :multiple => true) %>
     
+    <% unless @assignee_use_default %>
+      <%= select_tag("assignee_custom_values", 
+          options_from_collection_for_select(@members, :id, :name,
+          :selected => session[:params_assignee_custom_values]), 
+          "data-placeholder" => "All " + @assignee_custom_field.name, 
+          :class => "chosen-select", :multiple => true) %>
+    <% end %>
+    
     <%= select_tag "statuses", options_from_collection_for_select(@statuses, :id, :name, 
         :selected => session[:params_status_ids]), "data-placeholder" => "All Statuses", 
         :class => "chosen-select", :multiple => true %>
