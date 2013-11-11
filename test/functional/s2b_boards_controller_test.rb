@@ -71,8 +71,6 @@ class S2bBoardsControllerTest < ActionController::TestCase
   end
   
   test "should create new issue" do
-    
-    
     post :create, :subject => "Stuff",
                   :description => "letters!!!",
                   :tracker_id => Tracker.first.id,
@@ -87,7 +85,5 @@ class S2bBoardsControllerTest < ActionController::TestCase
                   
     assert_response :success 
   end
-  
-  
   
 end
