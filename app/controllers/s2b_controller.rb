@@ -67,7 +67,7 @@ class S2bController < ApplicationController
     @statuses = IssueStatus.sorted
     @projects = Project.order("projects.name")
     if @priority_use_default
-      @priorities = IssuePriority.sorted
+      @priorities = IssuePriority.all
     else
       @priorities = @priority_custom_field.possible_values
     end
@@ -83,7 +83,7 @@ class S2bController < ApplicationController
     end
     
     @members = User.joins(:members).where(:members => {:project_id => @projects.pluck(
-        :id)}).order(:firstname, :lastname).uniq
+        "projects.id")}).order(:firstname, :lastname).uniq
     
     unless @assignee_use_default || @assignee_custom_field.blank?
       @member_hash = {}
@@ -109,8 +109,8 @@ class S2bController < ApplicationController
 
     if board_columns.blank? || sprint_settings.blank? || priority_settings.blank? || assignee_settings.blank?
       flash[:error] = "The system has not been setup to use Scrum2B Tool." + 
-          " Please contact to Administrator or go to the " + 
-          "<a href='#{plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
+          " Please contact to Administrator or go to the "
+          #"<a href='#{Rails.application.routes.url_helpers.plugin_settings_path(@plugin)}'>Settings</a> page of the plugin."
       redirect_to projects_path
       return
     end

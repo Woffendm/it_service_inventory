@@ -102,7 +102,7 @@ users_004:
   last_login_on: 
   admin: false
   firstname: ""
-  mail: ""
+  mail: anonymous@example.com
   lastname: Anonymous
   login: ""
   type: AnonymousUser
@@ -174,7 +174,7 @@ users_011:
   last_login_on: 
   admin: false
   firstname: ""
-  mail: ""
+  mail: anonymous@example.com
   lastname: CWS Managers
   login: ""
   type: Group
@@ -192,7 +192,7 @@ users_010:
   last_login_on: 
   admin: false
   firstname: ""
-  mail: ""
+  mail: anonymous@example.com
   lastname: CWS Rails Developers
   login: ""
   type: Group

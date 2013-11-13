@@ -75,3 +75,21 @@ custom_fields22:
   visible: 1
   multiple: 0
 
+custom_fields23:
+  id: 26
+  type: IssueCustomField
+  name: POC
+  field_format: user
+  possible_values: 
+  regexp: ''
+  min_length: 0
+  max_length: 0
+  is_required: 0
+  is_for_all: 1
+  is_filter: 1
+  position: 6
+  searchable: 1
+  default_value:
+  editable: 1
+  visible: 1
+  multiple: 0
