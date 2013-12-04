@@ -7,8 +7,8 @@ GIT
       json
 
 GIT
-  remote: https://github.com/oregonstateuniv/rubycas-client-rails.git
-  revision: b97de6edc7871bc43ca1c9572f4d9188a210b341
+  remote: git@gitlab.cws.oregonstate.edu:gems/rubycas-client-rails-osu.git
+  revision: 709b3d8a9d4ed7c059c8ee6b7dd9171023e362cb
   specs:
     rubycas-client-rails (0.1.1)
       rails (>= 3.0.0)
