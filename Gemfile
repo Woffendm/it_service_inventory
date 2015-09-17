@@ -14,20 +14,22 @@ gem 'cancan', '1.6.9'
 gem 'net-ldap'
 
 gem 'rubycas-client'
-gem 'rubycas-client-rails', :git => "git@gitlab.cws.oregonstate.edu:gems/rubycas-client-rails-osu.git"
+gem 'rubycas-client-rails'
 
 gem 'will_paginate', '3.0.4'
 
-gem 'mysql2'
+gem 'mysql2', '0.3.20'
+gem 'activerecord-mysql-adapter'
 
 gem 'seed-fu', '~> 2.2.0'
 
-gem "cws_logger", :git => "git@gitlab.cws.oregonstate.edu:gems/cws_logger.git"
+#gem "cws_logger", :git => "git@gitlab.cws.oregonstate.edu:gems/cws_logger.git"
 
 gem 'annotate', ">=2.5.0"
 
 group :development, :test do
 #  gem 'debugger'
+  gem 'sqlite3'
   gem 'rspec'
   gem 'rspec-rails'
   gem 'rack-mini-profiler'
